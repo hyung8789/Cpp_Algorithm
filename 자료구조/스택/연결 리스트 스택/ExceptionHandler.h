@@ -5,14 +5,14 @@ namespace exceptionhandler
 {
 	typedef enum class EXCEPTION : const int
 	{
-		UNKNOWN_ERR = -200,
-		NOT_ENOUGH_HEAP_MEMORY = -100,
-		FAILED_TO_STRCPY = -101,
-		NOT_ASSIGNED_STACK_ACCESS = -10,
-		TRY_POP_ON_EMPTY_STACK = -2,
-		TRY_PEEK_ON_EMPTY_STACK = -3,
+		UNKNOWN_ERR = -999,
+		NOT_ENOUGH_HEAP_MEMORY = -10,
+		MEM_LEAK = -11,
+		INVALID_DATA = -12,
+		FAILED_TO_STRCPY = -13,
+		NOT_ASSIGNED_STACK_ACCESS = -1
 	}EX;
 
-	void ThrowException(EXCEPTION, bool = true);
+	void ThrowCriticalException(EXCEPTION);
 }
 #endif
