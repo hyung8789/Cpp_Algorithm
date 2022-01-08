@@ -1,0 +1,10 @@
+﻿  main.cpp
+C:\Users\김형준\OneDrive - 강원대학교\Repos\Cpp_Algorithm\단일 연결 리스트\main.cpp(9,25): warning C4101: 'newState' :참조되지 않은 지역 변수입니다.
+C:\Users\김형준\OneDrive - 강원대학교\Repos\Cpp_Algorithm\단일 연결 리스트\main.cpp(9,15): warning C4101: 'oldState' :참조되지 않은 지역 변수입니다.
+C:\Users\김형준\OneDrive - 강원대학교\Repos\Cpp_Algorithm\단일 연결 리스트\main.cpp(9,35): warning C4101: 'lastState' :참조되지 않은 지역 변수입니다.
+  SLL.cpp
+  코드를 생성하고 있습니다.
+  Previous IPDB not found, fall back to full compilation.
+  All 23 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  코드를 생성했습니다.
+  단일 연결 리스트.vcxproj -> C:\Users\김형준\OneDrive - 강원대학교\Repos\Cpp_Algorithm\Release\단일 연결 리스트.exe
