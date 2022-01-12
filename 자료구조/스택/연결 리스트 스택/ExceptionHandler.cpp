@@ -1,11 +1,7 @@
 #include "LLS_Core.h"
 
-void exceptionhandler::ThrowException(EXCEPTION ex, bool terminate)
+void exceptionhandler::ThrowCriticalException(EXCEPTION ex)
 {
 	std::cout << "Exception Code : " << (const int)ex << std::endl;
-	
-	if (terminate)
-	{
-		exit((const int)ex);
-	}
+	exit((const int)ex);
 }
