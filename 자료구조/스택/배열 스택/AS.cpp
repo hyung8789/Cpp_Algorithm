@@ -8,7 +8,6 @@
 void AS_CreateStack(ArrayStack** srcArrayStack, StackIndexType capacity) throw(std::invalid_argument, std::runtime_error)
 {
 	if ((*srcArrayStack) != NULL)
-<<<<<<< HEAD
 		throw std::runtime_error("Memleak");
 
 	if (capacity <= 0)
@@ -21,17 +20,6 @@ void AS_CreateStack(ArrayStack** srcArrayStack, StackIndexType capacity) throw(s
 	(*srcArrayStack)->nodeArray = (Node*)malloc(sizeof(Node) * capacity); //할당 크기만큼 생성
 	if ((*srcArrayStack)->nodeArray == NULL)
 		throw std::runtime_error("Not enough Heap Memory");
-=======
-		ThrowCriticalException(EX::MEM_LEAK);
-
-	(*srcArrayStack) = (ArrayStack*)malloc(sizeof(ArrayStack));
-	if ((*srcArrayStack) == NULL)
-		ThrowCriticalException(EX::NOT_ENOUGH_HEAP_MEMORY);
-
-	(*srcArrayStack)->nodeArray = (Node*)malloc(sizeof(Node) * capacity); //할당 크기만큼 생성
-	if ((*srcArrayStack)->nodeArray == NULL)
-		ThrowCriticalException(EX::NOT_ENOUGH_HEAP_MEMORY);
->>>>>>> d7a7bc6e75e62cce5e2f1f506204e1aca326980a
 
 	//(*srcArrayStack)->nodeArray = (Node*)realloc((*srcArrayStack)->nodeArray, sizeof(Node) * capacity); //할당 크기만큼 재 할당
 	//if ((*srcArrayStack)->nodeArray == NULL)
@@ -65,11 +53,7 @@ void AS_DeallocateArrayStack(ArrayStack** srcArrayStack)
 void AS_Push(ArrayStack** srcArrayStack, DataType srcData) throw(std::runtime_error)
 {
 	if ((*srcArrayStack) == NULL)
-<<<<<<< HEAD
 		throw std::runtime_error("Not initialized");
-=======
-		ThrowCriticalException(EX::NOT_ASSIGNED_STACK_ACCESS);
->>>>>>> d7a7bc6e75e62cce5e2f1f506204e1aca326980a
 
 	if (!AS_IsFull(srcArrayStack)) //가득 차지 않았으면
 	{
@@ -80,10 +64,6 @@ void AS_Push(ArrayStack** srcArrayStack, DataType srcData) throw(std::runtime_er
 	else
 	{
 		//TODO : PUSH 할 경우 할당량이 임계값 초과 시 할당 된 크기 늘리기 (realloc)
-<<<<<<< HEAD
-=======
-		ThrowCriticalException(EX::TRY_PUSH_ON_FULL_STACK);
->>>>>>> d7a7bc6e75e62cce5e2f1f506204e1aca326980a
 	}
 }
 
@@ -95,11 +75,7 @@ void AS_Push(ArrayStack** srcArrayStack, DataType srcData) throw(std::runtime_er
 DataType AS_Pop(ArrayStack** srcArrayStack) throw(std::runtime_error)
 {
 	if ((*srcArrayStack) == NULL)
-<<<<<<< HEAD
 		throw std::runtime_error("Not initialized");
-=======
-		ThrowCriticalException(EX::NOT_ASSIGNED_STACK_ACCESS);
->>>>>>> d7a7bc6e75e62cce5e2f1f506204e1aca326980a
 
 	if (!AS_IsEmpty(srcArrayStack)) //비어있지 않으면
 	{
@@ -109,10 +85,6 @@ DataType AS_Pop(ArrayStack** srcArrayStack) throw(std::runtime_error)
 	else
 	{
 		//TODO : POP 할 경우 할당량이 임계값 이하 일 경우 할당 된 크기 줄이기 (realloc)
-<<<<<<< HEAD
-=======
-		ThrowCriticalException(EX::TRY_POP_ON_EMPTY_STACK);
->>>>>>> d7a7bc6e75e62cce5e2f1f506204e1aca326980a
 	}
 }
 
@@ -124,11 +96,7 @@ DataType AS_Pop(ArrayStack** srcArrayStack) throw(std::runtime_error)
 DataType AS_Peek(ArrayStack** srcArrayStack) throw(std::runtime_error)
 {
 	if ((*srcArrayStack) == NULL)
-<<<<<<< HEAD
 		throw std::runtime_error("Not initialized");
-=======
-		ThrowCriticalException(EX::NOT_ASSIGNED_STACK_ACCESS);
->>>>>>> d7a7bc6e75e62cce5e2f1f506204e1aca326980a
 
 	if (!AS_IsEmpty(srcArrayStack)) //비어있지 않으면
 	{
@@ -137,11 +105,7 @@ DataType AS_Peek(ArrayStack** srcArrayStack) throw(std::runtime_error)
 	}
 	else
 	{
-<<<<<<< HEAD
 
-=======
-		ThrowCriticalException(EX::TRY_PEEK_ON_EMPTY_STACK);
->>>>>>> d7a7bc6e75e62cce5e2f1f506204e1aca326980a
 	}
 }
 
@@ -153,11 +117,7 @@ DataType AS_Peek(ArrayStack** srcArrayStack) throw(std::runtime_error)
 StackIndexType AS_GetTotalNodeDataCount(ArrayStack** srcArrayStack) throw(std::runtime_error)
 {
 	if ((*srcArrayStack) == NULL)
-<<<<<<< HEAD
 		throw std::runtime_error("Not initialized");
-=======
-		ThrowCriticalException(EX::NOT_ASSIGNED_STACK_ACCESS);
->>>>>>> d7a7bc6e75e62cce5e2f1f506204e1aca326980a
 
 	return (*srcArrayStack)->top;
 }
@@ -170,11 +130,7 @@ StackIndexType AS_GetTotalNodeDataCount(ArrayStack** srcArrayStack) throw(std::r
 bool AS_IsEmpty(ArrayStack** srcArrayStack) throw(std::runtime_error)
 {
 	if ((*srcArrayStack) == NULL)
-<<<<<<< HEAD
 		throw std::runtime_error("Not initialized");
-=======
-		ThrowCriticalException(EX::NOT_ASSIGNED_STACK_ACCESS);
->>>>>>> d7a7bc6e75e62cce5e2f1f506204e1aca326980a
 
 	return ((*srcArrayStack)->top == 0);
 }
@@ -187,11 +143,7 @@ bool AS_IsEmpty(ArrayStack** srcArrayStack) throw(std::runtime_error)
 bool AS_IsFull(ArrayStack** srcArrayStack) throw(std::runtime_error)
 {
 	if ((*srcArrayStack) == NULL)
-<<<<<<< HEAD
 		throw std::runtime_error("Not initialized");
-=======
-		ThrowCriticalException(EX::NOT_ASSIGNED_STACK_ACCESS);
->>>>>>> d7a7bc6e75e62cce5e2f1f506204e1aca326980a
 
 	return ((*srcArrayStack)->capacity == (*srcArrayStack)->top); //할당 크기와 동일해지는 시점부터 더 이상 삽입 불가능
 }

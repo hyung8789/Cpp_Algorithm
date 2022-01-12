@@ -7,19 +7,11 @@
 void LLS_CreateStack(LinkedListStack** srcLinkedListStack) throw(std::runtime_error)
 {
 	if ((*srcLinkedListStack) != NULL)
-<<<<<<< HEAD
 		throw std::runtime_error("Memleak");
 
 	(*srcLinkedListStack) = (LinkedListStack*)malloc(sizeof(LinkedListStack));
 	if ((*srcLinkedListStack) == NULL)
 		throw std::runtime_error("Not enough Heap Memory");
-=======
-		ThrowCriticalException(EX::MEM_LEAK);
-
-	(*srcLinkedListStack) = (LinkedListStack*)malloc(sizeof(LinkedListStack));
-	if ((*srcLinkedListStack) == NULL)
-		ThrowCriticalException(EX::NOT_ENOUGH_HEAP_MEMORY);
->>>>>>> d7a7bc6e75e62cce5e2f1f506204e1aca326980a
 
 	(*srcLinkedListStack)->head = (*srcLinkedListStack)->top = NULL;
 	(*srcLinkedListStack)->totalNodeCount = 0;
@@ -53,7 +45,6 @@ Node* LLS_CreateNode(const char* srcData) throw(std::invalid_argument, std::runt
 {
 	Node* retVal = NULL;
 
-<<<<<<< HEAD
 	if (srcData == NULL)
 		throw std::invalid_argument("Invalid Args");
 
@@ -67,21 +58,6 @@ Node* LLS_CreateNode(const char* srcData) throw(std::invalid_argument, std::runt
 
 	if (strcpy_s(retVal->data, strlen(srcData) + 1, srcData) != 0)
 		throw std::runtime_error("dst is not null or wrong size");
-=======
-	if ((*srcData) == NULL)
-		ThrowCriticalException(EX::INVALID_DATA);
-
-	retVal = (Node*)malloc(sizeof(Node));
-	if (retVal == NULL)
-		ThrowCriticalException(EX::NOT_ENOUGH_HEAP_MEMORY);
-
-	retVal->data = (char*)malloc(sizeof(srcData) + 1); //'\0' 포함 크기
-	if (retVal->data == NULL)
-		ThrowCriticalException(EX::NOT_ENOUGH_HEAP_MEMORY);
-
-	if (strcpy_s(retVal->data, sizeof(retVal->data), srcData) != 0)
-		ThrowCriticalException(EX::FAILED_TO_STRCPY);
->>>>>>> d7a7bc6e75e62cce5e2f1f506204e1aca326980a
 
 	retVal->next = NULL;
 
@@ -115,16 +91,11 @@ void LLS_DeallocateNode(Node** srcNode)
 void LLS_Push(LinkedListStack** srcLinkedListStack, Node* srcNewNode) throw(std::invalid_argument, std::runtime_error)
 {
 	if ((*srcLinkedListStack) == NULL)
-<<<<<<< HEAD
 		throw std::runtime_error("Not initialized");
 
 	if (srcNewNode == NULL)
 		throw std::invalid_argument("Invalid Args");
 
-=======
-		ThrowCriticalException(EX::NOT_ASSIGNED_STACK_ACCESS);
-
->>>>>>> d7a7bc6e75e62cce5e2f1f506204e1aca326980a
 	if ((*srcLinkedListStack)->head == NULL)
 	{
 		(*srcLinkedListStack)->head = (*srcLinkedListStack)->top = srcNewNode;
@@ -149,11 +120,7 @@ Node* LLS_Pop(LinkedListStack** srcLinkedListStack) throw(std::runtime_error)
 	Node* retVal = NULL;
 
 	if ((*srcLinkedListStack) == NULL)
-<<<<<<< HEAD
 		throw std::runtime_error("Not initialized");
-=======
-		ThrowCriticalException(EX::NOT_ASSIGNED_STACK_ACCESS);
->>>>>>> d7a7bc6e75e62cce5e2f1f506204e1aca326980a
 
 	if (!LLS_IsEmpty(srcLinkedListStack))
 	{
@@ -161,19 +128,11 @@ Node* LLS_Pop(LinkedListStack** srcLinkedListStack) throw(std::runtime_error)
 		(*srcLinkedListStack)->totalNodeCount--; //전체 노드 수 감소
 
 		if (retVal == (*srcLinkedListStack)->head) //최상위 노드가 헤드 노드일 경우
-<<<<<<< HEAD
 		{
 			(*srcLinkedListStack)->top = (*srcLinkedListStack)->head = NULL;
 		}
 		else //단일 연결 리스트이므로, 순차적으로 최상위 노드의 이전을 탐색
 		{
-=======
-		{
-			(*srcLinkedListStack)->top = (*srcLinkedListStack)->head = NULL;
-		}
-		else //단일 연결 리스트이므로, 순차적으로 최상위 노드의 이전을 탐색
-		{
->>>>>>> d7a7bc6e75e62cce5e2f1f506204e1aca326980a
 			Node* current = (*srcLinkedListStack)->head;
 
 			while (current != NULL && current->next != retVal)
@@ -182,11 +141,7 @@ Node* LLS_Pop(LinkedListStack** srcLinkedListStack) throw(std::runtime_error)
 			}
 
 			if (current == NULL)
-<<<<<<< HEAD
 				throw std::runtime_error("Unknown Err");
-=======
-				ThrowCriticalException(EX::UNKNOWN_ERR);
->>>>>>> d7a7bc6e75e62cce5e2f1f506204e1aca326980a
 
 			(*srcLinkedListStack)->top = current; //최상위 노드를 최상위 노드의 이전 노드로 변경
 			current->next = NULL;
@@ -206,11 +161,7 @@ Node* LLS_Peek(LinkedListStack** srcLinkedListStack)
 	Node* retVal = NULL;
 
 	if ((*srcLinkedListStack) == NULL)
-<<<<<<< HEAD
 		throw std::runtime_error("Not initialized");
-=======
-		ThrowCriticalException(EX::NOT_ASSIGNED_STACK_ACCESS);
->>>>>>> d7a7bc6e75e62cce5e2f1f506204e1aca326980a
 
 	if (!LLS_IsEmpty(srcLinkedListStack))
 	{
@@ -228,11 +179,7 @@ Node* LLS_Peek(LinkedListStack** srcLinkedListStack)
 StackIndexType LLS_GetTotalNodeCount(LinkedListStack** srcLinkedListStack) throw(std::runtime_error)
 {
 	if ((*srcLinkedListStack) == NULL)
-<<<<<<< HEAD
 		throw std::runtime_error("Not initialized");
-=======
-		ThrowCriticalException(EX::NOT_ASSIGNED_STACK_ACCESS);
->>>>>>> d7a7bc6e75e62cce5e2f1f506204e1aca326980a
 
 	return (*srcLinkedListStack)->totalNodeCount;
 }
@@ -245,11 +192,7 @@ StackIndexType LLS_GetTotalNodeCount(LinkedListStack** srcLinkedListStack) throw
 bool LLS_IsEmpty(LinkedListStack** srcLinkedListStack) throw(std::runtime_error)
 {
 	if ((*srcLinkedListStack) == NULL)
-<<<<<<< HEAD
 		throw std::runtime_error("Not initialized");
-=======
-		ThrowCriticalException(EX::NOT_ASSIGNED_STACK_ACCESS);
->>>>>>> d7a7bc6e75e62cce5e2f1f506204e1aca326980a
 
 	return ((*srcLinkedListStack)->totalNodeCount == 0);
 }

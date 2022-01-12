@@ -1,6 +1,5 @@
 #ifndef _AS_H_
 #define _AS_H_
-#pragma warning(disable : 6011) //NULL 역참조 경고 해제
 
 typedef int DataType; //노드의 데이터 타입
 typedef int StackIndexType; //스택 인덱스 타입

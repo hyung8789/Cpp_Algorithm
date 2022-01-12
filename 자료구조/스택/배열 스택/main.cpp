@@ -45,11 +45,6 @@ int main()
 		exit(EXIT_FAILURE);
 	}
 
-<<<<<<< HEAD
-=======
-	AS_DeallocateArrayStack(&stack);
-
->>>>>>> d7a7bc6e75e62cce5e2f1f506204e1aca326980a
 	_CrtMemCheckpoint(&newState); //할당 해제 후 상태
 	_CrtDumpMemoryLeaks();
 	if (_CrtMemDifference(&lastState, &oldState, &newState))

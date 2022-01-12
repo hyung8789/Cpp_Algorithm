@@ -1,10 +1,6 @@
 #ifndef _LLS_H_
 #define _LLS_H_
-<<<<<<< HEAD
 //#pragma warning(disable : 6011) //NULL 역참조 경고 해제
-=======
-#pragma warning(disable : 6011) //NULL 역참조 경고 해제
->>>>>>> d7a7bc6e75e62cce5e2f1f506204e1aca326980a
 
 typedef int StackIndexType; //스택 인덱스 타입
 
