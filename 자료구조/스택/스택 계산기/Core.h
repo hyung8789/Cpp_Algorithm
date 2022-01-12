@@ -14,4 +14,5 @@
 #include <stdexcept>
 
 #include "LLS.h"
+#include "Calculator.h"
 #endif

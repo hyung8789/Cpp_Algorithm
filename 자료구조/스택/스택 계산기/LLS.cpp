@@ -1,4 +1,4 @@
-#include "LLS_Core.h"
+#include "Core.h"
 
 /// <summary>
 /// 대상 연결 리스트 스택 생성
@@ -44,7 +44,7 @@ void LLS_DeallocateLinkedListStack(LinkedListStack** srcLinkedListStack)
 Node* LLS_CreateNode(const char* srcData) throw(std::invalid_argument, std::runtime_error)
 {
 	Node* retVal = NULL;
-
+	
 	if (srcData == NULL)
 		throw std::invalid_argument("Invalid Args");
 

@@ -139,12 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ExceptionHandler.h" />
     <ClInclude Include="LLS.h" />
     <ClInclude Include="LLS_Core.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ExceptionHandler.cpp" />
     <ClCompile Include="LLS.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
