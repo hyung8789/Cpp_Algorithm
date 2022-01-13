@@ -15,7 +15,7 @@ int main()
 
 		GenPostfixExpr(infixExpr, postfixExpr);
 		printf("중위 표현식 : %s\n후위 표현식 : %s\n", infixExpr, postfixExpr);
-		//printf("계산 결과 : %f\n", CalcPostfixExpr(postfixExpr));
+		printf("계산 결과 : %f\n", CalcPostfixExpr(postfixExpr));
 	}
 	catch (const std::exception& ex)
 	{

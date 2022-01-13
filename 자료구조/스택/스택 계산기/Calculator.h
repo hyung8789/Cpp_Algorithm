@@ -2,7 +2,8 @@
 #define _CALCULATOR_H_
 
 #define MAX_STR_LEN 256
-#define ARRAY_LEN(X) (sizeof(X)/sizeof(X[0])) //배열의 길이 (
+
+#include <cfenv> // https://www.cplusplus.com/reference/cfenv
 
 enum class SYMBOL_TYPE : const char
 {
@@ -12,8 +13,9 @@ enum class SYMBOL_TYPE : const char
 	MINUS = '-',
 	MULTIPLY = '*',
 	DIVIDE = '/',
-	SPACE = ' ', //공백
-	OPERAND //피연산자 (숫자 혹은 소수 표현을 위한 '.' 기호)
+	OPERAND, //피연산자
+	SPACE = ' ', //피연산자 간 구분을 위한 공백
+	DOT = '.', //소수 표현을 위한 점
 }; //기호 타입
 
 typedef struct
@@ -23,13 +25,15 @@ typedef struct
 	unsigned int readCount; //읽은 문자 개수
 }Token;
 
-inline int CharToDecAscii(char);
-inline int IntToDecAscii(int) throw(std::invalid_argument);
+double CalcOperation(double, SYMBOL_TYPE, double) throw(std::invalid_argument, std::overflow_error, std::underflow_error);
 
-SYMBOL_TYPE GetSymbolTypeFromChar(char) throw(std::invalid_argument);
+inline int CharToDecAscii(char);
+inline int SingleNumToDecAscii(int) throw(std::invalid_argument);
+
+SYMBOL_TYPE CharToSymbolType(char) throw(std::invalid_argument);
 int GetSymbolTypePriority(SYMBOL_TYPE, bool);
 
-void CreateNextToken(const char*, Token*) throw(std::invalid_argument, std::out_of_range);
+void GenNextToken(const char*, Token*) throw(std::invalid_argument, std::out_of_range);
 void GenPostfixExpr(const char*, char*) throw(std::invalid_argument);
 double CalcPostfixExpr(const char*);
 #endif

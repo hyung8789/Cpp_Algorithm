@@ -185,10 +185,10 @@ StackIndexType LLS_GetTotalNodeCount(LinkedListStack** srcLinkedListStack) throw
 }
 
 /// <summary>
-/// 대상 연결 리스트 스택의 공백 여부 반환
+/// 대상 연결 리스트 스택의 피연산자 간 구분을 위한 공백 여부 반환
 /// </summary>
 /// <param name="srcLinkedListStack">대상 연결 리스트 스택</param>
-/// <returns>대상 연결 리스트 스택의 공백 여부</returns>
+/// <returns>대상 연결 리스트 스택의 피연산자 간 구분을 위한 공백 여부</returns>
 bool LLS_IsEmpty(LinkedListStack** srcLinkedListStack) throw(std::runtime_error)
 {
 	if ((*srcLinkedListStack) == NULL)
