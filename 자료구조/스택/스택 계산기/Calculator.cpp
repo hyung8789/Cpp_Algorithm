@@ -1,6 +1,29 @@
 #include "Core.h"
 
 /// <summary>
+/// 대상 피연산자 1 및 대상 피연산자 2에 대해 연산자 문지에 따른 계산 결과 반환
+/// </summary>
+/// <param name="a">대상 피연산자 1</param>
+/// <param name="srcChar">연산자 문자</param>
+/// <param name="b">대상 피연산자 2</param>
+/// <returns>대상 피연산자 1 및 대상 피연산자 2에 대해 연산자 문자에 따른 계산 결과</returns>
+double CalcOperation(double a, char srcChar, double b) throw(std::invalid_argument, std::overflow_error, std::underflow_error)
+{
+	double retVal = 0.0;
+
+	try
+	{
+		retVal = CalcOperation(a, CharToSymbolType(srcChar), b);
+	}
+	catch (const std::exception& ex)
+	{
+		throw ex;
+	}
+
+	return retVal;
+}
+
+/// <summary>
 /// 대상 피연산자 1 및 대상 피연산자 2에 대해 연산자 기호 타입에 따른 계산 결과 반환
 /// </summary>
 /// <param name="a">대상 피연산자 1</param>
@@ -57,9 +80,9 @@ inline int CharToDecAscii(char srcChar)
 }
 
 /// <summary>
-/// 대상 0~9 단일 숫자를 10진 아스키 코드로 변환
+/// 대상 0~9 범위의 단일 숫자를 10진 아스키 코드로 변환
 /// </summary>
-/// <param name="srcSingleNum">대상 0~9 단일 숫자</param>
+/// <param name="srcSingleNum">대상 0~9 범위의 단일 숫자</param>
 /// <returns>변환 된 10진 아스키 코드</returns>
 inline int SingleNumToDecAscii(int srcSingleNum) throw(std::invalid_argument)
 {
@@ -258,7 +281,7 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr) throw(std::i
 			break;
 
 		case SYMBOL_TYPE::RIGHT_PARENTHESIS: //')' 인 경우
-			while (!LLS_IsEmpty(&stack)) //스택에서 '(' 를 만날때까지 빼내어 후위 표기식에 출력
+			while (!LLS_IsEmpty(&stack)) //스택에서 '(' 를 만날 때까지 빼내어 후위 표기식에 출력
 			{
 				Node* poppedNode = LLS_Pop(&stack);
 
@@ -322,6 +345,8 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr) throw(std::i
 	LLS_DeallocateLinkedListStack(&stack);
 
 	//TODO : 리스트에도 예외 처리 추가
+	//TODO : 변수명 리팩토링
+	//TODO : 스택 계산기에 대한 단위 테스트 작성
 }
 
 /// <summary>

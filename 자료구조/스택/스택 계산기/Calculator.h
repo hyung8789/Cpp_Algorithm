@@ -25,6 +25,7 @@ typedef struct
 	unsigned int readCount; //읽은 문자 개수
 }Token;
 
+double CalcOperation(double, char, double) throw(std::invalid_argument, std::overflow_error, std::underflow_error);
 double CalcOperation(double, SYMBOL_TYPE, double) throw(std::invalid_argument, std::overflow_error, std::underflow_error);
 
 inline int CharToDecAscii(char);
