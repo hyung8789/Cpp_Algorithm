@@ -11,15 +11,15 @@ void AS_CreateStack(ArrayStack** srcArrayStack, StackIndexType capacity) throw(s
 		throw std::runtime_error("Memleak");
 
 	if (capacity <= 0)
-		throw std::invalid_argument("Invalid Args");
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
 	(*srcArrayStack) = (ArrayStack*)malloc(sizeof(ArrayStack));
 	if ((*srcArrayStack) == NULL)
-		throw std::runtime_error("Not enough Heap Memory");
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
 	(*srcArrayStack)->nodeArray = (Node*)malloc(sizeof(Node) * capacity); //할당 크기만큼 생성
 	if ((*srcArrayStack)->nodeArray == NULL)
-		throw std::runtime_error("Not enough Heap Memory");
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
 	//(*srcArrayStack)->nodeArray = (Node*)realloc((*srcArrayStack)->nodeArray, sizeof(Node) * capacity); //할당 크기만큼 재 할당
 	//if ((*srcArrayStack)->nodeArray == NULL)
@@ -53,7 +53,7 @@ void AS_DeallocateArrayStack(ArrayStack** srcArrayStack)
 void AS_Push(ArrayStack** srcArrayStack, DataType srcData) throw(std::runtime_error)
 {
 	if ((*srcArrayStack) == NULL)
-		throw std::runtime_error("Not initialized");
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	if (!AS_IsFull(srcArrayStack)) //가득 차지 않았으면
 	{
@@ -75,7 +75,7 @@ void AS_Push(ArrayStack** srcArrayStack, DataType srcData) throw(std::runtime_er
 DataType AS_Pop(ArrayStack** srcArrayStack) throw(std::runtime_error)
 {
 	if ((*srcArrayStack) == NULL)
-		throw std::runtime_error("Not initialized");
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	if (!AS_IsEmpty(srcArrayStack)) //비어있지 않으면
 	{
@@ -96,7 +96,7 @@ DataType AS_Pop(ArrayStack** srcArrayStack) throw(std::runtime_error)
 DataType AS_Peek(ArrayStack** srcArrayStack) throw(std::runtime_error)
 {
 	if ((*srcArrayStack) == NULL)
-		throw std::runtime_error("Not initialized");
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	if (!AS_IsEmpty(srcArrayStack)) //비어있지 않으면
 	{
@@ -117,7 +117,7 @@ DataType AS_Peek(ArrayStack** srcArrayStack) throw(std::runtime_error)
 StackIndexType AS_GetTotalNodeDataCount(ArrayStack** srcArrayStack) throw(std::runtime_error)
 {
 	if ((*srcArrayStack) == NULL)
-		throw std::runtime_error("Not initialized");
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	return (*srcArrayStack)->top;
 }
@@ -130,7 +130,7 @@ StackIndexType AS_GetTotalNodeDataCount(ArrayStack** srcArrayStack) throw(std::r
 bool AS_IsEmpty(ArrayStack** srcArrayStack) throw(std::runtime_error)
 {
 	if ((*srcArrayStack) == NULL)
-		throw std::runtime_error("Not initialized");
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	return ((*srcArrayStack)->top == 0);
 }
@@ -143,7 +143,7 @@ bool AS_IsEmpty(ArrayStack** srcArrayStack) throw(std::runtime_error)
 bool AS_IsFull(ArrayStack** srcArrayStack) throw(std::runtime_error)
 {
 	if ((*srcArrayStack) == NULL)
-		throw std::runtime_error("Not initialized");
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	return ((*srcArrayStack)->capacity == (*srcArrayStack)->top); //할당 크기와 동일해지는 시점부터 더 이상 삽입 불가능
 }

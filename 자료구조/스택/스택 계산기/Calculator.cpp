@@ -18,7 +18,7 @@ inline int CharToDecAscii(char srcChar)
 inline int IntToDecAscii(int srcNum) throw(std::invalid_argument)
 {
 	if (srcNum < 0 || srcNum > 9)
-		throw std::invalid_argument("Invalid Args");
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
 	return '0' + srcNum;
 }
@@ -46,7 +46,7 @@ SYMBOL_TYPE GetSymbolTypeFromChar(char srcChar) throw(std::invalid_argument)
 	default: //피연산자 혹은 잘못 된 입력
 		if (!((decAscii >= IntToDecAscii(0) && decAscii <= IntToDecAscii(9)) ||
 			(decAscii == CharToDecAscii('.')))) //0(48) ~ 9(57) 및 '.'(46)가 아닐 경우 (피연산자가 아닌 경우)
-			throw std::invalid_argument("Invalid Args");
+			throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
 		return SYMBOL_TYPE::OPERAND;
 	}
@@ -81,10 +81,12 @@ int GetSymbolTypePriority(SYMBOL_TYPE srcSymbol, bool isInStack)
 	case SYMBOL_TYPE::PLUS:
 	case SYMBOL_TYPE::MINUS:
 		priority = 0;
+		break;
 
 	case SYMBOL_TYPE::MULTIPLY:
 	case SYMBOL_TYPE::DIVIDE:
 		priority = 1;
+		break;
 
 	default: //')' 및 공백에 대해 즉시 처리를 위하여 최하위 우선순위
 		break;
@@ -100,23 +102,28 @@ int GetSymbolTypePriority(SYMBOL_TYPE srcSymbol, bool isInStack)
 /// <returns>대상 표현식으로부터 생성 된 토큰</returns>
 void CreateNextToken(const char* srcExpr, Token* dstToken) throw(std::invalid_argument, std::out_of_range)
 {
-	if (srcExpr == NULL)
-		throw std::invalid_argument("Invalid Args");
+	if (srcExpr == NULL || dstToken == NULL)
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
 	if (strlen(srcExpr) > sizeof(dstToken->str) - 1) //'\0' 제외 한 크기를 초과 할 경우
-		throw std::out_of_range("srcExpr : out of range");
+		throw std::out_of_range(std::string(__func__) + std::string(" : out of range"));
 
 	memset(dstToken->str, '\0', sizeof(dstToken->str));
 	dstToken->readCount = 0;
 
 	/***
-		ex) (1.0 * 2.0) + 3.0
-		1) '(' 및 ')' 에 대해 스택에 삽입 위해 읽기 중지
-		2) 연산자인 * 및 + 에 대해 스택에 삽입 위해 읽기 중지
-		3) 피연산자에 대해 피연산자가 아닌 괄호 혹은 연산자를 만날 때까지 읽기
-		---
-		1) 현재 읽은 문자가 피연산자 (숫자 혹은 소수 표현을 위한 '.' 기호)인 경우, 현재 문자의 다음 문자가 존재하며 피연산자가 아닐 경우 스택에 삽입 위하여 읽기 중지
+		1) 현재 읽은 문자가 피연산자 (숫자 혹은 소수 표현을 위한 '.' 기호)인 경우, 현재 문자의 다음 문자가 존재하며 현재 문자의 다음 문자가 
+		피연산자가 아닐 경우 스택에 삽입 위하여 읽기 중지
+		
 		2) 현재 읽은 문자가 피연산자 (숫자 혹은 소수 표현을 위한 '.' 기호)가 아닌 경우, 스택에 삽입 위하여 읽기 중지
+		---
+		ex) (1.0 * 2.0) + 3.0
+		
+		1) '(' 및 ')' 에 대해 스택에 삽입 위해 읽기 중지
+		
+		2) 연산자인 * 및 + 에 대해 스택에 삽입 위해 읽기 중지
+		
+		3) 피연산자에 대해 피연산자가 아닌 괄호 혹은 연산자를 만날 때까지 읽기
 	***/
 
 	while (dstToken->readCount < strlen(srcExpr))
@@ -128,7 +135,7 @@ void CreateNextToken(const char* srcExpr, Token* dstToken) throw(std::invalid_ar
 		if (dstToken->symbolType == SYMBOL_TYPE::OPERAND) //현재 읽은 문자가 피연산자 (숫자 혹은 소수 표현을 위한 '.' 기호)인 경우
 		{
 			if (dstToken->readCount < strlen(srcExpr) && 
-				GetSymbolTypeFromChar(srcExpr[dstToken->readCount]) != SYMBOL_TYPE::OPERAND) //현재 문자의 다음 문자가 존재하며, 피연산자가 아닐 경우
+				GetSymbolTypeFromChar(srcExpr[dstToken->readCount]) != SYMBOL_TYPE::OPERAND) //현재 문자의 다음 문자가 존재하며, 현재 문자의 다음 문자가 피연산자가 아닐 경우
 				break; //스택에 삽입 위하여 읽기 중지
 		}
 		else //현재 읽은 문자가 피연산자 (숫자 혹은 소수 표현을 위한 '.' 기호)가 아닌 경우
@@ -142,7 +149,7 @@ void CreateNextToken(const char* srcExpr, Token* dstToken) throw(std::invalid_ar
 /// 대상 중위 표기식으로부터 후위 표기식 생성
 /// </summary>
 /// <param name="srcInfixExpr">대상 중위 표기식</param>
-/// <param name="dstPostfixExpr">생성 된 후위 표기식</param>
+/// <param name="dstPostfixExpr">대상 중위 표기식으로부터 변환 되어 출력 될 후위 표기식</param>
 void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr) throw(std::invalid_argument)
 {
 	/***
@@ -158,12 +165,13 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr) throw(std::i
 			3-1) 피연산자 (숫자 혹은 소수 표현을 위한 '.' 기호)인 경우
 			: 스택에 삽입하지 않고 변환 된 후위 표기식의 결과로서 출력
 
-			3-2) 왼쪽 괄호 혹은 연산자인 경우
-			: 현재 스택의 최상위 노드의 연산자 우선순위 < 토큰의 우선순위 혹은 스택이 빌 때까지 
+			3-2) '(' 혹은 연산자인 경우
+			: 후위 표기식의 결과로서 출력 위한 판별 수행
+			현재 스택의 최상위 노드의 연산자 우선순위 < 토큰의 우선순위 혹은 스택이 빌 때까지,
 			현재 스택의 최상위 노드에 있는 연산자 우선순위와 토큰의 우선순위 비교
 
 			ex : ((1 - 2 * 2) + 1) * 3
-			=> 스택에 '('이 존재하고, 다시 '('에 대한 처리 : 기존 스택에 존재하는 '('의 우선순위 < 새로운 '('의 우선순위 (3-2-2)
+			=> 스택에 '('이 존재하고, 다시 '('에 대한 처리 : 기존 스택에 존재하는 '('의 우선순위 < 새로운 '('의 우선순위 => 3-2-2
 
 				3-2-1) 현재 스택의 최상위 노드의 연산자 우선순위 >= 토큰의 우선순위
 				: 현재 스택의 최상위 노드를 스택에서 꺼내 변환 된 후위 표기식의 결과로서 출력 및 토큰을 스택에 삽입
@@ -171,14 +179,14 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr) throw(std::i
 				3-2-2) 현재 스택의 최상위 노드의 연산자 우선순위 < 토큰의 우선순위
 				: 토큰을 스택에 삽입 및 후위 표기식의 결과로서 출력 위한 판별 중지
 			
-			3-3) 오른쪽 괄호인 경우
-			: 스택에서 ')'일 때까지 꺼내어 순차적으로 변환 된 후위 표기식의 결과로서 출력
+			3-3) ')' 괄호인 경우
+			: 스택에서 '(' 가 나올 때 까지 꺼내어 순차적으로 변환 된 후위 표기식의 결과로서 출력
 
 		4) 스택에 남은 노드를 순차적으로 모두 변환 된 후위 표기식의 결과로서 출력
 	***/
 
-	if (srcInfixExpr == NULL || dstPostfixExpr[0] != '\0')
-		throw std::invalid_argument("Invalid Args");
+	if (srcInfixExpr == NULL || dstPostfixExpr == NULL)
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
 	LinkedListStack* stack = NULL;
 
@@ -195,7 +203,8 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr) throw(std::i
 		switch (token.symbolType)
 		{
 		case SYMBOL_TYPE::OPERAND: //피연산자 (숫자 혹은 소수 표현을 위한 '.' 기호)일 경우
-			strcat_s(dstPostfixExpr, MAX_STR_LEN - 1, token.str); //후위 표기식에 출력
+			if(strcat_s(dstPostfixExpr, MAX_STR_LEN - 1, token.str) != 0) //후위 표기식에 출력
+				throw std::runtime_error(std::string(__func__) + std::string(" : src, dst is null or wrong size"));
 			break;
 
 		case SYMBOL_TYPE::RIGHT_PARENTHESIS: //')' 인 경우
@@ -210,7 +219,9 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr) throw(std::i
 				}
 				else //피연산자 (숫자 혹은 소수 표현을 위한 '.' 기호) 혹은 연산자인 경우
 				{
-					strcat_s(dstPostfixExpr, MAX_STR_LEN - 1, poppedNode->data); //후위 표기식에 출력
+					if(strcat_s(dstPostfixExpr, MAX_STR_LEN - 1, poppedNode->data) != 0) //후위 표기식에 출력
+						throw std::runtime_error(std::string(__func__) + std::string(" : src, dst is null or wrong size"));
+
 					LLS_DeallocateNode(&poppedNode);
 				}
 			}
@@ -219,19 +230,23 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr) throw(std::i
 		default: //'(', 연산자, 공백인 경우
 			while (!LLS_IsEmpty(&stack))
 			{
-				Node* poppedNode = LLS_Pop(&stack);
-				
-				if (GetSymbolTypePriority(GetSymbolTypeFromChar(poppedNode->data[0]), true) >=
+				SYMBOL_TYPE peekedNodeSymbolType = GetSymbolTypeFromChar(LLS_Peek(&stack)->data[0]); //현재 스택의 최상위 노드의 연산자
+
+				if (GetSymbolTypePriority(peekedNodeSymbolType, true) >=
 					GetSymbolTypePriority(token.symbolType, false)) //현재 스택의 최상위 노드의 연산자 우선순위 >= 토큰의 우선순위
 				{
-					if(GetSymbolTypeFromChar(poppedNode->data[0]) != SYMBOL_TYPE::LEFT_PARENTHESIS) //'(' 가 아닌 경우
-						strcat_s(dstPostfixExpr, MAX_STR_LEN - 1, poppedNode->data); //후위 표기식에 출력
+					if (peekedNodeSymbolType != SYMBOL_TYPE::LEFT_PARENTHESIS) //'(' 가 아닌 경우
+					{
+						Node* poppedNode = LLS_Pop(&stack);
 
-					LLS_DeallocateNode(&poppedNode);
+						if(strcat_s(dstPostfixExpr, MAX_STR_LEN - 1, poppedNode->data) != 0) //후위 표기식에 출력
+							throw std::runtime_error(std::string(__func__) + std::string(" : src, dst is null or wrong size"));
+
+						LLS_DeallocateNode(&poppedNode);
+					}
 				}
 				else //현재 스택의 최상위 노드의 연산자 우선순위 < 토큰의 우선순위
 				{
-					LLS_DeallocateNode(&poppedNode);
 					break;
 				}
 			}
@@ -248,14 +263,15 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr) throw(std::i
 		Node* poppedNode = LLS_Pop(&stack);
 
 		if (GetSymbolTypeFromChar(poppedNode->data[0]) != SYMBOL_TYPE::LEFT_PARENTHESIS) //'(' 가 아닌 경우
-			strcat_s(dstPostfixExpr, MAX_STR_LEN - 1, poppedNode->data); //후위 표기식에 출력
+			if(strcat_s(dstPostfixExpr, MAX_STR_LEN - 1, poppedNode->data) != 0) //후위 표기식에 출력
+				throw std::runtime_error(std::string(__func__) + std::string(" : src, dst is null or wrong size"));
 
 		LLS_DeallocateNode(&poppedNode);
 	}
 
 	LLS_DeallocateLinkedListStack(&stack);
-	//TODO : 입력 ((1-2*2)+1)*3 , 올바른 출력 :	1 2 2 * - 1 + 3 *
-	//현재 출력 : 12-2*1+3*
+
+	//TODO :리스트에도 예외 처리 추가
 }
 
 /// <summary>
@@ -266,8 +282,7 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr) throw(std::i
 double CalcPostfixExpr(const char* srcPostfixExpr)
 {
 	/***
-	
-	< 후위 표기식에 대한 처리 >
+		< 후위 표기식에 대한 처리 및 계산 >
 		1) 왼쪽부터 순차적으로 토큰 분리 (피연산자, 연산자)
 		ex: 1 3 - 2 *
 
@@ -281,5 +296,7 @@ double CalcPostfixExpr(const char* srcPostfixExpr)
 		3) 수식을 끝까지 읽었을 경우 현재 스택에 남아있는 계산 결과 반환
 
 	***/
+
+
 	return 0.0;
 }

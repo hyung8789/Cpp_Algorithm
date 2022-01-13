@@ -7,11 +7,11 @@
 void LLS_CreateStack(LinkedListStack** srcLinkedListStack) throw(std::runtime_error)
 {
 	if ((*srcLinkedListStack) != NULL)
-		throw std::runtime_error("Memleak");
+		throw std::runtime_error(std::string(__func__) + std::string(" : Memleak"));
 
 	(*srcLinkedListStack) = (LinkedListStack*)malloc(sizeof(LinkedListStack));
 	if ((*srcLinkedListStack) == NULL)
-		throw std::runtime_error("Not enough Heap Memory");
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
 	(*srcLinkedListStack)->head = (*srcLinkedListStack)->top = NULL;
 	(*srcLinkedListStack)->totalNodeCount = 0;
@@ -46,18 +46,18 @@ Node* LLS_CreateNode(const char* srcData) throw(std::invalid_argument, std::runt
 	Node* retVal = NULL;
 	
 	if (srcData == NULL)
-		throw std::invalid_argument("Invalid Args");
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
 	retVal = (Node*)malloc(sizeof(Node));
 	if (retVal == NULL)
-		throw std::runtime_error("Not enough Heap Memory");
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
 	retVal->data = (char*)malloc(strlen(srcData) + 1); //'\0' 포함 크기
 	if (retVal->data == NULL)
-		throw std::runtime_error("Not enough Heap Memory");
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
 	if (strcpy_s(retVal->data, strlen(srcData) + 1, srcData) != 0)
-		throw std::runtime_error("dst is not null or wrong size");
+		throw std::runtime_error(std::string(__func__) + std::string(" : src, dst is null or wrong size"));
 
 	retVal->next = NULL;
 
@@ -91,10 +91,10 @@ void LLS_DeallocateNode(Node** srcNode)
 void LLS_Push(LinkedListStack** srcLinkedListStack, Node* srcNewNode) throw(std::invalid_argument, std::runtime_error)
 {
 	if ((*srcLinkedListStack) == NULL)
-		throw std::runtime_error("Not initialized");
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	if (srcNewNode == NULL)
-		throw std::invalid_argument("Invalid Args");
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
 	if ((*srcLinkedListStack)->head == NULL)
 	{
@@ -120,7 +120,7 @@ Node* LLS_Pop(LinkedListStack** srcLinkedListStack) throw(std::runtime_error)
 	Node* retVal = NULL;
 
 	if ((*srcLinkedListStack) == NULL)
-		throw std::runtime_error("Not initialized");
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	if (!LLS_IsEmpty(srcLinkedListStack))
 	{
@@ -141,7 +141,7 @@ Node* LLS_Pop(LinkedListStack** srcLinkedListStack) throw(std::runtime_error)
 			}
 
 			if (current == NULL)
-				throw std::runtime_error("Unknown Err");
+				throw std::runtime_error(std::string(__func__) + std::string(" : Unknown Err"));
 
 			(*srcLinkedListStack)->top = current; //최상위 노드를 최상위 노드의 이전 노드로 변경
 			current->next = NULL;
@@ -161,7 +161,7 @@ Node* LLS_Peek(LinkedListStack** srcLinkedListStack)
 	Node* retVal = NULL;
 
 	if ((*srcLinkedListStack) == NULL)
-		throw std::runtime_error("Not initialized");
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	if (!LLS_IsEmpty(srcLinkedListStack))
 	{
@@ -179,7 +179,7 @@ Node* LLS_Peek(LinkedListStack** srcLinkedListStack)
 StackIndexType LLS_GetTotalNodeCount(LinkedListStack** srcLinkedListStack) throw(std::runtime_error)
 {
 	if ((*srcLinkedListStack) == NULL)
-		throw std::runtime_error("Not initialized");
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	return (*srcLinkedListStack)->totalNodeCount;
 }
@@ -192,7 +192,7 @@ StackIndexType LLS_GetTotalNodeCount(LinkedListStack** srcLinkedListStack) throw
 bool LLS_IsEmpty(LinkedListStack** srcLinkedListStack) throw(std::runtime_error)
 {
 	if ((*srcLinkedListStack) == NULL)
-		throw std::runtime_error("Not initialized");
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	return ((*srcLinkedListStack)->totalNodeCount == 0);
 }

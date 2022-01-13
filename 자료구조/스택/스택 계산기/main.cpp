@@ -11,7 +11,7 @@ int main()
 		memset(postfixExpr, '\0', MAX_STR_LEN);
 
 		printf("중위 표현식 입력 (최대 %d 자) : ", MAX_STR_LEN - 1);
-		scanf_s("%s", infixExpr, MAX_STR_LEN - 1);
+		scanf_s("%[^\n]", infixExpr, MAX_STR_LEN - 1);
 
 		GenPostfixExpr(infixExpr, postfixExpr);
 		printf("중위 표현식 : %s\n후위 표현식 : %s\n", infixExpr, postfixExpr);
