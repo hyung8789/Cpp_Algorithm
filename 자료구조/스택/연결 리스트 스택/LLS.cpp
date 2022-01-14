@@ -156,7 +156,7 @@ Node* LLS_Pop(LinkedListStack** srcLinkedListStack) throw(std::runtime_error)
 /// </summary>
 /// <param name="srcLinkedListStack">대상 연결 리스트 스택</param>
 /// <returns>대상 연결 리스트 스택의 최상위 데이터</returns>
-Node* LLS_Peek(LinkedListStack** srcLinkedListStack)
+Node* LLS_Peek(LinkedListStack** srcLinkedListStack) throw(std::runtime_error)
 {
 	Node* retVal = NULL;
 

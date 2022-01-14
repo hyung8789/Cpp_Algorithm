@@ -25,16 +25,16 @@ typedef struct
 	unsigned int readCount; //읽은 문자 개수
 }Token;
 
-double CalcOperation(double, char, double) throw(std::invalid_argument, std::overflow_error, std::underflow_error);
+inline double CalcOperation(double, char, double) throw(std::invalid_argument, std::overflow_error, std::underflow_error);
 double CalcOperation(double, SYMBOL_TYPE, double) throw(std::invalid_argument, std::overflow_error, std::underflow_error);
 
 inline int CharToDecAscii(char);
 inline int SingleNumToDecAscii(int) throw(std::invalid_argument);
-
 SYMBOL_TYPE CharToSymbolType(char) throw(std::invalid_argument);
+
 int GetSymbolTypePriority(SYMBOL_TYPE, bool);
 
 void GenNextToken(const char*, Token*) throw(std::invalid_argument, std::out_of_range);
-void GenPostfixExpr(const char*, char*) throw(std::invalid_argument);
-double CalcPostfixExpr(const char*);
+void GenPostfixExpr(const char*, char*) throw(std::invalid_argument, std::runtime_error, std::logic_error);
+double CalcPostfixExpr(const char*) throw(std::invalid_argument);
 #endif
