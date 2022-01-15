@@ -2,11 +2,11 @@
 
 int main()
 {
-	char infixExpr[MAX_STR_LEN]; //중위 표현식
-	char postfixExpr[MAX_STR_LEN]; //후위 표현식
-
 	_CrtMemState oldState, newState, lastState;
 	_CrtMemCheckpoint(&oldState); //할당 전 상태
+
+	char infixExpr[MAX_STR_LEN]; //중위 표현식
+	char postfixExpr[MAX_STR_LEN]; //후위 표현식
 
 	try
 	{

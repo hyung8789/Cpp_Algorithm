@@ -16,14 +16,14 @@ typedef struct ArrayStackType
 	Node* nodeArray; //노드 배열
 }ArrayStack;
 
-void AS_CreateStack(ArrayStack**, StackIndexType) throw(std::invalid_argument, std::runtime_error);
+void AS_CreateStack(ArrayStack**, StackIndexType);
 void AS_DeallocateArrayStack(ArrayStack**);
 
-void AS_Push(ArrayStack**, DataType) throw(std::runtime_error);
-DataType AS_Pop(ArrayStack**) throw(std::runtime_error);
-DataType AS_Peek(ArrayStack**) throw(std::runtime_error);
+void AS_Push(ArrayStack**, DataType);
+DataType AS_Pop(ArrayStack**);
+DataType AS_Peek(ArrayStack**);
 
-StackIndexType AS_GetTotalNodeDataCount(ArrayStack**) throw(std::runtime_error);
-bool AS_IsEmpty(ArrayStack**) throw(std::runtime_error);
-bool AS_IsFull(ArrayStack**) throw(std::runtime_error);
+StackIndexType AS_GetTotalNodeDataCount(ArrayStack**);
+bool AS_IsEmpty(ArrayStack**);
+bool AS_IsFull(ArrayStack**);
 #endif

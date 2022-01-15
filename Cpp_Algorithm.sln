@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "자료구조", "자료구조", "{0A8B1006-11F2-432F-B686-33F6DEDD2176}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "리스트", "리스트", "{EFA8E0C4-7814-4987-B296-CCA55DCE5CF5}"
+	ProjectSection(SolutionItems) = preProject
+		자료구조\리스트\리스트_CodeMap.dgml = 자료구조\리스트\리스트_CodeMap.dgml
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "스택", "스택", "{FD021423-E618-43B9-826C-3B802686056F}"
 EndProject

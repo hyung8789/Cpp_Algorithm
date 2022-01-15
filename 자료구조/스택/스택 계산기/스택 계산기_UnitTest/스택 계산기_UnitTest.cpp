@@ -23,22 +23,32 @@ namespace 스택_계산기_UnitTest
 			double result2 = CalcOperation(1.0, SYMBOL_TYPE::PLUS, 2.0);
 
 			Assert::AreEqual(result1, result2);
+
+			try
+			{
+				CalcOperation(1, '/', 0);
+				Assert::Fail();
+			}
+			catch (const std::invalid_argument& ex)
+			{
+				Logger::WriteMessage(ex.what()); //success
+			}
 		}
 
 		TEST_METHOD(CharToDecAscii_TestMethod)
 		{
-			int expected = (int)'a'; //예측값
-			int actual = CharToDecAscii('a'); //실제값
-
-			Assert::AreEqual(expected, actual);
+			Assert::AreEqual((int)'a', CharToDecAscii('a'));
+			Assert::AreEqual((int)'z', CharToDecAscii('z'));
 		}
 
 		TEST_METHOD(SingleNumToDecAscii_TestMethod)
 		{
 			for (int i = -1; i <= 10; i++)
 			{
-				if (i == -1 || i == 10) //경계값 검사
+				switch (i) //경계값 검사
 				{
+				case -1:
+				case 10:
 					try
 					{
 						SingleNumToDecAscii(i);
@@ -48,23 +58,48 @@ namespace 스택_계산기_UnitTest
 					{
 						Logger::WriteMessage(ex.what()); //success
 					}
-				}
-				else
-				{
+					break;
+
+				default:
 					Assert::AreEqual('0' + i, SingleNumToDecAscii(i));
+					break;
 				}
 			}
 		}
 
 		TEST_METHOD(CharToSymbolType_TestMethod)
 		{
+			for (int i = 47; i <= 58; i++) //10진 아스키 코드 범위
+			{
+				switch (i) //경계값 검사
+				{
+				case 47: //'/'
+					Assert::AreEqual((const char)SYMBOL_TYPE::DIVIDE, (const char)CharToSymbolType(i));
+					break;
 
+				case 58: //':'
+					try
+					{
+						CharToSymbolType(i);
+						Assert::Fail();
+					}
+					catch (const std::invalid_argument& ex)
+					{
+						Logger::WriteMessage(ex.what()); //success
+					}
+					break;
+
+				default:
+					Assert::AreEqual((const char)SYMBOL_TYPE::OPERAND, (const char)CharToSymbolType(i));
+					break;
+				}
+			}
 		}
 
-		TEST_METHOD(GenPostfixExpr_TestMethod)
+		TEST_METHOD(GenPostfixExpr_TestMethod1)
 		{
 			const char* input = "1+3.334/(4.28*(110-7729))"; //입력값
-			const char* expected = "1 3.334 4.28 110 7720 -*/+"; //예측값
+			const char* expected = "1 3.334 4.28 110 7729 -*/+"; //예측값
 			char actual[MAX_STR_LEN] = { '\0', }; //실제값
 
 			//Infix Expr : 1+3.334/(4.28*(110-7729))
@@ -72,7 +107,25 @@ namespace 스택_계산기_UnitTest
 			GenPostfixExpr(input, actual);
 			Assert::AreEqual(expected, actual);
 
-			//FIXME : 잘못 된 우선순위 할당? 연산 과정 논리 오류?
+		//TODO : 오류 데이터에 대한 테스트 추가
+
+
+			/***
+				< 테스트용 오류 데이터 >
+
+				1+*2
+				(1+)2
+
+				)1+2
+				1)+2
+				1+)2
+				1+2)
+
+				((1+2
+				(1(+2
+				(1+(2
+				(1+2(
+			***/
 		}
 
 		TEST_METHOD(CalcPostfixExpr_TestMethod)

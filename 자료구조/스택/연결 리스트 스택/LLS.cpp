@@ -4,7 +4,7 @@
 /// 대상 연결 리스트 스택 생성
 /// </summary>
 /// <param name="srcLinkedListStack">대상 연결 리스트 스택</param>
-void LLS_CreateStack(LinkedListStack** srcLinkedListStack) throw(std::runtime_error)
+void LLS_CreateStack(LinkedListStack** srcLinkedListStack)
 {
 	if ((*srcLinkedListStack) != NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Memleak"));
@@ -41,7 +41,7 @@ void LLS_DeallocateLinkedListStack(LinkedListStack** srcLinkedListStack)
 /// </summary>
 /// <param name="srcData">노드의 데이터</param>
 /// <returns>생성 된 노드</returns>
-Node* LLS_CreateNode(const char* srcData) throw(std::invalid_argument, std::runtime_error)
+Node* LLS_CreateNode(const char* srcData)
 {
 	Node* retVal = NULL;
 
@@ -88,7 +88,7 @@ void LLS_DeallocateNode(Node** srcNode)
 /// </summary>
 /// <param name="srcLinkedListStack">대상 연결 리스트 스택</param>
 /// <param name="srcNewNode">삽입 할 노드</param>
-void LLS_Push(LinkedListStack** srcLinkedListStack, Node* srcNewNode) throw(std::invalid_argument, std::runtime_error)
+void LLS_Push(LinkedListStack** srcLinkedListStack, Node* srcNewNode)
 {
 	if ((*srcLinkedListStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -115,7 +115,7 @@ void LLS_Push(LinkedListStack** srcLinkedListStack, Node* srcNewNode) throw(std:
 /// </summary>
 /// <param name="srcLinkedListStack">대상 연결 리스트 스택</param>
 /// <returns>대상 연결 리스트 스택의 최상위 데이터</returns>
-Node* LLS_Pop(LinkedListStack** srcLinkedListStack) throw(std::runtime_error)
+Node* LLS_Pop(LinkedListStack** srcLinkedListStack)
 {
 	Node* retVal = NULL;
 
@@ -156,7 +156,7 @@ Node* LLS_Pop(LinkedListStack** srcLinkedListStack) throw(std::runtime_error)
 /// </summary>
 /// <param name="srcLinkedListStack">대상 연결 리스트 스택</param>
 /// <returns>대상 연결 리스트 스택의 최상위 데이터</returns>
-Node* LLS_Peek(LinkedListStack** srcLinkedListStack) throw(std::runtime_error)
+Node* LLS_Peek(LinkedListStack** srcLinkedListStack)
 {
 	Node* retVal = NULL;
 
@@ -176,7 +176,7 @@ Node* LLS_Peek(LinkedListStack** srcLinkedListStack) throw(std::runtime_error)
 /// </summary>
 /// <param name="srcLinkedListStack">대상 연결 리스트 스택의 전체 노드 개수</param>
 /// <returns></returns>
-StackIndexType LLS_GetTotalNodeCount(LinkedListStack** srcLinkedListStack) throw(std::runtime_error)
+StackIndexType LLS_GetTotalNodeCount(LinkedListStack** srcLinkedListStack)
 {
 	if ((*srcLinkedListStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -185,11 +185,11 @@ StackIndexType LLS_GetTotalNodeCount(LinkedListStack** srcLinkedListStack) throw
 }
 
 /// <summary>
-/// 대상 연결 리스트 스택의 공백 여부 반환
+/// 대상 연결 리스트 스택의 피연산자 간 구분을 위한 공백 여부 반환
 /// </summary>
 /// <param name="srcLinkedListStack">대상 연결 리스트 스택</param>
-/// <returns>대상 연결 리스트 스택의 공백 여부</returns>
-bool LLS_IsEmpty(LinkedListStack** srcLinkedListStack) throw(std::runtime_error)
+/// <returns>대상 연결 리스트 스택의 피연산자 간 구분을 위한 공백 여부</returns>
+bool LLS_IsEmpty(LinkedListStack** srcLinkedListStack)
 {
 	if ((*srcLinkedListStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));

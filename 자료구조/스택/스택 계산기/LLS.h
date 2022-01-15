@@ -18,16 +18,16 @@ typedef struct LinkedListStackType
 	StackIndexType totalNodeCount; //전체 노드 수
 }LinkedListStack;
 
-void LLS_CreateStack(LinkedListStack**) throw(std::runtime_error);
+void LLS_CreateStack(LinkedListStack**);
 void LLS_DeallocateLinkedListStack(LinkedListStack**);
 
-Node* LLS_CreateNode(const char*) throw(std::invalid_argument, std::runtime_error);
+Node* LLS_CreateNode(const char*);
 void LLS_DeallocateNode(Node**);
 
-void LLS_Push(LinkedListStack**, Node*) throw(std::invalid_argument, std::runtime_error);
-Node* LLS_Pop(LinkedListStack**) throw(std::runtime_error);
-Node* LLS_Peek(LinkedListStack**) throw(std::runtime_error);
+void LLS_Push(LinkedListStack**, Node*);
+Node* LLS_Pop(LinkedListStack**);
+Node* LLS_Peek(LinkedListStack**);
 
-StackIndexType LLS_GetTotalNodeCount(LinkedListStack**) throw(std::runtime_error);
-bool LLS_IsEmpty(LinkedListStack**) throw(std::runtime_error);
+StackIndexType LLS_GetTotalNodeCount(LinkedListStack**);
+bool LLS_IsEmpty(LinkedListStack**);
 #endif

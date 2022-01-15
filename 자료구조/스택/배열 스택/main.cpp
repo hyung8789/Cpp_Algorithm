@@ -4,13 +4,12 @@
 
 int main()
 {
-	ArrayStack* stack = NULL; //배열 스택
-
 	_CrtMemState oldState, newState, lastState;
 	_CrtMemCheckpoint(&oldState); //할당 전 상태
 
 	try
 	{
+		ArrayStack* stack = NULL; //배열 스택
 		AS_CreateStack(&stack, STACK_SIZE); //STACK_SIZE만큼 삽입 가능 한 크기 할당
 
 		for (int i = 0; i < STACK_SIZE; i++)

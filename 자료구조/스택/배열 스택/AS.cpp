@@ -5,10 +5,10 @@
 /// </summary>
 /// <param name="srcArrayStack">대상 배열 스택</param>
 /// <param name="capacity">할당 크기</param>
-void AS_CreateStack(ArrayStack** srcArrayStack, StackIndexType capacity) throw(std::invalid_argument, std::runtime_error)
+void AS_CreateStack(ArrayStack** srcArrayStack, StackIndexType capacity)
 {
 	if ((*srcArrayStack) != NULL)
-		throw std::runtime_error("Memleak");
+		throw std::runtime_error(std::string(__func__) + std::string(" : Memleak"));
 
 	if (capacity <= 0)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -50,7 +50,7 @@ void AS_DeallocateArrayStack(ArrayStack** srcArrayStack)
 /// </summary>
 /// <param name="srcArrayStack">대상 배열 스택</param>
 /// <param name="srcData">삽입 할 데이터</param>
-void AS_Push(ArrayStack** srcArrayStack, DataType srcData) throw(std::runtime_error)
+void AS_Push(ArrayStack** srcArrayStack, DataType srcData)
 {
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -72,7 +72,7 @@ void AS_Push(ArrayStack** srcArrayStack, DataType srcData) throw(std::runtime_er
 /// </summary>
 /// <param name="srcArrayStack">대상 배열 스택</param>
 /// <returns>대상 배열 스택의 최상위 데이터</returns>
-DataType AS_Pop(ArrayStack** srcArrayStack) throw(std::runtime_error)
+DataType AS_Pop(ArrayStack** srcArrayStack)
 {
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -93,7 +93,7 @@ DataType AS_Pop(ArrayStack** srcArrayStack) throw(std::runtime_error)
 /// </summary>
 /// <param name="srcArrayStack">대상 배열 스택</param>
 /// <returns>대상 배열 스택의 최상위 데이터</returns>
-DataType AS_Peek(ArrayStack** srcArrayStack) throw(std::runtime_error)
+DataType AS_Peek(ArrayStack** srcArrayStack)
 {
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -114,7 +114,7 @@ DataType AS_Peek(ArrayStack** srcArrayStack) throw(std::runtime_error)
 /// </summary>
 /// <param name="srcArrayStack">대상 배열 스택</param>
 /// <returns>대상 배열 스택의 전체 노드 데이터 개수</returns>
-StackIndexType AS_GetTotalNodeDataCount(ArrayStack** srcArrayStack) throw(std::runtime_error)
+StackIndexType AS_GetTotalNodeDataCount(ArrayStack** srcArrayStack)
 {
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -127,7 +127,7 @@ StackIndexType AS_GetTotalNodeDataCount(ArrayStack** srcArrayStack) throw(std::r
 /// </summary>
 /// <param name="srcArrayStack">대상 배열 스택</param>
 /// <returns>대상 배열 스택의 공백 여부</returns>
-bool AS_IsEmpty(ArrayStack** srcArrayStack) throw(std::runtime_error)
+bool AS_IsEmpty(ArrayStack** srcArrayStack)
 {
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -140,7 +140,7 @@ bool AS_IsEmpty(ArrayStack** srcArrayStack) throw(std::runtime_error)
 /// </summary>
 /// <param name="srcArrayStack">대상 배열 스택</param>
 /// <returns>대상 배열 스택의 삽입 가능 여부</returns>
-bool AS_IsFull(ArrayStack** srcArrayStack) throw(std::runtime_error)
+bool AS_IsFull(ArrayStack** srcArrayStack)
 {
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));

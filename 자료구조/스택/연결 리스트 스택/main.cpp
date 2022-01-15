@@ -2,13 +2,12 @@
 
 int main()
 {
-	LinkedListStack* stack = NULL; //연결 리스트 스택
-
 	_CrtMemState oldState, newState, lastState;
 	_CrtMemCheckpoint(&oldState); //할당 전 상태
 	
 	try
 	{
+		LinkedListStack* stack = NULL; //단일 연결 리스트 스택
 		LLS_CreateStack(&stack);
 		LLS_Push(&stack, LLS_CreateNode("abc"));
 		LLS_Push(&stack, LLS_CreateNode("123"));

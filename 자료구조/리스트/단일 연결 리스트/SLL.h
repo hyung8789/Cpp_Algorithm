@@ -10,19 +10,19 @@ typedef struct NodeType
 	NodeType* next; //다음 노드
 }Node;
 
-Node* SLL_CreateNode(DataType) throw(std::runtime_error);
+Node* SLL_CreateNode(DataType);
 void SLL_DeallocateNode(Node**);
 void SLL_DeallocateNodeList(Node**);
 
-void SLL_AppendNode(Node**, Node*) throw(std::invalid_argument);
-Node* SLL_GetNodeAt(Node**, NodePositionType) throw(std::invalid_argument, std::runtime_error);
+void SLL_AppendNode(Node**, Node*);
+Node* SLL_GetNodeAt(Node**, NodePositionType);
 
-void SLL_RemoveNodeAt(Node**, NodePositionType, bool = true) throw(std::invalid_argument, std::runtime_error);
-void SLL_RemoveNode(Node**, Node*, bool = true) throw(std::invalid_argument, std::runtime_error);
+void SLL_RemoveNodeAt(Node**, NodePositionType, bool = true);
+void SLL_RemoveNode(Node**, Node*, bool = true);
 
-void SLL_InsertNewHead(Node**, Node*) throw(std::invalid_argument);
-void SLL_InsertNodeAfter(Node*, Node*) throw(std::invalid_argument);
-void SLL_InsertNodeBefore(Node**, Node*, Node*) throw(std::invalid_argument, std::runtime_error);
+void SLL_InsertNewHead(Node**, Node*);
+void SLL_InsertNodeAfter(Node*, Node*);
+void SLL_InsertNodeBefore(Node**, Node*, Node*);
 
 NodePositionType SLL_GetTotalNodeCount(Node**);
 void SLL_DispNodeList(Node**);

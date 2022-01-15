@@ -5,7 +5,7 @@
 /// </summary>
 /// <param name="srcData">노드의 데이터</param>
 /// <returns>생성 된 노드</returns>
-Node* SLL_CreateNode(DataType srcData) throw(std::runtime_error)
+Node* SLL_CreateNode(DataType srcData)
 {
 	Node* retVal = (Node*)malloc(sizeof(Node));
 	if (retVal == NULL)
@@ -52,7 +52,7 @@ void SLL_DeallocateNodeList(Node** srcList)
 /// </summary>
 /// <param name="srcList">대상 리스트</param>
 /// <param name="srcNewNode">리스트의 끝에 삽입하고자 하는 새 노드</param>
-void SLL_AppendNode(Node** srcList, Node* srcNewNode) throw(std::invalid_argument)
+void SLL_AppendNode(Node** srcList, Node* srcNewNode)
 {
 	if (srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -80,7 +80,7 @@ void SLL_AppendNode(Node** srcList, Node* srcNewNode) throw(std::invalid_argumen
 /// <param name="srcList">대상 리스트</param>
 /// <param name="position">헤드 노드 기준 상대적 특정 위치</param>
 /// <returns>헤드 노드 기준 상대적 특정 위치의 노드</returns>
-Node* SLL_GetNodeAt(Node** srcList, NodePositionType position) throw(std::invalid_argument, std::runtime_error)
+Node* SLL_GetNodeAt(Node** srcList, NodePositionType position)
 {
 	if (position < 0)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -104,7 +104,7 @@ Node* SLL_GetNodeAt(Node** srcList, NodePositionType position) throw(std::invali
 /// <param name="srcList">대상 리스트</param>
 /// <param name="position">헤드 노드 기준 삭제 할 상대적 특정 위치</param>
 /// <param name="deallocateAfterRemove">삭제 대상 노드에 대한 메모리 해제 수행 여부</param>
-void SLL_RemoveNodeAt(Node** srcList, NodePositionType position, bool deallocateAfterRemove) throw(std::invalid_argument, std::runtime_error)
+void SLL_RemoveNodeAt(Node** srcList, NodePositionType position, bool deallocateAfterRemove)
 {
 	/***
 		단일 연결 리스트에서 삭제 대상 노드에서 이전 노드로 즉시 접근이 불가능하므로,
@@ -158,7 +158,7 @@ void SLL_RemoveNodeAt(Node** srcList, NodePositionType position, bool deallocate
 /// <param name="srcList">대상 리스트</param>
 /// <param name="srcTargetNode">삭제 대상 노드</param>
 /// <param name="deallocateAfterRemove">삭제 대상 노드에 대한 메모리 해제 수행 여부</param>
-void SLL_RemoveNode(Node** srcList, Node* srcTargetNode, bool deallocateAfterRemove) throw(std::invalid_argument, std::runtime_error)
+void SLL_RemoveNode(Node** srcList, Node* srcTargetNode, bool deallocateAfterRemove)
 {
 	if (srcTargetNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -200,7 +200,7 @@ void SLL_RemoveNode(Node** srcList, Node* srcTargetNode, bool deallocateAfterRem
 /// </summary>
 /// <param name="srcList">대상 리스트</param>
 /// <param name="srcNewNode">삽입하고자 하는 새 노드</param>
-void SLL_InsertNewHead(Node** srcList, Node* srcNewNode) throw(std::invalid_argument)
+void SLL_InsertNewHead(Node** srcList, Node* srcNewNode)
 {
 	if (srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -220,7 +220,7 @@ void SLL_InsertNewHead(Node** srcList, Node* srcNewNode) throw(std::invalid_argu
 /// </summary>
 /// <param name="srcTargetNode">대상 노드</param>
 /// <param name="srcNewNode">삽입하고자 하는 새 노드</param>
-void SLL_InsertNodeAfter(Node* srcTargetNode, Node* srcNewNode) throw(std::invalid_argument)
+void SLL_InsertNodeAfter(Node* srcTargetNode, Node* srcNewNode)
 {
 	if (srcTargetNode == NULL || srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -235,7 +235,7 @@ void SLL_InsertNodeAfter(Node* srcTargetNode, Node* srcNewNode) throw(std::inval
 /// <param name="srcList">대상 리스트</param>
 /// <param name="srcTargetNode">대상 노드</param>
 /// <param name="srcNewNode">삽입하고자 하는 새 노드</param>
-void SLL_InsertNodeBefore(Node** srcList, Node* srcTargetNode, Node* srcNewNode) throw(std::invalid_argument, std::runtime_error)
+void SLL_InsertNodeBefore(Node** srcList, Node* srcTargetNode, Node* srcNewNode)
 {
 	/***
 		1) TH : 대상 노드의 헤드 노드 여부 (T : 헤드 노드, F : 중간 노드 혹은 꼬리 노드)
