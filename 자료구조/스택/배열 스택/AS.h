@@ -1,6 +1,8 @@
 #ifndef _AS_H_
 #define _AS_H_
 
+#define CAPACITY_REDUCE_THRESHOLD_RATIO 0.7 //할당 크기에 대한 감소 임계 비율 (0.0 ~ 1.0)
+
 typedef int DataType; //노드의 데이터 타입
 typedef int StackIndexType; //스택 인덱스 타입
 

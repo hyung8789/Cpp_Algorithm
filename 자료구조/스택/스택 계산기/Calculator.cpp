@@ -177,17 +177,17 @@ void GenNextToken(const char* srcExpr, Token* dstToken)
 			현재 문자의 이전, 다음 문자가 존재하지 않거나, 현재 문자의 이전, 다음 문자가 피연산자가 아닐 경우 잘못 된 표현식 예외 발생
 			'.'이 이미 이전에 존재하였을 경우 잘못 된 표현식 예외 발생
 
-			2-3) 현재 읽은 문자의 기호 타입이 ('(', ')'), 연산자, 피연산자 간 구분을 위한 공백인 경우
+			2-3) 현재 읽은 문자의 기호 타입이 '(', ')', 연산자, 피연산자 간 구분을 위한 공백인 경우
 			: 스택에 삽입 혹은 기타 처리를 위하여 읽기 중지
-		
+
 		---
 
 		< '.'을 포함하는 실수의 조건 >
 
 		1) '.'은 '.'을 포함하는 실수에서 맨 처음에 단독으로 존재 할 수 없으며, 어떠한 피연산자가 최소 한 번은 존재 한 다음에만 존재
 		2) '.'은 '.'을 포함하는 실수에서 반드시 한 번만 존재
-		3) '.'을 포함하는 실수에서 '.'이 존재한 뒤, 피연산자가 최소 한 번은 반드시 존재하여야 하고, 
-		최소 한 번 이상의 피연산자가 존재 후 더 이상 피연산자가 존재하지 않을 경우, 
+		3) '.'을 포함하는 실수에서 '.'이 존재한 뒤, 피연산자가 최소 한 번은 반드시 존재하여야 하고,
+		최소 한 번 이상의 피연산자가 존재 후 더 이상 피연산자가 존재하지 않을 경우,
 		이 전체를 하나의 실수로 간주하여 '.' 및 피연산자를 포함 한 하나의 피연산자 토큰으로 처리
 	***/
 
@@ -218,28 +218,17 @@ void GenNextToken(const char* srcExpr, Token* dstToken)
 			break;
 
 		case SYMBOL_TYPE::DOT:
-			if (!isDotAlreadyExists) //아직 '.'가 존재하지 않은 경우
-			{
-				isDotAlreadyExists = true;
-
-				if (dstToken->readCount >= 2 && dstToken->readCount < strlen(srcExpr)) //현재 문자의 이전, 다음 문자가 존재 할 경우
-				{
-					SYMBOL_TYPE prevSymbolType = CharToSymbolType(dstToken->str[dstToken->readCount - 2]); //현재 문자의 이전 기호 문자
-					SYMBOL_TYPE nextSymbolType = CharToSymbolType(srcExpr[dstToken->readCount]); //현재 문자의 다음 기호 문자
-
-					if (!(prevSymbolType == SYMBOL_TYPE::OPERAND && nextSymbolType == SYMBOL_TYPE::OPERAND)) //현재 문자의 이전, 다음 문자의 기호 타입이 피연산자가 아닐 경우
-						throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (wrong srcExpr)"));
-				}
-				else
-				{
-					throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (wrong srcExpr)"));
-				}
-			}
-			else //이미 '.'가 존재 할 경우
-			{
+			if (isDotAlreadyExists || 
+				!(dstToken->readCount >= 2 && dstToken->readCount < strlen(srcExpr))) //이미 '.'가 존재하거나, 현재 문자의 이전, 다음 문자가 존재하지 않을 경우
 				throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (wrong srcExpr)"));
-			}
-			break;
+
+			isDotAlreadyExists = true;
+
+			if (!(CharToSymbolType(dstToken->str[dstToken->readCount - 2]) == SYMBOL_TYPE::OPERAND &&
+				CharToSymbolType(srcExpr[dstToken->readCount]) == SYMBOL_TYPE::OPERAND)) //현재 문자의 이전, 다음 문자의 기호 타입이 피연산자가 아닐 경우
+				throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (wrong srcExpr)"));
+
+			break; //현재 문자의 이전, 다음 문자가 존재하며, 현재 문자의 이전, 다음 문자가 피연산자이면 계속 읽기
 
 		default: //'(', ')', 연산자, 피연산자 간 구분을 위한 공백인 경우
 			goto END_PROC; //스택에 삽입 위하여 읽기 중지
@@ -295,8 +284,9 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr)
 			: '.'은 단일 토큰으로서 처리 되지 않으며, '.'을 포함 한 실수로서 하나의 피연산자로 처리되어야만 함
 			이에 따라, 논리 예외 발생
 
-		4) 현재 중위 표기식에 더 이상 토큰으로 분리 할 것이 없으면,
-		스택에 남은 노드의 기호들을 순차적으로 모두 변환 된 후위 표기식의 결과로서 출력
+		4) 현재 중위 표기식에 더 이상 토큰으로 분리 할 것이 없으면, 스택에 남은 노드의 기호들을 순차적으로 모두 변환 된 후위 표기식의 결과로서 출력
+		: 올바른 중위 표기식은 항상 '('와 ')'의 쌍이 일치 (개수가 일치)해야만 히며, 중위 표기식을 후위 표기식으로 변환하는 과정에서 ')'가 나올 경우, 
+		'('가 나올 때 까지 후위 표기식에 출력하므로, 현재 스택에 남은 노드들 중 '('이 존재 할 경우, 잘못 된 중위 표기식 예외 발생
 	***/
 
 	if (srcInfixExpr == NULL || dstPostfixExpr == NULL)
@@ -393,9 +383,11 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr)
 	{
 		Node* poppedNode = LLS_Pop(&stack);
 
-		if (CharToSymbolType(poppedNode->data[0]) != SYMBOL_TYPE::LEFT_PARENTHESIS) //'(' 가 아닌 경우
-			if (strcat_s(dstPostfixExpr, MAX_STR_LEN - 1, poppedNode->data) != 0) //후위 표기식에 출력
-				throw std::runtime_error(std::string(__func__) + std::string(" : src, dst is null or wrong size"));
+		if (CharToSymbolType(poppedNode->data[0]) == SYMBOL_TYPE::LEFT_PARENTHESIS) //')'와 쌍이 맞지 않는 '(' 가 남아있는 경우
+			throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (wrong InfixExpr)"));
+
+		if (strcat_s(dstPostfixExpr, MAX_STR_LEN - 1, poppedNode->data) != 0) //후위 표기식에 출력
+			throw std::runtime_error(std::string(__func__) + std::string(" : src, dst is null or wrong size"));
 
 		LLS_DeallocateNode(&poppedNode);
 	}
@@ -424,20 +416,18 @@ double CalcPostfixExpr(const char* srcPostfixExpr)
 
 		2) 분리 된 토큰의 기호 타입에 따라,
 			2-1) 피연산자 간 구분을 위한 공백인 경우
-			: 계산을 위하여 해당 토큰 무시
+			: 계산 시에 사용하지 않으므로, 해당 토큰 무시
 
 			2-2) 피연산자인 경우
 			: 토큰을 스택에 삽입
 
 			2-3) 연산자인 경우
 			: 스택에 존재하는 피연산자를 2회 꺼낸 후 피연산자에 대해 역순으로 현재 토큰의 연산자와 계산 수행 및 계산 결과를 다시 스택에 삽입
+			단, 올바른 후위 표기식은 분리 된 토큰이 연산자인 상황에서 계산을 위해 스택에서 2회 꺼냈을 시, 항상 피연산자가 2회 연속으로 나타나야 함
+			이에 따라, 스택에서 노드를 2회 꺼낼 수 없을 경우 (ex : 1*+2), 잘못 된 후위 표기식 예외 발생
 
 		3) 후위 표기식을 끝까지 읽었을 경우 현재 스택에 남아있는 최종 계산 결과 반환
 	***/
-
-	//TODO : 중위 표현식에 대한 유효성 검사를 단순화 하기 위해 변환 된 후위 표현식을 통한 유효성 검사 수행
-	// (ex : 1*+2 입력 시 스택에서 2회 제거 할 수 없는 경우)
-	//중위 표현식에서 유효성 검사를 수행할 경우 파스 트리를 작성해야 함
 
 	if (srcPostfixExpr == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -471,12 +461,15 @@ double CalcPostfixExpr(const char* srcPostfixExpr)
 			break;
 
 		default: //연산자인 경우
+			if(LLS_GetTotalNodeCount(&stack) < 2) //스택에서 노드를 2회 꺼낼 수 없을 경우
+				throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (wrong srcPostfixExpr)"));
+
 			Node* operandNode1 = LLS_Pop(&stack); //연산자 뒤에 들어 갈 피연산자
 			Node* operandNode2 = LLS_Pop(&stack); //연산자 앞에 들어 갈 피연산자
 			double tmpResult = CalcOperation(atof(operandNode2->data), token.symbolType, atof(operandNode1->data)); //중간 계산 결과
 			char tmpResultBuffer[_CVTBUFSIZE] = { '\0', }; //중간 계산 결과 변환 위한 버퍼
 
-			_gcvt_s(tmpResultBuffer, _CVTBUFSIZE, tmpResult, 10); //부동 실수점을 문자열로 변환
+			_gcvt_s(tmpResultBuffer, _CVTBUFSIZE, tmpResult, 10); //실수를 문자열로 변환
 			LLS_Push(&stack, LLS_CreateNode(tmpResultBuffer));
 
 			LLS_DeallocateNode(&operandNode1);

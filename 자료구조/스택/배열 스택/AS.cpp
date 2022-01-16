@@ -54,6 +54,11 @@ void AS_Push(ArrayStack** srcArrayStack, DataType srcData)
 {
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
+	
+	if (AS_IsFull(srcArrayStack)) //°¡µæ Ã¡À¸¸é
+	{
+		
+	}
 
 	if (!AS_IsFull(srcArrayStack)) //°¡µæ Â÷Áö ¾Ê¾ÒÀ¸¸é
 	{

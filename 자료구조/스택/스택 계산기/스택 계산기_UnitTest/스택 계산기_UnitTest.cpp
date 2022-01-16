@@ -5,6 +5,8 @@
 #include "../Calculator.cpp"
 #include "../LLS.cpp"
 
+#define length(array) ((sizeof(array)) / (sizeof(array[0])))
+
 // 속성 매크로 : https://2ry53.tistory.com/entry/%EB%B9%84%EC%A5%AC%EC%96%BC-%EC%8A%A4%ED%8A%9C%EB%94%94%EC%98%A4-%EB%B9%8C%EB%93%9C-%EB%AA%85%EB%A0%B9-%EB%98%90%EB%8A%94-%EB%A7%A4%ED%81%AC%EB%A1%9CSolutionDir-ProjectFileName%EB%93%B1
 // https://docs.microsoft.com/ko-kr/visualstudio/test/writing-unit-tests-for-c-cpp?view=vs-2022
 // https://docs.microsoft.com/ko-kr/visualstudio/test/microsoft-visualstudio-testtools-cppunittestframework-api-reference?view=vs-2022#general_asserts
@@ -45,11 +47,11 @@ namespace 스택_계산기_UnitTest
 		{
 			for (int i = -1; i <= 10; i++)
 			{
-				switch (i) //경계값 검사
+				switch (i)
 				{
 				case -1:
 				case 10:
-					try
+					try //경계값 검사
 					{
 						SingleNumToDecAscii(i);
 						Assert::Fail();
@@ -71,14 +73,14 @@ namespace 스택_계산기_UnitTest
 		{
 			for (int i = 47; i <= 58; i++) //10진 아스키 코드 범위
 			{
-				switch (i) //경계값 검사
+				switch (i)
 				{
 				case 47: //'/'
 					Assert::AreEqual((const char)SYMBOL_TYPE::DIVIDE, (const char)CharToSymbolType(i));
 					break;
 
 				case 58: //':'
-					try
+					try //경계값 검사
 					{
 						CharToSymbolType(i);
 						Assert::Fail();
@@ -96,41 +98,56 @@ namespace 스택_계산기_UnitTest
 			}
 		}
 
-		TEST_METHOD(GenPostfixExpr_TestMethod1)
+		TEST_METHOD(GenPostfixExpr_TestMethod)
 		{
 			const char* input = "1+3.334/(4.28*(110-7729))"; //입력값
 			const char* expected = "1 3.334 4.28 110 7729 -*/+"; //예측값
 			char actual[MAX_STR_LEN] = { '\0', }; //실제값
 
-			//Infix Expr : 1+3.334/(4.28*(110-7729))
-			//Postfix Expr : 1 3.334 4.28 110 7729 -*/+
 			GenPostfixExpr(input, actual);
 			Assert::AreEqual(expected, actual);
-
-		//TODO : 오류 데이터에 대한 테스트 추가
-
-
-			/***
-				< 테스트용 오류 데이터 >
-
-				1+*2
-				(1+)2
-
-				)1+2
-				1)+2
-				1+)2
-				1+2)
-
-				((1+2
-				(1(+2
-				(1+(2
-				(1+2(
-			***/
 		}
 
-		TEST_METHOD(CalcPostfixExpr_TestMethod)
+		TEST_METHOD(InvalidExpr_TestMethod)
 		{
+			const char* input[] = {
+			"1+*2",
+			"(1+)2",
+			")1 + 2",
+			"1) + 2",
+			"1 + )2",
+			"1 + 2)",
+			"((1 + 2",
+			"(1(+2",
+			"(1 + (2",
+			"(1 + 2("
+			}; //오류 데이터 입력값
+			char actual[MAX_STR_LEN] = { '\0', }; //실제값
 
+			for (int i = 0; i < length(input); i++)
+			{
+				try
+				{
+					memset(actual, '\0', sizeof(actual));
+					Logger::WriteMessage(
+						(std::string(__func__) + std::string(" : ") + std::string(input[i]))
+						.c_str()
+					);
+					
+					GenPostfixExpr(input[i], actual);
+					CalcPostfixExpr(actual);
+
+					Logger::WriteMessage(
+						(std::string("Failed at : ") + std::string(input[i]))
+						.c_str()
+					);
+					Assert::Fail();
+				}
+				catch (const std::invalid_argument& ex)
+				{
+					Logger::WriteMessage(ex.what()); //success
+				}
+			}
 		}
 	};
 }
