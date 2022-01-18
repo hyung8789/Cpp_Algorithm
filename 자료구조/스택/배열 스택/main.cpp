@@ -36,6 +36,19 @@ int main()
 			std::cout << "-------------------------------------------\n";
 		}
 
+		std::cout << "--- realloc test ---\n";
+		int reallocTestSize = STACK_SIZE * 2;
+		for (int i = 0; i < reallocTestSize; i++) //초기 할당 크기를 초과하여 데이터 삽입
+		{
+			AS_Push(&stack, i);
+			std::cout << "Current Capacity : " << stack->capacity << std::endl;
+		}
+		for (int i = 0; i < reallocTestSize; i++)
+		{
+			AS_Pop(&stack);
+			std::cout << "Current Capacity : " << stack->capacity << std::endl;
+		}
+
 		AS_DeallocateArrayStack(&stack);
 	}
 	catch (const std::exception& ex)

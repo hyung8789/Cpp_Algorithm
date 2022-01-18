@@ -1,7 +1,8 @@
 #ifndef _AS_H_
 #define _AS_H_
 
-#define CAPACITY_REDUCE_THRESHOLD_RATIO 0.7 //할당 크기에 대한 감소 임계 비율 (0.0 ~ 1.0)
+#define CAPACITY_REALLOC_RATIO 0.3 //기존 할당 크기에 대해 증가 혹은 감소 시 재 할당 될 비율 (0.0 ~ 1.0)
+#define CAPACITY_REDUCE_RATIO_THRESHOLD 0.7 //기존 할당 크기에 대한 감소가 발생 될 빈 공간 임계 비율 (0.0 ~ 1.0)
 
 typedef int DataType; //노드의 데이터 타입
 typedef int StackIndexType; //스택 인덱스 타입

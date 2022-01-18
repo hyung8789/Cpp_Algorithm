@@ -5,7 +5,9 @@
 #include "../Calculator.cpp"
 #include "../LLS.cpp"
 
+#define FP_DIFF_THRESHOLD 0.0001 //부동 소수점 차이 임계값 (epsilon)
 #define length(array) ((sizeof(array)) / (sizeof(array[0])))
+static const bool LOGGING_EX = true; //예외 내용 출력
 
 // 속성 매크로 : https://2ry53.tistory.com/entry/%EB%B9%84%EC%A5%AC%EC%96%BC-%EC%8A%A4%ED%8A%9C%EB%94%94%EC%98%A4-%EB%B9%8C%EB%93%9C-%EB%AA%85%EB%A0%B9-%EB%98%90%EB%8A%94-%EB%A7%A4%ED%81%AC%EB%A1%9CSolutionDir-ProjectFileName%EB%93%B1
 // https://docs.microsoft.com/ko-kr/visualstudio/test/writing-unit-tests-for-c-cpp?view=vs-2022
@@ -33,7 +35,8 @@ namespace 스택_계산기_UnitTest
 			}
 			catch (const std::invalid_argument& ex)
 			{
-				Logger::WriteMessage(ex.what()); //success
+				if (LOGGING_EX)
+					Logger::WriteMessage(ex.what()); //success
 			}
 		}
 
@@ -58,7 +61,8 @@ namespace 스택_계산기_UnitTest
 					}
 					catch (const std::invalid_argument& ex)
 					{
-						Logger::WriteMessage(ex.what()); //success
+						if (LOGGING_EX)
+							Logger::WriteMessage(ex.what()); //success
 					}
 					break;
 
@@ -80,14 +84,15 @@ namespace 스택_계산기_UnitTest
 					break;
 
 				case 58: //':'
-					try //경계값 검사
+					try
 					{
 						CharToSymbolType(i);
 						Assert::Fail();
 					}
 					catch (const std::invalid_argument& ex)
 					{
-						Logger::WriteMessage(ex.what()); //success
+						if (LOGGING_EX)
+							Logger::WriteMessage(ex.what()); //success
 					}
 					break;
 
@@ -108,34 +113,77 @@ namespace 스택_계산기_UnitTest
 			Assert::AreEqual(expected, actual);
 		}
 
-		TEST_METHOD(InvalidExpr_TestMethod)
+		TEST_METHOD(ValidExpr_TestMethod)
 		{
-			const char* input[] = {
-			"1+*2",
-			"(1+)2",
-			")1 + 2",
-			"1) + 2",
-			"1 + )2",
-			"1 + 2)",
-			"((1 + 2",
-			"(1(+2",
-			"(1 + (2",
-			"(1 + 2("
-			}; //오류 데이터 입력값
-			char actual[MAX_STR_LEN] = { '\0', }; //실제값
+			const char* input[] =
+			{
+				"1 + 3.334 / (4.28 * (110 - 7729))"
+			}; //유효 데이터 입력값
+
+			double expected[] =
+			{
+				1 + 3.334 / (4.28 * (110 - 7729))
+			}; //유효 데이터 입력값에 대한 예측값
+
+			char buffer[MAX_STR_LEN] = { '\0', };
 
 			for (int i = 0; i < length(input); i++)
 			{
 				try
 				{
-					memset(actual, '\0', sizeof(actual));
+					memset(buffer, '\0', sizeof(buffer));
 					Logger::WriteMessage(
 						(std::string(__func__) + std::string(" : ") + std::string(input[i]))
 						.c_str()
 					);
-					
-					GenPostfixExpr(input[i], actual);
-					CalcPostfixExpr(actual);
+
+					GenPostfixExpr(input[i], buffer);
+					Assert::AreEqual(expected[i], CalcPostfixExpr(buffer), FP_DIFF_THRESHOLD);
+				}
+				catch (const std::invalid_argument& ex)
+				{
+					Logger::WriteMessage(
+						(std::string("Failed at : ") + std::string(input[i]))
+						.c_str()
+					);
+					if (LOGGING_EX)
+						Logger::WriteMessage(ex.what());
+					Assert::Fail();
+				}
+			}
+		}
+
+		TEST_METHOD(InvalidExpr_TestMethod)
+		{
+			const char* input[] =
+			{
+				"(",
+				"+12*",
+				"1+*2",
+				"(1+)2",
+				")1 + 2",
+				"1) + 2",
+				"1 + )2",
+				"1 + 2)",
+				"((1 + 2",
+				"(1(+2",
+				"(1 + (2",
+				"(1 + 2("
+			}; //오류 데이터 입력값
+			char buffer[MAX_STR_LEN] = { '\0', };
+
+			for (int i = 0; i < length(input); i++)
+			{
+				try
+				{
+					memset(buffer, '\0', sizeof(buffer));
+					Logger::WriteMessage(
+						(std::string(__func__) + std::string(" : ") + std::string(input[i]))
+						.c_str()
+					);
+
+					GenPostfixExpr(input[i], buffer);
+					CalcPostfixExpr(buffer);
 
 					Logger::WriteMessage(
 						(std::string("Failed at : ") + std::string(input[i]))
@@ -145,7 +193,8 @@ namespace 스택_계산기_UnitTest
 				}
 				catch (const std::invalid_argument& ex)
 				{
-					Logger::WriteMessage(ex.what()); //success
+					if (LOGGING_EX)
+						Logger::WriteMessage(ex.what()); //success
 				}
 			}
 		}

@@ -9,5 +9,7 @@
 #include <stdio.h>
 #include <iostream>
 
+#include <stdexcept>
+
 #include "SLL.h"
 #endif

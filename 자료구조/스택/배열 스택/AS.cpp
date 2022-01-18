@@ -21,10 +21,6 @@ void AS_CreateStack(ArrayStack** srcArrayStack, StackIndexType capacity)
 	if ((*srcArrayStack)->nodeArray == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-	//(*srcArrayStack)->nodeArray = (Node*)realloc((*srcArrayStack)->nodeArray, sizeof(Node) * capacity); //할당 크기만큼 재 할당
-	//if ((*srcArrayStack)->nodeArray == NULL)
-		//ThrowCriticalException(EX::NOT_ENOUGH_HEAP_MEMORY);
-
 	(*srcArrayStack)->capacity = capacity;
 	(*srcArrayStack)->top = 0;
 }
@@ -54,22 +50,22 @@ void AS_Push(ArrayStack** srcArrayStack, DataType srcData)
 {
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
-	
+
 	if (AS_IsFull(srcArrayStack)) //가득 찼으면
 	{
-		
+		StackIndexType reallocCapacity = (*srcArrayStack)->capacity + ceil((*srcArrayStack)->capacity * CAPACITY_REALLOC_RATIO); //재 할당 될 크기
+		StackIndexType reallocSizeInBytes = sizeof(Node) * reallocCapacity; //재 할당 될 바이트 단위 크기
+
+		void* reallocAddr = realloc((*srcArrayStack)->nodeArray, reallocSizeInBytes);
+		if (reallocAddr == NULL)
+			throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
+
+		(*srcArrayStack)->nodeArray = (Node*)reallocAddr;
+		(*srcArrayStack)->capacity = reallocCapacity;
 	}
 
-	if (!AS_IsFull(srcArrayStack)) //가득 차지 않았으면
-	{
-		StackIndexType index = (*srcArrayStack)->top++; //Push 할 인덱스
-		(*srcArrayStack)->nodeArray[index].data = srcData;
-		return;
-	}
-	else
-	{
-		//TODO : PUSH 할 경우 할당량이 임계값 초과 시 할당 된 크기 늘리기 (realloc)
-	}
+	StackIndexType index = (*srcArrayStack)->top++; //Push 할 인덱스
+	(*srcArrayStack)->nodeArray[index].data = srcData;
 }
 
 /// <summary>
@@ -82,15 +78,24 @@ DataType AS_Pop(ArrayStack** srcArrayStack)
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	if (!AS_IsEmpty(srcArrayStack)) //비어있지 않으면
+	if (AS_IsEmpty(srcArrayStack)) //비어있으면
+		throw std::logic_error(std::string(__func__) + std::string(" : Empty Stack"));
+
+	if ((AS_GetTotalNodeDataCount(srcArrayStack) / (*srcArrayStack)->capacity) <
+		CAPACITY_REDUCE_RATIO_THRESHOLD) //사용량에 대한 비율이 기존 할당 크기에 대한 감소가 발생 될 빈 공간 임계 비율 미만일 경우
 	{
-		StackIndexType index = --((*srcArrayStack)->top); //Pop 할 인덱스
-		return (*srcArrayStack)->nodeArray[index].data;
+		StackIndexType reallocCapacity = (*srcArrayStack)->capacity - ceil((*srcArrayStack)->capacity * CAPACITY_REALLOC_RATIO); //재 할당 될 크기
+		StackIndexType reallocSizeInBytes = sizeof(Node) * reallocCapacity; //재 할당 될 바이트 단위 크기
+		void* reallocAddr = realloc((*srcArrayStack)->nodeArray, reallocSizeInBytes);
+		if (reallocAddr == NULL)
+			throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
+
+		(*srcArrayStack)->nodeArray = (Node*)reallocAddr;
+		(*srcArrayStack)->capacity = reallocCapacity;
 	}
-	else
-	{
-		//TODO : POP 할 경우 할당량이 임계값 이하 일 경우 할당 된 크기 줄이기 (realloc)
-	}
+
+	StackIndexType index = --((*srcArrayStack)->top); //Pop 할 인덱스
+	return (*srcArrayStack)->nodeArray[index].data;
 }
 
 /// <summary>
@@ -103,15 +108,11 @@ DataType AS_Peek(ArrayStack** srcArrayStack)
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	if (!AS_IsEmpty(srcArrayStack)) //비어있지 않으면
-	{
-		StackIndexType index = ((*srcArrayStack)->top) - 1; //Peek 할 인덱스
-		return (*srcArrayStack)->nodeArray[index].data;
-	}
-	else
-	{
+	if (AS_IsEmpty(srcArrayStack)) //비어있으면
+		throw std::logic_error(std::string(__func__) + std::string(" : Empty Stack"));
 
-	}
+	StackIndexType index = ((*srcArrayStack)->top) - 1; //Peek 할 인덱스
+	return (*srcArrayStack)->nodeArray[index].data;
 }
 
 /// <summary>

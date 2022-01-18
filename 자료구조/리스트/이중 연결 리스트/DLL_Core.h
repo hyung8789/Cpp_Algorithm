@@ -9,5 +9,7 @@
 #include <stdio.h>
 #include <iostream>
 
+#include <stdexcept>
+
 #include "DLL.h"
 #endif
