@@ -45,39 +45,76 @@ void LCRS_DeallocateTree(Node** srcRootNode)
 		if ((*srcRootNode)->rightSibling != NULL)
 			LCRS_DeallocateTree(&((*srcRootNode)->rightSibling));
 
-		LCRS_DeallocateNode(srcRootNode); //최하위 자식 노드의 오른쪽 끝 형제 노드부터 해제
+		//std::cout << "Dealloc : " << (*srcRootNode)->data << std::endl;
+		LCRS_DeallocateNode(srcRootNode);
 
 #elif defined ITERATIVE_METHOD
 		/***
-			1) 최초 대상 트리의 최상위 루트 노드를 메모리 해제 대기열에 삽입
+			< RECURSIVE_METHOD의 Call Stack 구현 >
+			
+			1) 최초 Call Stack에 초기 루트 노드와 루트 노드에서 왼쪽 자식 노드 및 오른쪽 형제 노드의 방문 여부 (false) 삽입 
+			
+			2) Call Stack이 빌 때까지 이하 반복
+			
+			3) 현재 노드 및 현재 노드의 왼쪽 자식 노드 및 오른쪽 형제 노드의 방문 여부 할당
+				3-1) 현재 노드 = Call Stack의 최상위 노드
+			
+				3-2) 현재 노드의 왼쪽 자식 노드 및 오른쪽 형제 노드의 방문 여부 = Call Stack의 최상위 노드의 각 방문 여부
 
-			2) 메모리 해제 대기열이 빌 때까지 이하 반복
+			4) 현재 노드의 왼쪽 자식 노드가 존재하며, 현재 노드의 왼쪽 자식 노드에 대해 아직 방문하지 않은 경우
+				4-1) Call Stack의 최상위 노드에 Call Stack의 최상위 노드의 왼쪽 자식 노드로 방문했음을 저장 (true)
 
-				2-1) 메모리 해제 대기열에서 처음 요소 (노드)의 왼쪽 자식 노드가 존재 할 경우
-				: 해당 노드의 왼쪽 자식 노드를 메모리 해제 대기열에 삽입
+				4-2) Call Stack에 현재 노드의 왼쪽 자식 노드와 현재 노드에서 왼쪽 자식 노드 및 오른쪽 형제 노드의 방문 여부 (false) 삽입
+				
+				4-3) 2)로 이동 (현재 노드의 왼쪽 자식 노드로 이동)
 
-				2-2) 메모리 해제 대기열에서 처음 요소 (노드)의 오른쪽 형제 노드가 존재 할 경우
-				: 해당 노드의 오른쪽 형제 노드를 메모리 해제 대기열에 삽입
+			4) 현재 노드의 오른쪽 형제 노드가 존재하며, 현재 노드의 오른쪽 형제 노드에 대해 아직 방문하지 않은 경우
+				4-1) Call Stack의 최상위 노드에 Call Stack의 최상위 노드의 오른쪽 형제 노드로 방문했음을 저장 (true)
 
-				2-3) 메모리 해제 대기열에서 처음 요소 (노드) 제거 및 메모리 해제
+				4-2) Call Stack에 현재 노드의 오른쪽 형제 노드와 현재 노드에서 왼쪽 자식 노드 및 오른쪽 형제 노드의 방문 여부 (false) 삽입
+				
+				4-2) 2)로 이동 (현재 노드의 오른쪽 형제 노드로 이동)
+			
+			5) 현재 노드에서 더 이상 왼쪽 자식 노드와 오른쪽 자식 노드에 대해 이동이 불가능 할 경우
+				5-1) 메모리 할당 해제 대상인 Call Stack의 최상위 노드 제거 및 현재 노드 메모리 할당 해제
+				
+				5-2) 2)로 이동 (현재 노드에 도달하기 전 노드로 이동) 
+				: 메모리 할당 해제 된 노드에 대해 재 접근하지 않도록 이미 방문 된 노드 여부 이용
 		***/
 
-		std::queue<Node*> deallocateQueue; //메모리 해제 대기열
-		deallocateQueue.push((*srcRootNode));
+		Node* currentNode = (*srcRootNode); //현재 노드
+		bool isLeftChildVisited = false; //현재 노드의 왼쪽 자식 노드에 대해 이미 방문 된 노드 여부
+		bool isRightSiblingVisited = false; //현재 노드의 오른쪽 형제 노드에 대해 이미 방문 된 노드 여부
 
-		while (!deallocateQueue.empty())
+		std::stack<std::tuple<Node*, bool, bool>> callStack; //Call Stack
+		callStack.push(std::make_tuple(currentNode, isLeftChildVisited, isRightSiblingVisited));
+
+		while (!callStack.empty())
 		{
-			Node* tmp = deallocateQueue.front();
-			deallocateQueue.pop();
+			currentNode = std::get<0>(callStack.top());
+			isLeftChildVisited = std::get<1>(callStack.top());
+			isRightSiblingVisited = std::get<2>(callStack.top());
+			
+			if (currentNode->leftChild != NULL && !isLeftChildVisited)
+			{
+				std::get<1>(callStack.top()) = true; //현재 노드에서 현재 노드의 왼쪽 자식 노드로 방문했음을 저장
 
-			if (tmp->leftChild != NULL) //메모리 해제 대기열에서 처음 요소 (노드)의 왼쪽 자식 노드가 존재 할 경우
-				deallocateQueue.push(tmp->leftChild);
+				callStack.push(std::make_tuple(currentNode->leftChild, false, false));
+				continue;
+			}
 
-			if (tmp->rightSibling != NULL) //메모리 해제 대기열에서 처음 요소 (노드)의 오른쪽 형제 노드가 존재 할 경우
-				deallocateQueue.push(tmp->rightSibling);
+			if (currentNode->rightSibling != NULL && !isRightSiblingVisited)
+			{
+				std::get<2>(callStack.top()) = true; //현재 노드에서 현재 노드의 오른쪽 형제 노드로 방문했음을 저장
 
-			//std::cout << "Dealloc : " << tmp->data << std::endl;
-			LCRS_DeallocateNode(&tmp);
+				callStack.push(std::make_tuple(currentNode->rightSibling, false, false));
+				continue;
+			}
+
+			callStack.pop();
+			//std::cout << "Dealloc : " << currentNode->data << std::endl;
+			LCRS_DeallocateNode(&currentNode);
+
 		}
 #endif
 		(*srcRootNode) = NULL;
@@ -161,33 +198,11 @@ void LCRS_DispTree(Node* srcRootNode, TreeIndexType rootNodeDepth)
 		LCRS_DispTree(srcRootNode->rightSibling, rootNodeDepth);
 
 #elif defined ITERATIVE_METHOD
-	//TODO : RECURSIVE_METHOD와 동일한 출력 순서 구현
-	//deque?
 	/***
-		1) 최초 대상 트리의 최상위 루트 노드를 왼쪽 자식 노드 대기열에 삽입
+		< RECURSIVE_METHOD의 Call Stack 구현 >
 
-		//2) 현재 왼쪽 자식 노드 대기열의 처음 요소 출력
-
-		3) 현재 왼쪽 자식 노드 대기열의 처음 요소의 모든 왼쪽 자식 노드를 왼쪽 자식 노드 대기열에 삽입
-		3) 현재 왼쪽 자식 노드 대기열의 마지막 노드의 모든 오른쪽 형제 노드를 오른쪽 형제 노드 대기열에 삽입
 	***/
 
-	std::queue<QueueElement> leftChlidNodeQueue;
-	std::queue<QueueElement> rightSiblingNodeQueue;
 
-	QueueElement element;
-	element.node = srcRootNode;
-	element.nodeDepth = rootNodeDepth;
-	leftChlidNodeQueue.push(element);
-
-
-
-	while (!leftChlidNodeQueue.empty())
-	{
-		element = leftChlidNodeQueue.front();
-		leftChlidNodeQueue.pop();
-
-		std::cout << element.nodeDepth << std::endl;
-	}
 #endif
 }

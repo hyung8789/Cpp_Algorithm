@@ -15,13 +15,10 @@ typedef struct NodeType
 #ifndef RECURSIVE_METHOD 
 #define ITERATIVE_METHOD //반복적 방법
 
-#include <queue> // https://www.cplusplus.com/reference/queue/queue/
-
-typedef struct QueueElementType
-{
-	Node* node; //노드
-	TreeIndexType nodeDepth; //노드의 깊이
-}QueueElement; //큐의 요소
+#include <stack>
+#include <utility> //https://www.cplusplus.com/reference/utility/?kw=utility
+#include <tuple>
+//#include <queue> // https://www.cplusplus.com/reference/queue/queue/
 #endif
 
 Node* LCRS_CreateNode(DataType);
