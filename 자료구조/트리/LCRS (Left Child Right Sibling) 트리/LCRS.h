@@ -1,8 +1,8 @@
 #ifndef _LCRS_H_
 #define _LCRS_H_
 
-typedef int DataType; //노드의 데이터 타입
-typedef int TreeIndexType; //트리 인덱스 타입
+typedef char DataType; //노드의 데이터 타입
+typedef int TreeDepthType; //트리 깊이 타입
 
 typedef struct NodeType
 {
@@ -15,10 +15,9 @@ typedef struct NodeType
 #ifndef RECURSIVE_METHOD 
 #define ITERATIVE_METHOD //반복적 방법
 
-#include <stack>
-#include <utility> //https://www.cplusplus.com/reference/utility/?kw=utility
-#include <tuple>
-//#include <queue> // https://www.cplusplus.com/reference/queue/queue/
+#include <stack> // https://www.cplusplus.com/reference/stack/stack/
+#include <utility> // https://www.cplusplus.com/reference/utility/
+#include <tuple> // https://www.cplusplus.com/reference/tuple/
 #endif
 
 Node* LCRS_CreateNode(DataType);
@@ -27,6 +26,6 @@ void LCRS_DeallocateTree(Node**);
 
 void LCRS_AddChildNode(Node*, Node*);
 
-void LCRS_DispTreeNodesAt(Node*, TreeIndexType);
-void LCRS_DispTree(Node*, TreeIndexType = 0);
+void LCRS_DispTreeNodesAt(Node*, TreeDepthType);
+void LCRS_DispTree(Node*, TreeDepthType = 0);
 #endif

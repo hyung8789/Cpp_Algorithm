@@ -112,7 +112,7 @@ namespace 스택_계산기_UnitTest
 			Assert::AreEqual(expected, actual);
 		}
 
-		TEST_METHOD(ValidExpr_TestMethod)
+		TEST_METHOD(Valid_InfixExpr_TestMethod)
 		{
 			const char* input[] =
 			{
@@ -152,7 +152,7 @@ namespace 스택_계산기_UnitTest
 			}
 		}
 
-		TEST_METHOD(InvalidExpr_TestMethod)
+		TEST_METHOD(Invalid_InfixExpr_TestMethod)
 		{
 			const char* input[] =
 			{

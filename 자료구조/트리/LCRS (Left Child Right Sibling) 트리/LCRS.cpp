@@ -51,70 +51,84 @@ void LCRS_DeallocateTree(Node** srcRootNode)
 #elif defined ITERATIVE_METHOD
 		/***
 			< RECURSIVE_METHOD의 Call Stack 구현 >
-			
-			1) 최초 Call Stack에 초기 루트 노드와 루트 노드에서 왼쪽 자식 노드 및 오른쪽 형제 노드의 방문 여부 (false) 삽입 
-			
+
+			1) 최초 Call Stack에 초기 루트 노드와 실행 분기 단일 플래그 삽입
+
 			2) Call Stack이 빌 때까지 이하 반복
-			
-			3) 현재 노드 및 현재 노드의 왼쪽 자식 노드 및 오른쪽 형제 노드의 방문 여부 할당
-				3-1) 현재 노드 = Call Stack의 최상위 노드
-			
-				3-2) 현재 노드의 왼쪽 자식 노드 및 오른쪽 형제 노드의 방문 여부 = Call Stack의 최상위 노드의 각 방문 여부
 
-			4) 현재 노드의 왼쪽 자식 노드가 존재하며, 현재 노드의 왼쪽 자식 노드에 대해 아직 방문하지 않은 경우
-				4-1) Call Stack의 최상위 노드에 Call Stack의 최상위 노드의 왼쪽 자식 노드로 방문했음을 저장 (true)
+			3) 현재 노드 (Call Stack의 최상위 노드) 및 현재 노드의 실행 분기 단일 플래그 할당
 
-				4-2) Call Stack에 현재 노드의 왼쪽 자식 노드와 현재 노드에서 왼쪽 자식 노드 및 오른쪽 형제 노드의 방문 여부 (false) 삽입
-				
-				4-3) 2)로 이동 (현재 노드의 왼쪽 자식 노드로 이동)
+			4) 현재 노드의 왼쪽 자식 노드가 존재할 경우
+				4-1) 헌재 노드에 대해 다음 번 실행 시 오른쪽 형제 노드를 방문
+				4-2) 현재 노드의 왼쪽 자식 노드로 이동
 
-			4) 현재 노드의 오른쪽 형제 노드가 존재하며, 현재 노드의 오른쪽 형제 노드에 대해 아직 방문하지 않은 경우
-				4-1) Call Stack의 최상위 노드에 Call Stack의 최상위 노드의 오른쪽 형제 노드로 방문했음을 저장 (true)
+			5) 현재 노드의 오른쪽 형제 노드가 존재할 경우
+				5-1) 현재 노드에 대해 다음 번 실행 시 Call Stack에서 pop 및 마지막 작업 수행
+				5-2) 현재 노드의 오른쪽 형제 노드로 이동
 
-				4-2) Call Stack에 현재 노드의 오른쪽 형제 노드와 현재 노드에서 왼쪽 자식 노드 및 오른쪽 형제 노드의 방문 여부 (false) 삽입
-				
-				4-2) 2)로 이동 (현재 노드의 오른쪽 형제 노드로 이동)
-			
-			5) 현재 노드에서 더 이상 왼쪽 자식 노드와 오른쪽 자식 노드에 대해 이동이 불가능 할 경우
-				5-1) 메모리 할당 해제 대상인 Call Stack의 최상위 노드 제거 및 현재 노드 메모리 할당 해제
-				
-				5-2) 2)로 이동 (현재 노드에 도달하기 전 노드로 이동) 
-				: 메모리 할당 해제 된 노드에 대해 재 접근하지 않도록 이미 방문 된 노드 여부 이용
+			6) 현재 노드에서 더 이상 왼쪽 자식 노드와 오른쪽 자식 노드에 대해 이동이 불가능 할 경우
+				6-1) 메모리 할당 해제 대상인 Call Stack의 최상위 노드 제거 및 현재 노드 메모리 할당 해제
+				6-2) 현재 노드에 도달하기 전 노드로 이동
 		***/
 
 		Node* currentNode = (*srcRootNode); //현재 노드
-		bool isLeftChildVisited = false; //현재 노드의 왼쪽 자식 노드에 대해 이미 방문 된 노드 여부
-		bool isRightSiblingVisited = false; //현재 노드의 오른쪽 형제 노드에 대해 이미 방문 된 노드 여부
+		char execBranchSingleFlag = (0x0); //실행 분기 단일 플래그
 
-		std::stack<std::tuple<Node*, bool, bool>> callStack; //Call Stack
-		callStack.push(std::make_tuple(currentNode, isLeftChildVisited, isRightSiblingVisited));
+		/***
+			< 실행 분기 단일 플래그 >
+
+			0000(2) : 초기 상태 (순차적 실행)
+			0001(2) : Left Child 방문
+			0010(2) : Right Sibling 방문
+			0011(2) : pop 및 필요 할 경우 해당 요소에 대한 마지막 작업 수행
+		***/
+
+		std::stack<std::tuple<Node*, char>> callStack; //Call Stack
+		callStack.push(std::make_tuple(currentNode, execBranchSingleFlag));
 
 		while (!callStack.empty())
 		{
 			currentNode = std::get<0>(callStack.top());
-			isLeftChildVisited = std::get<1>(callStack.top());
-			isRightSiblingVisited = std::get<2>(callStack.top());
-			
-			if (currentNode->leftChild != NULL && !isLeftChildVisited)
-			{
-				std::get<1>(callStack.top()) = true; //현재 노드에서 현재 노드의 왼쪽 자식 노드로 방문했음을 저장
+			execBranchSingleFlag = std::get<1>(callStack.top());
 
-				callStack.push(std::make_tuple(currentNode->leftChild, false, false));
+			switch (execBranchSingleFlag)
+			{
+			case (0x0): //초기 상태 (순차적 실행)
+				break;
+
+			case (0x1): //Left Child 방문
+				goto VISIT_LEFT_CHILD_PROC;
+
+			case (0x2): //Right Sibling 방문
+				goto VISIT_RIGHT_SIBLING_PROC;
+
+			case (0x3): //pop 및 필요 할 경우 해당 요소에 대한 마지막 작업 수행
+				goto LAST_PROC;
+
+			default:
+				throw std::logic_error(std::string(__func__) + std::string(" : Invalid Flag"));
+			}
+
+		VISIT_LEFT_CHILD_PROC: //0x1
+			if (currentNode->leftChild != NULL) //현재 노드의 왼쪽 자식 노드가 존재 할 경우
+			{
+				std::get<1>(callStack.top()) = (0x2); //헌재 노드에 대해 다음 번 실행 시 오른쪽 형제 노드를 방문
+				callStack.push(std::make_tuple(currentNode->leftChild, (0x0)));
 				continue;
 			}
 
-			if (currentNode->rightSibling != NULL && !isRightSiblingVisited)
+		VISIT_RIGHT_SIBLING_PROC: //0x2
+			if (currentNode->rightSibling != NULL) //현재 노드의 오른쪽 형제 노드가 존재 할 경우
 			{
-				std::get<2>(callStack.top()) = true; //현재 노드에서 현재 노드의 오른쪽 형제 노드로 방문했음을 저장
-
-				callStack.push(std::make_tuple(currentNode->rightSibling, false, false));
+				std::get<1>(callStack.top()) = (0x3); //현재 노드에 대해 다음 번 실행 시 Call Stack에서 pop 및 필요 할 경우 마지막 작업 수행
+				callStack.push(std::make_tuple(currentNode->rightSibling, (0x0)));
 				continue;
 			}
 
+		LAST_PROC: //0x3
 			callStack.pop();
 			//std::cout << "Dealloc : " << currentNode->data << std::endl;
 			LCRS_DeallocateNode(&currentNode);
-
 		}
 #endif
 		(*srcRootNode) = NULL;
@@ -152,26 +166,97 @@ void LCRS_AddChildNode(Node* srcTargetNode, Node* srcNewNode)
 /// 대상 트리의 특정 깊이의 모든 노드 출력
 /// </summary>
 /// <param name="">대상 트리의 최상위 루트 노드</param>
-/// <param name="targetNodeDepth">대상 트리의 특정 노드의 깊이</param>
-void LCRS_DispTreeNodesAt(Node* srcRootNode, TreeIndexType targetNodeDepth)
+/// <param name="targetNodeDepth">대상 트리의 대상 특정 노드의 깊이</param>
+void LCRS_DispTreeNodesAt(Node* srcRootNode, TreeDepthType targetNodeDepth)
 {
 	if (srcRootNode == NULL || targetNodeDepth < 0)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	Node* currentNode = srcRootNode;
-
-	//TODO : 대상 트리의 특정 깊이의 모든 노드 출력
-	while (targetNodeDepth > 0) //특정 깊이에 도달 할 때까지
+#ifdef RECURSIVE_METHOD
+	if (targetNodeDepth == 0) //대상 특정 노드의 깊이에 도달 시
 	{
-		if (currentNode->leftChild != NULL)
-		{
-			currentNode = currentNode->leftChild;
-			targetNodeDepth--;
-		}
-
+		std::cout << "- " << srcRootNode->data << std::endl;
 	}
 
-	std::cout << "- " << currentNode->data << std::endl;
+	if (srcRootNode->leftChild != NULL && targetNodeDepth > 0)
+		LCRS_DispTreeNodesAt(srcRootNode->leftChild, targetNodeDepth - 1);
+	
+	if(srcRootNode->rightSibling != NULL)
+		LCRS_DispTreeNodesAt(srcRootNode->rightSibling, targetNodeDepth);
+
+#elif defined ITERATIVE_METHOD
+	Node* currentNode = srcRootNode; //현재 노드
+	TreeDepthType currentNodeDepth = 0; //현재 노드의 깊이
+	char execBranchSingleFlag = (0x0); //실행 분기 단일 플래그
+
+	/***
+		< 실행 분기 단일 플래그 >
+
+		0000(2) : 초기 상태 (순차적 실행)
+		0001(2) : 특정 노드의 깊이에 도달 시 현재 노드 출력
+		0010(2) : 현재 노드가 대상 특정 노드의 깊이보다 상위 노드일 경우 Left Child 방문
+		0011(2) : Right Sibling 방문
+		0100(2) : pop 및 필요 할 경우 해당 요소에 대한 마지막 작업 수행
+	***/
+
+	std::stack<std::tuple<Node*, TreeDepthType, char>> callStack; //Call Stack
+	callStack.push(std::make_tuple(currentNode, currentNodeDepth, execBranchSingleFlag));
+
+	while (!callStack.empty())
+	{
+		currentNode = std::get<0>(callStack.top());
+		currentNodeDepth = std::get<1>(callStack.top());
+		execBranchSingleFlag = std::get<2>(callStack.top());
+
+		switch (execBranchSingleFlag)
+		{
+		case (0x0): //초기 상태 (순차적 실행)
+			break;
+
+		case (0x1): //대상 특정 노드의 깊이에 도달 시 현재 노드 출력
+			goto DISP_CURRENT_NODE_PROC;
+
+		case (0x2): //현재 노드가 대상 특정 노드의 깊이보다 상위 노드일 경우 Left Child 방문
+			goto VISIT_LEFT_CHILD_PROC;
+
+		case (0x3): //Right Sibling 방문
+			goto VISIT_RIGHT_SIBLING_PROC;
+
+		case (0x4): //pop 및 필요 할 경우 해당 요소에 대한 마지막 작업 수행
+			goto LAST_POP_PROC;
+
+		default:
+			throw std::logic_error(std::string(__func__) + std::string(" : Invalid Flag"));
+		}
+
+	DISP_CURRENT_NODE_PROC: //0x1
+		std::get<2>(callStack.top()) = (0x2); //헌재 노드에 대해 다음 번 실행 시 현재 노드가 특정 노드의 깊이보다 상위 노드일 경우 Left Child 방문
+
+		if (currentNodeDepth == targetNodeDepth) //특정 노드의 깊이에 도달 시
+		{
+			std::cout << "- " << currentNode->data << std::endl;
+		}
+		
+	VISIT_LEFT_CHILD_PROC: //0x2
+		if (currentNode->leftChild != NULL && currentNodeDepth < targetNodeDepth) //현재 노드의 왼쪽 자식 노드가 존재하며, 현재 노드가 특정 노드의 깊이보다 상위 노드일 경우
+		{
+			std::get<2>(callStack.top()) = (0x3); //헌재 노드에 대해 다음 번 실행 시 오른쪽 형제 노드를 방문
+			callStack.push(std::make_tuple(currentNode->leftChild, currentNodeDepth + 1, (0x0)));
+			continue;
+		}
+
+	VISIT_RIGHT_SIBLING_PROC: //0x3
+		if (currentNode->rightSibling != NULL) //현재 노드의 오른쪽 형제 노드가 존재 할 경우
+		{
+			std::get<2>(callStack.top()) = (0x4); //현재 노드에 대해 다음 번 실행 시 Call Stack에서 pop 및 마지막 작업 수행
+			callStack.push(std::make_tuple(currentNode->rightSibling, currentNodeDepth, (0x0)));
+			continue;
+		}
+
+	LAST_POP_PROC: //0x4
+		callStack.pop();
+	}
+#endif
 }
 
 /// <summary>
@@ -179,13 +264,13 @@ void LCRS_DispTreeNodesAt(Node* srcRootNode, TreeIndexType targetNodeDepth)
 /// </summary>
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 /// <param name="rootNodeDepth">대상 트리의 최상위 루트 노드의 깊이</param>
-void LCRS_DispTree(Node* srcRootNode, TreeIndexType rootNodeDepth)
+void LCRS_DispTree(Node* srcRootNode, TreeDepthType rootNodeDepth)
 {
 	if (srcRootNode == NULL || rootNodeDepth < 0)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
 #ifdef RECURSIVE_METHOD
-	for (TreeIndexType i = 0; i < rootNodeDepth; i++)
+	for (TreeDepthType i = 0; i < rootNodeDepth; i++)
 	{
 		std::cout << "|";
 	}
@@ -198,11 +283,77 @@ void LCRS_DispTree(Node* srcRootNode, TreeIndexType rootNodeDepth)
 		LCRS_DispTree(srcRootNode->rightSibling, rootNodeDepth);
 
 #elif defined ITERATIVE_METHOD
-	/***
-		< RECURSIVE_METHOD의 Call Stack 구현 >
+	Node* currentNode = srcRootNode; //현재 노드
+	TreeDepthType currentNodeDepth = rootNodeDepth; //현재 노드의 깊이
+	char execBranchSingleFlag = (0x0); //실행 분기 단일 플래그
 
+	/***
+		< 실행 분기 단일 플래그 >
+
+		0000(2) : 초기 상태 (순차적 실행)
+		0001(2) : 현재 노드 출력
+		0010(2) : Left Child 방문
+		0011(2) : Right Sibling 방문
+		0100(2) : pop 및 필요 할 경우 해당 요소에 대한 마지막 작업 수행
 	***/
 
+	std::stack<std::tuple<Node*, TreeDepthType, char>> callStack; //Call Stack
+	callStack.push(std::make_tuple(currentNode, currentNodeDepth, execBranchSingleFlag));
 
+	while (!callStack.empty())
+	{
+		currentNode = std::get<0>(callStack.top());
+		currentNodeDepth = std::get<1>(callStack.top());
+		execBranchSingleFlag = std::get<2>(callStack.top());
+
+		switch (execBranchSingleFlag)
+		{
+		case (0x0): //초기 상태 (순차적 실행)
+			break;
+
+		case (0x1): //현재 노드 출력
+			goto DISP_CURRENT_NODE_PROC;
+
+		case (0x2): //Left Child 방문
+			goto VISIT_LEFT_CHILD_PROC;
+
+		case (0x3): //Right Sibling 방문
+			goto VISIT_RIGHT_SIBLING_PROC;
+
+		case (0x4): //pop 및 필요 할 경우 해당 요소에 대한 마지막 작업 수행
+			goto LAST_PROC;
+
+		default:
+			throw std::logic_error(std::string(__func__) + std::string(" : Invalid Flag"));
+		}
+
+	DISP_CURRENT_NODE_PROC: //0x1
+		std::get<2>(callStack.top()) = (0x2); //헌재 노드에 대해 다음 번 실행 시 왼쪽 자식 노드를 방문
+
+		for (TreeDepthType i = 0; i < currentNodeDepth; i++)
+		{
+			std::cout << "|";
+		}
+		std::cout << "- " << currentNode->data << std::endl;
+
+	VISIT_LEFT_CHILD_PROC: //0x2
+		if (currentNode->leftChild != NULL)
+		{
+			std::get<2>(callStack.top()) = (0x3); //헌재 노드에 대해 다음 번 실행 시 오른쪽 형제 노드를 방문
+			callStack.push(std::make_tuple(currentNode->leftChild, currentNodeDepth + 1, (0x0)));
+			continue;
+		}
+
+	VISIT_RIGHT_SIBLING_PROC: //0x3
+		if (currentNode->rightSibling != NULL)
+		{
+			std::get<2>(callStack.top()) = (0x4); //현재 노드에 대해 다음 번 실행 시 Call Stack에서 pop 및 필요 할 경우 마지막 작업 수행
+			callStack.push(std::make_tuple(currentNode->rightSibling, currentNodeDepth, (0x0)));
+			continue;
+		}
+
+	LAST_PROC: //0x4
+		callStack.pop();
+	}
 #endif
 }
