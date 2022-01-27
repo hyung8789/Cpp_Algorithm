@@ -16,14 +16,14 @@ int main()
 		for (int i = 0; i < NODE_COUNT; i++) //최상위 루트 노트에 자식 노드 연결
 		{
 			rootChildNode[i] = LCRS_CreateNode((char)(66 + i)); //B부터 할당
-			LCRS_AddChildNode(rootNode, rootChildNode[i]);
+			LCRS_AppendNode(rootNode, rootChildNode[i]);
 		}
 
 		for (int i = 0; i < NODE_COUNT; i++)
 		{
 			for (int j = 0; j < NODE_COUNT; j++) //최상위 루트 노드의 각 자식 노드들에 대해 다시 자식 노드 연결
 			{
-				LCRS_AddChildNode(rootChildNode[i], LCRS_CreateNode((char)(98 + i))); //b부터 할당
+				LCRS_AppendNode(rootChildNode[i], LCRS_CreateNode((char)(98 + i))); //b부터 할당
 			}
 		}
 

@@ -31,7 +31,7 @@ void LCRS_DeallocateNode(Node** srcNode)
 }
 
 /// <summary>
-/// 대상 트리에 할당 된 모든 노드의 메모리 해제 (Recursive)
+/// 대상 트리에 할당 된 모든 노드의 메모리 해제
 /// </summary>
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 void LCRS_DeallocateTree(Node** srcRootNode)
@@ -103,7 +103,7 @@ void LCRS_DeallocateTree(Node** srcRootNode)
 				goto VISIT_RIGHT_SIBLING_PROC;
 
 			case (0x3): //pop 및 필요 할 경우 해당 요소에 대한 마지막 작업 수행
-				goto LAST_PROC;
+				goto FINALIZE_PROC;
 
 			default:
 				throw std::logic_error(std::string(__func__) + std::string(" : Invalid Flag"));
@@ -125,7 +125,7 @@ void LCRS_DeallocateTree(Node** srcRootNode)
 				continue;
 			}
 
-		LAST_PROC: //0x3
+		FINALIZE_PROC: //0x3
 			callStack.pop();
 			//std::cout << "Dealloc : " << currentNode->data << std::endl;
 			LCRS_DeallocateNode(&currentNode);
@@ -136,11 +136,11 @@ void LCRS_DeallocateTree(Node** srcRootNode)
 }
 
 /// <summary>
-/// 대상 노드에 새 자식 노드 연결
+/// 대상 노드에 새 노드 연결
 /// </summary>
 /// <param name="srcTargetNode">대상 노드</param>
-/// <param name="srcNewNode">대상 노드에 연결 될 새 자식 노드</param>
-void LCRS_AddChildNode(Node* srcTargetNode, Node* srcNewNode)
+/// <param name="srcNewNode">대상 노드에 연결 될 새 노드</param>
+void LCRS_AppendNode(Node* srcTargetNode, Node* srcNewNode)
 {
 	if (srcTargetNode == NULL || srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -223,7 +223,7 @@ void LCRS_DispTreeNodesAt(Node* srcRootNode, TreeDepthType targetNodeDepth)
 			goto VISIT_RIGHT_SIBLING_PROC;
 
 		case (0x4): //pop 및 필요 할 경우 해당 요소에 대한 마지막 작업 수행
-			goto LAST_POP_PROC;
+			goto FINALIZE_PROC;
 
 		default:
 			throw std::logic_error(std::string(__func__) + std::string(" : Invalid Flag"));
@@ -253,7 +253,7 @@ void LCRS_DispTreeNodesAt(Node* srcRootNode, TreeDepthType targetNodeDepth)
 			continue;
 		}
 
-	LAST_POP_PROC: //0x4
+	FINALIZE_PROC: //0x4
 		callStack.pop();
 	}
 #endif
@@ -321,7 +321,7 @@ void LCRS_DispTree(Node* srcRootNode, TreeDepthType rootNodeDepth)
 			goto VISIT_RIGHT_SIBLING_PROC;
 
 		case (0x4): //pop 및 필요 할 경우 해당 요소에 대한 마지막 작업 수행
-			goto LAST_PROC;
+			goto FINALIZE_PROC;
 
 		default:
 			throw std::logic_error(std::string(__func__) + std::string(" : Invalid Flag"));
@@ -352,7 +352,7 @@ void LCRS_DispTree(Node* srcRootNode, TreeDepthType rootNodeDepth)
 			continue;
 		}
 
-	LAST_PROC: //0x4
+	FINALIZE_PROC: //0x4
 		callStack.pop();
 	}
 #endif

@@ -1,0 +1,89 @@
+#include "BT_Core.h"
+
+/// <summary>
+/// 새로운 노드 생성 및 생성 된 노드 반환
+/// </summary>
+/// <param name="srcData">노드의 데이터</param>
+/// <returns>생성 된 노드</returns>
+Node* BT_CreateNode(DataType srcData)
+{
+	Node* retVal = (Node*)malloc(sizeof(Node));
+	if (retVal == NULL)
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
+
+	retVal->data = srcData;
+	retVal->left = retVal->right = NULL;
+
+	return retVal;
+}
+
+/// <summary>
+/// 대상 노드에 할당 된 메모리 해제
+/// </summary>
+/// <param name="srcNode">대상 노드</param>
+void BT_DeallocateNode(Node** srcNode)
+{
+	if ((*srcNode) != NULL)
+	{
+		free(*srcNode);
+		(*srcNode) = NULL;
+	}
+}
+
+/// <summary>
+/// 대상 트리에 할당 된 모든 노드의 메모리 해제
+/// </summary>
+/// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
+void BT_DeallocateTree(Node** srcRootNode)
+{
+	if ((*srcRootNode) != NULL) //후위 순회로 왼쪽 끝 노드부터 해제 
+	{
+		if ((*srcRootNode)->left != NULL)
+			BT_DeallocateTree(&((*srcRootNode)->left));
+
+		if((*srcRootNode)->right != NULL)
+			BT_DeallocateTree(&((*srcRootNode)->right));
+
+		BT_DeallocateNode(srcRootNode);
+		(*srcRootNode) = NULL;
+	}
+}
+
+void BT_DispTree(Node* srcRootNode, TRAVERSAL_MODE traversalMode)
+{
+	if (srcRootNode == NULL)
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
+
+	switch (traversalMode)
+	{
+	case TRAVERSAL_MODE::PREORDER:
+		std::cout << srcRootNode->data << " ";
+
+		if(srcRootNode->left != NULL)
+			BT_DispTree(srcRootNode->left, traversalMode);
+
+		if (srcRootNode->right != NULL)
+			BT_DispTree(srcRootNode->right, traversalMode);
+		break;
+
+	case TRAVERSAL_MODE::INORDER:
+		if (srcRootNode->left != NULL)
+			BT_DispTree(srcRootNode->left, traversalMode);
+
+		std::cout << srcRootNode->data << " ";
+
+		if (srcRootNode->right != NULL)
+			BT_DispTree(srcRootNode->right, traversalMode);
+		break;
+
+	case TRAVERSAL_MODE::POSTORDER:
+		if (srcRootNode->left != NULL)
+			BT_DispTree(srcRootNode->left, traversalMode);
+
+		if (srcRootNode->right != NULL)
+			BT_DispTree(srcRootNode->right, traversalMode);
+
+		std::cout << srcRootNode->data << " ";
+		break;
+	}
+}

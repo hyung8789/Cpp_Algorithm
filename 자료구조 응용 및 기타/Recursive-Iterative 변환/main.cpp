@@ -62,7 +62,7 @@ unsigned int Factorial(unsigned int n, unsigned int acc = 1)
 		Factorial(3) : n == 3, acc == 1
 			=> Factorial(2, 3) : n == 2, acc == 3
 				=> Factorial(1, 6) : n == 1, acc == 6
-					=> Factorial(0, 6) : n == 0, acc = 6
+					=> Factorial(0, 6) : n == 0, acc == 6
 	***/
 
 	acc = n * acc;

@@ -24,7 +24,7 @@ Node* LCRS_CreateNode(DataType);
 void LCRS_DeallocateNode(Node**);
 void LCRS_DeallocateTree(Node**);
 
-void LCRS_AddChildNode(Node*, Node*);
+void LCRS_AppendNode(Node*, Node*);
 
 void LCRS_DispTreeNodesAt(Node*, TreeDepthType);
 void LCRS_DispTree(Node*, TreeDepthType = 0);
