@@ -33,11 +33,11 @@ int main()
 
 
 		std::cout << "\n전위 순회 (Root -> Left -> Right) : ";
-		BT_DispTree(rootNode, TRAVERSAL_MODE::PREORDER);
+		BT_DispOrderedTree(rootNode, TRAVERSAL_MODE::PREORDER);
 		std::cout << "\n중위 순회 (Left -> Root -> Right) : ";
-		BT_DispTree(rootNode, TRAVERSAL_MODE::INORDER);
+		BT_DispOrderedTree(rootNode, TRAVERSAL_MODE::INORDER);
 		std::cout << "\n후위 순회 (Left -> Right -> Root) : ";
-		BT_DispTree(rootNode, TRAVERSAL_MODE::POSTORDER);
+		BT_DispOrderedTree(rootNode, TRAVERSAL_MODE::POSTORDER);
 		std::cout << "\n";
 	}
 	catch (const std::exception& ex)

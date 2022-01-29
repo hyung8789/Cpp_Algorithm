@@ -49,7 +49,12 @@ void BT_DeallocateTree(Node** srcRootNode)
 	}
 }
 
-void BT_DispTree(Node* srcRootNode, TRAVERSAL_MODE traversalMode)
+/// <summary>
+/// 순회 모드에 따른 대상 트리 출력
+/// </summary>
+/// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
+/// <param name="traversalMode">순회 모드</param>
+void BT_DispOrderedTree(Node* srcRootNode, TRAVERSAL_MODE traversalMode)
 {
 	if (srcRootNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -60,28 +65,28 @@ void BT_DispTree(Node* srcRootNode, TRAVERSAL_MODE traversalMode)
 		std::cout << srcRootNode->data << " ";
 
 		if(srcRootNode->left != NULL)
-			BT_DispTree(srcRootNode->left, traversalMode);
+			BT_DispOrderedTree(srcRootNode->left, traversalMode);
 
 		if (srcRootNode->right != NULL)
-			BT_DispTree(srcRootNode->right, traversalMode);
+			BT_DispOrderedTree(srcRootNode->right, traversalMode);
 		break;
 
 	case TRAVERSAL_MODE::INORDER:
 		if (srcRootNode->left != NULL)
-			BT_DispTree(srcRootNode->left, traversalMode);
+			BT_DispOrderedTree(srcRootNode->left, traversalMode);
 
 		std::cout << srcRootNode->data << " ";
 
 		if (srcRootNode->right != NULL)
-			BT_DispTree(srcRootNode->right, traversalMode);
+			BT_DispOrderedTree(srcRootNode->right, traversalMode);
 		break;
 
 	case TRAVERSAL_MODE::POSTORDER:
 		if (srcRootNode->left != NULL)
-			BT_DispTree(srcRootNode->left, traversalMode);
+			BT_DispOrderedTree(srcRootNode->left, traversalMode);
 
 		if (srcRootNode->right != NULL)
-			BT_DispTree(srcRootNode->right, traversalMode);
+			BT_DispOrderedTree(srcRootNode->right, traversalMode);
 
 		std::cout << srcRootNode->data << " ";
 		break;

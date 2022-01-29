@@ -13,6 +13,5 @@
 // http://soen.kr/lecture/ccpp/cpp3/32-3-2.htm
 #include <stdexcept>
 
-#include "TokenGen.h"
 #include "EXPRT.h"
 #endif

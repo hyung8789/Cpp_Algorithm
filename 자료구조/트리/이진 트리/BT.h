@@ -22,5 +22,5 @@ Node* BT_CreateNode(DataType);
 void BT_DeallocateNode(Node**);
 void BT_DeallocateTree(Node**);
 
-void BT_DispTree(Node*, TRAVERSAL_MODE);
+void BT_DispOrderedTree(Node*, TRAVERSAL_MODE);
 #endif
