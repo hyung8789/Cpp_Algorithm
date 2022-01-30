@@ -96,6 +96,12 @@ void EXPRT_DeallocateNode(Node** srcNode)
 {
 	if ((*srcNode) != NULL)
 	{
+		if (typeid((*srcNode)->data) == typeid(char*) && (*srcNode)->data != NULL)
+		{
+			free((*srcNode)->data);
+			(*srcNode)->data = NULL;
+		}
+
 		free(*srcNode);
 		(*srcNode) = NULL;
 	}
@@ -125,7 +131,7 @@ void EXPRT_DeallocateTree(Node** srcRootNode)
 /// </summary>
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 /// <param name="srcPostfixExpr">대상 후위 표현식</param>
-void EXPRT_BulidTreeFromPostfixExpr(Node** srcRootNode, char* srcPostfixExpr)
+void EXPRT_BulidTreeFromPostfixExpr(Node** srcRootNode, char srcPostfixExpr[])
 {
 	if ((*srcRootNode) != NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Memleak"));
@@ -144,6 +150,7 @@ void EXPRT_BulidTreeFromPostfixExpr(Node** srcRootNode, char* srcPostfixExpr)
 		1) 후위 표현식의 오른쪽에서 왼쪽 (역방향)으로 순차적인 토큰 분리 (피연산자 간 구분을 위한 공백, 피연산자, 연산자)
 
 		2) 분리 된 토큰의 기호 타입에 따라,
+
 			2-1) 피연산자 간 구분을 위한 공백인 경우
 			: 계산 시에 사용하지 않으므로, 해당 토큰 무시
 
@@ -171,7 +178,8 @@ void EXPRT_BulidTreeFromPostfixExpr(Node** srcRootNode, char* srcPostfixExpr)
 
 	Token token;
 	GenNextToken(srcPostfixExpr, &token, EXPR_READ_DIRECTION::RIGHT_TO_LEFT);
-	srcPostfixExpr[strlen(srcPostfixExpr) - token.readCount] = '\0'; //대상 후위 표현식의 토큰에서 읽은 문자 개수만큼 제거
+	memset(&srcPostfixExpr[strlen(srcPostfixExpr) - (token.readCount + token.ignoredCount)], '\0',
+		token.readCount + token.ignoredCount); //대상 후위 표현식의 토큰에서 무시 된 문자 개수를 포함 한 읽은 문자 개수만큼 제거
 
 	switch (token.symbolType)
 	{
@@ -181,20 +189,20 @@ void EXPRT_BulidTreeFromPostfixExpr(Node** srcRootNode, char* srcPostfixExpr)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (wrong srcPostfixExpr)"));
 
 	case SYMBOL_TYPE::SPACE:
-		break;
+		throw std::logic_error(std::string(__func__) + std::string(" : ignored space"));
 
 	case SYMBOL_TYPE::PLUS:
 	case SYMBOL_TYPE::MINUS:
 	case SYMBOL_TYPE::MULTIPLY:
 	case SYMBOL_TYPE::DIVIDE:
-		(*srcRootNode) = EXPRT_CreateNode(token.str);
+		(*srcRootNode) = EXPRT_CreateNode(token.str); //연산자인 경우 해당 토큰은 초기 루트 노드 혹은 가지 노드
 
 		EXPRT_BulidTreeFromPostfixExpr(&((*srcRootNode)->right), srcPostfixExpr); //현재 노드의 오른쪽 자식 노드 생성
 		EXPRT_BulidTreeFromPostfixExpr(&((*srcRootNode)->left), srcPostfixExpr); //현재 노드의 왼쪽 자식 노드 생성
 		break;
 
 	default: //피연산자인 경우
-		(*srcRootNode) = EXPRT_CreateNode(token.str); //해당 토큰은 잎 노드
+		(*srcRootNode) = EXPRT_CreateNode(token.str); //피연산자인 경우 해당 토큰은 잎 노드
 		break;
 	}
 }
@@ -205,16 +213,47 @@ void EXPRT_BulidTreeFromPostfixExpr(Node** srcRootNode, char* srcPostfixExpr)
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 double EXPRT_EvaluateTree(Node* srcRootNode)
 {
-	//구축 된 수식 트리의 후위 순회를 통해 맨 왼쪽 하단 노드부터 병합하여 계산 수행
+	/***
+		< 구축 된 수식 트리로부터 연산 수행 >
 
-	if (srcRootNode == NULL)
-		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
+		1) 루트 노드에서 시작, 현재 노드의 기호 타입에 따라,
+
+			1-1) 연산자인 경우
+			: 현재 노드의 왼쪽 하위 트리 및 오른쪽 하위 트리로 탐색,
+			각 하위 트리의 연산 결과를 병합하여 루트 노드 (연산자)에서 최종 계산 결과 반환 (후위 순회)
+			단, 현재 노드가 연산자인 경우, 왼쪽 하위 트리 혹은 오른쪽 하위 트리가 하나라도 존재하지 않을 경우 잘못 된 후위 표기식 예외 발생
+
+			1-2) 피연산자인 경우
+			: 현재 노드의 상위 노드로 현재 노드의 값 전달
+	***/
 
 	double retVal = 0.0;
+	double leftTreeOpResult = 0.0; //현재 노드의 왼쪽 하위 트리의 연산 결과
+	double rightTreeOpResult = 0.0; //현재 노드의 오른쪽 하위 트리의 연산 결과
 
+	switch (StrToSymbolType(srcRootNode->data))
+	{
+	case SYMBOL_TYPE::LEFT_PARENTHESIS:
+	case SYMBOL_TYPE::RIGHT_PARENTHESIS:
+	case SYMBOL_TYPE::DOT:
+	case SYMBOL_TYPE::SPACE:
+		throw std::runtime_error(std::string(__func__) + std::string(" : Invalid PostfixExpr"));
 
+	case SYMBOL_TYPE::OPERAND:
+		return atof(srcRootNode->data); //피연산자인 경우, 현재 노드의 상위 노드로 현재 노드의 값 전달
 
-	return 0.0;
+	default: //연산자인 경우
+		if (srcRootNode->left == NULL || srcRootNode->right == NULL)
+			throw std::runtime_error(std::string(__func__) + std::string(" : Invalid PostfixExpr"));
+
+		leftTreeOpResult = EXPRT_EvaluateTree(srcRootNode->left); //현재 노드의 왼쪽 하위 트리로 탐색
+		rightTreeOpResult = EXPRT_EvaluateTree(srcRootNode->right); //현재 노드의 오른쪽 하위 트리로 탐색
+
+		retVal = CalcOperation(leftTreeOpResult, StrToSymbolType(srcRootNode->data), rightTreeOpResult);
+		break;
+	}
+
+	return retVal;
 }
 
 /// <summary>
@@ -222,7 +261,8 @@ double EXPRT_EvaluateTree(Node* srcRootNode)
 /// </summary>
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 /// <param name="traversalMode">순회 모드</param>
-void EXPRT_DispOrderedTree(Node* srcRootNode, TRAVERSAL_MODE traversalMode)
+/// <param name="os">출력 스트림</param>
+void EXPRT_DispOrderedTree(Node* srcRootNode, TRAVERSAL_MODE traversalMode, std::ostream& os)
 {
 	if (srcRootNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -230,7 +270,7 @@ void EXPRT_DispOrderedTree(Node* srcRootNode, TRAVERSAL_MODE traversalMode)
 	switch (traversalMode)
 	{
 	case TRAVERSAL_MODE::PREORDER:
-		std::cout << srcRootNode->data << " ";
+		os << srcRootNode->data << " ";
 
 		if (srcRootNode->left != NULL)
 			EXPRT_DispOrderedTree(srcRootNode->left, traversalMode);
@@ -243,7 +283,9 @@ void EXPRT_DispOrderedTree(Node* srcRootNode, TRAVERSAL_MODE traversalMode)
 		if (srcRootNode->left != NULL)
 			EXPRT_DispOrderedTree(srcRootNode->left, traversalMode);
 
-		std::cout << srcRootNode->data << " ";
+		os << " '";
+		os << srcRootNode->data;
+		os << "' ";
 
 		if (srcRootNode->right != NULL)
 			EXPRT_DispOrderedTree(srcRootNode->right, traversalMode);
@@ -256,7 +298,7 @@ void EXPRT_DispOrderedTree(Node* srcRootNode, TRAVERSAL_MODE traversalMode)
 		if (srcRootNode->right != NULL)
 			EXPRT_DispOrderedTree(srcRootNode->right, traversalMode);
 
-		std::cout << srcRootNode->data << " ";
+		os << srcRootNode->data << " ";
 		break;
 	}
 }

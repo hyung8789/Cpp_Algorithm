@@ -277,11 +277,11 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr)
 				3-3-2) 현재 스택의 최상위 노드의 기호 타입에 대한 우선순위 < 현재 분리 된 토큰의 기호 타입에 대한 우선순위
 				: 우선순위가 높은 기호에 대해 먼저 계산을 위해 후위 표현식의 결과로서 출력 위한 판별 중지
 
-			3-4) 피연산자 (정수 혹은 '.'을 포함 한 실수), ' ' (피연산자 간 구분을 위한 공백) 인 경우
+			3-4) 피연산자 (정수 혹은 '.'을 포함 한 실수) 인 경우
 			: 현재 분리 된 토큰의 기호를 스택에 삽입하지 않고 즉시 변환 된 후위 표현식의 결과로서 출력
 
-			3-5) '.' (실수 표현을 위한 점) 인 경우
-			: '.'은 단일 토큰으로서 처리 되지 않으며, '.'을 포함 한 실수로서 하나의 피연산자로 처리되어야만 함
+			3-5) ' ' (피연산자 간 구분을 위한 공백), '.' (실수 표현을 위한 점) 인 경우
+			: ' ', '.'은 단일 토큰으로서 처리 되지 않으며, 무시되거나 '.'을 포함 한 실수로서 하나의 피연산자로 처리되어야만 함
 			이에 따라, 논리 예외 발생
 
 		4) 현재 중위 표현식에 더 이상 토큰으로 분리 할 것이 없으면, 스택에 남은 노드의 기호들을 순차적으로 모두 변환 된 후위 표현식의 결과로서 출력
@@ -341,10 +341,11 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr)
 		case SYMBOL_TYPE::OPERAND:
 			if (strcat_s(dstPostfixExpr, MAX_STR_LEN - 1, token.str) != 0) //현재 분리 된 토큰의 기호를 후위 표현식에 출력
 				throw std::runtime_error(std::string(__func__) + std::string(" : src, dst is null or wrong size"));
-		case SYMBOL_TYPE::SPACE:
 			if (strcat_s(dstPostfixExpr, MAX_STR_LEN - 1, " ") != 0) //피연산자 간 구분을 위한 공백을 후위 표현식에 출력
 				throw std::runtime_error(std::string(__func__) + std::string(" : src, dst is null or wrong size"));
-			break;
+
+		case SYMBOL_TYPE::SPACE:
+			throw std::logic_error(std::string(__func__) + std::string(" : ignored space"));
 
 		case SYMBOL_TYPE::DOT:
 			throw std::logic_error(std::string(__func__) + std::string(" : '.' is part of operand"));

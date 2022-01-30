@@ -32,10 +32,10 @@ namespace 스택_계산기_UnitTest
 				CalcOperation(1, '/', 0);
 				Assert::Fail();
 			}
-			catch (const std::invalid_argument& ex)
+			catch (const std::invalid_argument& ex) //success
 			{
 				if (LOGGING_EX)
-					Logger::WriteMessage(ex.what()); //success
+					Logger::WriteMessage(ex.what());
 			}
 		}
 
@@ -58,10 +58,10 @@ namespace 스택_계산기_UnitTest
 						SingleNumToDecAscii(i);
 						Assert::Fail();
 					}
-					catch (const std::invalid_argument& ex)
+					catch (const std::invalid_argument& ex) //success
 					{
 						if (LOGGING_EX)
-							Logger::WriteMessage(ex.what()); //success
+							Logger::WriteMessage(ex.what());
 					}
 					break;
 
@@ -88,10 +88,10 @@ namespace 스택_계산기_UnitTest
 						CharToSymbolType(i);
 						Assert::Fail();
 					}
-					catch (const std::invalid_argument& ex)
+					catch (const std::invalid_argument& ex) //success
 					{
 						if (LOGGING_EX)
-							Logger::WriteMessage(ex.what()); //success
+							Logger::WriteMessage(ex.what());
 					}
 					break;
 
@@ -112,7 +112,7 @@ namespace 스택_계산기_UnitTest
 			Assert::AreEqual(expected, actual);
 		}
 
-		TEST_METHOD(Valid_InfixExpr_TestMethod)
+		TEST_METHOD(InfixExpr_Valid_TestMethod)
 		{
 			const char* input[] =
 			{
@@ -139,7 +139,7 @@ namespace 스택_계산기_UnitTest
 					GenPostfixExpr(input[i], buffer);
 					Assert::AreEqual(expected[i], CalcPostfixExpr(buffer), FP_DIFF_THRESHOLD);
 				}
-				catch (const std::invalid_argument& ex)
+				catch (const std::exception& ex)
 				{
 					Logger::WriteMessage(
 						(std::string("Failed at : ") + std::string(input[i]))
@@ -152,7 +152,7 @@ namespace 스택_계산기_UnitTest
 			}
 		}
 
-		TEST_METHOD(Invalid_InfixExpr_TestMethod)
+		TEST_METHOD(InfixExpr_Invalid_TestMethod)
 		{
 			const char* input[] =
 			{
@@ -190,10 +190,10 @@ namespace 스택_계산기_UnitTest
 					);
 					Assert::Fail();
 				}
-				catch (const std::invalid_argument& ex)
+				catch (const std::exception& ex) //success
 				{
 					if (LOGGING_EX)
-						Logger::WriteMessage(ex.what()); //success
+						Logger::WriteMessage(ex.what());
 				}
 			}
 		}

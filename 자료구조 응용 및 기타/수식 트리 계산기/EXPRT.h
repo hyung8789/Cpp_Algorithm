@@ -38,8 +38,8 @@ Node* EXPRT_CreateNode(DataType);
 void EXPRT_DeallocateNode(Node**);
 void EXPRT_DeallocateTree(Node**);
 
-void EXPRT_BulidTreeFromPostfixExpr(Node**, const char*);
+void EXPRT_BulidTreeFromPostfixExpr(Node**, char[]);
 double EXPRT_EvaluateTree(Node*);
 
-void EXPRT_DispOrderedTree(Node*, TRAVERSAL_MODE);
+void EXPRT_DispOrderedTree(Node*, TRAVERSAL_MODE, std::ostream& = std::cout);
 #endif

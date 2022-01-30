@@ -3,6 +3,8 @@
 
 //TODO : 토큰 생성 모듈 분리 및 기능 추가에 따른 스택 계산기 모듈 단위 리팩토링
 //TODO : 이에 따른 스택 계산기에 의존적인 주석 및 README 수정 (스택에 삽입 위해 => 현재 읽은 문자에 대해 처리를 위해)
+//TODO : 토큰 생성 시 공백을 무시하였으므로, 스택 계산기 생성 된 토큰에 공백 기호 타입이 있을 경우 예외
+
 
 #define MAX_STR_LEN 256
 
@@ -49,13 +51,16 @@ typedef struct
 {
 	char str[MAX_STR_LEN]; //읽은 문자열
 	SYMBOL_TYPE symbolType; //기호 타입
-	size_t readCount; //읽은 문자 개수
+
+	size_t readCount; //읽은 문자 개수 (무시 된 문자 제외)
+	size_t ignoredCount; //읽었지만 무시 된 문자 개수
 }Token;
 
-void ReverseInplaceStr(char*);
+void ReverseInplaceStr(char[]);
 inline int CharToDecAscii(char);
 inline int SingleNumToDecAscii(int);
 SYMBOL_TYPE CharToSymbolType(char);
+SYMBOL_TYPE StrToSymbolType(const char*);
 
 int GetSymbolTypePriority(SYMBOL_TYPE);
 

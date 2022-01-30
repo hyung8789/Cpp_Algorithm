@@ -4,12 +4,14 @@
 /// 대상 문자열 제자리 좌우반전
 /// </summary>
 /// <param name="targetStr">대상 문자열</param>
-void ReverseInplaceStr(char* targetStr)
+void ReverseInplaceStr(char targetStr[])
 {
 	if (targetStr == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
 	size_t targetStrLen = strlen(targetStr); //대상 문자열의 길이 ('\0' 제외 한 길이)
+	if (targetStrLen == 1) //do nothing
+		return;
 
 	for (size_t i = 0; i < (targetStrLen / 2); i++)
 	{
@@ -65,13 +67,59 @@ SYMBOL_TYPE CharToSymbolType(char srcChar)
 
 	default: //피연산자 혹은 잘못 된 입력
 		if (!(srcCharDecAscii >= SingleNumToDecAscii(0) &&
-			srcCharDecAscii <= SingleNumToDecAscii(9))) //0 (dec ascii : 48) ~ 9 (dec ascii : 57) 가 아닐 경우 (피연산자가 아닌 경우)
+			srcCharDecAscii <= SingleNumToDecAscii(9))) //0 (dec ascii : 48) ~ 9 (dec ascii : 57) 가 아닐 경우
 			throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
 		return SYMBOL_TYPE::OPERAND;
 	}
 
 	return (SYMBOL_TYPE)srcChar;
+}
+
+/// <summary>
+/// 대상 문자열을 기호 타입으로 변환
+/// </summary>
+/// <param name="srcStr">대상 문자열</param>
+/// <returns>대상 문자열의 기호 타입</returns>
+SYMBOL_TYPE StrToSymbolType(const char* srcStr)
+{
+	if (srcStr == NULL)
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
+
+	size_t srcStrLen = strlen(srcStr); //대상 문자열의 길이 ('\0' 제외 한 길이)
+
+	if (srcStrLen == 1) //단일 문자인 경우
+		return CharToSymbolType((const char)srcStr[0]); //단일 문자에 대한 기호 타입 변환 결과 반환
+
+	/***
+		< 단일 문자가 아닌 피연산자 (한 자리를 초과하는 정수 혹은 '.'을 포함하는 실수) 판별 >
+
+		1) GenNextToken 의 '.'을 포함하는 실수의 조건을 따름
+	***/
+
+	bool isDotAlreadyExists = false; //실수 표현을 위한 '.' 의 최초 한 번 존재 여부
+
+	for (size_t i = 0; i < srcStrLen; i++)
+	{
+		switch (CharToDecAscii((const char)srcStr[i])) //대상 문자열의 각 자리의 단일 문자에 대한 10진 아스키 코드에 따라
+		{
+		case (const int)SYMBOL_TYPE::DOT:
+			if (isDotAlreadyExists ||
+				!(i >= 1 && (i + 1) < srcStrLen)) //이미 '.'가 존재하거나, 현재 문자의 이전, 다음 문자가 존재하지 않을 경우
+				throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args ('.' already exists or invalid floating point)"));
+
+			isDotAlreadyExists = true;
+			break;
+
+		default:
+			if (!(CharToDecAscii((const char)srcStr[i]) >= SingleNumToDecAscii(0) &&
+				CharToDecAscii((const char)srcStr[i]) <= SingleNumToDecAscii(9))) //0 (dec ascii : 48) ~ 9 (dec ascii : 57) 가 아닐 경우
+				throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
+			break;
+		}
+	}
+
+	return SYMBOL_TYPE::OPERAND;
 }
 
 /// <summary>
@@ -121,11 +169,12 @@ void GenNextToken(const char* srcExpr, Token* dstToken, EXPR_READ_DIRECTION expr
 
 	memset(dstToken->str, '\0', sizeof(dstToken->str));
 	dstToken->readCount = 0;
+	dstToken->ignoredCount = 0;
 
 	/***
 		< '.'을 포함하는 실수의 조건 >
 
-		1) '.'은 '.'을 포함하는 실수에서 맨 처음에 단독으로 존재 할 수 없으며, 
+		1) '.'은 '.'을 포함하는 실수에서 맨 처음에 단독으로 존재 할 수 없으며,
 		어떠한 피연산자가 최소 한 번은 존재 한 다음에만 존재
 
 		2) '.'은 '.'을 포함하는 실수에서 반드시 한 번만 존재
@@ -158,26 +207,50 @@ void GenNextToken(const char* srcExpr, Token* dstToken, EXPR_READ_DIRECTION expr
 				2-2-2) 현재 문자의 이전, 다음 문자가 존재하지 않거나, 현재 문자의 이전, 다음 문자가 피연산자가 아닐 경우
 				: 잘못 된 표현식 예외 발생
 
-			2-3) 현재 읽은 문자의 기호 타입이 '(', ')', 연산자, 피연산자 간 구분을 위한 공백인 경우
+			2-3) 현재 읽은 문자의 기호 타입이 ' ' (피연산자 간 구분을 위한 공백)인 경우
+			: 현재 읽은 문자 무시를 위하여 현재 읽은 문자 제거, 읽은 문자 개수 감소 및 무시 된 문자 개수 증가 
+			현재 읽은 문자의 다음 문자부터 계속 읽기
+
+			2-4) 현재 읽은 문자의 기호 타입이 '(', ')', 연산자인 경우
 			: 현재 읽은 문자에 대해 처리를 위하여 읽기 중지
 	***/
 
 	size_t srcExprLen = strlen(srcExpr); //대상 표현식의 길이 ('\0' 제외 한 길이)
-	size_t srcExprNextReadIndex = 
-		(exprReadDirection == EXPR_READ_DIRECTION::LEFT_TO_RIGHT) ? dstToken->readCount :
-		(exprReadDirection == EXPR_READ_DIRECTION::RIGHT_TO_LEFT) ? (srcExprLen - 1) - dstToken->readCount : //읽을 위치 : 대상 표현식의 Index 된 길이 - 현재까지 읽은 문자 개수
+	size_t srcExprNextReadIndex =
+		(exprReadDirection == EXPR_READ_DIRECTION::LEFT_TO_RIGHT) ? 0 : //읽을 위치 : 대상 문자열의 시작
+		(exprReadDirection == EXPR_READ_DIRECTION::RIGHT_TO_LEFT) ? (srcExprLen - 1) : //읽을 위치 : 대상 문자열의 끝
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args")); //대상 표현식의 다음에 읽을 인덱스
 	bool isDotAlreadyExists = false; //실수 표현을 위한 '.' 의 최초 한 번 존재 여부
 
-	while (dstToken->readCount < srcExprLen) //대상 표현식을 다 읽을 때 까지
+	while ((dstToken->readCount + dstToken->ignoredCount) < srcExprLen) //대상 표현식을 다 읽을 때 까지
 	{
 		dstToken->str[dstToken->readCount] = srcExpr[srcExprNextReadIndex]; //한 문자씩 처리
-		dstToken->symbolType = CharToSymbolType(dstToken->str[dstToken->readCount]); //읽은 문자에 대한 기호 타입 할당
+		dstToken->symbolType = CharToSymbolType(srcExpr[srcExprNextReadIndex]); //읽은 문자에 대한 기호 타입 할당
 		dstToken->readCount++; //읽은 문자 개수 증가
+
 		srcExprNextReadIndex =
-			(exprReadDirection == EXPR_READ_DIRECTION::LEFT_TO_RIGHT) ? dstToken->readCount :
-			(exprReadDirection == EXPR_READ_DIRECTION::RIGHT_TO_LEFT) ? (srcExprLen - 1) - dstToken->readCount : //읽을 위치 : 대상 표현식의 Index 된 길이 - 현재까지 읽은 문자 개수
+			(exprReadDirection == EXPR_READ_DIRECTION::LEFT_TO_RIGHT) ? srcExprNextReadIndex + 1 :
+			(exprReadDirection == EXPR_READ_DIRECTION::RIGHT_TO_LEFT) ? srcExprNextReadIndex - 1 :
 			throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args")); //대상 표현식의 다음에 읽을 위치 할당
+
+		//TODO : reverse 토큰 생성 간 잘못 된 기호 타입 오류
+		/*
+		* tmp sliced string : 7 1 * 5 2 - /
+Current Token Str (Right -> Left) : /
+tmp sliced string : 7 1 * 5 2 - 
+Current Token Str (Right -> Left) : -
+tmp sliced string : 7 1 * 5 2 
+Current Token Str (Right -> Left) : 2
+tmp sliced string : 7 1 * 5 
+Current Token Str (Right -> Left) : 5
+tmp sliced string : 7 1 * 
+Current Token Str (Right -> Left) : *
+tmp sliced string : 7 1 
+Current Token Str (Right -> Left) : 1
+tmp sliced string : 7 
+CharToSymbolType : Invalid Args
+		*/
+
 
 		switch (dstToken->symbolType)
 		{
@@ -193,7 +266,7 @@ void GenNextToken(const char* srcExpr, Token* dstToken, EXPR_READ_DIRECTION expr
 				default: //현재 문자의 다음 문자의 기호 타입이 '(', ')', 연산자, 피연산자 간 구분을 위한 공백인 경우
 					if (exprReadDirection == EXPR_READ_DIRECTION::RIGHT_TO_LEFT) //오른쪽에서 왼쪽으로 읽었을 경우
 						ReverseInplaceStr(dstToken->str); //현재까지 읽은 문자열에 대해 좌우반전
-					
+
 					goto END_PROC; //현재까지 읽은 문자에 대해 처리를 위하여 읽기 중지
 				}
 			}
@@ -213,7 +286,12 @@ void GenNextToken(const char* srcExpr, Token* dstToken, EXPR_READ_DIRECTION expr
 
 			break; //현재 문자의 이전, 다음 문자가 존재하며, 현재 문자의 이전, 다음 문자가 피연산자이면 계속 읽기
 
-		default: //'(', ')', 연산자, 피연산자 간 구분을 위한 공백인 경우
+		case SYMBOL_TYPE::SPACE:
+			dstToken->str[--(dstToken->readCount)] = '\0'; //현재 읽은 문자 제거 및 읽은 문자 개수 감소
+			dstToken->ignoredCount++; //무시 된 문자 개수 증가
+			continue; //현재 읽은 문자 무시 및 다음 문자 읽기
+
+		default: //'(', ')', 연산자인 경우
 			goto END_PROC; //현재 읽은 문자에 대해 처리를 위하여 읽기 중지
 		}
 	}
