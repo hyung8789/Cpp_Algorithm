@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{250cf230-9cf5-484e-b279-e3d1caee1800}</ProjectGuid>
-    <RootNamespace>수식트리계산기</RootNamespace>
+    <ProjectGuid>{d78589bf-bf6f-4260-9142-4c067735edc5}</ProjectGuid>
+    <RootNamespace>정렬</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -140,18 +140,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
-    <ClInclude Include="EXPRT.h" />
-    <ClInclude Include="TokenGen.h" />
-    <ClInclude Include="Utils.h" />
+    <ClInclude Include="Sort.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EXPRT.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="TokenGen.cpp" />
-    <ClCompile Include="Utils.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "CppUnitTest.h"
 
+#include "../Utils.cpp"
 #include "../TokenGen.cpp"
 #include "../EXPRT.cpp"
 
@@ -19,9 +20,42 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace 수식_트리_계산기_UnitTest
 {
-	TEST_CLASS(수식_트리_계산기_UnitTest)
+	TEST_CLASS(모듈_단위_테스트)
 	{
 	public:
+		/// <summary>
+	/// 부동 소수점으로 이루어진 대상 문자열을 부동 소수점으로 변환 테스트 메소드
+	/// </summary>
+		TEST_METHOD(StrToDouble_TestMethod)
+		{
+			try
+			{
+				double invalid = StrToDouble("invalid");
+				Logger::WriteMessage((std::string("invalid data : ") + std::to_string(invalid)).c_str());
+				Assert::Fail();
+			}
+			catch (const std::exception& ex)
+			{
+				if (LOGGING_EX)
+					Logger::WriteMessage(ex.what());
+			}
+
+			try
+			{
+				double valid = StrToDouble("1.0");
+				Logger::WriteMessage((std::string("valid data : ") + std::to_string(valid)).c_str());
+			}
+			catch (const std::exception& ex)
+			{
+				if (LOGGING_EX)
+					Logger::WriteMessage(ex.what());
+
+				Assert::Fail();
+			}
+		}
+		/// <summary>
+		/// 대상 문자열 제자리 좌우반전 테스트 메소드
+		/// </summary>
 		TEST_METHOD(ReverseInplaceStr_TestMethod)
 		{
 			char input[] = { '1','.','0','\0' }; //유효한 입력값
@@ -41,7 +75,9 @@ namespace 수식_트리_계산기_UnitTest
 
 			Assert::AreEqual(input, expected);
 		}
-
+		/// <summary>
+		/// 대상 문자열을 기호 타입으로 변환에 대한 유효 데이터 테스트 메소드
+		/// </summary>
 		TEST_METHOD(StrToSymbolType_Valid_TestMethod)
 		{
 			const char* input[] =
@@ -68,9 +104,11 @@ namespace 수식_트리_계산기_UnitTest
 					Logger::WriteMessage(ex.what());
 
 				Assert::Fail();
-			}	
+			}
 		}
-
+		/// <summary>
+		/// 대상 문자열을 기호 타입으로 변환에 대한 무효 데이터 테스트 메소드
+		/// </summary>
 		TEST_METHOD(StrToSymbolType_Invalid_TestMethod)
 		{
 			const char* input[] =
@@ -95,10 +133,12 @@ namespace 수식_트리_계산기_UnitTest
 					Logger::WriteMessage(ex.what());
 			}
 		}
-
+		/// <summary>
+		/// 대상 표현식으로부터 토큰 생성 테스트 메소드
+		/// </summary>
 		TEST_METHOD(GenNextToken_TestMethod)
 		{
-			const char* input = "(1.0 + 2.0)"; //유효한 입력값
+			const char* input = "7 1 * 5 2 - /"; //유효한 입력값
 			size_t inputLen = strlen(input);
 			size_t currentReadCount = 0; //입력값에 대해 현재까지 읽은 개수
 
@@ -121,9 +161,12 @@ namespace 수식_트리_계산기_UnitTest
 					Assert::Fail();
 				}
 
-				currentReadCount += (token.readCount + token.ignoredCount);
+				currentReadCount += token.readCount;
 			}
 		}
+		/// <summary>
+		/// 대상 표현식으로부터 토큰 생성 역방향 테스트 메소드
+		/// </summary>
 		TEST_METHOD(GenNextToken_Reverse_TestMethod)
 		{
 			const char* input = "7 1 * 5 2 - /"; //유효한 입력값
@@ -154,20 +197,29 @@ namespace 수식_트리_계산기_UnitTest
 					Assert::Fail();
 				}
 
-				currentReadCount += (token.readCount + token.ignoredCount);
+				currentReadCount += token.readCount;
 			}
 		}
-		
+	};
+
+	TEST_CLASS(통합_테스트)
+	{
+	public:
+		/// <summary>
+		/// 수식 트리 유효 데이터 통합 테스트 메소드
+		/// </summary>
 		TEST_METHOD(EXPRT_Valid_Integration_TestMethod)
 		{
 			const char* input[] =
 			{
-				"7 1*5 2-/" //2.33333....
+				"7 1*5 2-/", //(7 * 1) / (5 - 2) = 2.33333....
+				"1 3.334 4.28 110 7729 - */ +", //1 + 3.334 / (4.28 * (110 - 7729)) = 0.99989775929
 			}; //유효한 입력값 (후위 표현식)
-			
+
 			double expected[] =
 			{
-				2.33333
+				2.33333,
+				0.99989775929,
 			}; //유효한 입력값에 대한 예측값
 
 			try
@@ -175,26 +227,35 @@ namespace 수식_트리_계산기_UnitTest
 				Node* rootNode = NULL;
 				char buffer[MAX_STR_LEN] = { '\0' };
 				double result = 0.0;
-				std::ostringstream oss; //문자열 출력 스트림
+				std::stringstream ss;
 
 				for (int i = 0; i < length(input); i++)
 				{
 					memset(buffer, '\0', sizeof(buffer));
-					memcpy(buffer, input[i], sizeof(input[i]));
-					
+					memcpy(buffer, input[i], strlen(input[i]));
+
+					if (LOGGING_DEBUG_RESULT)
+						Logger::WriteMessage((std::string("current valid input : ") + std::string(buffer)).c_str());
+
 					EXPRT_BulidTreeFromPostfixExpr(&rootNode, buffer);
 					result = EXPRT_EvaluateTree(rootNode);
 
 					if (LOGGING_DEBUG_RESULT)
 					{
-						Logger::WriteMessage((std::string("current input : ") + std::string(input[i])).c_str());
+						EXPRT_DispOrderedTree(rootNode, TRAVERSAL_MODE::PREORDER, ss);
+						Logger::WriteMessage((std::string("PREORDER : ") + std::string(ss.str())).c_str());
+						ss.str(std::string());
+						ss.clear();
 
-						EXPRT_DispOrderedTree(rootNode, TRAVERSAL_MODE::PREORDER, oss);
-						Logger::WriteMessage((std::string("PREORDER : ") + std::string(oss.str())).c_str());
-						EXPRT_DispOrderedTree(rootNode, TRAVERSAL_MODE::INORDER, oss);
-						Logger::WriteMessage((std::string("INORDER : ") + std::string(oss.str())).c_str());
-						EXPRT_DispOrderedTree(rootNode, TRAVERSAL_MODE::POSTORDER, oss);
-						Logger::WriteMessage((std::string("POSTORDER : ") + std::string(oss.str())).c_str());
+						EXPRT_DispOrderedTree(rootNode, TRAVERSAL_MODE::INORDER, ss);
+						Logger::WriteMessage((std::string("INORDER : ") + std::string(ss.str())).c_str());
+						ss.str(std::string());
+						ss.clear();
+
+						EXPRT_DispOrderedTree(rootNode, TRAVERSAL_MODE::POSTORDER, ss);
+						Logger::WriteMessage((std::string("POSTORDER : ") + std::string(ss.str())).c_str());
+						ss.str(std::string());
+						ss.clear();
 					}
 
 					Assert::AreEqual(expected[i], result, FP_DIFF_THRESHOLD);
@@ -208,7 +269,47 @@ namespace 수식_트리_계산기_UnitTest
 
 				Assert::Fail();
 			}
-			
+
+		}
+		/// <summary>
+		/// 수식 트리 무효 데이터 통합 테스트 메소드
+		/// </summary>
+		TEST_METHOD(EXPRT_Invalid_Integration_TestMethod)
+		{
+			const char* input[] =
+			{
+				"13.3344.281107729- */ +",
+				"(123",
+				".012+",
+				"71*52-/",
+			}; //무효한 입력값 (후위 표현식)
+
+			try
+			{
+				Node* rootNode = NULL;
+				char buffer[MAX_STR_LEN] = { '\0' };
+				double result = 0.0;
+
+				for (int i = 0; i < length(input); i++)
+				{
+					memset(buffer, '\0', sizeof(buffer));
+					memcpy(buffer, input[i], strlen(input[i]));
+
+					if (LOGGING_DEBUG_RESULT)
+						Logger::WriteMessage((std::string("current invalid input : ") + std::string(buffer)).c_str());
+
+					EXPRT_BulidTreeFromPostfixExpr(&rootNode, buffer);
+					result = EXPRT_EvaluateTree(rootNode);
+					EXPRT_DeallocateTree(&rootNode);
+
+					Assert::Fail();
+				}
+			}
+			catch (const std::exception& ex) //success
+			{
+				if (LOGGING_EX)
+					Logger::WriteMessage(ex.what());
+			}
 		}
 	};
 }

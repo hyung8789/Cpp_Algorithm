@@ -1,11 +1,15 @@
 ﻿#include "pch.h"
 #include "CppUnitTest.h"
 
-#include "../Calculator.cpp"
+#include "../Utils.cpp"
+#include "../TokenGen.cpp"
 #include "../LLS.cpp"
+#include "../SCalc.cpp"
 
 #define FP_DIFF_THRESHOLD 0.0001 //부동 소수점 차이 임계값 (epsilon)
 #define length(array) ((sizeof(array)) / (sizeof(array[0])))
+
+static const bool LOGGING_DEBUG_RESULT = true; //디버그용 결과 출력
 static const bool LOGGING_EX = true; //예외 내용 출력
 
 // 속성 매크로 : https://2ry53.tistory.com/entry/%EB%B9%84%EC%A5%AC%EC%96%BC-%EC%8A%A4%ED%8A%9C%EB%94%94%EC%98%A4-%EB%B9%8C%EB%93%9C-%EB%AA%85%EB%A0%B9-%EB%98%90%EB%8A%94-%EB%A7%A4%ED%81%AC%EB%A1%9CSolutionDir-ProjectFileName%EB%93%B1
@@ -17,9 +21,12 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace 스택_계산기_UnitTest
 {
-	TEST_CLASS(스택_계산기_UnitTest)
+	TEST_CLASS(모듈_단위_테스트)
 	{
 	public:
+		/// <summary>
+		/// 대상 피연산자 1 및 대상 피연산자 2에 대해 연산자 문지에 따른 계산 결과 테스트 메소드
+		/// </summary>
 		TEST_METHOD(CalcOperation_TestMethod)
 		{
 			double result1 = CalcOperation(1, '+', 2);
@@ -38,13 +45,17 @@ namespace 스택_계산기_UnitTest
 					Logger::WriteMessage(ex.what());
 			}
 		}
-
+		/// <summary>
+		/// 대상 문자를 10진 아스키 코드로 변환 테스트 메소드
+		/// </summary>
 		TEST_METHOD(CharToDecAscii_TestMethod)
 		{
 			Assert::AreEqual((int)'a', CharToDecAscii('a'));
 			Assert::AreEqual((int)'z', CharToDecAscii('z'));
 		}
-
+		/// <summary>
+		/// 대상 0~9 범위의 단일 숫자를 10진 아스키 코드로 변환 테스트 메소드
+		/// </summary>
 		TEST_METHOD(SingleNumToDecAscii_TestMethod)
 		{
 			for (int i = -1; i <= 10; i++)
@@ -71,7 +82,9 @@ namespace 스택_계산기_UnitTest
 				}
 			}
 		}
-
+		/// <summary>
+		/// 대상 문자를 기호 타입으로 변환 테스트 메소드
+		/// </summary>
 		TEST_METHOD(CharToSymbolType_TestMethod)
 		{
 			for (int i = 47; i <= 58; i++) //10진 아스키 코드 범위
@@ -101,7 +114,9 @@ namespace 스택_계산기_UnitTest
 				}
 			}
 		}
-
+		/// <summary>
+		/// 대상 중위 표현식으로부터 후위 표현식 생성 테스트 메소드
+		/// </summary>
 		TEST_METHOD(GenPostfixExpr_TestMethod)
 		{
 			const char* input = "1+3.334/(4.28*(110-7729))"; //입력값
@@ -111,8 +126,15 @@ namespace 스택_계산기_UnitTest
 			GenPostfixExpr(input, actual);
 			Assert::AreEqual(expected, actual);
 		}
+	};
 
-		TEST_METHOD(InfixExpr_Valid_TestMethod)
+	TEST_CLASS(통합_테스트)
+	{
+	public:
+		/// <summary>
+		/// 중위 표현식에 대한 유효 데이터 통합 테스트 메소드
+		/// </summary>
+		TEST_METHOD(InfixExpr_Valid_Integration_TestMethod)
 		{
 			const char* input[] =
 			{
@@ -151,8 +173,10 @@ namespace 스택_계산기_UnitTest
 				}
 			}
 		}
-
-		TEST_METHOD(InfixExpr_Invalid_TestMethod)
+		/// <summary>
+		/// 중위 표현식에 대한 무효 데이터 통합 테스트 메소드
+		/// </summary>
+		TEST_METHOD(InfixExpr_Invalid_Integration_TestMethod)
 		{
 			const char* input[] =
 			{

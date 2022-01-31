@@ -145,14 +145,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Calculator.cpp" />
+    <ClCompile Include="SCalc.cpp" />
     <ClCompile Include="LLS.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="TokenGen.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Calculator.h" />
+    <ClInclude Include="SCalc.h" />
     <ClInclude Include="LLS.h" />
     <ClInclude Include="Core.h" />
+    <ClInclude Include="TokenGen.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

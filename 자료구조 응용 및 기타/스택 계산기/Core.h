@@ -9,10 +9,11 @@
 #include <stdio.h>
 #include <iostream>
 
-// https://en.cppreference.com/w/cpp/header/stdexcept 
-// http://soen.kr/lecture/ccpp/cpp3/32-3-2.htm
-#include <stdexcept>
+#include <stdexcept> // https://en.cppreference.com/w/cpp/header/stdexcept
+#include <cfenv> // https://www.cplusplus.com/reference/cfenv
 
+#include "Utils.h"
+#include "TokenGen.h"
 #include "LLS.h"
-#include "Calculator.h"
+#include "SCalc.h"
 #endif

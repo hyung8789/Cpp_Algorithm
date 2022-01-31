@@ -1,8 +1,6 @@
 #ifndef _EXPRT_H_
 #define _EXPRT_H_
 
-#include "TokenGen.h"
-
 /***
 	! 이하, 후위 표현식으로부터 수식 트리를 구축하는 과정의 기능 단위 분류에 따라,
 
@@ -31,7 +29,7 @@ enum class TRAVERSAL_MODE : const int
 	POSTORDER //후위 순회 (Left -> Right -> Root)
 };
 
-inline double CalcOperation(double, char, double);
+double CalcOperation(double, char, double);
 double CalcOperation(double, SYMBOL_TYPE, double);
 
 Node* EXPRT_CreateNode(DataType);
