@@ -26,10 +26,6 @@ struct TRACE_RESULT
 		std::cout << "===========================================================================\n";
 	}
 
-	/// <summary>
-	/// 증가 연산자 재정의
-	/// </summary>
-	/// <param name="newResult">새 Trace Result</param>
 	void operator+=(TRACE_RESULT newResult)
 	{
 		this->accDuration += newResult.accDuration;
@@ -44,10 +40,6 @@ struct TRACE_RESULT
 			this->maxDuration = newResult.maxDuration;
 	}
 
-	/// <summary>
-	/// 증가 연산자 재정의
-	/// </summary>
-	/// <param name="newDuration">새 소요 시간</param>
 	void operator+=(std::chrono::nanoseconds newDuration)
 	{
 		this->accDuration += newDuration;
@@ -62,10 +54,6 @@ struct TRACE_RESULT
 			this->maxDuration = newDuration;
 	};
 
-	/// <summary>
-	/// 대입 연산자 재정의
-	/// </summary>
-	/// <param name="newDuration">새 소요 시간</param>
 	void operator=(std::chrono::nanoseconds newDuration)
 	{
 		this->accDuration = newDuration;
