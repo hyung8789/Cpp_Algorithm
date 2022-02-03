@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
+    <ClInclude Include="Trace.hpp" />
     <ClInclude Include="Sort.hpp" />
   </ItemGroup>
   <ItemGroup>
