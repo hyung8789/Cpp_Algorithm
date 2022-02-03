@@ -6,7 +6,7 @@
 #include "../EXPRT.cpp"
 
 #define FP_DIFF_THRESHOLD 0.0001 //부동 소수점 차이 임계값 (epsilon)
-#define length(array) ((sizeof(array)) / (sizeof(array[0])))
+#define LENGTH(array) ((sizeof(array)) / (sizeof(array[0])))
 
 static const bool LOGGING_DEBUG_RESULT = true; //디버그용 결과 출력
 static const bool LOGGING_EX = true; //예외 내용 출력
@@ -24,8 +24,8 @@ namespace 수식_트리_계산기_UnitTest
 	{
 	public:
 		/// <summary>
-	/// 부동 소수점으로 이루어진 대상 문자열을 부동 소수점으로 변환 테스트 메소드
-	/// </summary>
+		/// 부동 소수점으로 이루어진 대상 문자열을 부동 소수점으로 변환 테스트 메소드
+		/// </summary>
 		TEST_METHOD(StrToDouble_TestMethod)
 		{
 			try
@@ -90,7 +90,7 @@ namespace 수식_트리_계산기_UnitTest
 
 			try
 			{
-				for (int i = 0; i < length(input); i++)
+				for (int i = 0; i < LENGTH(input); i++)
 				{
 					SYMBOL_TYPE actual = StrToSymbolType(input[i]);
 					if (LOGGING_DEBUG_RESULT)
@@ -121,7 +121,7 @@ namespace 수식_트리_계산기_UnitTest
 
 			try
 			{
-				for (int i = 0; i < length(input); i++)
+				for (int i = 0; i < LENGTH(input); i++)
 				{
 					SYMBOL_TYPE actual = StrToSymbolType(input[i]);
 					Assert::Fail();
@@ -229,7 +229,7 @@ namespace 수식_트리_계산기_UnitTest
 				double result = 0.0;
 				std::stringstream ss;
 
-				for (int i = 0; i < length(input); i++)
+				for (int i = 0; i < LENGTH(input); i++)
 				{
 					memset(buffer, '\0', sizeof(buffer));
 					memcpy(buffer, input[i], strlen(input[i]));
@@ -290,7 +290,7 @@ namespace 수식_트리_계산기_UnitTest
 				char buffer[MAX_STR_LEN] = { '\0' };
 				double result = 0.0;
 
-				for (int i = 0; i < length(input); i++)
+				for (int i = 0; i < LENGTH(input); i++)
 				{
 					memset(buffer, '\0', sizeof(buffer));
 					memcpy(buffer, input[i], strlen(input[i]));

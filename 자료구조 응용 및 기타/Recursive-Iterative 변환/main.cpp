@@ -11,7 +11,7 @@
 #define ITERATIVE_METHOD //반복적 방법
 #endif
 
-#define length(array) ((sizeof(array)) / (sizeof(array[0])))
+#define LENGTH(array) ((sizeof(array)) / (sizeof(array[0])))
 
 // https://www.baeldung.com/cs/convert-recursion-to-iteration
 
@@ -125,7 +125,7 @@ int main()
 	std::cout << FACTORIAL_N << "! = " << Factorial(FACTORIAL_N) << std::endl;
 
 	int fooArray[] = { 1,2,3,4,5 };
-	std::valarray<int> barArray(fooArray, length(fooArray));
+	std::valarray<int> barArray(fooArray, LENGTH(fooArray));
 	std::cout << "barArray 내의 요소들의 합 : " << SumArray(barArray) << std::endl;
 
 	return EXIT_SUCCESS;

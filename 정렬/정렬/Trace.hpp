@@ -1,15 +1,13 @@
 #ifndef _TRACE_HPP_
 #define _TRACE_HPP_
 
-extern const int ELEMENT_COUNT;
-extern const int TEST_PASSES;
-extern const bool LOGGING_DEBUG_RESULT;
+extern const int LOGGING_LEVEL;
 
 struct TRACE_RESULT
 {
-	std::chrono::nanoseconds accDuration = std::chrono::milliseconds::zero(); //누적 소요 시간
-	std::chrono::nanoseconds minDuration = std::chrono::milliseconds::zero(); //최소 소요 시간
-	std::chrono::nanoseconds maxDuration = std::chrono::milliseconds::zero(); //최대 소요 시간
+	std::chrono::nanoseconds accDuration = std::chrono::nanoseconds::zero(); //누적 소요 시간
+	std::chrono::nanoseconds minDuration = std::chrono::nanoseconds::zero(); //최소 소요 시간
+	std::chrono::nanoseconds maxDuration = std::chrono::nanoseconds::zero(); //최대 소요 시간
 
 	/// <summary>
 	/// 자신의 Trace Result 출력
@@ -19,18 +17,18 @@ struct TRACE_RESULT
 	void dispTraceResult(const char* sortNameStr, size_t totalTestPassCount)
 	{
 		std::cout << "========================== " << sortNameStr << " ==========================\n";
-		std::cout << "전체 Pass 간 총 소요 시간 : " << this->accDuration.count() << "ns\n";
-		std::cout << "전체 Pass 간 평균 소요 시간 : " << this->accDuration.count() / TEST_PASSES << "ns\n";
-		std::cout << "전체 Pass 간 최소 소요 시간 : " << this->minDuration.count() << "ns\n";
-		std::cout << "전체 Pass 간 최대 소요 시간 : " << this->maxDuration.count() << "ns\n";
+		std::cout << "전체 Pass의 총 소요 시간 : " << this->accDuration.count() << "ns\n";
+		std::cout << "평균 소요 시간 : " << this->accDuration.count() / totalTestPassCount << "ns\n";
+		std::cout << "최소 소요 시간 : " << this->minDuration.count() << "ns\n";
+		std::cout << "최대 소요 시간 : " << this->maxDuration.count() << "ns\n";
 		std::cout << "===========================================================================\n";
 	}
 
-	void operator+=(TRACE_RESULT newResult)
+	TRACE_RESULT& operator+=(const TRACE_RESULT& newResult)
 	{
 		this->accDuration += newResult.accDuration;
 
-		if (this->minDuration == std::chrono::milliseconds::zero())
+		if (this->minDuration == std::chrono::nanoseconds::zero())
 			this->minDuration = newResult.minDuration;
 
 		if (this->minDuration > newResult.minDuration)
@@ -38,13 +36,15 @@ struct TRACE_RESULT
 
 		if (this->maxDuration < newResult.maxDuration)
 			this->maxDuration = newResult.maxDuration;
+
+		return *this;
 	}
 
-	void operator+=(std::chrono::nanoseconds newDuration)
+	TRACE_RESULT& operator+=(const std::chrono::nanoseconds& newDuration)
 	{
 		this->accDuration += newDuration;
 
-		if (this->minDuration == std::chrono::milliseconds::zero())
+		if (this->minDuration == std::chrono::nanoseconds::zero())
 			this->minDuration = newDuration;
 
 		if (this->minDuration > newDuration)
@@ -52,14 +52,17 @@ struct TRACE_RESULT
 
 		if (this->maxDuration < newDuration)
 			this->maxDuration = newDuration;
+
+		return *this;
 	};
 
-	void operator=(std::chrono::nanoseconds newDuration)
+	TRACE_RESULT& operator=(const std::chrono::nanoseconds& newDuration)
 	{
 		this->accDuration = newDuration;
 		this->minDuration = newDuration;
-		this->minDuration = newDuration;
 		this->maxDuration = newDuration;
+
+		return *this;
 	};
 };
 
@@ -108,9 +111,9 @@ void RandGenEnumerableSet(SortElementType targetEnumerableSet[], size_t elementC
 /// <param sortNameStr="traceResult">단일 Pass의 Trace 결과</param>
 /// <param sortNameStr="mutex">뮤텍스</param>
 template<typename SortElementType>
-void RunSinglePassSortTrace(const char* sortNameStr, 
+void RunSinglePassSortTrace(const char* sortNameStr,
 	void(*sortFunc)(SortElementType[], size_t, ORDER_BY),
-	SortElementType targetEnumerableSet[], size_t elementCount, 
+	SortElementType targetEnumerableSet[], size_t elementCount,
 	std::promise<TRACE_RESULT>& traceResult, std::mutex& mutex)
 {
 	std::chrono::system_clock::time_point startTime; //시작 시간
@@ -118,7 +121,7 @@ void RunSinglePassSortTrace(const char* sortNameStr,
 	std::chrono::nanoseconds descDuration = std::chrono::milliseconds::zero(); //내림차순 정렬 소요 시간
 	std::chrono::nanoseconds ascDuration = std::chrono::milliseconds::zero(); //오름차순 정렬 소요 시간
 
-	if (LOGGING_DEBUG_RESULT)
+	if (LOGGING_LEVEL == 2)
 	{
 		mutex.lock();
 		std::cout << "--- " << sortNameStr << " : 정렬 전 초기 상태 ---\n";
@@ -131,12 +134,17 @@ void RunSinglePassSortTrace(const char* sortNameStr,
 	endTime = std::chrono::system_clock::now();
 	descDuration = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime);
 
-	if (LOGGING_DEBUG_RESULT)
+	if (LOGGING_LEVEL >= 1)
 	{
 		mutex.lock();
-		std::cout << "--- " << sortNameStr << " : 내림차순 정렬 후 ---\n";
-		DispEnumerableSet<SortElementType>(targetEnumerableSet, elementCount);
-		std::cout << ">> 내림차순 정렬 : " << descDuration.count() << "ns 소요\n" << std::endl;
+
+		if (LOGGING_LEVEL == 2)
+		{
+			std::cout << "--- " << sortNameStr << " : 내림차순 정렬 후 ---\n";
+			DispEnumerableSet<SortElementType>(targetEnumerableSet, elementCount);
+		}
+
+		std::cout << ">> " << sortNameStr << " : 내림차순 정렬 : " << descDuration.count() << "ns 소요\n" << std::endl;
 		mutex.unlock();
 	}
 
@@ -145,12 +153,17 @@ void RunSinglePassSortTrace(const char* sortNameStr,
 	endTime = std::chrono::system_clock::now();
 	ascDuration = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime);
 
-	if (LOGGING_DEBUG_RESULT)
+	if (LOGGING_LEVEL >= 1)
 	{
 		mutex.lock();
-		std::cout << "--- " << sortNameStr << " :  Worst Case 에 대한 오름차순 정렬 후 ---\n";
-		DispEnumerableSet<SortElementType>(targetEnumerableSet, elementCount);
-		std::cout << ">> 내림차순 정렬 된 데이터에 대해 오름차순 정렬 (Worst Case) : " << ascDuration.count() << "ns 소요\n" << std::endl;
+
+		if (LOGGING_LEVEL == 2)
+		{
+			std::cout << "--- " << sortNameStr << " :  Worst Case 에 대한 오름차순 정렬 후 ---\n";
+			DispEnumerableSet<SortElementType>(targetEnumerableSet, elementCount);
+		}
+
+		std::cout << ">> " << sortNameStr << " : 내림차순 정렬 된 데이터에 대해 오름차순 정렬 (Worst Case) : " << ascDuration.count() << "ns 소요\n" << std::endl;
 		mutex.unlock();
 	}
 

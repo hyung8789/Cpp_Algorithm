@@ -7,7 +7,7 @@
 #include "../SCalc.cpp"
 
 #define FP_DIFF_THRESHOLD 0.0001 //부동 소수점 차이 임계값 (epsilon)
-#define length(array) ((sizeof(array)) / (sizeof(array[0])))
+#define LENGTH(array) ((sizeof(array)) / (sizeof(array[0])))
 
 static const bool LOGGING_DEBUG_RESULT = true; //디버그용 결과 출력
 static const bool LOGGING_EX = true; //예외 내용 출력
@@ -148,7 +148,7 @@ namespace 스택_계산기_UnitTest
 
 			char buffer[MAX_STR_LEN] = { '\0', };
 
-			for (int i = 0; i < length(input); i++)
+			for (int i = 0; i < LENGTH(input); i++)
 			{
 				try
 				{
@@ -195,7 +195,7 @@ namespace 스택_계산기_UnitTest
 			}; //오류 데이터 입력값
 			char buffer[MAX_STR_LEN] = { '\0', };
 
-			for (int i = 0; i < length(input); i++)
+			for (int i = 0; i < LENGTH(input); i++)
 			{
 				try
 				{
