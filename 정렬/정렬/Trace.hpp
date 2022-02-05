@@ -18,11 +18,14 @@ struct TRACE_RESULT
 	void DispTotalTestPassTraceResult(const char* sortFuncNameStr, size_t totalTestPassCount)
 	{
 		std::cout << sortFuncNameStr << " ----------------------------------------------\n";
-		std::cout << "- 전체 Pass의 총 소요 시간 : " << this->accDuration.count() << "ns\n";
-		std::cout << "- 평균 소요 시간 : " << this->accDuration.count() / totalTestPassCount << "ns\n";
-		std::cout << "- 최소 소요 시간 : " << this->minDuration.count() << "ns\n";
-		std::cout << "- 최대 소요 시간 : " << this->maxDuration.count() << "ns\n";
+		std::cout << ">> 전체 Pass의 총 소요 시간 : " << this->accDuration.count() << "ns\n";
+		std::cout << ">> 평균 소요 시간 : " << this->accDuration.count() / totalTestPassCount << "ns\n";
+		std::cout << ">> 최소 소요 시간 : " << this->minDuration.count() << "ns\n";
+		std::cout << ">> 최대 소요 시간 : " << this->maxDuration.count() << "ns\n";
+
+#ifdef LOGGING_COMPARE_COUNT
 		DispCompareCount(sortFuncNameStr);
+#endif
 		std::cout << std::endl;
 	}
 
@@ -175,7 +178,8 @@ void RunSinglePassSortTrace(const char* sortFuncNameStr,
 			std::cout << std::endl;
 		}
 
-		std::cout << ">> " << sortFuncNameStr << " (오름차순 정렬) : " << ascDuration.count() << "ns 소요\n" << std::endl;
+		std::cout << ">> " << sortFuncNameStr << " (오름차순 정렬) : " << ascDuration.count() << "ns 소요" << std::endl;
+		DispCompareCount(sortFuncNameStr);
 
 		mutex.unlock();
 	}
@@ -196,7 +200,8 @@ void RunSinglePassSortTrace(const char* sortFuncNameStr,
 			std::cout << std::endl;
 		}
 
-		std::cout << ">> " << sortFuncNameStr << " (오름차순 정렬 된 데이터에 대한 내림차순 정렬) : " << descDuration.count() << "ns 소요\n" << std::endl;
+		std::cout << ">> " << sortFuncNameStr << " (오름차순 정렬 된 데이터에 대한 내림차순 정렬) : " << descDuration.count() << "ns 소요" << std::endl;
+		DispCompareCount(sortFuncNameStr);
 
 		mutex.unlock();
 	}

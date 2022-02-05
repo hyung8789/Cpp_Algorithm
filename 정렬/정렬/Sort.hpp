@@ -11,7 +11,7 @@
 extern const int LOGGING_LEVEL;
 extern std::mutex mutex;
 
-static size_t compareCount[4] = { 0, }; //비교 횟수 카운트
+static size_t compareCount[3] = { 0, }; //비교 횟수 카운트
 
 /// <summary>
 /// 정렬 함수 이름 문자열을 비교 횟수 카운트의 인덱스로 변환
@@ -40,12 +40,8 @@ void ClearCompareCount()
 /// <param name="sortFuncNameStr">정렬 함수 이름 문자열</param>
 void DispCompareCount(const char* sortFuncNameStr)
 {
-	mutex.lock();
-
-	std::cout << "- " << sortFuncNameStr << "의 총 비교 횟수 : " << \
+	std::cout << ">> " << sortFuncNameStr << "의 총 비교 횟수 : " << \
 		compareCount[SortFuncNameStrToCompareCountIndex(sortFuncNameStr)] << "회" << std::endl;
-
-	mutex.unlock();
 }
 
 /// <summary>
@@ -107,14 +103,12 @@ void BubbleSort(SortElementType targetEnumerableSet[], size_t elementCount, ORDE
 		: 인덱스 0와 인덱스 1의 요소, 인덱스 1과 인덱스 2의 요소...
 
 			2-1) 비교 중인 뒤의 요소가 이웃 한 바로 앞의 요소보다 작을 경우
-			: 두 요소를 SWAP 하고, 
-			비교 중인 뒤의 요소가 이웃 한 바로 앞의 요소보다 크거나 같을 때까지 (더 이상 SWAP 이 불가능 할 때까지)
-			현재 비교 대상 범위 내에서 계속 비교
-			(이에 따라, SWAP 과정이 완료 된 시점부터 항상 현재 비교 대상 범위의 마지막 요소는 정렬 된 순서를 유지하나,
-			다음 비교 시 비교 대상 범위가 줄어드므로, 반드시 현재 비교 대상 범위의 끝까지 비교를 수행하여야 함)
+			: 두 요소를 SWAP
 
 			2-2) 비교 중인 뒤의 요소가 이웃 한 바로 앞의 요소보다 크거나 같을 경우
-			: 현재 비교 대상 범위 내의 마지막 요소는 정렬 된 조건을 만족하므로, 다음 비교 대상 범위에서 제외 (비교 대상 범위 1 감소)
+			: 두 요소를 SWAP 하지 않고, 다음 이웃 한 요소들에 대해 계속 비교
+
+		3) 현재 비교 대상 범위 내의 마지막 요소는 정렬 된 조건을 만족하므로, 다음 비교 대상 범위에서 제외 (비교 대상 범위 1 감소)
 
 		---
 
@@ -198,8 +192,6 @@ void InsertionSort(SortElementType targetEnumerableSet[], size_t elementCount, O
 			: 현재 비교 대상 범위 내에서 비교 중인 뒤의 요소가 삽입 될 적절한 위치를 현재 비교 대상 범위의 처음부터 순차적으로 탐색하여,
 			삽입 될 위치의 기존 요소부터 비교 중인 뒤의 요소가 이웃 한 바로 앞의 요소 내의 범위의 요소들을 뒤로 한 칸씩 이동하고
 			비교 중인 뒤의 요소를 빈 위치에 삽입
-			(이에 따라, 최초 삽입이 발생한 시점부터 항상 현재 비교 대상 범위의 모든 요소들은 정렬 된 순서를 유지하고,
-			다음 비교 시 비교 대상 범위가 증가하나, 비교 대상 범위 증가 전의 모든 기존 요소들은 마찬가지 정렬 된 순서를 유지)
 
 			2-2) 비교 중인 뒤의 요소가 이웃 한 바로 앞의 요소보다 클 경우
 			: 현재 비교 대상 범위 내의 마지막 요소는 정렬 된 조건을 만족하므로, 현재 비교 대상 범위 1 증가
@@ -274,17 +266,18 @@ void InsertionSort(SortElementType targetEnumerableSet[], size_t elementCount, O
 			InsertionSort : 1과(와) 0 비교 발생
 
 		이론적으로 버블 정렬 및 삽입 정렬은 n * ((n-1) / 2) 의 비교 횟수를 가진다.
-		그러나 요소의 개수가 커질수록 Best Case 에서는 동일하나, 
-		Worst Case, Average Case 는 극단적으로 삽입 정렬이 더 적은 비교 횟수를 가진다.
+		그러나 요소의 개수가 커질수록 Best Case 에서는 항상 동일하나, Worst Case, Average Case 는 극단적으로 삽입 정렬이 더 적은 비교 횟수를 가진다.
 		
-		버블 정렬의 SWAP을 위한 비교 과정 시
-		SWAP 과정이 완료 된 시점부터 항상 현재 비교 대상 범위의 마지막 요소는 정렬 된 순서를 유지하나,
-		다음 비교 시 비교 대상 범위가 줄어드므로, 반드시 현재 비교 대상 범위의 끝까지 비교를 수행하여야 한다. (Worst Case, Average Case)
+		버블 정렬의 SWAP을 위한 비교 과정 시 SWAP 과정이 완료 된 시점에 현재 비교 대상 범위의 마지막 요소는 올바른 정렬 된 순서를 유지하나,
+		다음 비교 시 비교 대상 범위가 줄어들어, 정렬 된 순서를 유지하는 마지막 요소가 제외되었으므로,
+		임의의 데이터 패턴에 대해 정렬되어 있지 않은 현재 비교 대상 범위 내의 요소들에 대한 비교 횟수는 n * ((n-1) / 2) 이다.
+		(실제로 100개의 데이터에 대한 버블 정렬의 Worst Case의 경우, n * ((n-1) / 2)인 4950회의 비교가 발생)
 
 		삽입 정렬의 현재 비교 대상 범위 내에서 비교 중인 뒤의 요소가 삽입 될 적절한 위치를 현재 비교 대상 범위의 처음부터 순차적으로 탐색 과정에서
 		최초 삽입이 발생한 시점부터 항상 현재 비교 대상 범위의 모든 요소들은 정렬 된 순서를 유지하고,
 		다음 비교 시 비교 대상 범위가 증가하나, 비교 대상 범위 증가 전의 모든 기존 요소들은 마찬가지 정렬 된 순서를 유지하므로,
-		즉시 찾을 수 있거나 (Worst Case), 훨씬 더 적은 비교 횟수 (Average Case)를 가진다.
+		임의의 데이터 패턴에 대해 정렬되어 있는 현재 비교 대상 범위 내의 요소들에 대한 삽입 할 위치를 즉시 찾을 수 있거나, 
+		평균적으로 (n-1) + n * ((n-1) / 2) / 2 이다.
 	***/
 
 	SortElementType tmp;
