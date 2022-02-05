@@ -179,8 +179,10 @@ void RunSinglePassSortTrace(const char* sortFuncNameStr,
 		}
 
 		std::cout << ">> " << sortFuncNameStr << " (오름차순 정렬) : " << ascDuration.count() << "ns 소요" << std::endl;
-		DispCompareCount(sortFuncNameStr);
 
+#ifdef LOGGING_COMPARE_COUNT
+		DispCompareCount(sortFuncNameStr);
+#endif
 		mutex.unlock();
 	}
 
@@ -201,8 +203,10 @@ void RunSinglePassSortTrace(const char* sortFuncNameStr,
 		}
 
 		std::cout << ">> " << sortFuncNameStr << " (오름차순 정렬 된 데이터에 대한 내림차순 정렬) : " << descDuration.count() << "ns 소요" << std::endl;
-		DispCompareCount(sortFuncNameStr);
 
+#ifdef LOGGING_COMPARE_COUNT
+		DispCompareCount(sortFuncNameStr);
+#endif
 		mutex.unlock();
 	}
 

@@ -136,11 +136,11 @@ void BubbleSort(SortElementType targetEnumerableSet[], size_t elementCount, ORDE
 	***/
 
 	SortElementType tmp;
-	bool sortPerformed = false; //정렬 수행 여부
+	bool swapPerformed = false; //현재 비교 대상 범위에 대해 SWAP 발생 여부
 
 	for (size_t i = 0; i < (elementCount - 1); i++) //마지막 요소는 직접 접근 하지 않으며, 비교 시에만 간접 접근
 	{
-		sortPerformed = false;
+		swapPerformed = false;
 
 		for (size_t j = 0; j < ((elementCount - 1) - i); j++) //현재 비교 대상 범위 내의 마지막 요소는 정렬 된 조건을 만족하므로, 다음 비교 대상 범위에서 제외
 		{
@@ -150,7 +150,7 @@ void BubbleSort(SortElementType targetEnumerableSet[], size_t elementCount, ORDE
 				if (COMPARE(targetEnumerableSet[j], targetEnumerableSet[j + 1]) == 1) //a > b
 				{
 					SWAP(targetEnumerableSet[j], targetEnumerableSet[j + 1], tmp);
-					sortPerformed = true;
+					swapPerformed = true;
 				}
 
 				break;
@@ -159,14 +159,14 @@ void BubbleSort(SortElementType targetEnumerableSet[], size_t elementCount, ORDE
 				if (COMPARE(targetEnumerableSet[j], targetEnumerableSet[j + 1]) == -1) //a < b
 				{
 					SWAP(targetEnumerableSet[j], targetEnumerableSet[j + 1], tmp);
-					sortPerformed = true;
+					swapPerformed = true;
 				}
 
 				break;
 			}
 		}
 
-		if (!sortPerformed) //정렬이 한 번도 수행되지 않은 경우 (이미 내부 요소가 모두 정렬 되어 있을 경우)
+		if (!swapPerformed) //현재 비교 대상 범위에 대해 SWAP이 한 번도 수행되지 않은 경우 (이미 내부 요소가 모두 정렬 되어 있을 경우)
 			break;
 	}
 }
@@ -221,9 +221,8 @@ void InsertionSort(SortElementType targetEnumerableSet[], size_t elementCount, O
 		: 0, 1, 2 에 대한 오름차순 정렬
 
 			1-1) 버블 정렬
-			: 최초, 루프의 비교 과정에서 한 번도 정렬이 발생하지 않았을 경우 (!sortPerformed),
-			이는 이미 내부 데이터가 모두 정렬되어있음을 의미하고,
-			이에 따라, 비교를 중단하므로 (n-1) 의 비교 횟수
+			: 현재 비교 대상 범위에 대해 한 번도 SWAP이 발생하지 않았을 경우 (!swapPerformed),
+			이는 이미 내부 데이터가 모두 정렬되어있음을 의미하고, 비교를 중단하므로 (n-1) 의 비교 횟수
 
 			< 실제 수행 결과 >
 
@@ -265,19 +264,18 @@ void InsertionSort(SortElementType targetEnumerableSet[], size_t elementCount, O
 			InsertionSort : 2과(와) 0 비교 발생
 			InsertionSort : 1과(와) 0 비교 발생
 
-		이론적으로 버블 정렬 및 삽입 정렬은 n * ((n-1) / 2) 의 비교 횟수를 가진다.
-		그러나 요소의 개수가 커질수록 Best Case 에서는 항상 동일하나, Worst Case, Average Case 는 극단적으로 삽입 정렬이 더 적은 비교 횟수를 가진다.
+		이론적으로 버블 정렬 및 삽입 정렬은 n * ((n-1) / 2) 의 비교 횟수를 가짐
+		그러나 요소의 개수가 커질수록 Best Case 에서는 항상 동일하나, Worst Case, Average Case 는 극단적으로 삽입 정렬이 더 적은 비교 횟수를 가짐
 		
-		버블 정렬의 SWAP을 위한 비교 과정 시 SWAP 과정이 완료 된 시점에 현재 비교 대상 범위의 마지막 요소는 올바른 정렬 된 순서를 유지하나,
-		다음 비교 시 비교 대상 범위가 줄어들어, 정렬 된 순서를 유지하는 마지막 요소가 제외되었으므로,
-		임의의 데이터 패턴에 대해 정렬되어 있지 않은 현재 비교 대상 범위 내의 요소들에 대한 비교 횟수는 n * ((n-1) / 2) 이다.
-		(실제로 100개의 데이터에 대한 버블 정렬의 Worst Case의 경우, n * ((n-1) / 2)인 4950회의 비교가 발생)
+		버블 정렬은 거의 대부분 상황에서 n * ((n-1) / 2) 이거나 거의 가까운 수치
+		(정렬 과정 중 현재 비교 대상 범위에 대해 SWAP이 한 번도 수행되지 않은 경우 (이미 내부 요소가 모두 정렬 되어 있을 경우)
+		더 이상 비교를 중지하므로 n * ((n-1) / 2) 보다 적게 나올 수 있음)
 
 		삽입 정렬의 현재 비교 대상 범위 내에서 비교 중인 뒤의 요소가 삽입 될 적절한 위치를 현재 비교 대상 범위의 처음부터 순차적으로 탐색 과정에서
 		최초 삽입이 발생한 시점부터 항상 현재 비교 대상 범위의 모든 요소들은 정렬 된 순서를 유지하고,
 		다음 비교 시 비교 대상 범위가 증가하나, 비교 대상 범위 증가 전의 모든 기존 요소들은 마찬가지 정렬 된 순서를 유지하므로,
 		임의의 데이터 패턴에 대해 정렬되어 있는 현재 비교 대상 범위 내의 요소들에 대한 삽입 할 위치를 즉시 찾을 수 있거나, 
-		평균적으로 (n-1) + n * ((n-1) / 2) / 2 이다.
+		평균적으로 (n-1) + n * ((n-1) / 2) / 2
 	***/
 
 	SortElementType tmp;

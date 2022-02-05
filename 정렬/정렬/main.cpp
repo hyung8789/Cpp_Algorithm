@@ -1,6 +1,6 @@
 #include "Core.h"
 
-static const int ELEMENT_COUNT = 100; //요소 개수
+static const int ELEMENT_COUNT = 1000; //요소 개수
 static const int TEST_PASSES = 1; //테스트 횟수
 static const int LOGGING_LEVEL = 1; //로깅 레벨 (0 : 출력 안함, 1 : 간략한 내용, 2 : 상세 내용 (중간 과정 출력 위한 수행 시간 오차 발생))
 
@@ -22,7 +22,7 @@ int main()
 
 		for (size_t i = 0; i < TEST_PASSES; i++)
 		{
-			//GenRandPatternEnumerableSet<SortElementType>(originData, ELEMENT_COUNT); 
+			GenRandPatternEnumerableSet<SortElementType>(originData, ELEMENT_COUNT); 
 			
 			/***
 				< 이미 정렬 되어 있는 상황 (Best Case) : 0 1 2 에 대한 오름차순 정렬의 비교 횟수 테스트 >
@@ -46,7 +46,7 @@ int main()
 				5) 비교 과정 시 LOGGING_LEVEL == 2에 따른 중간에 비교 발생 내용을 출력 위해 수행 시간에 오차가 발생하므로, 수행 시간은 무시 할 것
 			***/
 
-			GenSequentialPatternEnumerableSet<SortElementType>(originData, ELEMENT_COUNT, ORDER_BY::DESCENDING);
+			//GenSequentialPatternEnumerableSet<SortElementType>(originData, ELEMENT_COUNT, ORDER_BY::DESCENDING);
 
 			memcpy_s(bubbleSortData, sizeof(SortElementType) * ELEMENT_COUNT, 
 				originData, sizeof(SortElementType) * ELEMENT_COUNT);
