@@ -4,6 +4,13 @@ static const int ELEMENT_COUNT = 1000; //요소 개수
 static const int TEST_PASSES = 1; //테스트 횟수
 static const int LOGGING_LEVEL = 1; //로깅 레벨 (0 : 출력 안함, 1 : 간략한 내용, 2 : 상세 내용 (중간 과정 출력 위한 수행 시간 오차 발생))
 
+static const bool RUN_BUBBLE_SORT = true;
+static const bool RUN_INSERTION_SORT = true;
+static const bool RUN_QUICK_SORT = true;
+static const bool RUN_SELECTION_SORT = true;
+static const bool RUN_MERGE_SORT = true;
+
+
 #define SortElementType int
 
 int main()
@@ -58,28 +65,41 @@ int main()
 			std::promise<TRACE_RESULT> promise1, promise2, promise3; //thread에 의해 결과가 저장 될 것이라는 약속
 			std::future<TRACE_RESULT>
 				future1 = promise1.get_future(),
-				future2 = promise2.get_future();
-			//future3 = promise3.get_future(); //약속에 의해 미래에 thread로부터 결과를 받을 개체
+				future2 = promise2.get_future(),
+				future3 = promise3.get_future(); //약속에 의해 미래에 thread로부터 결과를 받을 개체
 
 			std::thread bubbleSortThread(
 				RunSinglePassSortTrace<SortElementType>,
 				"BubbleSort",
-				BubbleSort<SortElementType>, bubbleSortData, ELEMENT_COUNT,
+				BubbleSort<SortElementType>, 
+				bubbleSortData, ELEMENT_COUNT,
 				std::ref(promise1));
 
 			std::thread insertionSortThread(
 				RunSinglePassSortTrace<SortElementType>,
 				"InsertionSort",
-				InsertionSort<SortElementType>, insertionSortData, ELEMENT_COUNT,
+				InsertionSort<SortElementType>, 
+				insertionSortData, ELEMENT_COUNT,
 				std::ref(promise2));
 
+			// https://stackoverflow.com/questions/44049407/c-compilation-fails-on-calling-overloaded-function-in-stdthread
+			//오버로딩 된 템플릿 함수를 아래 thread 생성 시 컴파일러가 추론 할 수 없으므로, 컴파일 타임에 정적 캐스트
+			std::thread quickSortThread(
+				RunSinglePassSortTrace<SortElementType>,
+				"QuickSort",
+				static_cast<void(*)(SortElementType[], size_t, ORDER_BY)>(QuickSort<SortElementType>),
+				quickSortData, ELEMENT_COUNT,
+				std::ref(promise3));
+			
 			//thread에 의해 결과가 반환되는 시점까지 대기하였다가 할당
 			bubbleSortResult += future1.get();
 			insertionSortResult += future2.get();
+			quickSortResult += future3.get();
 
 			//단일 pass에 대해 모든 thread가 종료 될 때까지 대기
 			bubbleSortThread.join();
 			insertionSortThread.join();
+			quickSortThread.join();
 		}
 
 		/***
@@ -89,6 +109,7 @@ int main()
 
 		bubbleSortResult.DispTotalTestPassTraceResult("BubbleSort", TEST_PASSES);
 		insertionSortResult.DispTotalTestPassTraceResult("InsertionSort", TEST_PASSES);
+		quickSortResult.DispTotalTestPassTraceResult("QuickSort", TEST_PASSES);
 
 		delete[](originData);
 		delete[](bubbleSortData);
