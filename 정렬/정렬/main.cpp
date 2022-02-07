@@ -1,8 +1,9 @@
 #include "Core.h"
 
-static const int ELEMENT_COUNT = 1000; //요소 개수
+static const int ELEMENT_COUNT = 5; //요소 개수
 static const int TEST_PASSES = 1; //테스트 횟수
-static const int LOGGING_LEVEL = 1; //로깅 레벨 (0 : 출력 안함, 1 : 간략한 내용, 2 : 상세 내용 (중간 과정 출력 위한 수행 시간 오차 발생))
+static const int LOGGING_LEVEL = 2; //로깅 레벨 (0 : 출력 안함, 1 : 간략한 내용, 2 : 상세 내용 (중간 과정 출력 위한 수행 시간 오차 발생))
+static const bool VALIDATE_AFTER_SORT = true; //정렬 후 정렬 된 집합에 대한 유효성 검사 수행
 
 static const bool RUN_BUBBLE_SORT = true;
 static const bool RUN_INSERTION_SORT = true;
@@ -84,6 +85,7 @@ int main()
 
 			// https://stackoverflow.com/questions/44049407/c-compilation-fails-on-calling-overloaded-function-in-stdthread
 			//오버로딩 된 템플릿 함수를 아래 thread 생성 시 컴파일러가 추론 할 수 없으므로, 컴파일 타임에 정적 캐스트
+		
 			std::thread quickSortThread(
 				RunSinglePassSortTrace<SortElementType>,
 				"QuickSort",

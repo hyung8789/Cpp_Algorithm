@@ -16,9 +16,15 @@
 extern const int LOGGING_LEVEL;
 extern std::mutex mutex;
 
-//TODO : XML 미 입력 주석 수정
+//TODO : XML 미 입력 주석 수정, 일부 잘못 된 XML 주석 발견 전체 재확인
 //TODO : 가능 할 경우 이하 비교 횟수 카운트를 TRACE_RESULT와 통합 혹은 별도의 개체로 분리 할 것
 //TODO : 주석에서 하위 설명 : 로 된거 depth를 늘려서 줄바꿈 줄이기 (Partion 참조)
+//TODO : 정렬 함수 내 주석을 간소화 할것
+
+/***
+	< 정렬 성능 비교 >
+
+***/
 
 static size_t compareCount[3] = { 0, }; //비교 횟수 카운트
 
@@ -33,7 +39,7 @@ size_t SortFuncNameStrToCompareCountIndex(const char* sortFuncNameStr)
 	return strcmp(sortFuncNameStr, "BubbleSort") == 0 ? 0 :
 		strcmp(sortFuncNameStr, "InsertionSort") == 0 ? 1 :
 		strcmp(sortFuncNameStr, "QuickSort") == 0 ? 2 :
-		strcmp(sortFuncNameStr, "Partition") == 0 ? 2 : //퀵 소트에서 호출
+		strcmp(sortFuncNameStr, "PartitioningProc") == 0 ? 2 : //퀵 소트에서 호출
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 }
 
@@ -351,55 +357,82 @@ void InsertionSort(SortElementType targetEnumerableSet[],
 /// </summary>
 /// <typeparam name="SortElementType">정렬 요소 타입</typeparam>
 /// <param name="targetEnumereableSet">순차적으로 열거 가능 한 요소들의 집합</param>
-/// <param name="partitionLeftIndex">순차적으로 열거 가능 한 요소들의 집합의 분할 된 왼쪽 인덱스</param>
-/// <param name="partitionRightIndex">순차적으로 열거 가능 한 요소들의 집합의 분할 된 오른쪽 인덱스</param>
-/// <param name="orderBy"></param>
-/// <returns></returns>
+/// <param name="partitionLeftIndex">순차적으로 열거 가능 한 요소들의 집합의 분할 된 왼쪽 인덱스 (최초 0)</param>
+/// <param name="partitionRightIndex">순차적으로 열거 가능 한 요소들의 집합의 분할 된 오른쪽 인덱스 (최초 요소들의 개수 - 1)</param>
+/// <param name="orderBy">정렬 방향</param>
+/// <returns>분할 및 이동 처리 완료 후 변동 된 순차적으로 열거 가능 한 요소들의 집합의 분할 된 오른쪽 인덱스</returns>
 template<typename SortElementType>
-size_t Partition(SortElementType targetEnumereableSet[], 
+size_t PartitioningProc(SortElementType targetEnumereableSet[], 
 	size_t partitionLeftIndex, size_t partitionRightIndex, ORDER_BY orderBy = ORDER_BY::ASCENDING)
 {
 	/***
-		< Partitioning - 오름차순 >
+		< Partitioning Proc - 오름차순 >
 
-		1) 최초 호출 시점의 partitionLeftIndex 는 순차적으로 열거 가능 한 요소들의 집합의 처음부터 시작
+		! partitionLeftIndex : 왼쪽 인덱스
+		! partitionRightIndex : 오른쪽 인덱스
+
+		1) 최초 호출 시점의 초기값
+			
+			1-1) 왼쪽 인덱스는 순차적으로 열거 가능 한 요소들의 집합의 처음부터 시작
+			
+			1-2) 오른쪽 인덱스는 순차적으로 열거 가능 한 요소들의 집합의 마지막부터 시작
+
+		2) 기준 (pivot)을 현재 순차적으로 열거 가능 한 요소들의 집합의 첫 번째 요소 (왼쪽 인덱스)로 선택
 		
-		2) 최초 호출 시점의 partitionRightIndex 는 순차적으로 열거 가능 한 요소들의 집합의 마지막부터 시작
+			2-1) 왼쪽 인덱스는 기준 (pivot)이 되는 요소가 제외 된 다음 위치 (왼쪽 인덱스 + 1)부터 시작
 
-		3) 기준 (pivot)을 현재 분할 된 순차적으로 열거 가능 한 요소들의 집합의 첫 번째 요소 (partitionLeftIndex)로 선택
+		3) 기준 (pivot)이 되는 요소를 제외한 나머지 요소들에 대해 왼쪽 인덱스와 오른쪽 인덱스가 교차되는 시점까지 이하, 반복
 
-		4) 기준 (pivot)이 되는 요소를 제외한 나머지 요소들에 대해 partitionLeftIndex 와 partitionRightIndex 가 교차되는 시점까지 이하 반복
+		////
+		4) 왼쪽 인덱스와 오른쪽 인덱스의 각각 반대 방향으로 서로 탐색 수행 (정렬 방향에 따라 비교 조건 변동)
 
-			4-1) partitionLeftIndex 는 기준 (pivot)이 되는 요소가 제외 된 다음 위치 (partitionLeftIndex + 1)부터 시작
+			4-1) 왼쪽 인덱스는 기준 (pivot)보다 같거나 큰 요소가 나올 때까지 오른쪽으로 탐색
+		
+			4-2) 오른쪽 인덱스는 기준 (pivot)보다 작은 요소가 나올 때까지 왼쪽으로 탐색
 
-		5) 현재 partitionLeftIndex 의 요소와 기준 (pivot)이 되는 요소 비교 (정렬 방향에 따라 비교 조건 변동)
+			4-3) 위의 탐색 과정 간 현재 왼쪽 인덱스와 오른쪽 인덱스가 교차 여부에 따라,
 
-			5-1) 현재 partitionLeftIndex 의 요소가 기준 (pivot)보다 클 경우
+				4-3-1) 왼쪽 인덱스와 오른쪽 인덱스가 교차 될 경우
+				: 기준 (pivot)에 대해 나머지 요소들이 이미 정렬되어있는 경우에 발생하므로 탐색 중지
 
-				2-1-1) 현재 partitionLeftIndex 의 요소는 기준 (pivot)이 되는 요소의 오른쪽으로 이동해야하므로,
-				현재 partitionRightIndex 의 요소와 현재 partitionLeftIndex 의 요소 SWAP
+				4-3-2) 왼쪽 인덱스와 오른쪽 인덱스가 교차되지 않았을 경우
+				: 정렬 조건을 만족하기위해 현재 왼쪽 인덱스의 요소와 오른쪽 인덱스의 요소를 서로 SWAP
 
-				2-1-2) 현재 partitionLeftIndex 의 요소와 현재 partitionRightIndex 의 요소의 SWAP 이 발생 된 시점에,
-				현재 partitionRightIndex 의 요소는 기준 (pivot)이 되는 요소보다 큰 요소이므로 
-				다음 partitionRightIndex 의 위치로 이동 (partitionRightIndex - 1)
+		5) 현재 왼쪽 인덱스와 오른쪽 인덱스가 아직 교차되지 않았을 경우, 다시 탐색 수행
+		/////
 
-			2-2) 현재 partitionLeftIndex 의 요소가 기준 (pivot)보다 작거나 같을 경우
-			: do nothing
+		6) 왼쪽 인덱스와 오른쪽 인덱스가 교차 된 시점에, 기준 (pivot)과 오른쪽 인덱스의 요소 SWAP
+		: 이에 따라, 기준 (pivot)이 되는 요소의 오른쪽에 기준 (pivot)이 되는 요소보다 큰 요소들만 존재, 
+		기준 (pivot)이 되는 요소의 왼쪽에 기준 (pivot)이 되는 요소보다 작거나 같은 요소들만 존재
 
-		6) 현재 partitionLeftIndex 의 요소는 기준 (pivot)보다 작거나 같으므로, 다음 partitionLeftIndex 의 위치로 이동 (partitionLeftIndex + 1)
+		---
 
-		7) partitionLeftIndex 와 partitionRightIndex 가 교차되는 시점에 대해,
+		TODO : 논리 오류?
 
-			7-1) partitionLeftIndex 를 포함하여 partitionLeftIndex 의 왼쪽에는 기준 (pivot)보다 작거나 같은 요소들만 존재
+		5) 현재 왼쪽 인덱스의 요소와 기준 (pivot)이 되는 요소 비교 (정렬 방향에 따라 비교 조건 변동)
 
-			7-2) partitionRightIndex 의 오른쪽에는 기준 (pivot)보다 큰 요소들만 존재
+			5-1) 현재 왼쪽 인덱스의 요소가 기준 (pivot)보다 작거나 같을 경우
+			: 다음 왼쪽 인덱스의 위치로 이동 (왼쪽 인덱스 + 1)
 
-			7-3) 최종 정렬 조건을 만족하기 위해, 기준 (pivot)과 partitionLeftIndex 의 요소 SWAP
+			5-2) 현재 왼쪽 인덱스의 요소가 기준 (pivot)보다 클 경우
+			: 현재 왼쪽 인덱스의 요소는 기준 (pivot)이 되는 요소의 오른쪽으로 이동해야하므로,
+			현재 왼쪽 인덱스의 요소와 현재 오른쪽 인덱스의 요소 SWAP
+			이에 따라, 현재 오른쪽 인덱스의 요소는 기준 (pivot)이 되는 요소보다 큰 요소이므로 다음 오른쪽 인덱스의 위치로 이동 (오른쪽 인덱스 - 1)
+			현재 왼쪽 인덱스의 요소는 기준 (pivot)이 되는 요소보다 작거나 같을 수도 있지만, 클 수도 있으므로, 왼쪽 인덱스는 변동되지 않음
 
-			7-4) 이에 따라, 기준 (pivot)의 왼쪽에는 기준 (pivot)보다 작거나 같은 요소들만 존재, 기준 (pivot)의 오른쪽에는 기준보다 큰 요소들만 존재
+		7) 왼쪽 인덱스와 오른쪽 인덱스가 교차되는 시점에 대해,
+		: 현재 왼쪽 인덱스의 요소 왼쪽에는 기준 (pivot)보다 작거나 같은 요소들만 존재하며, 
+		오른쪽 인덱스의 오른쪽에는 기준 (pivot)보다 큰 요소들만 존재
+		
+		기준 (pivot)과 오른쪽 인덱스의 요소 SWAP
+		
+		이에 따라, 기준 (pivot)의 왼쪽에는 기준 (pivot)보다 작거나 같은 요소들만 존재,
+		기준 (pivot)의 오른쪽에는 기준보다 큰 요소들만 존재
 
+		TODO : 이하 명확하지 않으므로 수정
+		
 		8) 기준 (pivot)을 제외한 남아있는 요소들에 대한 다음 Partitioning 처리를 위해 현재 partitionRightIndex 반환
-		
+
 			8-1) 해당 반환 값을 다음 입력 시 기준 (pivot)을 제외한 남아있는 왼쪽 요소에 대해 처리를 위해 다음과 같이 입력 할 것
 			: partitionLeftIndex (Arg) = Caller Left Index, partitionRightIndex (Arg) = partitionRightIndex (retVal) - 1
 
@@ -409,7 +442,7 @@ size_t Partition(SortElementType targetEnumereableSet[],
 
 	if(partitionLeftIndex < 0 || partitionRightIndex < 0 || (partitionLeftIndex > partitionRightIndex))
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
-	
+
 	size_t pivotIndex = partitionLeftIndex++; //기준 (pivot)이 되는 요소 인덱스
 	size_t tmp;
 
@@ -418,35 +451,25 @@ size_t Partition(SortElementType targetEnumereableSet[],
 		switch (orderBy)
 		{
 		case ORDER_BY::ASCENDING:
-			if (COMPARE(targetEnumereableSet[partitionLeftIndex], targetEnumereableSet[pivotIndex]) == 1) //a > b
-			{
-				SWAP(targetEnumereableSet[partitionLeftIndex],
-					targetEnumereableSet[partitionRightIndex],
-					tmp); //현재 partitionLeftIndex 의 요소는 기준 (pivot)이 되는 요소의 오른쪽으로 이동
+			if (COMPARE(targetEnumereableSet[partitionLeftIndex], targetEnumereableSet[pivotIndex]) <= 0) //a <= b (0 or -1)
+				partitionLeftIndex++;
+			else //a > b
+				SWAP(targetEnumereableSet[partitionLeftIndex], targetEnumereableSet[partitionRightIndex--], tmp);
 
-				partitionRightIndex--;
-			}
-
-			partitionLeftIndex++;
 			break;
 
 		case ORDER_BY::DESCENDING:
-			if (COMPARE(targetEnumereableSet[partitionLeftIndex], targetEnumereableSet[pivotIndex]) == -1) //a < b
-			{
-				SWAP(targetEnumereableSet[partitionLeftIndex],
-					targetEnumereableSet[partitionRightIndex],
-					tmp); //현재 partitionLeftIndex 의 요소는 기준 (pivot)이 되는 요소의 오른쪽으로 이동
+			if (COMPARE(targetEnumereableSet[partitionLeftIndex], targetEnumereableSet[pivotIndex]) >= 0) //a >= b (0 or 1)
+				partitionLeftIndex++;
+			else //a < b
+				SWAP(targetEnumereableSet[partitionLeftIndex], targetEnumereableSet[partitionRightIndex--], tmp);
 
-				partitionRightIndex--;
-			}
-
-			partitionLeftIndex++;
 			break;
 		}
 	}
 
-	SWAP(targetEnumereableSet[pivotIndex], 
-		targetEnumereableSet[partitionRightIndex], 
+	SWAP(targetEnumereableSet[pivotIndex],
+		targetEnumereableSet[partitionRightIndex],
 		tmp); //최종 정렬 조건을 만족하기 위해, 기준 (pivot)과 partitionLeftIndex 의 요소 SWAP
 	return partitionRightIndex;
 }
@@ -468,10 +491,12 @@ void QuickSort(SortElementType targetEnumerableSet[],
 
 	if (leftIndex < rightIndex) //순차적으로 열거 가능 한 요소들의 집합에 대해 분할 할 수 있는 경우
 	{
-		size_t partitionRightIndex = Partition(targetEnumerableSet, leftIndex, rightIndex); //분할 된 오른쪽 인덱스
+		size_t partitionRightIndex = PartitioningProc(targetEnumerableSet, leftIndex, rightIndex); //분할 된 오른쪽 인덱스
 
-		QuickSort<SortElementType>(targetEnumerableSet, leftIndex, partitionRightIndex - 1, orderBy); //분할 된 오른쪽 인덱스 기준 남아있는 왼쪽에 대한 처리
-		QuickSort<SortElementType>(targetEnumerableSet, partitionRightIndex + 1, rightIndex, orderBy); //분할 된 오른쪽 인덱스 기준 남아있는 오른쪽에 대한 처리
+		QuickSort<SortElementType>(targetEnumerableSet, 
+			leftIndex, partitionRightIndex - 1, orderBy); //현재 분할 된 오른쪽 인덱스 기준 남아있는 왼쪽 요소들에 대한 처리
+		QuickSort<SortElementType>(targetEnumerableSet, 
+			partitionRightIndex + 1, rightIndex, orderBy); //현재 분할 된 오른쪽 인덱스 기준 남아있는 오른쪽 요소들에 대한 처리
 	}
 }
 
