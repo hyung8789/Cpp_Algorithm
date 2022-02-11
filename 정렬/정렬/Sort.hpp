@@ -5,14 +5,13 @@
 #define COMPARE(x, y) ((x) > (y) ? 1 : (x) == (y) ? 0 : -1) //x > y : 1, x == y : 0, x < y : -1
 #define SWAP(x, y, tmp) ((tmp) = (x), (x) = (y), (y) = (tmp))
 
-#define MySortElementType int //임의의 정렬 요소 타입
-
 #define RECURSIVE_METHOD //재귀적 방법 (주석 처리 : 반복적 방법 사용)
 #ifndef RECURSIVE_METHOD 
 #define ITERATIVE_METHOD //반복적 방법
 //TODO : iter
 #endif
 
+//TODO : SortMapper에 의해 TraceResult 접근, 카운트 증가
 #define LOGGING_COMPARE_COUNT //비교 횟수 카운트 기록 및 출력 (주석 처리 : 비활성화)
 #ifdef LOGGING_COMPARE_COUNT
 extern const int LOGGING_LEVEL;
@@ -39,7 +38,8 @@ int LoggingCompareCountProc(SortElementType x, SortElementType y, const char* so
 
 	return COMPARE(x, y);
 }
-#define COMPARE(x, y) LoggingCompareCountProc<MySortElementType>(x,y, __func__) //비교 횟수 카운트 위한 호출 측 함수명 이용
+//#define COMPARE(x, y) LoggingCompareCountProc<MySortElementType>(x,y, __func__) //비교 횟수 카운트 위한 호출 측 함수명 이용
+//#define COMPARE(x,y) 
 #endif
 
 /***
@@ -130,6 +130,9 @@ enum class ORDER_BY : const int
 	ASCENDING, //오름차순
 	DESCENDING //내림차순
 }; //정렬 방향
+
+template<typename SortElementType>
+using SortFuncType = void(*)(SortElementType[], size_t, ORDER_BY); // https://en.cppreference.com/w/cpp/language/type_alias
 
 /// <summary>
 /// 버블 정렬 (Best Case : O(n), Worst, Average Case : O(n^2))

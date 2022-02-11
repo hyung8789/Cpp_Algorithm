@@ -140,13 +140,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
-    <ClInclude Include="SortMapper.hpp" />
-    <ClInclude Include="Trace.h" />
+    <ClInclude Include="SortMapper.h" />
+    <ClInclude Include="Trace.hpp" />
     <ClInclude Include="Sort.hpp" />
+    <ClInclude Include="TraceResult.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Trace.cpp" />
+    <ClCompile Include="SortMapper.cpp" />
+    <ClCompile Include="TraceResult.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

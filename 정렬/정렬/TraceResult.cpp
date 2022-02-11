@@ -5,7 +5,7 @@
 /// </summary>
 TRACE_RESULT::TRACE_RESULT()
 {
-	this->accDuration = this->maxDuration = this->minDuration = std::chrono::nanoseconds::zero();
+	this->ClearAll();
 }
 
 /// <summary>
@@ -16,10 +16,10 @@ TRACE_RESULT::TRACE_RESULT()
 void TRACE_RESULT::DispTotalTestPassTraceResult(const char* sortFuncNameStr, size_t totalTestPassCount)
 {
 	std::cout << sortFuncNameStr << " ----------------------------------------------\n";
-	std::cout << ">> 전체 Pass의 총 소요 시간 : " << this->accDuration.count() << "ns\n";
-	std::cout << ">> 평균 소요 시간 : " << this->accDuration.count() / totalTestPassCount << "ns\n";
-	std::cout << ">> 최소 소요 시간 : " << this->minDuration.count() << "ns\n";
-	std::cout << ">> 최대 소요 시간 : " << this->maxDuration.count() << "ns\n";
+	std::cout << ">> 전체 Pass의 총 소요 시간 : " << this->_accDuration.count() << "ns\n";
+	std::cout << ">> 평균 소요 시간 : " << this->_accDuration.count() / totalTestPassCount << "ns\n";
+	std::cout << ">> 최소 소요 시간 : " << this->_minDuration.count() << "ns\n";
+	std::cout << ">> 최대 소요 시간 : " << this->_maxDuration.count() << "ns\n";
 
 #ifdef LOGGING_COMPARE_COUNT
 	DispCompareCount(sortFuncNameStr);
@@ -29,22 +29,31 @@ void TRACE_RESULT::DispTotalTestPassTraceResult(const char* sortFuncNameStr, siz
 }
 
 /// <summary>
+/// 모든 결과 초기화
+/// </summary>
+void TRACE_RESULT::ClearAll()
+{
+	this->_accDuration = this->_maxDuration = this->_minDuration = std::chrono::nanoseconds::zero();
+	this->_compareCount = 0;
+}
+
+/// <summary>
 /// += 연산자 재정의
 /// </summary>
 /// <param name="newResult">+= 연산을 수행 할 대상</param>
 /// <returns>자신의 참조</returns>
 TRACE_RESULT& TRACE_RESULT::operator+=(const TRACE_RESULT& newResult)
 {
-	this->accDuration += newResult.accDuration;
+	this->_accDuration += newResult._accDuration;
 
-	if (this->minDuration == std::chrono::nanoseconds::zero())
-		this->minDuration = newResult.minDuration;
+	if (this->_minDuration == std::chrono::nanoseconds::zero())
+		this->_minDuration = newResult._minDuration;
 
-	if (this->minDuration > newResult.minDuration)
-		this->minDuration = newResult.minDuration;
+	if (this->_minDuration > newResult._minDuration)
+		this->_minDuration = newResult._minDuration;
 
-	if (this->maxDuration < newResult.maxDuration)
-		this->maxDuration = newResult.maxDuration;
+	if (this->_maxDuration < newResult._maxDuration)
+		this->_maxDuration = newResult._maxDuration;
 
 	return *this;
 }
@@ -56,16 +65,16 @@ TRACE_RESULT& TRACE_RESULT::operator+=(const TRACE_RESULT& newResult)
 /// <returns>자신의 참조</returns>
 TRACE_RESULT& TRACE_RESULT::operator+=(const std::chrono::nanoseconds& newDuration)
 {
-	this->accDuration += newDuration;
+	this->_accDuration += newDuration;
 
-	if (this->minDuration == std::chrono::nanoseconds::zero())
-		this->minDuration = newDuration;
+	if (this->_minDuration == std::chrono::nanoseconds::zero())
+		this->_minDuration = newDuration;
 
-	if (this->minDuration > newDuration)
-		this->minDuration = newDuration;
+	if (this->_minDuration > newDuration)
+		this->_minDuration = newDuration;
 
-	if (this->maxDuration < newDuration)
-		this->maxDuration = newDuration;
+	if (this->_maxDuration < newDuration)
+		this->_maxDuration = newDuration;
 
 	return *this;
 };
@@ -77,13 +86,14 @@ TRACE_RESULT& TRACE_RESULT::operator+=(const std::chrono::nanoseconds& newDurati
 /// <returns>자신의 참조</returns>
 TRACE_RESULT& TRACE_RESULT::operator=(const std::chrono::nanoseconds& newDuration)
 {
-	this->accDuration = newDuration;
-	this->minDuration = newDuration;
-	this->maxDuration = newDuration;
+	this->_accDuration = newDuration;
+	this->_minDuration = newDuration;
+	this->_maxDuration = newDuration;
 
 	return *this;
 };
 
+//TODO : 이하 삭제
 /// <summary>
 /// 현재 비교 횟수 초기화
 /// </summary>

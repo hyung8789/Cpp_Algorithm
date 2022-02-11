@@ -20,8 +20,10 @@ int main()
 	try
 	{
 		MySortElementType* originData = new MySortElementType[ELEMENT_COUNT];
-		MySortElementType* copiedData = new MySortElementType[ELEMENT_COUNT * TOTAL_SORT_FUNC_COUNT];
-		TRACE_RESULT result[TOTAL_SORT_FUNC_COUNT];
+		MySortElementType* copiedData = new MySortElementType[ELEMENT_COUNT * (const int)SORT_UNIQUE_MAPPED_INDEX::TOTAL_SORT_FUNC_COUNT];
+
+		TRACE_RESULT result[(const int)SORT_UNIQUE_MAPPED_INDEX::TOTAL_SORT_FUNC_COUNT];
+		SORT_MAPPER<MySortElementType>& sortMapper = SORT_MAPPER<MySortElementType>::GetInstance();
 		
 		for (size_t i = 0; i < TEST_PASSES; i++)
 		{
@@ -51,19 +53,29 @@ int main()
 
 			//GenSequentialPatternEnumerableSet<MySortElementType>(originData, ELEMENT_COUNT, ORDER_BY::DESCENDING);
 			
-			for (size_t sortFuncIndex = 0; sortFuncIndex < TOTAL_SORT_FUNC_COUNT; sortFuncIndex++) //각 sort에서 사용하기 위해 원본 데이터 복사
+			for (size_t sortFuncIndex = 0; sortFuncIndex < (const int)SORT_UNIQUE_MAPPED_INDEX::TOTAL_SORT_FUNC_COUNT; sortFuncIndex++) //각 sort에서 사용하기 위해 원본 데이터 복사
 			{
 				memcpy_s(&copiedData[sortFuncIndex * ELEMENT_COUNT], sizeof(MySortElementType) * ELEMENT_COUNT,
 					originData, sizeof(MySortElementType) * ELEMENT_COUNT);
 			}
 
-			std::promise<TRACE_RESULT> promiseArray[TOTAL_SORT_FUNC_COUNT];  //thread에 의해 결과가 저장 될 것이라는 약속
-			std::future<TRACE_RESULT> futureArray[TOTAL_SORT_FUNC_COUNT]; //약속에 의해 미래에 thread로부터 결과를 받을 개체
-			std::thread threadArray[TOTAL_SORT_FUNC_COUNT];
-			for (size_t sortFuncIndex = 0; sortFuncIndex < TOTAL_SORT_FUNC_COUNT; sortFuncIndex++)
+			std::promise<TRACE_RESULT> promiseArray[(const int)SORT_UNIQUE_MAPPED_INDEX::TOTAL_SORT_FUNC_COUNT]; //thread에 의해 결과가 저장 될 것이라는 약속
+			std::future<TRACE_RESULT> futureArray[(const int)SORT_UNIQUE_MAPPED_INDEX::TOTAL_SORT_FUNC_COUNT]; //약속에 의해 미래에 thread로부터 결과를 받을 개체
+			std::thread threadArray[(const int)SORT_UNIQUE_MAPPED_INDEX::TOTAL_SORT_FUNC_COUNT];
+			
+			for (size_t sortFuncIndex = 0; sortFuncIndex < (const int)SORT_UNIQUE_MAPPED_INDEX::TOTAL_SORT_FUNC_COUNT; sortFuncIndex++)
 			{
 				futureArray[sortFuncIndex] = promiseArray[sortFuncIndex].get_future();
+
+				std::thread t(RunSinglePassSortTrace<MySortElementType>,
+					sortMapper.UniqueMappedIndexToSortFuncNameStr((SORT_UNIQUE_MAPPED_INDEX)sortFuncIndex),
+					sortMapper.GetSortFuncAddr((SORT_UNIQUE_MAPPED_INDEX)sortFuncIndex),
+
+					);
+				;
+				
 				//TODO : 고유 사상 인덱스에 따라 내부에서 생성 할 것
+
 			}
 
 			

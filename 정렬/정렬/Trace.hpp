@@ -4,70 +4,6 @@
 extern const int LOGGING_LEVEL;
 extern const bool VALIDATE_AFTER_SORT;
 
-static std::mutex mutex; //디버그용 결과 출력 위한 뮤텍스
-
-struct TRACE_RESULT
-{
-	std::chrono::nanoseconds accDuration = std::chrono::nanoseconds::zero(); //누적 소요 시간
-	std::chrono::nanoseconds minDuration = std::chrono::nanoseconds::zero(); //최소 소요 시간
-	std::chrono::nanoseconds maxDuration = std::chrono::nanoseconds::zero(); //최대 소요 시간
-
-	void DispTotalTestPassTraceResult(const char* sortFuncNameStr, size_t totalTestPassCount)
-	{
-		std::cout << sortFuncNameStr << " ----------------------------------------------\n";
-		std::cout << ">> 전체 Pass의 총 소요 시간 : " << this->accDuration.count() << "ns\n";
-		std::cout << ">> 평균 소요 시간 : " << this->accDuration.count() / totalTestPassCount << "ns\n";
-		std::cout << ">> 최소 소요 시간 : " << this->minDuration.count() << "ns\n";
-		std::cout << ">> 최대 소요 시간 : " << this->maxDuration.count() << "ns\n";
-
-#ifdef LOGGING_COMPARE_COUNT
-		DispCompareCount(sortFuncNameStr);
-#endif
-		std::cout << std::endl;
-	}
-
-	TRACE_RESULT& operator+=(const TRACE_RESULT& newResult)
-	{
-		this->accDuration += newResult.accDuration;
-
-		if (this->minDuration == std::chrono::nanoseconds::zero())
-			this->minDuration = newResult.minDuration;
-
-		if (this->minDuration > newResult.minDuration)
-			this->minDuration = newResult.minDuration;
-
-		if (this->maxDuration < newResult.maxDuration)
-			this->maxDuration = newResult.maxDuration;
-
-		return *this;
-	}
-
-	TRACE_RESULT& operator+=(const std::chrono::nanoseconds& newDuration)
-	{
-		this->accDuration += newDuration;
-
-		if (this->minDuration == std::chrono::nanoseconds::zero())
-			this->minDuration = newDuration;
-
-		if (this->minDuration > newDuration)
-			this->minDuration = newDuration;
-
-		if (this->maxDuration < newDuration)
-			this->maxDuration = newDuration;
-
-		return *this;
-	};
-
-	TRACE_RESULT& operator=(const std::chrono::nanoseconds& newDuration)
-	{
-		this->accDuration = newDuration;
-		this->minDuration = newDuration;
-		this->maxDuration = newDuration;
-
-		return *this;
-	};
-};
-
 /// <summary>
 /// 순차적으로 열거 가능 한 요소들의 집합의 순차적인 요소 출력
 /// </summary>
@@ -111,7 +47,7 @@ void GenRandPatternEnumerableSet(SortElementType targetEnumerableSet[], size_t e
 /// <param name="elementCount">순차적으로 열거 가능 한 요소들의 집합의 요소들의 개수</param>
 /// <param name="orderBy">정렬 방향</param>
 template<typename SortElementType>
-void GenSequentialPatternEnumerableSet(SortElementType targetEnumerableSet[], size_t elementCount, ORDER_BY orderBy = ORDER_BY::DESCENDING)
+void GenSequentialPatternEnumerableSet(SortElementType targetEnumerableSet[], size_t elementCount, ORDER_BY orderBy)
 {
 	for (size_t i = 0; i < elementCount; i++)
 	{
@@ -144,12 +80,12 @@ void ValidateSortedEnumerableSet(SortElementType targetEnumerableSet[], size_t e
 		{
 		case ORDER_BY::ASCENDING:
 			if (targetEnumerableSet[i] > targetEnumerableSet[i + 1])
-				throw std::logic_error(std::string(__func__) + std::string(" : Invalid Sorted EnumerableSet (Asc)"));
+				throw std::logic_error(std::string(__func__) + std::string(" : Sort logic error (Asc)"));
 			break;
 
 		case ORDER_BY::DESCENDING:
 			if (targetEnumerableSet[i] < targetEnumerableSet[i + 1])
-				throw std::logic_error(std::string(__func__) + std::string(" : Invalid Sorted EnumerableSet (Desc)"));
+				throw std::logic_error(std::string(__func__) + std::string(" : Sort logic error (Desc)"));
 			break;
 		}
 	}
@@ -192,7 +128,7 @@ void RunSinglePassSortTrace(const char* sortFuncNameStr,
 	ascDuration = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime);
 
 	if (VALIDATE_AFTER_SORT)
-		ValidateSortedEnumerableSet(targetEnumerableSet, elementCount, ORDER_BY::ASCENDING);
+		ValidateSortedEnumerableSet<SortElementType>(targetEnumerableSet, elementCount, ORDER_BY::ASCENDING);
 
 	if (LOGGING_LEVEL >= 1)
 	{
@@ -219,7 +155,7 @@ void RunSinglePassSortTrace(const char* sortFuncNameStr,
 	descDuration = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime);
 
 	if (VALIDATE_AFTER_SORT)
-		ValidateSortedEnumerableSet(targetEnumerableSet, elementCount, ORDER_BY::DESCENDING);
+		ValidateSortedEnumerableSet<SortElementType>(targetEnumerableSet, elementCount, ORDER_BY::DESCENDING);
 
 	if (LOGGING_LEVEL >= 1)
 	{
