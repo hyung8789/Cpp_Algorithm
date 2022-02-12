@@ -33,7 +33,7 @@ public:
 	static SORT_MAPPER& GetInstance();
 	void Dispose();
 
-	const char* UniqueMappedIndexToSortFuncNameStr(SORT_UNIQUE_MAPPED_INDEX);
+	const char* SortUniqueMappedIndexToSortFuncNameStr(SORT_UNIQUE_MAPPED_INDEX);
 	SORT_UNIQUE_MAPPED_INDEX SortFuncNameStrToUniqueMappedIndex(const char*);
 
 	SORT_METADATA& GetRefSortMetaData(SORT_UNIQUE_MAPPED_INDEX);

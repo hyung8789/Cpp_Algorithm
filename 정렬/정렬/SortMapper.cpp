@@ -64,7 +64,7 @@ void SORT_MAPPER::Dispose()
 /// </summary>
 /// <param name="index">정렬의 고유 사상 인덱스</param>
 /// <returns>정렬 함수 이름 문자열</returns>
-const char* SORT_MAPPER::UniqueMappedIndexToSortFuncNameStr(SORT_UNIQUE_MAPPED_INDEX index)
+const char* SORT_MAPPER::SortUniqueMappedIndexToSortFuncNameStr(SORT_UNIQUE_MAPPED_INDEX index)
 {
 	return this->_sortMetaDataTable[(const int)index]._sortFuncName;
 }

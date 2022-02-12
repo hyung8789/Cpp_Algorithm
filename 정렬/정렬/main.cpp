@@ -62,13 +62,13 @@ int main()
 				SORT_UNIQUE_MAPPED_INDEX sortUniqueMappedIndex = (SORT_UNIQUE_MAPPED_INDEX)i;
 
 				threadArray[i] = std::thread(RunSinglePassSortTrace<MySortElementType>,
-					SORT_MAPPER::GetInstance().UniqueMappedIndexToSortFuncNameStr(sortUniqueMappedIndex),
+					SORT_MAPPER::GetInstance().SortUniqueMappedIndexToSortFuncNameStr(sortUniqueMappedIndex),
 					SORT_MAPPER::GetInstance().GetRefSortMetaData(sortUniqueMappedIndex)._sortFuncAddr,
 					&copiedData[i * ELEMENT_COUNT], ELEMENT_COUNT,
 					std::ref(promiseArray[i]));
 			}
 
-			for (size_t i = 0; i < totalSortFuncCount; i++)
+			for (int i = 0; i < totalSortFuncCount; i++)
 			{
 				SORT_UNIQUE_MAPPED_INDEX sortUniqueMappedIndex = (SORT_UNIQUE_MAPPED_INDEX)i;
 
@@ -88,10 +88,10 @@ int main()
 		for (size_t i = 0; i < totalSortFuncCount; i++)
 		{
 			SORT_UNIQUE_MAPPED_INDEX sortUniqueMappedIndex = (SORT_UNIQUE_MAPPED_INDEX)i;
-			const char* sortFuncNameStr = SORT_MAPPER::GetInstance().UniqueMappedIndexToSortFuncNameStr(sortUniqueMappedIndex);
-			SORT_METADATA& sortMetadata = SORT_MAPPER::GetInstance().GetRefSortMetaData(sortUniqueMappedIndex);
+			const char* sortFuncNameStr = SORT_MAPPER::GetInstance().SortUniqueMappedIndexToSortFuncNameStr(sortUniqueMappedIndex);
+			SORT_METADATA& sortMetaData = SORT_MAPPER::GetInstance().GetRefSortMetaData(sortUniqueMappedIndex);
 
-			sortMetadata._traceResult.DispTotalTestPassTraceResult(sortFuncNameStr, TEST_PASSES);
+			sortMetaData._traceResult.DispTotalTestPassTraceResult(sortFuncNameStr, TEST_PASSES);
 		}
 
 		delete[](originData);

@@ -336,7 +336,25 @@ SELECTION_MEDIAN_PROC: //중앙값으로 기준 (pivot) 선택 처리 루틴
 		3) 왼쪽 인덱스 요소와 가운데 인덱스 요소 비교
 
 			3-1) 왼쪽 인덱스 요소 > 가운데 인덱스 요소
-			: 가운데 인덱스의 요소가 왼쪽 인덱스의 요소의 왼쪽에 위치하는 것이 올바른 정렬 된 위치므로,
+			
+				3-1-1) 왼쪽 인덱스 요소 > 오른쪽 인덱스 요소
+
+				3-1-2) 왼쪽 인덱스 요소 <= 오른쪽 인덱스 요소
+
+			3-2) 왼쪽 인덱스 요소 <= 가운데 인덱스 요소
+
+
+
+
+		TODO : 기준 만족하는 요소만 맨 왼쪽으로 SWAP 할 것
+		---
+		TODO : 이하 삭제
+
+		3) 왼쪽 인덱스 요소와 가운데 인덱스 요소 비교
+
+			3-1) 왼쪽 인덱스 요소 > 가운데 인덱스 요소
+			: 현재 중앙값을 가운데 인덱스 요소로 선택
+			가운데 인덱스의 요소가 왼쪽 인덱스의 요소의 왼쪽에 위치하는 것이 올바른 정렬 된 위치므로,
 			가운데 인덱스 요소와 왼쪽 인덱스 요소 SWAP
 
 			3-2) 왼쪽 인덱스 요소 <= 가운데 인덱스 요소
@@ -374,8 +392,11 @@ SELECTION_MEDIAN_PROC: //중앙값으로 기준 (pivot) 선택 처리 루틴
 		중앙값으로 기준 (pivot) 선택 처리 루틴에 따라, 상수 시간만큼 비교 횟수 및 SWAP 횟수가 증가
 		해당 중앙값이 순차적으로 열거 가능 한 요소들의 집합 내에서 완전한 중앙값이라고 보장 할 수 없지만, Worst Case 발생 확률을 줄일 수 있음
 	***/
+	
 
-	size_t midIndex = (size_t)((srcLeftIndex + srcRightIndex) >> 1); //가운데 인덱스
+
+	size_t midIndex = (srcLeftIndex + srcRightIndex) >> 1; //가운데 인덱스
+	size_t orderedIndex;
 	SortElementType tmp;
 
 	switch (orderBy)
@@ -407,8 +428,8 @@ SELECTION_MEDIAN_PROC: //중앙값으로 기준 (pivot) 선택 처리 루틴
 
 	if ((midIndex + 1) == srcRightIndex) //현재 요소가 3개 이하일 경우
 		return midIndex;
-	else //현재 요소가 3개 초과일 경우
-		goto SORT_PROC;
+
+	goto SORT_PROC; //현재 요소가 3개 초과일 경우
 
 SORT_PROC: //정렬 처리 루틴
 	size_t pivotIndex = srcLeftIndex; //기준 (pivot) 인덱스
@@ -464,9 +485,10 @@ void QuickSort(SortElementType targetEnumerableSet[],
 	if (orderedPivotIndex > 0) //underflow 방지
 		QuickSort<SortElementType>(targetEnumerableSet,
 			srcLeftIndex, orderedPivotIndex - 1, orderBy); //정렬 된 기준 (pivot)의 왼쪽에 대해 다시 분할
-
-	QuickSort<SortElementType>(targetEnumerableSet,
-		orderedPivotIndex + 1, srcRightIndex, orderBy); //정렬 된 기준 (pivot)의 오른쪽에 대해 다시 분할
+	
+	if (orderedPivotIndex < SIZE_MAX) //overflow 방지
+		QuickSort<SortElementType>(targetEnumerableSet,
+			orderedPivotIndex + 1, srcRightIndex, orderBy); //정렬 된 기준 (pivot)의 오른쪽에 대해 다시 분할
 
 #elif defined ITERATIVE_METHOD
 	/***
@@ -496,11 +518,12 @@ void QuickSort(SortElementType targetEnumerableSet[],
 				stack[top++] = orderedPivotIndex - 1;
 			}
 
-		if (orderedPivotIndex + 1 < srcRightIndex) //정렬 된 기준 (pivot)의 오른쪽에 대해 요소가 존재 할 경우 다시 분할
-		{
-			stack[top++] = orderedPivotIndex + 1;
-			stack[top++] = srcRightIndex;
-		}
+		if(orderedPivotIndex < SIZE_MAX) //overflow 방지
+			if (orderedPivotIndex + 1 < srcRightIndex) //정렬 된 기준 (pivot)의 오른쪽에 대해 요소가 존재 할 경우 다시 분할
+			{
+				stack[top++] = orderedPivotIndex + 1;
+				stack[top++] = srcRightIndex;
+			}
 	}
 
 	delete[] stack;
