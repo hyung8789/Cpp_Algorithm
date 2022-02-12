@@ -17,7 +17,7 @@
 //#include <source_location> // https://en.cppreference.com/w/cpp/utility/source_location
 
 #include "Sort.hpp"
-#include "SortMapper.h"
 #include "TraceResult.h"
 #include "Trace.hpp"
+#include "SortMapper.h"
 #endif

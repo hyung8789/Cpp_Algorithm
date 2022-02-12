@@ -4,6 +4,8 @@
 extern const int LOGGING_LEVEL;
 extern const bool VALIDATE_AFTER_SORT;
 
+static std::mutex mutex;
+
 /// <summary>
 /// 순차적으로 열거 가능 한 요소들의 집합의 순차적인 요소 출력
 /// </summary>
@@ -136,16 +138,12 @@ void RunSinglePassSortTrace(const char* sortFuncNameStr,
 
 		if (LOGGING_LEVEL == 2)
 		{
-			std::cout << sortFuncNameStr << " : 오름차순 정렬 후\n";
+			std::cout << sortFuncNameStr << " (오름차순 정렬 후)\n";
 			DispEnumerableSet<SortElementType>(targetEnumerableSet, elementCount);
 			std::cout << std::endl;
 		}
 
-		std::cout << ">> " << sortFuncNameStr << " (오름차순 정렬) : " << ascDuration.count() << "ns 소요" << std::endl;
-
-#ifdef LOGGING_COMPARE_COUNT
-		DispCompareCount(sortFuncNameStr);
-#endif
+		std::cout << sortFuncNameStr << " (오름차순 정렬) : " << ascDuration.count() << "ns 소요\n" << std::endl;
 		mutex.unlock();
 	}
 
@@ -163,16 +161,12 @@ void RunSinglePassSortTrace(const char* sortFuncNameStr,
 
 		if (LOGGING_LEVEL == 2)
 		{
-			std::cout << sortFuncNameStr << " : 오름차순 정렬 된 데이터에 대한 내림차순 정렬 후\n";
+			std::cout << sortFuncNameStr << " (오름차순 정렬 된 데이터에 대한 내림차순 정렬 후)\n";
 			DispEnumerableSet<SortElementType>(targetEnumerableSet, elementCount);
 			std::cout << std::endl;
 		}
 
-		std::cout << ">> " << sortFuncNameStr << " (오름차순 정렬 된 데이터에 대한 내림차순 정렬) : " << descDuration.count() << "ns 소요" << std::endl;
-
-#ifdef LOGGING_COMPARE_COUNT
-		DispCompareCount(sortFuncNameStr);
-#endif
+		std::cout << sortFuncNameStr << " (오름차순 정렬 된 데이터에 대한 내림차순 정렬) : " << descDuration.count() << "ns 소요\n" << std::endl;
 		mutex.unlock();
 	}
 

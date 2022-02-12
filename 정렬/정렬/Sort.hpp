@@ -5,48 +5,30 @@
 #define COMPARE(x, y) ((x) > (y) ? 1 : (x) == (y) ? 0 : -1) //x > y : 1, x == y : 0, x < y : -1
 #define SWAP(x, y, tmp) ((tmp) = (x), (x) = (y), (y) = (tmp))
 
-#define RECURSIVE_METHOD //재귀적 방법 (주석 처리 : 반복적 방법 사용)
+//#define RECURSIVE_METHOD //재귀적 방법 (주석 처리 : 반복적 방법 사용)
 #ifndef RECURSIVE_METHOD 
 #define ITERATIVE_METHOD //반복적 방법
-//TODO : iter
 #endif
 
-//TODO : SortMapper에 의해 TraceResult 접근, 카운트 증가
 #define LOGGING_COMPARE_COUNT //비교 횟수 카운트 기록 및 출력 (주석 처리 : 비활성화)
 #ifdef LOGGING_COMPARE_COUNT
-extern const int LOGGING_LEVEL;
-extern std::mutex mutex;
-extern void IncreaseCompareCount(const char*);
+extern class TRACE_RESULT;
+extern enum class SORT_UNIQUE_MAPPED_INDEX;
+extern struct SORT_METADATA;
+extern class SORT_MAPPER;
 
-/// <summary>
-/// 정렬 함수 이름 문자열에 따른 비교 횟수 증가 및 비교 결과 반환
-/// </summary>
-/// <param name="sortFuncNameStr">정렬 함수 이름 문자열</param>
-template<typename SortElementType>
-int LoggingCompareCountProc(SortElementType x, SortElementType y, const char* sortFuncNameStr)
-{
-	IncreaseCompareCount(sortFuncNameStr);
-
-	if (LOGGING_LEVEL == 2)
-	{
-		mutex.lock();
-
-		std::cout << sortFuncNameStr << " : " << x << "과(와) " << y << " 비교 발생\n";
-
-		mutex.unlock();
-	}
-
-	return COMPARE(x, y);
-}
-//#define COMPARE(x, y) LoggingCompareCountProc<MySortElementType>(x,y, __func__) //비교 횟수 카운트 위한 호출 측 함수명 이용
-//#define COMPARE(x,y) 
+#define ALTERNATIVE_COMPARE(x, y) SORT_MAPPER::GetInstance().\
+GetRefSortMetaData(SORT_MAPPER::GetInstance().SortFuncNameStrToUniqueMappedIndex(__func__)).\
+_traceResult.IncreaseCompareCount(), \
+((x) > (y) ? 1 : (x) == (y) ? 0 : -1) //x > y : 1, x == y : 0, x < y : -1
+#define COMPARE(x, y) ALTERNATIVE_COMPARE(x, y) //비교 횟수 카운트 위한 호출 측 함수명 이용
 #endif
 
 /***
 	< 버블 정렬 요소들 간 비교 횟수 >
 
 	n : 순차적으로 열거 가능 한 요소들의 집합의 요소들의 개수
-	
+
 	ex1) 요소가 6개일 때, 첫 번째 루프에서 비교 범위 내의 모든 요소들을 5번 비교
 	각 루프 완료 후 비교 범위 1씩 감소
 
@@ -131,9 +113,6 @@ enum class ORDER_BY : const int
 	DESCENDING //내림차순
 }; //정렬 방향
 
-template<typename SortElementType>
-using SortFuncType = void(*)(SortElementType[], size_t, ORDER_BY); // https://en.cppreference.com/w/cpp/language/type_alias
-
 /// <summary>
 /// 버블 정렬 (Best Case : O(n), Worst, Average Case : O(n^2))
 /// </summary>
@@ -198,6 +177,20 @@ void BubbleSort(SortElementType targetEnumerableSet[],
 		if (!swapPerformed) //현재 비교 대상 범위에 대해 SWAP이 한 번도 수행되지 않은 경우 (이미 내부 요소가 모두 정렬 되어 있을 경우)
 			break;
 	}
+}
+
+/// <summary>
+/// 선택 정렬
+/// </summary>
+/// <typeparam name="SortElementType"></typeparam>
+/// <param name="targetEnumerableSet"></param>
+/// <param name="elementCount"></param>
+/// <param name="orderBy"></param>
+template<typename SortElementType>
+void SelectionSort(SortElementType targetEnumerableSet[],
+	size_t elementCount, ORDER_BY orderBy = ORDER_BY::ASCENDING)
+{
+	//TODO : 선택 정렬
 }
 
 /// <summary>
@@ -331,13 +324,111 @@ size_t PartitioningProc(SortElementType targetEnumerableSet[],
 
 			4-2) 현재 기준 (pivot)의 최종 정렬 된 위치를 기준으로 다시 분할하기 위해 현재 기준 (pivot)의 최종 정렬 된 위치 반환
 	***/
-	//TODO : Worst Case 발생 확률을 줄이기 위해 기준 선택 시 중앙값으로 선택 할 것
 
-	size_t pivotIndex = srcLeftIndex++; //기준 (pivot) 인덱스
-	size_t orderedPivotIndex = pivotIndex; //기준 (pivot)의 최종 정렬 된 위치
+SELECTION_MEDIAN_PROC: //중앙값으로 기준 (pivot) 선택 처리 루틴
+	/***
+		< 퀵 정렬 중앙값 선택 - 오름차순 >
+
+		1) 이하, 방법에 따라 기준 (pivot) 선정 (정렬 방향에 따라 중앙값 선택 위한 비교 조건 변동)
+
+		2) 왼쪽 인덱스의 요소, 가운데 인덱스의 요소, 오른쪽 인덱스의 요소에 대해,
+
+		3) 왼쪽 인덱스 요소와 가운데 인덱스 요소 비교
+
+			3-1) 왼쪽 인덱스 요소 > 가운데 인덱스 요소
+			: 가운데 인덱스의 요소가 왼쪽 인덱스의 요소의 왼쪽에 위치하는 것이 올바른 정렬 된 위치므로,
+			가운데 인덱스 요소와 왼쪽 인덱스 요소 SWAP
+
+			3-2) 왼쪽 인덱스 요소 <= 가운데 인덱스 요소
+			: do nothing
+
+		4) 왼쪽 인덱스 요소와 오른쪽 인덱스 요소 비교
+
+			4-1) 왼쪽 인덱스 요소 > 오른쪽 인덱스 요소
+			: 오른쪽 인덱스의 요소가 왼쪽 인덱스의 요소의 왼쪽에 위치하는 것이 올바른 정렬 된 위치므로,
+			왼쪽 인덱스 요소와 오른쪽 인덱스 요소 SWAP
+
+			4-2) 왼쪽 인덱스 요소 <= 오른쪽 인덱스 요소
+			: do nothing
+
+		5) 가운데 인덱스 요소와 오른쪽 인덱스 요소 비교
+
+			5-1) 가운데 인덱스 요소 > 오른쪽 인덱스 요소
+			: 오른쪽 인덱스의 요소가 가운데 인덱스 요소의 왼쪽에 위치하는 것이 올바른 정렬 된 위치므로,
+			오른쪽 요소와 가운데 인덱스 요소 SWAP
+
+			5-2) 가운데 인덱스 요소 <= 오른쪽 인덱스 요소
+			: do nothing
+
+		6) 현재 요소 개수에 따라,
+
+			6-1) 현재 요소가 3개 이하일 경우
+			: 중앙값을 선택 시 왼쪽 인덱스, 가운데 인덱스, 오른쪽 인덱스의 요소들은 정렬되므로,
+			이후 정렬 처리 루틴 생략 및 가운데 인덱스 반환
+
+			6-2) 현재 요소가 3개 초과일 경우
+			: 현재 왼쪽 인덱스의 요소를 기준 (pivot)으로 하여, 이후 정렬 처리 루틴 수행
+
+		---
+
+		중앙값으로 기준 (pivot) 선택 처리 루틴에 따라, 상수 시간만큼 비교 횟수가 증가하지만, 총 SWAP 횟수는 변동이 없음
+		=> 3개의 요소들은 정렬 된 순서를 유지하므로, 이후 정렬 처리 루틴에서 해당 요소들은 SWAP이 발생하지 않음
+
+		해당 중앙값이 순차적으로 열거 가능 한 요소들의 집합 내에서 완전한 중앙값이라고 보장 할 수 없지만, Worst Case 발생 확률을 줄일 수 있음
+	***/
+
+	size_t midIndex = (size_t)((srcLeftIndex + srcRightIndex) >> 1); //가운데 인덱스
 	SortElementType tmp;
 
-	for (; srcLeftIndex <= srcRightIndex; srcLeftIndex++)
+	switch (orderBy)
+	{
+	case ORDER_BY::ASCENDING:
+		if (COMPARE(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[midIndex]) == 1) //left > mid
+		{
+			SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[midIndex], tmp);
+		}
+
+		if (COMPARE(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[srcRightIndex]) == 1) //left > right
+		{
+			SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[srcRightIndex], tmp);
+		}
+
+		if (COMPARE(targetEnumerableSet[midIndex], targetEnumerableSet[srcRightIndex]) == 1) //mid > right
+		{
+			SWAP(targetEnumerableSet[midIndex], targetEnumerableSet[srcRightIndex], tmp);
+		}
+
+		break;
+
+	case ORDER_BY::DESCENDING:
+		if (COMPARE(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[midIndex]) == -1) //left < mid
+		{
+			SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[midIndex], tmp);
+		}
+
+		if (COMPARE(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[srcRightIndex]) == -1) //left < right
+		{
+			SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[srcRightIndex], tmp);
+		}
+
+		if (COMPARE(targetEnumerableSet[midIndex], targetEnumerableSet[srcRightIndex]) == -1) //mid < right
+		{
+			SWAP(targetEnumerableSet[midIndex], targetEnumerableSet[srcRightIndex], tmp);
+		}
+
+		break;
+	}
+
+	if ((midIndex + 1) == srcRightIndex) //현재 요소가 3개 이하일 경우
+		return midIndex;
+	else //현재 요소가 3개 초과일 경우
+		goto SORT_PROC;
+
+SORT_PROC: //정렬 처리 루틴
+	size_t pivotIndex = srcLeftIndex; //기준 (pivot) 인덱스
+	size_t orderedPivotIndex = pivotIndex; //기준 (pivot)의 최종 정렬 된 위치
+
+	for (srcLeftIndex += 1; srcLeftIndex <= srcRightIndex; srcLeftIndex++)
 	{
 		switch (orderBy)
 		{
@@ -381,17 +472,52 @@ void QuickSort(SortElementType targetEnumerableSet[],
 	if (srcLeftIndex >= srcRightIndex) //base case
 		return;
 
-	size_t orderedPivotIndex = PartitioningProc(targetEnumerableSet, srcLeftIndex, srcRightIndex, orderBy);
+	size_t orderedPivotIndex = 
+		PartitioningProc<SortElementType>(targetEnumerableSet, srcLeftIndex, srcRightIndex, orderBy); //정렬 된 기준 (pivot)의 인덱스
 
 	if (orderedPivotIndex > 0) //underflow 방지
 		QuickSort<SortElementType>(targetEnumerableSet,
-			srcLeftIndex, orderedPivotIndex - 1, orderBy); //분할 된 기준 (pivot)의 왼쪽에 대해 다시 분할
+			srcLeftIndex, orderedPivotIndex - 1, orderBy); //정렬 된 기준 (pivot)의 왼쪽에 대해 다시 분할
 
 	QuickSort<SortElementType>(targetEnumerableSet,
-		orderedPivotIndex + 1, srcRightIndex, orderBy); //분할 된 기준 (pivot)의 오른쪽에 대해 다시 분할
+		orderedPivotIndex + 1, srcRightIndex, orderBy); //정렬 된 기준 (pivot)의 오른쪽에 대해 다시 분할
 
 #elif defined ITERATIVE_METHOD
+	/***
+		이하, 구현사항은 RECURSIVE_METHOD의 실행 순서와 동일하지 않음
+		RECURSIVE_METHOD와 동일 한 실행 순서는 LCRS 트리의 < RECURSIVE_METHOD의 Call Stack 구현 > 을 참조 할 것
+	***/
 
+	size_t* stack = new size_t[(srcRightIndex - srcLeftIndex) + 1]; //전체 요소 개수만큼의 스택
+	size_t top = 0; //스택의 최상위 요소 인덱스
+
+	//왼쪽 인덱스, 오른쪽 인덱스 순으로 push, 오른쪽 인덱스, 왼쪽 인덱스 순으로 pop
+	stack[top++] = srcLeftIndex;
+	stack[top++] = srcRightIndex;
+	
+	while (top > 0) //pop, PartitioningProc
+	{
+		srcRightIndex = stack[--top];
+		srcLeftIndex = stack[--top];
+
+		size_t orderedPivotIndex = 
+			PartitioningProc<SortElementType>(targetEnumerableSet, srcLeftIndex, srcRightIndex, orderBy); //정렬 된 기준 (pivot)의 인덱스
+
+		if (orderedPivotIndex > 0) //underflow 방지
+			if (orderedPivotIndex - 1 > srcLeftIndex) //정렬 된 기준 (pivot)의 왼쪽에 대해 요소가 존재 할 경우 다시 분할
+			{
+				stack[top++] = srcLeftIndex;
+				stack[top++] = orderedPivotIndex - 1;
+			}
+
+		if (orderedPivotIndex + 1 < srcRightIndex) //정렬 된 기준 (pivot)의 오른쪽에 대해 요소가 존재 할 경우 다시 분할
+		{
+			stack[top++] = orderedPivotIndex + 1;
+			stack[top++] = srcRightIndex;
+		}
+	}
+
+	delete[] stack;
 #endif
 }
 
@@ -411,5 +537,19 @@ void QuickSort(SortElementType targetEnumerableSet[],
 
 	QuickSort<SortElementType>(targetEnumerableSet,
 		0, elementCount - 1, orderBy);
+}
+
+/// <summary>
+/// 병합 정렬
+/// </summary>
+/// <typeparam name="SortElementType"></typeparam>
+/// <param name="targetEnumerableSet"></param>
+/// <param name="elementCount"></param>
+/// <param name="orderBy"></param>
+template<typename SortElementType>
+void MergeSort(SortElementType targetEnumerableSet[],
+	size_t elementCount, ORDER_BY orderBy = ORDER_BY::ASCENDING)
+{
+	//TODO : 병합 정렬
 }
 #endif

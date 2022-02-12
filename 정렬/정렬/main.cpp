@@ -1,16 +1,9 @@
 #include "Core.h"
 
-static const int ELEMENT_COUNT = 500; //요소 개수
+static const int ELEMENT_COUNT = 1000; //요소 개수
 static const int TEST_PASSES = 10; //테스트 횟수
-static const int LOGGING_LEVEL = 1; //로깅 레벨 (0 : 출력 안함, 1 : 간략한 내용, 2 : 상세 내용 (중간 과정 출력 위한 수행 시간 오차 발생))
+static const int LOGGING_LEVEL = 0; //로깅 레벨 (0 : 출력 안함, 1 : 간략한 내용, 2 : 상세 내용 (중간 과정 출력 위한 수행 시간 오차 발생))
 static const bool VALIDATE_AFTER_SORT = true; //정렬 후 정렬 된 집합에 대한 유효성 검사 수행
-
-//TODO : 각 bool에 대해 생성 및 future, join에 대해 처리 할 것
-static const bool RUN_BUBBLE_SORT = true;
-static const bool RUN_INSERTION_SORT = true;
-static const bool RUN_QUICK_SORT = true;
-static const bool RUN_SELECTION_SORT = true;
-static const bool RUN_MERGE_SORT = true;
 
 int main()
 {
@@ -19,11 +12,10 @@ int main()
 
 	try
 	{
-		MySortElementType* originData = new MySortElementType[ELEMENT_COUNT];
-		MySortElementType* copiedData = new MySortElementType[ELEMENT_COUNT * (const int)SORT_UNIQUE_MAPPED_INDEX::TOTAL_SORT_FUNC_COUNT];
+		const int totalSortFuncCount = (const int)SORT_UNIQUE_MAPPED_INDEX::TOTAL_SORT_FUNC_COUNT;
 
-		TRACE_RESULT result[(const int)SORT_UNIQUE_MAPPED_INDEX::TOTAL_SORT_FUNC_COUNT];
-		SORT_MAPPER<MySortElementType>& sortMapper = SORT_MAPPER<MySortElementType>::GetInstance();
+		MySortElementType* originData = new MySortElementType[ELEMENT_COUNT];
+		MySortElementType* copiedData = new MySortElementType[ELEMENT_COUNT * totalSortFuncCount];
 		
 		for (size_t i = 0; i < TEST_PASSES; i++)
 		{
@@ -53,64 +45,39 @@ int main()
 
 			//GenSequentialPatternEnumerableSet<MySortElementType>(originData, ELEMENT_COUNT, ORDER_BY::DESCENDING);
 			
-			for (size_t sortFuncIndex = 0; sortFuncIndex < (const int)SORT_UNIQUE_MAPPED_INDEX::TOTAL_SORT_FUNC_COUNT; sortFuncIndex++) //각 sort에서 사용하기 위해 원본 데이터 복사
+			for (int i = 0; i < totalSortFuncCount; i++) //각 sort에서 사용하기 위해 원본 데이터 복사
 			{
-				memcpy_s(&copiedData[sortFuncIndex * ELEMENT_COUNT], sizeof(MySortElementType) * ELEMENT_COUNT,
+				memcpy_s(&copiedData[i * ELEMENT_COUNT], sizeof(MySortElementType) * ELEMENT_COUNT,
 					originData, sizeof(MySortElementType) * ELEMENT_COUNT);
 			}
 
-			std::promise<TRACE_RESULT> promiseArray[(const int)SORT_UNIQUE_MAPPED_INDEX::TOTAL_SORT_FUNC_COUNT]; //thread에 의해 결과가 저장 될 것이라는 약속
-			std::future<TRACE_RESULT> futureArray[(const int)SORT_UNIQUE_MAPPED_INDEX::TOTAL_SORT_FUNC_COUNT]; //약속에 의해 미래에 thread로부터 결과를 받을 개체
-			std::thread threadArray[(const int)SORT_UNIQUE_MAPPED_INDEX::TOTAL_SORT_FUNC_COUNT];
+			std::promise<TRACE_RESULT> promiseArray[totalSortFuncCount]; //thread에 의해 결과가 저장 될 것이라는 약속
+			std::future<TRACE_RESULT> futureArray[totalSortFuncCount]; //약속에 의해 미래에 thread로부터 결과를 받을 개체
+			std::thread threadArray[totalSortFuncCount];
 			
-			for (size_t sortFuncIndex = 0; sortFuncIndex < (const int)SORT_UNIQUE_MAPPED_INDEX::TOTAL_SORT_FUNC_COUNT; sortFuncIndex++)
+			for (int i = 0; i < totalSortFuncCount; i++)
 			{
-				futureArray[sortFuncIndex] = promiseArray[sortFuncIndex].get_future();
+				futureArray[i] = promiseArray[i].get_future(); //약속으로부터 미래 사상
 
-				std::thread t(RunSinglePassSortTrace<MySortElementType>,
-					sortMapper.UniqueMappedIndexToSortFuncNameStr((SORT_UNIQUE_MAPPED_INDEX)sortFuncIndex),
-					sortMapper.GetSortFuncAddr((SORT_UNIQUE_MAPPED_INDEX)sortFuncIndex),
+				SORT_UNIQUE_MAPPED_INDEX sortUniqueMappedIndex = (SORT_UNIQUE_MAPPED_INDEX)i;
 
-					);
-				;
-				
-				//TODO : 고유 사상 인덱스에 따라 내부에서 생성 할 것
-
+				threadArray[i] = std::thread(RunSinglePassSortTrace<MySortElementType>,
+					SORT_MAPPER::GetInstance().UniqueMappedIndexToSortFuncNameStr(sortUniqueMappedIndex),
+					SORT_MAPPER::GetInstance().GetRefSortMetaData(sortUniqueMappedIndex)._sortFuncAddr,
+					&copiedData[i * ELEMENT_COUNT], ELEMENT_COUNT,
+					std::ref(promiseArray[i]));
 			}
 
-			
-			std::thread sortThread(RunSinglePassSortTrace<MySortElementType>,
-				UniqueMappedIndexToSortFuncNameStr(sortFuncIndex),
-				BubbleSort<MySortElementType>,
-				copiedData[SortFuncNameStrToUniqueMappedIndex("BubbleSort") * ELEMENT_COUNT], ELEMENT_COUNT,
-				std::ref(promiseArray[]));
+			for (size_t i = 0; i < totalSortFuncCount; i++)
+			{
+				SORT_UNIQUE_MAPPED_INDEX sortUniqueMappedIndex = (SORT_UNIQUE_MAPPED_INDEX)i;
 
-			std::thread insertionSortThread(
-				RunSinglePassSortTrace<MySortElementType>,
-				"InsertionSort",
-				InsertionSort<MySortElementType>, 
-				insertionSortData, ELEMENT_COUNT,
-				std::ref(promise2));
+				//thread에 의해 결과가 반환되는 시점까지 대기하였다가 할당 (소요 시간 누적 계산)
+				SORT_MAPPER::GetInstance().GetRefTraceResult(sortUniqueMappedIndex) += futureArray[i].get();
 
-			// https://stackoverflow.com/questions/44049407/c-compilation-fails-on-calling-overloaded-function-in-stdthread
-			//오버로딩 된 템플릿 함수를 아래 thread 생성 시 컴파일러가 추론 할 수 없으므로, 컴파일 타임에 정적 캐스트
-		
-			std::thread quickSortThread(
-				RunSinglePassSortTrace<MySortElementType>,
-				"QuickSort",
-				static_cast<void(*)(MySortElementType[], size_t, ORDER_BY)>(QuickSort<MySortElementType>),
-				quickSortData, ELEMENT_COUNT,
-				std::ref(promise3));
-			
-			//thread에 의해 결과가 반환되는 시점까지 대기하였다가 할당
-			bubbleSortResult += future1.get();
-			insertionSortResult += future2.get();
-			quickSortResult += future3.get();
-
-			//단일 pass에 대해 모든 thread가 종료 될 때까지 대기
-			bubbleSortThread.join();
-			insertionSortThread.join();
-			quickSortThread.join();
+				//단일 pass에 대해 해당 thread가 완전히 종료 될 때까지 대기
+				threadArray[i].join();
+			}
 		}
 
 		/***
@@ -118,14 +85,19 @@ int main()
 			Average Case 보다 오래 걸려야 정상이지만 CPU의 Branch Prediction에 의해 더 빠르게 나옴
 		***/
 
-		bubbleSortResult.DispTotalTestPassTraceResult("BubbleSort", TEST_PASSES);
-		insertionSortResult.DispTotalTestPassTraceResult("InsertionSort", TEST_PASSES);
-		quickSortResult.DispTotalTestPassTraceResult("QuickSort", TEST_PASSES);
+		for (size_t i = 0; i < totalSortFuncCount; i++)
+		{
+			SORT_UNIQUE_MAPPED_INDEX sortUniqueMappedIndex = (SORT_UNIQUE_MAPPED_INDEX)i;
+			const char* sortFuncNameStr = SORT_MAPPER::GetInstance().UniqueMappedIndexToSortFuncNameStr(sortUniqueMappedIndex);
+			SORT_METADATA& sortMetadata = SORT_MAPPER::GetInstance().GetRefSortMetaData(sortUniqueMappedIndex);
+
+			sortMetadata._traceResult.DispTotalTestPassTraceResult(sortFuncNameStr, TEST_PASSES);
+		}
 
 		delete[](originData);
-		delete[](bubbleSortData);
-		delete[](insertionSortData);
-		delete[](quickSortData);
+		delete[](copiedData);
+
+		SORT_MAPPER::GetInstance().Dispose();
 	}
 	catch (const std::exception& ex)
 	{
