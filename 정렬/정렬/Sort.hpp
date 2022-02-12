@@ -371,9 +371,7 @@ SELECTION_MEDIAN_PROC: //중앙값으로 기준 (pivot) 선택 처리 루틴
 
 		---
 
-		중앙값으로 기준 (pivot) 선택 처리 루틴에 따라, 상수 시간만큼 비교 횟수가 증가하지만, 총 SWAP 횟수는 변동이 없음
-		=> 3개의 요소들은 정렬 된 순서를 유지하므로, 이후 정렬 처리 루틴에서 해당 요소들은 SWAP이 발생하지 않음
-
+		중앙값으로 기준 (pivot) 선택 처리 루틴에 따라, 상수 시간만큼 비교 횟수 및 SWAP 횟수가 증가
 		해당 중앙값이 순차적으로 열거 가능 한 요소들의 집합 내에서 완전한 중앙값이라고 보장 할 수 없지만, Worst Case 발생 확률을 줄일 수 있음
 	***/
 
@@ -384,37 +382,25 @@ SELECTION_MEDIAN_PROC: //중앙값으로 기준 (pivot) 선택 처리 루틴
 	{
 	case ORDER_BY::ASCENDING:
 		if (COMPARE(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[midIndex]) == 1) //left > mid
-		{
 			SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[midIndex], tmp);
-		}
 
 		if (COMPARE(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[srcRightIndex]) == 1) //left > right
-		{
 			SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[srcRightIndex], tmp);
-		}
 
 		if (COMPARE(targetEnumerableSet[midIndex], targetEnumerableSet[srcRightIndex]) == 1) //mid > right
-		{
 			SWAP(targetEnumerableSet[midIndex], targetEnumerableSet[srcRightIndex], tmp);
-		}
 
 		break;
 
 	case ORDER_BY::DESCENDING:
 		if (COMPARE(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[midIndex]) == -1) //left < mid
-		{
 			SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[midIndex], tmp);
-		}
 
 		if (COMPARE(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[srcRightIndex]) == -1) //left < right
-		{
 			SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[srcRightIndex], tmp);
-		}
 
 		if (COMPARE(targetEnumerableSet[midIndex], targetEnumerableSet[srcRightIndex]) == -1) //mid < right
-		{
 			SWAP(targetEnumerableSet[midIndex], targetEnumerableSet[srcRightIndex], tmp);
-		}
 
 		break;
 	}
