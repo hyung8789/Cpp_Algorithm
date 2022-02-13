@@ -123,6 +123,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -146,20 +147,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="SCalc.cpp" />
-    <ClCompile Include="LLS.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TokenGen.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SCalc.h" />
-    <ClInclude Include="LLS.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="TokenGen.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\자료구조\스택\연결 리스트 스택\연결 리스트 스택.vcxproj">
+      <Project>{21784829-4b78-4588-b97e-3c5923ae061a}</Project>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

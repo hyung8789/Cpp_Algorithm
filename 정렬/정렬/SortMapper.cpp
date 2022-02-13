@@ -90,7 +90,7 @@ SORT_UNIQUE_MAPPED_INDEX SORT_MAPPER::SortFuncNameStrToUniqueMappedIndex(const c
 }
 
 /// <summary>
-/// 정렬의 고유 사상 인덱스에 대한 정렬에 대한 메타데이터 반환
+/// 정렬의 고유 사상 인덱스에 대한 정렬에 대한 메타데이터 참조 반환
 /// </summary>
 /// <param name="index">정렬의 고유 사상 인덱스</param>
 /// <returns>정렬의 고유 사상 인덱스에 대한 정렬에 대한 메타데이터 참조</returns>

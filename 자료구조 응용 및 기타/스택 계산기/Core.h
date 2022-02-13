@@ -12,8 +12,9 @@
 #include <stdexcept> // https://en.cppreference.com/w/cpp/header/stdexcept
 #include <cfenv> // https://www.cplusplus.com/reference/cfenv
 
+//해당 프로젝트 속성에서 정적 라이브러리 (lib)로 빌드 할 것
+#include "../../자료구조/스택/연결 리스트 스택/LLS_Core.h"
 #include "Utils.h"
 #include "TokenGen.h"
-#include "LLS.h"
 #include "SCalc.h"
 #endif
