@@ -5,6 +5,22 @@
 #define COMPARE(x, y) ((x) > (y) ? 1 : (x) == (y) ? 0 : -1) //x > y : 1, x == y : 0, x < y : -1
 #define SWAP(x, y, tmp) ((tmp) = (x), (x) = (y), (y) = (tmp))
 
+#define MAX(x, y) (COMPARE(x, y) == 1 ? x : y) //x > y : x, x <= y : y
+#define MIN(x, y) (COMPARE(x, y) == 1 ? y : x) //x > y : y, x <= y : x
+#define MEDIAN(x, y, z) MAX(MIN(x, y), MIN(MAX(x, y), z)) //ex) x < y && x > z : x
+
+#define MAX_ARRAY_ELEMENT_INDEX(array, idx1, idx2) \
+(COMPARE(array[idx1], array[idx2]) == 1 ? idx1 : idx2) //array[idx1] > array[idx2] : idx1, array[idx1] <= array[idx2] : idx2
+
+#define MIN_ARRAY_ELEMENT_INDEX(array, idx1, idx2) \
+(COMPARE(array[idx1], array[idx2]) == 1 ? idx2 : idx1) //array[idx1] > array[idx2] : idx2, array[idx1] <= array[idx2] : idx1
+
+#define MEDIAN_ARRAY_ELEMENT_INDEX(array, idx1, idx2, idx3) \
+MAX_ARRAY_ELEMENT_INDEX(array, \
+MIN_ARRAY_ELEMENT_INDEX(array, idx1, idx2), \
+MIN_ARRAY_ELEMENT_INDEX(array, \
+MAX_ARRAY_ELEMENT_INDEX(array, idx1, idx2), idx3)) //ex) x < y && x > z : x
+
 //#define RECURSIVE_METHOD //재귀적 방법 (주석 처리 : 반복적 방법 사용)
 #ifndef RECURSIVE_METHOD 
 #define ITERATIVE_METHOD //반복적 방법
@@ -292,6 +308,55 @@ template<typename SortElementType>
 size_t PartitioningProc(SortElementType targetEnumerableSet[],
 	size_t srcLeftIndex, size_t srcRightIndex, ORDER_BY orderBy = ORDER_BY::ASCENDING)
 {
+	size_t midIndex = (srcLeftIndex + srcRightIndex) >> 1; //가운데 인덱스 (왼쪽 인덱스, 오른쪽 인덱스에 대한)
+	size_t medianIndex; //중앙값 인덱스 (왼쪽 인덱스, 가운데 인덱스, 오른쪽 인덱스에 대한)
+
+	size_t pivotIndex; //기준 (pivot) 인덱스
+	size_t orderedPivotIndex; //기준 (pivot)의 최종 정렬 된 위치 인덱스
+
+	SortElementType tmp;
+
+	if ((midIndex + 1) >= srcRightIndex) //현재 요소가 3개 이하일 경우
+		goto ALTERNATIVE_SORT_PROC; //3개 이하의 요소에 대한 대체 정렬 처리 루틴
+
+	goto SELECT_MEDIAN_PIVOT_PROC; //현재 요소가 3개 초과일 경우 중앙값으로 기준 (pivot) 선택 처리 루틴
+
+SELECT_MEDIAN_PIVOT_PROC: //중앙값으로 기준 (pivot) 선택 처리 루틴
+	/***
+		< 퀵 정렬 (중앙값 선택) - 오름차순 >
+
+		1) 이하, 방법에 따라 중앙값 선정 및 기준 (pivot)으로 사용하기 위해 맨 왼쪽으로 이동
+
+		2) 왼쪽 인덱스 요소, 가운데 인덱스 요소, 오른쪽 인덱스 요소에 대해, 중앙값인 인덱스 요소 탐색
+		: 4번의 비교 발생
+
+			2-1) 왼쪽 인덱스 요소, 가운데 인덱스 요소 중 최소 값 = a
+
+			2-2) 왼쪽 인덱스 요소, 가운데 인덱스 요소 중 최대 값 = b
+
+			2-3) b 와 오른쪽 인덱스 요소 중 최소값 = c
+
+			2-4) a 와 c 중의 최대 값 = 중앙값
+
+		3) 해당 중앙값 인덱스가 왼쪽 인덱스가 아닐 경우 왼쪽 인덱스의 요소와 해당 중앙값 인덱스의 요소 SWAP
+
+		3) 중앙값 인덱스의 요소가 맨 왼쪽으로 이동되었으며, 이를 기준 (pivot)으로 이용하여 정렬 수행
+
+		---
+
+		해당 중앙값이 순차적으로 열거 가능 한 요소들의 집합 내에서 완전한 중앙값이라고 보장 할 수 없지만,
+		이미 정렬 된 요소들에 대해 첫 번째 혹은 마지막 요소를 기준 (pivot)으로 선정 된 상황에서 정렬을 시도 할 경우 발생하는
+		각 분할마다 하나의 요소와 해당 요소를 제외한 요소들의 집합 (1 : n-1) 으로 분리되는 Worst Case 를 회피
+	***/
+
+	medianIndex = MEDIAN_ARRAY_ELEMENT_INDEX(targetEnumerableSet, srcLeftIndex, midIndex, srcRightIndex);
+
+	if (medianIndex != srcLeftIndex) // 해당 중앙값이 왼쪽 인덱스가 아닐 경우
+		SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[medianIndex], tmp);
+
+	goto SORT_PROC;
+
+SORT_PROC: //정렬 처리 루틴
 	/***
 		< 퀵 정렬 - 오름차순 >
 
@@ -325,79 +390,91 @@ size_t PartitioningProc(SortElementType targetEnumerableSet[],
 			4-2) 현재 기준 (pivot)의 최종 정렬 된 위치를 기준으로 다시 분할하기 위해 현재 기준 (pivot)의 최종 정렬 된 위치 반환
 	***/
 
-SELECTION_MEDIAN_PROC: //중앙값으로 기준 (pivot) 선택 처리 루틴
+	pivotIndex = srcLeftIndex; //기준 (pivot) 인덱스
+	orderedPivotIndex = pivotIndex; //기준 (pivot)의 최종 정렬 된 위치
+
+	for (srcLeftIndex += 1; srcLeftIndex <= srcRightIndex; srcLeftIndex++)
+	{
+		switch (orderBy)
+		{
+		case ORDER_BY::ASCENDING:
+			if (COMPARE(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[pivotIndex]) == -1) //left < pivot
+			{
+				orderedPivotIndex++;
+				SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[orderedPivotIndex], tmp);
+			}
+
+			break;
+
+		case ORDER_BY::DESCENDING:
+			if (COMPARE(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[pivotIndex]) == 1) //left > pivot
+			{
+				orderedPivotIndex++;
+				SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[orderedPivotIndex], tmp);
+			}
+
+			break;
+		}
+	}
+
+	SWAP(targetEnumerableSet[pivotIndex], targetEnumerableSet[orderedPivotIndex], tmp);
+	return orderedPivotIndex;
+
+ALTERNATIVE_SORT_PROC: //3개 이하의 요소에 대한 대체 정렬 처리 루틴
 	/***
-		< 퀵 정렬 중앙값 선택 - 오름차순 >
+		< 퀵 정렬 (3개 이하의 요소에 대한 대체 정렬 처리 루틴) - 오름차순 >
 
-		1) 이하, 방법에 따라 기준 (pivot) 선정 (정렬 방향에 따라 중앙값 선택 위한 비교 조건 변동)
+		1) 각 요소들 간 비교 및 SWAP (정렬 방향에 따라 중앙값 선택 위한 비교 조건 변동)
 
-		2) 왼쪽 인덱스의 요소, 가운데 인덱스의 요소, 오른쪽 인덱스의 요소에 대해,
+		2) 왼쪽 인덱스 요소와 가운데 인덱스 요소 비교
 
-		3) 왼쪽 인덱스 요소와 가운데 인덱스 요소 비교
+			2-1) 왼쪽 인덱스 요소 > 가운데 인덱스 요소
+			: 가운데 인덱스 요소와 왼쪽 인덱스 요소 SWAP (가운데 인덱스의 요소가 왼쪽 인덱스의 요소의 왼쪽에 위치하는 것이 올바른 정렬 된 위치)
 
-			3-1) 왼쪽 인덱스 요소 > 가운데 인덱스 요소
-			
-				3-1-1) 왼쪽 인덱스 요소 > 오른쪽 인덱스 요소
-
-				3-1-2) 왼쪽 인덱스 요소 <= 오른쪽 인덱스 요소
-
-			3-2) 왼쪽 인덱스 요소 <= 가운데 인덱스 요소
-
-
-
-
-		TODO : 기준 만족하는 요소만 맨 왼쪽으로 SWAP 할 것
-		---
-		TODO : 이하 삭제
-
-		3) 왼쪽 인덱스 요소와 가운데 인덱스 요소 비교
-
-			3-1) 왼쪽 인덱스 요소 > 가운데 인덱스 요소
-			: 현재 중앙값을 가운데 인덱스 요소로 선택
-			가운데 인덱스의 요소가 왼쪽 인덱스의 요소의 왼쪽에 위치하는 것이 올바른 정렬 된 위치므로,
-			가운데 인덱스 요소와 왼쪽 인덱스 요소 SWAP
-
-			3-2) 왼쪽 인덱스 요소 <= 가운데 인덱스 요소
+			2-2) 왼쪽 인덱스 요소 <= 가운데 인덱스 요소
 			: do nothing
 
-		4) 왼쪽 인덱스 요소와 오른쪽 인덱스 요소 비교
+		3) 왼쪽 인덱스 요소와 오른쪽 인덱스 요소 비교
 
-			4-1) 왼쪽 인덱스 요소 > 오른쪽 인덱스 요소
-			: 오른쪽 인덱스의 요소가 왼쪽 인덱스의 요소의 왼쪽에 위치하는 것이 올바른 정렬 된 위치므로,
-			왼쪽 인덱스 요소와 오른쪽 인덱스 요소 SWAP
+			3-1) 왼쪽 인덱스 요소 > 오른쪽 인덱스 요소
+			: 왼쪽 인덱스 요소와 오른쪽 인덱스 요소 SWAP (오른쪽 인덱스의 요소가 왼쪽 인덱스의 요소의 왼쪽에 위치하는 것이 올바른 정렬 된 위치)
 
-			4-2) 왼쪽 인덱스 요소 <= 오른쪽 인덱스 요소
+			3-2) 왼쪽 인덱스 요소 <= 오른쪽 인덱스 요소
 			: do nothing
 
-		5) 가운데 인덱스 요소와 오른쪽 인덱스 요소 비교
+		4) 가운데 인덱스 요소와 오른쪽 인덱스 요소 비교
 
-			5-1) 가운데 인덱스 요소 > 오른쪽 인덱스 요소
-			: 오른쪽 인덱스의 요소가 가운데 인덱스 요소의 왼쪽에 위치하는 것이 올바른 정렬 된 위치므로,
-			오른쪽 요소와 가운데 인덱스 요소 SWAP
+			4-1) 가운데 인덱스 요소 > 오른쪽 인덱스 요소
+			: 오른쪽 요소와 가운데 인덱스 요소 SWAP (오른쪽 인덱스의 요소가 가운데 인덱스 요소의 왼쪽에 위치하는 것이 올바른 정렬 된 위치)
 
-			5-2) 가운데 인덱스 요소 <= 오른쪽 인덱스 요소
+			4-2) 가운데 인덱스 요소 <= 오른쪽 인덱스 요소
 			: do nothing
 
-		6) 현재 요소 개수에 따라,
-
-			6-1) 현재 요소가 3개 이하일 경우
-			: 중앙값을 선택 시 왼쪽 인덱스, 가운데 인덱스, 오른쪽 인덱스의 요소들은 정렬되므로,
-			이후 정렬 처리 루틴 생략 및 가운데 인덱스 반환
-
-			6-2) 현재 요소가 3개 초과일 경우
-			: 현재 왼쪽 인덱스의 요소를 기준 (pivot)으로 하여, 이후 정렬 처리 루틴 수행
+		5) 현재 순차적으로 열거 가능 한 요소들의 집합내의 모든 요소들은 정렬되었으므로, 가운데 인덱스 반환
 
 		---
 
-		중앙값으로 기준 (pivot) 선택 처리 루틴에 따라, 상수 시간만큼 비교 횟수 및 SWAP 횟수가 증가
-		해당 중앙값이 순차적으로 열거 가능 한 요소들의 집합 내에서 완전한 중앙값이라고 보장 할 수 없지만, Worst Case 발생 확률을 줄일 수 있음
+		ex) 3 1 2 의 요소에 대해, 오름차순으로 기존 정렬 처리 루틴을 수행 할 경우,
+		
+			- 2번의 비교 발생
+			- 불필요한 2번의 제자리 SWAP 빌생
+			- 기준 (pivot)의 정렬 된 위치로 변경을 위한 1번의 SWAP 발생
+			- 정렬 된 순서는 1 2 3
+		
+		기준 (pivot) 3을 기준으로 다시 왼쪽에 대해 분할하여, 1 2 에 대해 다시 정렬을 수행
+		1 2 에 대해 다시 오름차순으로 기존 정렬 처리 루틴을 수행 할 경우,
+
+			- 1번의 비교 발생
+			- 불필요한 1번의 제자리 SWAP 발생
+
+		최종적으로, 총 3번의 비교 연산, 4번의 SWAP 연산 수행
+		이와 비교하여, 3 1 2 의 요소에 대해 3개 이하의 요소에 대한 대체 정렬 처리 루틴을 수행 할 경우,
+
+			- 3번의 비교 발생
+			- 2번의 SWAP 발생
+		
+		이외, 최악의 경우 (정렬하고자 하는 방법과 역순으로 정렬)에도 3번의 비교, 3번의 SWAP 연산 발생
 	***/
-	
-
-
-	size_t midIndex = (srcLeftIndex + srcRightIndex) >> 1; //가운데 인덱스
-	size_t orderedIndex;
-	SortElementType tmp;
 
 	switch (orderBy)
 	{
@@ -426,41 +503,7 @@ SELECTION_MEDIAN_PROC: //중앙값으로 기준 (pivot) 선택 처리 루틴
 		break;
 	}
 
-	if ((midIndex + 1) == srcRightIndex) //현재 요소가 3개 이하일 경우
-		return midIndex;
-
-	goto SORT_PROC; //현재 요소가 3개 초과일 경우
-
-SORT_PROC: //정렬 처리 루틴
-	size_t pivotIndex = srcLeftIndex; //기준 (pivot) 인덱스
-	size_t orderedPivotIndex = pivotIndex; //기준 (pivot)의 최종 정렬 된 위치
-
-	for (srcLeftIndex += 1; srcLeftIndex <= srcRightIndex; srcLeftIndex++)
-	{
-		switch (orderBy)
-		{
-		case ORDER_BY::ASCENDING:
-			if (COMPARE(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[pivotIndex]) == -1) //left < pivot
-			{
-				orderedPivotIndex++;
-				SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[orderedPivotIndex], tmp);
-			}
-
-			break;
-
-		case ORDER_BY::DESCENDING:
-			if (COMPARE(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[pivotIndex]) == 1) //left > pivot
-			{
-				orderedPivotIndex++;
-				SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[orderedPivotIndex], tmp);
-			}
-
-			break;
-		}
-	}
-
-	SWAP(targetEnumerableSet[pivotIndex], targetEnumerableSet[orderedPivotIndex], tmp);
-	return orderedPivotIndex;
+	return midIndex;
 }
 
 /// <summary>
@@ -479,13 +522,13 @@ void QuickSort(SortElementType targetEnumerableSet[],
 	if (srcLeftIndex >= srcRightIndex) //base case
 		return;
 
-	size_t orderedPivotIndex = 
+	size_t orderedPivotIndex =
 		PartitioningProc<SortElementType>(targetEnumerableSet, srcLeftIndex, srcRightIndex, orderBy); //정렬 된 기준 (pivot)의 인덱스
 
 	if (orderedPivotIndex > 0) //underflow 방지
 		QuickSort<SortElementType>(targetEnumerableSet,
 			srcLeftIndex, orderedPivotIndex - 1, orderBy); //정렬 된 기준 (pivot)의 왼쪽에 대해 다시 분할
-	
+
 	if (orderedPivotIndex < SIZE_MAX) //overflow 방지
 		QuickSort<SortElementType>(targetEnumerableSet,
 			orderedPivotIndex + 1, srcRightIndex, orderBy); //정렬 된 기준 (pivot)의 오른쪽에 대해 다시 분할
@@ -502,13 +545,13 @@ void QuickSort(SortElementType targetEnumerableSet[],
 	//왼쪽 인덱스, 오른쪽 인덱스 순으로 push, 오른쪽 인덱스, 왼쪽 인덱스 순으로 pop
 	stack[top++] = srcLeftIndex;
 	stack[top++] = srcRightIndex;
-	
+
 	while (top > 0) //pop, PartitioningProc
 	{
 		srcRightIndex = stack[--top];
 		srcLeftIndex = stack[--top];
 
-		size_t orderedPivotIndex = 
+		size_t orderedPivotIndex =
 			PartitioningProc<SortElementType>(targetEnumerableSet, srcLeftIndex, srcRightIndex, orderBy); //정렬 된 기준 (pivot)의 인덱스
 
 		if (orderedPivotIndex > 0) //underflow 방지
@@ -518,7 +561,7 @@ void QuickSort(SortElementType targetEnumerableSet[],
 				stack[top++] = orderedPivotIndex - 1;
 			}
 
-		if(orderedPivotIndex < SIZE_MAX) //overflow 방지
+		if (orderedPivotIndex < SIZE_MAX) //overflow 방지
 			if (orderedPivotIndex + 1 < srcRightIndex) //정렬 된 기준 (pivot)의 오른쪽에 대해 요소가 존재 할 경우 다시 분할
 			{
 				stack[top++] = orderedPivotIndex + 1;

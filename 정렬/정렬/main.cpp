@@ -1,7 +1,7 @@
 #include "Core.h"
 
-static const int ELEMENT_COUNT = 1000; //요소 개수
-static const int TEST_PASSES = 10; //테스트 횟수
+static const int ELEMENT_COUNT = 100; //요소 개수
+static const int TEST_PASSES = 100; //테스트 횟수
 static const int LOGGING_LEVEL = 0; //로깅 레벨 (0 : 출력 안함, 1 : 간략한 내용, 2 : 상세 내용 (중간 과정 출력 위한 수행 시간 오차 발생))
 static const bool VALIDATE_AFTER_SORT = true; //정렬 후 정렬 된 집합에 대한 유효성 검사 수행
 
