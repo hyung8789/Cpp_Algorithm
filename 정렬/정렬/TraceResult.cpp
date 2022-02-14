@@ -22,7 +22,7 @@ void TRACE_RESULT::ClearAll()
 /// </summary>
 /// <param name="sortFuncNameStr">정렬 함수 이름 문자열</param>
 /// <param name="totalTestPassCount">전체 Test Pass 횟수</param>
-void TRACE_RESULT::DispTotalTestPassTraceResult(const char* sortFuncNameStr, size_t totalTestPassCount)
+void TRACE_RESULT::DispTotalTestPassTraceResult(const char* sortFuncNameStr, size_t totalTestPassCount) const
 {
 	std::cout << sortFuncNameStr << " ----------------------------------------------\n";
 	std::cout << ">> 전체 Pass의 총 소요 시간 : " << this->_accDuration.count() << "ns\n";
@@ -49,7 +49,7 @@ void TRACE_RESULT::IncreaseCompareCount()
 /// 자신의 비교 횟수 반환
 /// </summary>
 /// <returns>비교 횟수</returns>
-size_t TRACE_RESULT::GetCompareCount()
+size_t TRACE_RESULT::GetCompareCount() const
 {
 	return this->_compareCount;
 }
@@ -58,7 +58,7 @@ size_t TRACE_RESULT::GetCompareCount()
 /// 자신의 비교 횟수 출력
 /// </summary>
 /// <param name="sortFuncNameStr">정렬 함수 이름 문자열</param>
-void TRACE_RESULT::DispCompareCount(const char* sortFuncNameStr)
+void TRACE_RESULT::DispCompareCount(const char* sortFuncNameStr) const
 {
 	mutex.lock();
 

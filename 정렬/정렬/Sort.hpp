@@ -9,12 +9,20 @@
 #define MIN(x, y) (COMPARE(x, y) == 1 ? y : x) //x > y : y, x <= y : x
 #define MEDIAN(x, y, z) MAX(MIN(x, y), MIN(MAX(x, y), z)) //ex) x < y && x > z : x
 
+#define MAX_ARRAY_ELEMENT(array, idx1, idx2) \
+(COMPARE(array[idx1], array[idx2]) == 1 ? array[idx1] : array[idx2]) //array[idx1] > array[idx2] : array[idx1], array[idx1] <= array[idx2] : array[idx2]
+#define MIN_ARRAY_ELEMENT(array, idx1, idx2) \
+(COMPARE(array[idx1], array[idx2]) == 1 ? array[idx2] : array[idx1]) //array[idx1] > array[idx2] : array[idx2], array[idx1] <= array[idx2] : array[idx1]
+#define MEDIAN_ARRAY_ELEMENT(array, idx1, idx2, idx3) \
+MAX_ARRAY_ELEMENT(array, \
+MIN_ARRAY_ELEMENT(array, idx1, idx2), \
+MIN_ARRAY_ELEMENT(array, \
+MAX_ARRAY_ELEMENT(array, idx1, idx2), idx3)) //ex) x < y && x > z : x
+
 #define MAX_ARRAY_ELEMENT_INDEX(array, idx1, idx2) \
 (COMPARE(array[idx1], array[idx2]) == 1 ? idx1 : idx2) //array[idx1] > array[idx2] : idx1, array[idx1] <= array[idx2] : idx2
-
 #define MIN_ARRAY_ELEMENT_INDEX(array, idx1, idx2) \
 (COMPARE(array[idx1], array[idx2]) == 1 ? idx2 : idx1) //array[idx1] > array[idx2] : idx2, array[idx1] <= array[idx2] : idx1
-
 #define MEDIAN_ARRAY_ELEMENT_INDEX(array, idx1, idx2, idx3) \
 MAX_ARRAY_ELEMENT_INDEX(array, \
 MIN_ARRAY_ELEMENT_INDEX(array, idx1, idx2), \
@@ -33,9 +41,9 @@ extern enum class SORT_UNIQUE_MAPPED_INDEX;
 extern struct SORT_METADATA;
 extern class SORT_MAPPER;
 
-#define ALTERNATIVE_COMPARE(x, y) SORT_MAPPER::GetInstance().\
-GetRefSortMetaData(SORT_MAPPER::GetInstance().SortFuncNameStrToUniqueMappedIndex(__func__)).\
-_traceResult.IncreaseCompareCount(), \
+#define ALTERNATIVE_COMPARE(x, y) SORT_MAPPER::GetInstance(). \
+GetRefTraceResult(SORT_MAPPER::GetInstance().SortFuncNameStrToSortUniqueMappedIndex(__func__)). \
+IncreaseCompareCount(), \
 ((x) > (y) ? 1 : (x) == (y) ? 0 : -1) //x > y : 1, x == y : 0, x < y : -1
 #define COMPARE(x, y) ALTERNATIVE_COMPARE(x, y) //비교 횟수 카운트 위한 호출 측 함수명 이용
 #endif
@@ -207,6 +215,39 @@ void SelectionSort(SortElementType targetEnumerableSet[],
 	size_t elementCount, ORDER_BY orderBy = ORDER_BY::ASCENDING)
 {
 	//TODO : 선택 정렬
+	/***
+		< 선택 정렬 - 오름차순 >
+
+
+	***/
+
+	size_t swapTargetIndex; //정렬 된 조건을 만족하는 SWAP 대상 인덱스
+	SortElementType tmp;
+
+	for (size_t i = 0; i < elementCount; i++) //각 정렬 대상에 대해
+	{
+		swapTargetIndex = i;
+
+		for (size_t j = i+1; j < elementCount; j++) //현재 정렬 대상을 제외한 요소들에 대해
+		{
+			switch (orderBy)
+			{
+			case ORDER_BY::ASCENDING:
+				if (COMPARE(targetEnumerableSet[swapTargetIndex], targetEnumerableSet[j]) == 1) //a > b
+					swapTargetIndex = j;
+
+				break;
+
+			case ORDER_BY::DESCENDING:
+				if (COMPARE(targetEnumerableSet[swapTargetIndex], targetEnumerableSet[j]) == -1) //a < b
+					swapTargetIndex = j;
+
+				break;
+			}
+		}
+
+		SWAP(targetEnumerableSet[i], targetEnumerableSet[swapTargetIndex], tmp);
+	}
 }
 
 /// <summary>
@@ -316,8 +357,10 @@ size_t PartitioningProc(SortElementType targetEnumerableSet[],
 
 	SortElementType tmp;
 
-	if ((midIndex + 1) >= srcRightIndex) //현재 요소가 3개 이하일 경우
-		goto ALTERNATIVE_SORT_PROC; //3개 이하의 요소에 대한 대체 정렬 처리 루틴
+	if (srcLeftIndex + 1 == srcRightIndex) //현재 요소가 2개인 경우
+		goto SORT_PROC; //중앙값 선택하지 않고, 정렬 처리 루틴
+	else if ((midIndex + 1) == srcRightIndex) //현재 요소가 3개인 경우
+		goto ALTERNATIVE_SORT_PROC; //3개의 요소에 대한 대체 정렬 처리 루틴
 
 	goto SELECT_MEDIAN_PIVOT_PROC; //현재 요소가 3개 초과일 경우 중앙값으로 기준 (pivot) 선택 처리 루틴
 
@@ -420,9 +463,9 @@ SORT_PROC: //정렬 처리 루틴
 	SWAP(targetEnumerableSet[pivotIndex], targetEnumerableSet[orderedPivotIndex], tmp);
 	return orderedPivotIndex;
 
-ALTERNATIVE_SORT_PROC: //3개 이하의 요소에 대한 대체 정렬 처리 루틴
+ALTERNATIVE_SORT_PROC: //3개의 요소에 대한 대체 정렬 처리 루틴
 	/***
-		< 퀵 정렬 (3개 이하의 요소에 대한 대체 정렬 처리 루틴) - 오름차순 >
+		< 퀵 정렬 (3개의 요소에 대한 대체 정렬 처리 루틴) - 오름차순 >
 
 		1) 각 요소들 간 비교 및 SWAP (정렬 방향에 따라 중앙값 선택 위한 비교 조건 변동)
 
@@ -457,23 +500,22 @@ ALTERNATIVE_SORT_PROC: //3개 이하의 요소에 대한 대체 정렬 처리 루틴
 		ex) 3 1 2 의 요소에 대해, 오름차순으로 기존 정렬 처리 루틴을 수행 할 경우,
 
 			- 2번의 비교 발생
-			- 불필요한 2번의 제자리 SWAP 빌생
-			- 기준 (pivot)의 정렬 된 위치로 변경을 위한 1번의 SWAP 발생
-			- 정렬 된 순서는 1 2 3
+			- 2번의 제자리 SWAP 빌생
+			- 기준 (pivot)의 정렬 된 위치로 변경을 위한 1번의 SWAP 발생 (정렬 된 순서는 1 2 3)
 
 		기준 (pivot) 3을 기준으로 다시 왼쪽에 대해 분할하여, 1 2 에 대해 다시 정렬을 수행
 		1 2 에 대해 다시 오름차순으로 기존 정렬 처리 루틴을 수행 할 경우,
 
 			- 1번의 비교 발생
-			- 불필요한 1번의 제자리 SWAP 발생
+			- 1번의 제자리 SWAP 발생
 
 		최종적으로, 총 3번의 비교 연산, 4번의 SWAP 연산 수행
-		이와 비교하여, 3 1 2 의 요소에 대해 3개 이하의 요소에 대한 대체 정렬 처리 루틴을 수행 할 경우,
+		이와 비교하여, 3 1 2 의 요소에 대해 3개의 요소에 대한 대체 정렬 처리 루틴을 수행 할 경우,
 
 			- 3번의 비교 발생
 			- 2번의 SWAP 발생
 
-		이외, 최악의 경우 (정렬하고자 하는 방법과 역순으로 정렬)에도 3번의 비교, 3번의 SWAP 연산 발생
+		최악의 경우 (정렬하고자 하는 방법과 역순으로 정렬)에도 3번의 비교, 3번의 SWAP 연산 발생
 	***/
 
 	switch (orderBy)

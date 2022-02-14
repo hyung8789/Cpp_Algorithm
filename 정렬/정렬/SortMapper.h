@@ -12,7 +12,7 @@ enum class SORT_UNIQUE_MAPPED_INDEX : const int
 	INSERTION_SORT,
 	QUICK_SORT,
 //	MERGE_SORT,
-	//SELECTION_SORT,
+	SELECTION_SORT,
 	TOTAL_SORT_FUNC_COUNT //전체 정렬 함수 개수
 }; //정렬의 고유 사상 인덱스
 
@@ -33,10 +33,10 @@ public:
 	static SORT_MAPPER& GetInstance();
 	void Dispose();
 
-	const char* SortUniqueMappedIndexToSortFuncNameStr(SORT_UNIQUE_MAPPED_INDEX);
-	SORT_UNIQUE_MAPPED_INDEX SortFuncNameStrToUniqueMappedIndex(const char*);
+	const char* SortUniqueMappedIndexToSortFuncNameStr(SORT_UNIQUE_MAPPED_INDEX) const;
+	SORT_UNIQUE_MAPPED_INDEX SortFuncNameStrToSortUniqueMappedIndex(const char*) const;
 
-	SORT_METADATA& GetRefSortMetaData(SORT_UNIQUE_MAPPED_INDEX);
+	const SORT_METADATA& GetSortMetaData(SORT_UNIQUE_MAPPED_INDEX) const;
 	TRACE_RESULT& GetRefTraceResult(SORT_UNIQUE_MAPPED_INDEX);
 
 private:

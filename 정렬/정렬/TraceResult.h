@@ -10,10 +10,10 @@ public:
 
 	void ClearAll();
 
-	void DispTotalTestPassTraceResult(const char*, size_t);
+	void DispTotalTestPassTraceResult(const char*, size_t) const;
 	void IncreaseCompareCount();
-	size_t GetCompareCount();
-	void DispCompareCount(const char*);
+	size_t GetCompareCount() const;
+	void DispCompareCount(const char*) const;
 
 	TRACE_RESULT& operator+=(const TRACE_RESULT&);
 	TRACE_RESULT& operator+=(const std::chrono::nanoseconds&);

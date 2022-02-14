@@ -1,7 +1,7 @@
 #include "Core.h"
 
-static const int ELEMENT_COUNT = 5000; //요소 개수
-static const int TEST_PASSES = 1; //테스트 횟수
+static const int ELEMENT_COUNT = 50; //요소 개수
+static const int TEST_PASSES = 12; //테스트 횟수
 static const int LOGGING_LEVEL = 0; //로깅 레벨 (0 : 출력 안함, 1 : 간략한 내용, 2 : 상세 내용 (중간 과정 출력 위한 수행 시간 오차 발생))
 static const bool VALIDATE_AFTER_SORT = true; //정렬 후 정렬 된 집합에 대한 유효성 검사 수행
 
@@ -63,7 +63,7 @@ int main()
 
 				threadArray[i] = std::thread(RunSinglePassSortTrace<MySortElementType>,
 					SORT_MAPPER::GetInstance().SortUniqueMappedIndexToSortFuncNameStr(sortUniqueMappedIndex),
-					SORT_MAPPER::GetInstance().GetRefSortMetaData(sortUniqueMappedIndex)._sortFuncAddr,
+					SORT_MAPPER::GetInstance().GetSortMetaData(sortUniqueMappedIndex)._sortFuncAddr,
 					&copiedData[i * ELEMENT_COUNT], ELEMENT_COUNT,
 					std::ref(promiseArray[i]));
 			}
@@ -89,7 +89,7 @@ int main()
 		{
 			SORT_UNIQUE_MAPPED_INDEX sortUniqueMappedIndex = (SORT_UNIQUE_MAPPED_INDEX)i;
 			const char* sortFuncNameStr = SORT_MAPPER::GetInstance().SortUniqueMappedIndexToSortFuncNameStr(sortUniqueMappedIndex);
-			SORT_METADATA& sortMetaData = SORT_MAPPER::GetInstance().GetRefSortMetaData(sortUniqueMappedIndex);
+			const SORT_METADATA& sortMetaData = SORT_MAPPER::GetInstance().GetSortMetaData(sortUniqueMappedIndex);
 
 			sortMetaData._traceResult.DispTotalTestPassTraceResult(sortFuncNameStr, TEST_PASSES);
 		}

@@ -64,7 +64,7 @@ void SORT_MAPPER::Dispose()
 /// </summary>
 /// <param name="index">정렬의 고유 사상 인덱스</param>
 /// <returns>정렬 함수 이름 문자열</returns>
-const char* SORT_MAPPER::SortUniqueMappedIndexToSortFuncNameStr(SORT_UNIQUE_MAPPED_INDEX index)
+const char* SORT_MAPPER::SortUniqueMappedIndexToSortFuncNameStr(SORT_UNIQUE_MAPPED_INDEX index) const
 {
 	return this->_sortMetaDataTable[(const int)index]._sortFuncName;
 }
@@ -74,7 +74,7 @@ const char* SORT_MAPPER::SortUniqueMappedIndexToSortFuncNameStr(SORT_UNIQUE_MAPP
 /// </summary>
 /// <param name="sortFuncNameStr">정렬 함수 이름 문자열</param>
 /// <returns>정렬의 고유 사상 인덱스</returns>
-SORT_UNIQUE_MAPPED_INDEX SORT_MAPPER::SortFuncNameStrToUniqueMappedIndex(const char* sortFuncNameStr)
+SORT_UNIQUE_MAPPED_INDEX SORT_MAPPER::SortFuncNameStrToSortUniqueMappedIndex(const char* sortFuncNameStr) const
 {
 	for (int i = 0; i < (const int)SORT_UNIQUE_MAPPED_INDEX::TOTAL_SORT_FUNC_COUNT; i++)
 	{
@@ -90,11 +90,11 @@ SORT_UNIQUE_MAPPED_INDEX SORT_MAPPER::SortFuncNameStrToUniqueMappedIndex(const c
 }
 
 /// <summary>
-/// 정렬의 고유 사상 인덱스에 대한 정렬에 대한 메타데이터 참조 반환
+/// 정렬의 고유 사상 인덱스에 대한 정렬에 대한 읽기 전용 메타데이터 참조 반환
 /// </summary>
 /// <param name="index">정렬의 고유 사상 인덱스</param>
-/// <returns>정렬의 고유 사상 인덱스에 대한 정렬에 대한 메타데이터 참조</returns>
-SORT_METADATA& SORT_MAPPER::GetRefSortMetaData(SORT_UNIQUE_MAPPED_INDEX index)
+/// <returns>정렬의 고유 사상 인덱스에 대한 정렬에 대한 읽기 전용 메타데이터 참조</returns>
+const SORT_METADATA& SORT_MAPPER::GetSortMetaData(SORT_UNIQUE_MAPPED_INDEX index) const
 {
 	return this->_sortMetaDataTable[(const int)index];
 }
@@ -119,6 +119,9 @@ SORT_MAPPER::SORT_MAPPER()
 
 	this->_sortMetaDataTable[(const int)SORT_UNIQUE_MAPPED_INDEX::INSERTION_SORT]
 		= SORT_METADATA(InsertionSort<MySortElementType>, "InsertionSort");
+
+	this->_sortMetaDataTable[(const int)SORT_UNIQUE_MAPPED_INDEX::SELECTION_SORT]
+		= SORT_METADATA(SelectionSort<MySortElementType>, "SelectionSort");
 
 	// https://stackoverflow.com/questions/44049407/c-compilation-fails-on-calling-overloaded-function-in-stdthread
 	//오버로딩 된 템플릿 함수를 thread 생성 시 컴파일러가 추론 할 수 없으므로, 컴파일 타임에 정적 캐스트
