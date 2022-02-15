@@ -110,6 +110,27 @@ IncreaseCompareCount(), \
 
 	---
 
+	< 선택 정렬의 요소들 간 비교 횟수 >
+
+	n : 순차적으로 열거 가능 한 요소들의 집합의 요소들의 개수
+
+	ex) 요소가 6개일 때, 첫 번째 루프에서 정렬 대상과 정렬 대상을 제외한 나머지 요소들 중 정렬 된 조건을 만족하는 요소를 찾기 위해 5번 비교
+	각 루프 완료 후 비교 범위 1씩 감소
+	5 + 4 + 3 + 2 + 1
+	= 6 (집합 내에서 앞, 뒤의 요소 쌍의 합) * 2 (집합 내에서 앞, 뒤의 요소 쌍의 개수) + 3 (쌍이 되지 못한 나머지)
+	= 6 (집합 내에서 앞, 뒤의 요소 쌍의 합) * 2.5 (집합 내에서 앞, 뒤의 요소 쌍의 개수 (n이 짝수 일 경우, 쌍이 되지 못한 나머지가 포함))
+
+	1 + 2 + 3 + ... + (n-2) + (n-1)
+	집합 내에서 앞, 뒤의 요소 쌍의 합 = n
+	집합 내에서 앞, 뒤의 요소 쌍의 개수 (n이 짝수 일 경우, 쌍이 되지 못한 나머지가 포함) = (n-1) / 2 이므로,
+	1 + 2 + 3 + ... + (n-2) + (n-1) = (n-1) + (n-2) + ... + 2 + 1 = n * ((n-1) / 2)
+
+	선택 정렬은 항상 정렬 대상을 제외한 나머지 요소들 중 정렬 된 조건을 만족하는 요소를 찾기 위해
+	정렬 대상을 제외한 나머지 요소들에 대해 모두 비교가 발생하므로, 
+	어떠한 데이터 패턴에도 동일 한 비교 횟수를 가짐
+
+	---
+
 	< 퀵 정렬의 요소들 간 비교 횟수 >
 
 	https://www.interviewbit.com/tutorial/quicksort-algorithm/#h827ske1ht0ea2fcemd1dxxl7u1ndu40q
@@ -156,13 +177,11 @@ void BubbleSort(SortElementType targetEnumerableSet[],
 		2) 현재 비교 대상 범위 내의 모든 요소들을 이웃 요소끼리 순차적으로 비교 (정렬 방향에 따라 비교 조건 변동)
 		: 인덱스 0와 인덱스 1의 요소, 인덱스 1과 인덱스 2의 요소...
 
-			2-1) 비교 중인 뒤의 요소가 이웃 한 바로 앞의 요소보다 작을 경우
+			2-1) 비교 중인 뒤의 요소 < 이웃 한 바로 앞의 요소
+			: 두 요소를 SWAP
 
-				2-1-1) 두 요소를 SWAP
-
-			2-2) 비교 중인 뒤의 요소가 이웃 한 바로 앞의 요소보다 크거나 같을 경우
-
-				2-2-1) 두 요소를 SWAP 하지 않고, 다음 이웃 한 요소들에 대해 계속 비교
+			2-2) 비교 중인 뒤의 요소 >= 이웃 한 바로 앞의 요소
+			: 두 요소를 SWAP 하지 않고, 다음 이웃 한 요소들에 대해 계속 비교
 
 		3) 현재 비교 대상 범위 내의 마지막 요소는 정렬 된 조건을 만족하므로, 다음 비교 대상 범위에서 제외 (비교 대상 범위 1 감소)
 	***/
@@ -204,21 +223,37 @@ void BubbleSort(SortElementType targetEnumerableSet[],
 }
 
 /// <summary>
-/// 선택 정렬
+/// 선택 정렬 (Best, Worst, Average Case : O(n^2))
 /// </summary>
-/// <typeparam name="SortElementType"></typeparam>
-/// <param name="targetEnumerableSet"></param>
-/// <param name="elementCount"></param>
-/// <param name="orderBy"></param>
+/// <typeparam name="SortElementType">정렬 요소 타입</typeparam>
+/// <param name="targetEnumerableSet">순차적으로 열거 가능 한 요소들의 집합</param>
+/// <param name="elementCount">순차적으로 열거 가능 한 요소들의 집합의 요소들의 개수</param>
+/// <param name="orderBy">정렬 방향</param>
 template<typename SortElementType>
 void SelectionSort(SortElementType targetEnumerableSet[],
 	size_t elementCount, ORDER_BY orderBy = ORDER_BY::ASCENDING)
 {
-	//TODO : 선택 정렬
 	/***
 		< 선택 정렬 - 오름차순 >
 
+		! 인간이 어떠한 집합 내에서 요소들을 정렬할 때 가장 일반적으로 수행하는 것처럼 하되,
+		차이점은 정렬 조건을 만족하는 요소를 탐색할 경우, 단순히 앞으로 삽입하는 것이 아니라, 현재 정렬 대상 요소와 SWAP 수행
 
+		1) 최초 비교 대상 범위는 순차적으로 열거 가능 한 요소들의 집합 내의 모든 요소들에 대해 시작
+
+		2) 최초 정렬 대상은 순차적으로 열거 가능 한 요소들의 집합 내의 처음 요소에 대해 시작
+
+		3) 현재 정렬 대상과 현재 비교 대상 범위 내의 모든 요소들에 대해 순차적으로 비교 (정렬 방향에 따라 비교 조건 변동)
+
+			3-1) 현재 정렬 대상 < 비교 대상 범위 내의 비교 중인 어떠한 요소
+			: 해당 비교 대상 범위 내의 비교 중인 어떠한 요소를 정렬 된 조건을 만족하는 요소로 마킹
+
+			3-2) 현재 정렬 대상 >= 비교 대상 범위 내의 비교 중인 어떠한 요소
+			: do nothing
+
+		4) 마킹 된 정렬 된 조건을 만족하는 요소와 현재 정렬 대상 요소 SWAP
+
+		5) 현재 비교 대상 범위 내의 정렬 대상 요소는 정렬 된 조건을 만족하므로, 다음 비교 대상 범위에서 제외 (비교 대상 범위 1 감소)
 	***/
 
 	size_t swapTargetIndex; //정렬 된 조건을 만족하는 SWAP 대상 인덱스
@@ -228,7 +263,7 @@ void SelectionSort(SortElementType targetEnumerableSet[],
 	{
 		swapTargetIndex = i;
 
-		for (size_t j = i+1; j < elementCount; j++) //현재 정렬 대상을 제외한 요소들에 대해
+		for (size_t j = i + 1; j < elementCount; j++) //현재 정렬 대상을 제외한 요소들에 대해
 		{
 			switch (orderBy)
 			{
@@ -268,7 +303,7 @@ void InsertionSort(SortElementType targetEnumerableSet[],
 
 		2) 현재 비교 대상 범위 내에서 마지막 요소를 이웃 한 바로 앞의 요소와 비교 (정렬 방향에 따라 비교 조건 변동)
 
-			2-1) 비교 중인 뒤의 요소가 이웃 한 바로 앞의 요소보다 작을 경우
+			2-1) 비교 중인 뒤의 요소 < 이웃 한 바로 앞의 요소
 
 				2-1-1) 현재 비교 대상 범위 내에서 비교 중인 뒤의 요소가 삽입 될 적절한 위치를 현재 비교 대상 범위의 처음부터 순차적으로 탐색
 
@@ -276,9 +311,8 @@ void InsertionSort(SortElementType targetEnumerableSet[],
 
 				2-1-3) 비교 중인 뒤의 요소를 빈 위치에 삽입
 
-			2-2) 비교 중인 뒤의 요소가 이웃 한 바로 앞의 요소보다 클 경우
-
-				2-2-1) 현재 비교 대상 범위 내의 마지막 요소는 정렬 된 조건을 만족하므로, 현재 비교 대상 범위 1 증가
+			2-2) 비교 중인 뒤의 요소 >= 이웃 한 바로 앞의 요소
+			: 현재 비교 대상 범위 내의 마지막 요소는 정렬 된 조건을 만족하므로, 현재 비교 대상 범위 1 증가
 	***/
 
 	SortElementType tmp;
@@ -349,7 +383,7 @@ template<typename SortElementType>
 size_t PartitioningProc(SortElementType targetEnumerableSet[],
 	size_t srcLeftIndex, size_t srcRightIndex, ORDER_BY orderBy = ORDER_BY::ASCENDING)
 {
-	size_t midIndex = (srcLeftIndex + srcRightIndex) >> 1; //가운데 인덱스 (왼쪽 인덱스, 오른쪽 인덱스에 대한)
+	size_t midIndex = srcLeftIndex + ((srcRightIndex - srcLeftIndex) >> 1); //base : srcLeftIndex, offset : srcRightIndex와 srcLeftIndex의 중간만큼 증가 (overflow 방지)
 	size_t medianIndex; //중앙값 인덱스 (왼쪽 인덱스, 가운데 인덱스, 오른쪽 인덱스에 대한)
 
 	size_t pivotIndex; //기준 (pivot) 인덱스
@@ -358,9 +392,128 @@ size_t PartitioningProc(SortElementType targetEnumerableSet[],
 	SortElementType tmp;
 
 	if (srcLeftIndex + 1 == srcRightIndex) //현재 요소가 2개인 경우
-		goto SORT_PROC; //중앙값 선택하지 않고, 정렬 처리 루틴
+	{
+		/***
+			< 퀵 정렬 (2개의 요소에 대한 대체 정렬 처리) - 오름차순 >
+
+			1) 두 요소들 간 비교 및 SWAP (정렬 방향에 따라 중앙값 선택 위한 비교 조건 변동)
+
+			2) 왼쪽 인덱스 요소와 오른쪽 인덱스 요소 비교
+
+				2-1) 왼쪽 인덱스 요소 > 오른쪽 인덱스 요소
+				: 왼쪽 인덱스 요소와 오른쪽 인덱스 요소 SWAP (오른쪽 인덱스의 요소가 왼쪽 인덱스의 요소의 왼쪽에 위치하는 것이 올바른 정렬 된 위치)
+
+				2-2) 왼쪽 인덱스 요소 <= 가운데 인덱스 요소
+				: do nothing
+
+			3) 현재 순차적으로 열거 가능 한 요소들의 집합내의 모든 요소들은 정렬되었으므로, 왼쪽 인덱스 반환
+
+			---
+
+			기존의 정렬 처리 루틴의 1회의 제자리 SWAP 연산을 없애기 위해
+			두 요소 간 비교 및 필요 할 경우 SWAP 수행
+		***/
+
+		switch (orderBy)
+		{
+		case ORDER_BY::ASCENDING:
+			if (COMPARE(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[srcRightIndex]) == 1) //left > right
+				SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[srcRightIndex], tmp);
+			break;
+
+		case ORDER_BY::DESCENDING:
+			if (COMPARE(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[srcRightIndex]) == -1) //left < right
+				SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[srcRightIndex], tmp);
+			break;
+		}
+
+		return srcLeftIndex;
+	}
 	else if ((midIndex + 1) == srcRightIndex) //현재 요소가 3개인 경우
-		goto ALTERNATIVE_SORT_PROC; //3개의 요소에 대한 대체 정렬 처리 루틴
+	{
+		/***
+			< 퀵 정렬 (3개의 요소에 대한 대체 정렬 처리) - 오름차순 >
+
+			1) 각 요소들 간 비교 및 SWAP (정렬 방향에 따라 중앙값 선택 위한 비교 조건 변동)
+
+			2) 왼쪽 인덱스 요소와 가운데 인덱스 요소 비교
+
+				2-1) 왼쪽 인덱스 요소 > 가운데 인덱스 요소
+				: 가운데 인덱스 요소와 왼쪽 인덱스 요소 SWAP (가운데 인덱스의 요소가 왼쪽 인덱스의 요소의 왼쪽에 위치하는 것이 올바른 정렬 된 위치)
+
+				2-2) 왼쪽 인덱스 요소 <= 가운데 인덱스 요소
+				: do nothing
+
+			3) 왼쪽 인덱스 요소와 오른쪽 인덱스 요소 비교
+
+				3-1) 왼쪽 인덱스 요소 > 오른쪽 인덱스 요소
+				: 왼쪽 인덱스 요소와 오른쪽 인덱스 요소 SWAP (오른쪽 인덱스의 요소가 왼쪽 인덱스의 요소의 왼쪽에 위치하는 것이 올바른 정렬 된 위치)
+
+				3-2) 왼쪽 인덱스 요소 <= 오른쪽 인덱스 요소
+				: do nothing
+
+			4) 가운데 인덱스 요소와 오른쪽 인덱스 요소 비교
+
+				4-1) 가운데 인덱스 요소 > 오른쪽 인덱스 요소
+				: 오른쪽 요소와 가운데 인덱스 요소 SWAP (오른쪽 인덱스의 요소가 가운데 인덱스 요소의 왼쪽에 위치하는 것이 올바른 정렬 된 위치)
+
+				4-2) 가운데 인덱스 요소 <= 오른쪽 인덱스 요소
+				: do nothing
+
+			5) 현재 순차적으로 열거 가능 한 요소들의 집합내의 모든 요소들은 정렬되었으므로, 가운데 인덱스 반환
+
+			---
+
+			ex) 3 1 2 의 요소에 대해, 오름차순으로 기존 정렬 처리 루틴을 수행 할 경우,
+
+			- 2번의 비교 발생
+			- 2번의 제자리 SWAP 빌생
+			- 기준 (pivot)의 정렬 된 위치로 변경을 위한 1번의 SWAP 발생 (정렬 된 순서는 1 2 3)
+
+			기준 (pivot) 3을 기준으로 다시 왼쪽에 대해 분할하여, 1 2 에 대해 다시 정렬을 수행
+			1 2 에 대해 다시 오름차순으로 기존 정렬 처리 루틴을 수행 할 경우,
+
+			- 1번의 비교 발생
+			- 1번의 제자리 SWAP 발생
+
+			최종적으로, 총 3번의 비교 연산, 4번의 SWAP 연산 수행
+			이와 비교하여, 3 1 2 의 요소에 대해 3개의 요소에 대한 대체 정렬 처리 루틴을 수행 할 경우,
+
+			- 3번의 비교 발생
+			- 2번의 SWAP 발생
+
+			최악의 경우 (정렬하고자 하는 방법과 역순으로 정렬 된 상황)에 3번의 비교, 3번의 SWAP 연산 발생
+		***/
+
+		switch (orderBy)
+		{
+		case ORDER_BY::ASCENDING:
+			if (COMPARE(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[midIndex]) == 1) //left > mid
+				SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[midIndex], tmp);
+
+			if (COMPARE(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[srcRightIndex]) == 1) //left > right
+				SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[srcRightIndex], tmp);
+
+			if (COMPARE(targetEnumerableSet[midIndex], targetEnumerableSet[srcRightIndex]) == 1) //mid > right
+				SWAP(targetEnumerableSet[midIndex], targetEnumerableSet[srcRightIndex], tmp);
+
+			break;
+
+		case ORDER_BY::DESCENDING:
+			if (COMPARE(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[midIndex]) == -1) //left < mid
+				SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[midIndex], tmp);
+
+			if (COMPARE(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[srcRightIndex]) == -1) //left < right
+				SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[srcRightIndex], tmp);
+
+			if (COMPARE(targetEnumerableSet[midIndex], targetEnumerableSet[srcRightIndex]) == -1) //mid < right
+				SWAP(targetEnumerableSet[midIndex], targetEnumerableSet[srcRightIndex], tmp);
+
+			break;
+		}
+
+		return midIndex;
+	}
 
 	goto SELECT_MEDIAN_PIVOT_PROC; //현재 요소가 3개 초과일 경우 중앙값으로 기준 (pivot) 선택 처리 루틴
 
@@ -383,7 +536,7 @@ SELECT_MEDIAN_PIVOT_PROC: //중앙값으로 기준 (pivot) 선택 처리 루틴
 
 		3) 해당 중앙값 인덱스가 왼쪽 인덱스가 아닐 경우 왼쪽 인덱스의 요소와 해당 중앙값 인덱스의 요소 SWAP
 
-		3) 중앙값 인덱스의 요소가 맨 왼쪽으로 이동되었으며, 이를 기준 (pivot)으로 이용하여 정렬 수행
+		4) 중앙값 인덱스의 요소가 맨 왼쪽으로 이동되었으며, 이를 기준 (pivot)으로 이용하여 정렬 수행
 
 		---
 
@@ -394,7 +547,7 @@ SELECT_MEDIAN_PIVOT_PROC: //중앙값으로 기준 (pivot) 선택 처리 루틴
 
 	medianIndex = MEDIAN_ARRAY_ELEMENT_INDEX(targetEnumerableSet, srcLeftIndex, midIndex, srcRightIndex);
 
-	if (medianIndex != srcLeftIndex) // 해당 중앙값이 왼쪽 인덱스가 아닐 경우
+	if (medianIndex != srcLeftIndex) //해당 중앙값이 왼쪽 인덱스가 아닐 경우
 		SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[medianIndex], tmp);
 
 	goto SORT_PROC;
@@ -462,90 +615,6 @@ SORT_PROC: //정렬 처리 루틴
 
 	SWAP(targetEnumerableSet[pivotIndex], targetEnumerableSet[orderedPivotIndex], tmp);
 	return orderedPivotIndex;
-
-ALTERNATIVE_SORT_PROC: //3개의 요소에 대한 대체 정렬 처리 루틴
-	/***
-		< 퀵 정렬 (3개의 요소에 대한 대체 정렬 처리 루틴) - 오름차순 >
-
-		1) 각 요소들 간 비교 및 SWAP (정렬 방향에 따라 중앙값 선택 위한 비교 조건 변동)
-
-		2) 왼쪽 인덱스 요소와 가운데 인덱스 요소 비교
-
-			2-1) 왼쪽 인덱스 요소 > 가운데 인덱스 요소
-			: 가운데 인덱스 요소와 왼쪽 인덱스 요소 SWAP (가운데 인덱스의 요소가 왼쪽 인덱스의 요소의 왼쪽에 위치하는 것이 올바른 정렬 된 위치)
-
-			2-2) 왼쪽 인덱스 요소 <= 가운데 인덱스 요소
-			: do nothing
-
-		3) 왼쪽 인덱스 요소와 오른쪽 인덱스 요소 비교
-
-			3-1) 왼쪽 인덱스 요소 > 오른쪽 인덱스 요소
-			: 왼쪽 인덱스 요소와 오른쪽 인덱스 요소 SWAP (오른쪽 인덱스의 요소가 왼쪽 인덱스의 요소의 왼쪽에 위치하는 것이 올바른 정렬 된 위치)
-
-			3-2) 왼쪽 인덱스 요소 <= 오른쪽 인덱스 요소
-			: do nothing
-
-		4) 가운데 인덱스 요소와 오른쪽 인덱스 요소 비교
-
-			4-1) 가운데 인덱스 요소 > 오른쪽 인덱스 요소
-			: 오른쪽 요소와 가운데 인덱스 요소 SWAP (오른쪽 인덱스의 요소가 가운데 인덱스 요소의 왼쪽에 위치하는 것이 올바른 정렬 된 위치)
-
-			4-2) 가운데 인덱스 요소 <= 오른쪽 인덱스 요소
-			: do nothing
-
-		5) 현재 순차적으로 열거 가능 한 요소들의 집합내의 모든 요소들은 정렬되었으므로, 가운데 인덱스 반환
-
-		---
-
-		ex) 3 1 2 의 요소에 대해, 오름차순으로 기존 정렬 처리 루틴을 수행 할 경우,
-
-			- 2번의 비교 발생
-			- 2번의 제자리 SWAP 빌생
-			- 기준 (pivot)의 정렬 된 위치로 변경을 위한 1번의 SWAP 발생 (정렬 된 순서는 1 2 3)
-
-		기준 (pivot) 3을 기준으로 다시 왼쪽에 대해 분할하여, 1 2 에 대해 다시 정렬을 수행
-		1 2 에 대해 다시 오름차순으로 기존 정렬 처리 루틴을 수행 할 경우,
-
-			- 1번의 비교 발생
-			- 1번의 제자리 SWAP 발생
-
-		최종적으로, 총 3번의 비교 연산, 4번의 SWAP 연산 수행
-		이와 비교하여, 3 1 2 의 요소에 대해 3개의 요소에 대한 대체 정렬 처리 루틴을 수행 할 경우,
-
-			- 3번의 비교 발생
-			- 2번의 SWAP 발생
-
-		최악의 경우 (정렬하고자 하는 방법과 역순으로 정렬)에도 3번의 비교, 3번의 SWAP 연산 발생
-	***/
-
-	switch (orderBy)
-	{
-	case ORDER_BY::ASCENDING:
-		if (COMPARE(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[midIndex]) == 1) //left > mid
-			SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[midIndex], tmp);
-
-		if (COMPARE(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[srcRightIndex]) == 1) //left > right
-			SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[srcRightIndex], tmp);
-
-		if (COMPARE(targetEnumerableSet[midIndex], targetEnumerableSet[srcRightIndex]) == 1) //mid > right
-			SWAP(targetEnumerableSet[midIndex], targetEnumerableSet[srcRightIndex], tmp);
-
-		break;
-
-	case ORDER_BY::DESCENDING:
-		if (COMPARE(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[midIndex]) == -1) //left < mid
-			SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[midIndex], tmp);
-
-		if (COMPARE(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[srcRightIndex]) == -1) //left < right
-			SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[srcRightIndex], tmp);
-
-		if (COMPARE(targetEnumerableSet[midIndex], targetEnumerableSet[srcRightIndex]) == -1) //mid < right
-			SWAP(targetEnumerableSet[midIndex], targetEnumerableSet[srcRightIndex], tmp);
-
-		break;
-	}
-
-	return midIndex;
 }
 
 /// <summary>
@@ -631,6 +700,11 @@ void QuickSort(SortElementType targetEnumerableSet[],
 
 	QuickSort<SortElementType>(targetEnumerableSet,
 		0, elementCount - 1, orderBy);
+}
+
+void MergeProc()
+{
+
 }
 
 /// <summary>

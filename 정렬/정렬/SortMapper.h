@@ -11,8 +11,10 @@ enum class SORT_UNIQUE_MAPPED_INDEX : const int
 	BUBBLE_SORT = 0,
 	INSERTION_SORT,
 	QUICK_SORT,
-//	MERGE_SORT,
 	SELECTION_SORT,
+	//	MERGE_SORT,
+//COCKTAIL_SORT,
+//CYCLE_SORT,
 	TOTAL_SORT_FUNC_COUNT //전체 정렬 함수 개수
 }; //정렬의 고유 사상 인덱스
 

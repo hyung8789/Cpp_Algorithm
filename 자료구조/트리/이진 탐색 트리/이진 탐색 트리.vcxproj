@@ -140,6 +140,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BST.h" />
+    <ClInclude Include="BST_Core.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\이진 트리\이진 트리.vcxproj">
+      <Project>{62ff5b04-8b60-430b-9526-7cc5294b3c66}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BST.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
