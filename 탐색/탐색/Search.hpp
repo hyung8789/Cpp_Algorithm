@@ -8,7 +8,7 @@
 /// <param name="srcList">대상 리스트</param>
 /// <param name="targetData">찾고자 하는 대상 데이터</param>
 /// <returns>대상 데이터가 포함 된 최초 노드</returns>
-Node* DLL_SequentialSearch_MTF(Node** srcList, DataType targetData)
+Node* DLL_SequentialSearch_MTF(Node** srcList, const DataType& targetData)
 {
 	Node* current = (*srcList); //현재 노드
 	Node* retVal = NULL; //찾은 노드
@@ -46,7 +46,7 @@ Node* DLL_SequentialSearch_MTF(Node** srcList, DataType targetData)
 /// <param name="srcList">대상 리스트</param>
 /// <param name="targetData">찾고자 하는 대상 데이터</param>
 /// <returns>대상 데이터가 포함 된 최초 노드</returns>
-Node* DLL_SequentialSearch_Transpose(Node** srcList, DataType targetData)
+Node* DLL_SequentialSearch_Transpose(Node** srcList, const DataType& targetData)
 {
 	Node* current = (*srcList); //현재 노드
 	Node* retVal = NULL; //찾은 노드
@@ -91,7 +91,7 @@ Node* DLL_SequentialSearch_Transpose(Node** srcList, DataType targetData)
 /// <returns>찾고자 하는 대상 데이터와 일치하는 최초로 찾은 데이터</returns>
 template<typename SearchElementType>
 SearchElementType SequentialSearch_MTF(SearchElementType targetEnumerableSet[],
-	size_t elementCount, SearchElementType targetData)
+	size_t elementCount, const SearchElementType& targetData)
 {
 	SearchElementType tmp;
 
@@ -125,7 +125,7 @@ SearchElementType SequentialSearch_MTF(SearchElementType targetEnumerableSet[],
 /// <returns>찾고자 하는 대상 데이터와 일치하는 최초로 찾은 데이터</returns>
 template<typename SearchElementType>
 SearchElementType SequentialSearch_Transpose(SearchElementType targetEnumerableSet[],
-	size_t elementCount, SearchElementType targetData)
+	size_t elementCount, const SearchElementType& targetData)
 {
 	SearchElementType tmp;
 

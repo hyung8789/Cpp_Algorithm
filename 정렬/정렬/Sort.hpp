@@ -622,9 +622,12 @@ void QuickSort(SortElementType targetEnumerableSet[],
 		RECURSIVE_METHOD와 동일 한 실행 순서는 LCRS 트리의 < RECURSIVE_METHOD의 Call Stack 구현 > 을 참조 할 것
 	***/
 
+	if ((srcRightIndex - srcLeftIndex) == 0)
+		return;
+
 	size_t* stack = new size_t[(srcRightIndex - srcLeftIndex) + 1]; //전체 요소 개수만큼의 스택
 	size_t top = 0; //스택의 최상위 요소 인덱스
-
+	
 	//왼쪽 인덱스, 오른쪽 인덱스 순으로 push, 오른쪽 인덱스, 왼쪽 인덱스 순으로 pop
 	stack[top++] = srcLeftIndex;
 	stack[top++] = srcRightIndex;

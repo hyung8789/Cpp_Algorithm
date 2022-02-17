@@ -11,5 +11,12 @@ namespace myexception //사용자 정의 에외
 		NOT_FOUND_EXCEPTION(const std::string& what) : std::runtime_error(what)
 		{}
 	};
+
+	class NOT_ALLOWED_DUPLICATE_DATA_EXCEPTION : public std::runtime_error
+	{
+	public:
+		NOT_ALLOWED_DUPLICATE_DATA_EXCEPTION(const std::string& what) : std::runtime_error(what)
+		{}
+	};
 }
 #endif

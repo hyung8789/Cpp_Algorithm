@@ -62,6 +62,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{2F871E40-EA3
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lib", "lib\lib\lib.vcxproj", "{30E376AC-0D9B-4ADC-8A9B-E985FEA0D7C3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Red-Black (레드-블랙) 트리", "자료구조\트리\Red-Black (레드-블랙) 트리\Red-Black (레드-블랙) 트리.vcxproj", "{05A422E0-162D-4946-B1D6-3590FACB0364}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -222,6 +224,14 @@ Global
 		{30E376AC-0D9B-4ADC-8A9B-E985FEA0D7C3}.Release|x64.Build.0 = Release|x64
 		{30E376AC-0D9B-4ADC-8A9B-E985FEA0D7C3}.Release|x86.ActiveCfg = Release|Win32
 		{30E376AC-0D9B-4ADC-8A9B-E985FEA0D7C3}.Release|x86.Build.0 = Release|Win32
+		{05A422E0-162D-4946-B1D6-3590FACB0364}.Debug|x64.ActiveCfg = Debug|x64
+		{05A422E0-162D-4946-B1D6-3590FACB0364}.Debug|x64.Build.0 = Debug|x64
+		{05A422E0-162D-4946-B1D6-3590FACB0364}.Debug|x86.ActiveCfg = Debug|Win32
+		{05A422E0-162D-4946-B1D6-3590FACB0364}.Debug|x86.Build.0 = Debug|Win32
+		{05A422E0-162D-4946-B1D6-3590FACB0364}.Release|x64.ActiveCfg = Release|x64
+		{05A422E0-162D-4946-B1D6-3590FACB0364}.Release|x64.Build.0 = Release|x64
+		{05A422E0-162D-4946-B1D6-3590FACB0364}.Release|x86.ActiveCfg = Release|Win32
+		{05A422E0-162D-4946-B1D6-3590FACB0364}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -250,6 +260,7 @@ Global
 		{D78589BF-BF6F-4260-9142-4C067735EDC5} = {C7E9F153-ED7E-42DE-8B72-5131383945F7}
 		{0CABCF38-9789-4BD6-8C44-49B37E7C160A} = {0E267FF8-CBC6-4B67-AD0F-D41E981DEBA6}
 		{30E376AC-0D9B-4ADC-8A9B-E985FEA0D7C3} = {2F871E40-EA30-4EF0-97BC-7E383AC3AAA3}
+		{05A422E0-162D-4946-B1D6-3590FACB0364} = {B94DA8CF-A01D-4AD0-A792-B77CEB63955E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D3CD1F56-C927-48C3-B1A1-4D96FE0343E6}
