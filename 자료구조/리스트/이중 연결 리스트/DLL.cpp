@@ -93,7 +93,7 @@ Node* DLL_GetNodeAt(Node** srcList, NodePositionType position)
 	}
 
 	if (retVal == NULL)
-		throw std::runtime_error(std::string(__func__) + std::string(" : Not found"));
+		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
 	return retVal;
 }
@@ -117,7 +117,7 @@ void DLL_RemoveNodeAt(Node** srcList, NodePositionType position, bool deallocate
 	}
 
 	if (current == NULL)
-		throw std::runtime_error(std::string(__func__) + std::string(" : Not found"));
+		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
 	DLL_RemoveNode(srcList, current, deallocateAfterRemove);
 }

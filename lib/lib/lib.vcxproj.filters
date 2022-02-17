@@ -15,28 +15,25 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EXPRT.h">
+    <ClInclude Include="LIB_Core.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="TokenGen.h">
+    <ClInclude Include="Macro.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Core.h">
+    <ClInclude Include="MyException.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TokenGen.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="EXPRT.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
+    <ClInclude Include="Utils.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Utils.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

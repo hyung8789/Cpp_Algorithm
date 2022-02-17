@@ -93,7 +93,7 @@ Node* SLL_GetNodeAt(Node** srcList, NodePositionType position)
 	}
 
 	if (retVal == NULL)
-		throw std::runtime_error(std::string(__func__) + std::string(" : Not found"));
+		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
 	return retVal;
 }
@@ -138,7 +138,7 @@ void SLL_RemoveNodeAt(Node** srcList, NodePositionType position, bool deallocate
 		}
 
 		if (current == NULL)
-			throw std::runtime_error(std::string(__func__) + std::string(" : Not found"));
+			throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
 		Node* tmp = current->next; //삭제 대상 노드
 
@@ -183,7 +183,7 @@ void SLL_RemoveNode(Node** srcList, Node* srcTargetNode, bool deallocateAfterRem
 		}
 
 		if (current == NULL)
-			throw std::runtime_error(std::string(__func__) + std::string(" : Not found"));
+			throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
 		current->next = srcTargetNode->next; //현재 노드의 다음을 삭제 대상 노드의 다음 노드로 연결
 		srcTargetNode->next = NULL;
@@ -268,7 +268,7 @@ void SLL_InsertNodeBefore(Node** srcList, Node* srcTargetNode, Node* srcNewNode)
 		}
 
 		if (current == NULL)
-			throw std::runtime_error(std::string(__func__) + std::string(" : Not found"));
+			throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
 		current->next = srcNewNode; //현재 노드의 다음을 새 노드로 연결
 		srcNewNode->next = srcTargetNode; //새 노드의 다음을 대상 노드로 연결

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{250cf230-9cf5-484e-b279-e3d1caee1800}</ProjectGuid>
-    <RootNamespace>수식트리계산기</RootNamespace>
+    <ProjectGuid>{30e376ac-0d9b-4adc-8a9b-e985fea0d7c3}</ProjectGuid>
+    <RootNamespace>lib</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -40,7 +40,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -139,22 +139,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Core.h" />
-    <ClInclude Include="EXPRT.h" />
-    <ClInclude Include="TokenGen.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="EXPRT.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="TokenGen.cpp" />
+    <ClInclude Include="LIB_Core.h" />
+    <ClInclude Include="Macro.h" />
+    <ClInclude Include="MyException.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\lib\lib\lib.vcxproj">
-      <Project>{30e376ac-0d9b-4adc-8a9b-e985fea0d7c3}</Project>
-    </ProjectReference>
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

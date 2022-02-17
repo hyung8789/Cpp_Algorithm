@@ -9,7 +9,8 @@
 #include <stdio.h>
 #include <iostream>
 
-#include <stdexcept>
+//해당 프로젝트 속성에서 정적 라이브러리 (lib)로 빌드 할 것
+#include "../../../lib/lib/LIB_Core.h"
 
 #include "SLL.h"
 #endif

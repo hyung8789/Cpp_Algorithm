@@ -146,6 +146,9 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\lib\lib\lib.vcxproj">
+      <Project>{30e376ac-0d9b-4adc-8a9b-e985fea0d7c3}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\자료구조\리스트\이중 연결 리스트\이중 연결 리스트.vcxproj">
       <Project>{3816788d-d651-456b-af27-35889d53b07c}</Project>
     </ProjectReference>

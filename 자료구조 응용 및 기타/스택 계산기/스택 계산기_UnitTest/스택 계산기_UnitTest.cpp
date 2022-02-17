@@ -15,9 +15,6 @@
 	3) 단위 테스트 대상 프로젝트의 코어 헤더 파일만 포함
 ***/
 
-#define FP_DIFF_THRESHOLD 0.0001 //부동 소수점 차이 임계값 (epsilon)
-#define LENGTH(array) ((sizeof(array)) / (sizeof(array[0])))
-
 static const bool LOGGING_DEBUG_RESULT = true; //디버그용 결과 출력
 static const bool LOGGING_EX = true; //예외 내용 출력
 

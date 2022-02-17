@@ -1,10 +1,6 @@
 #ifndef _SEARCH_HPP_
 #define _SEARCH_HPP_
 
-#ifdef LOGGING_COMPARE_COUNT
-#define COMPARE(x, y) ((x) > (y) ? 1 : (x) == (y) ? 0 : -1) //x > y : 1, x == y : 0, x < y : -1
-#endif
-
 #ifdef _DLL_H_
 /// <summary>
 /// 대상 리스트에서 순차탐색 - 전진 이동법 (Move To Front)으로 대상 데이터가 포함 된 최초 노드 반환
@@ -29,7 +25,7 @@ Node* DLL_SequentialSearch_MTF(Node** srcList, DataType targetData)
 	}
 
 	if (current == NULL || COMPARE(current->data, targetData) != 0)
-		throw std::runtime_error(std::string(__func__) + std::string(" : Not found"));
+		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
 	if (retVal != (*srcList)) //찾은 노드가 헤드 노드가 아닌 경우
 	{
@@ -68,7 +64,7 @@ Node* DLL_SequentialSearch_Transpose(Node** srcList, DataType targetData)
 	}
 
 	if (current == NULL || COMPARE(current->data, targetData) != 0)
-		throw std::runtime_error(std::string(__func__) + std::string(" : Not found"));
+		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
 	if (retVal->prev != NULL) //찾은 노드의 앞 노드가 존재하면
 	{
@@ -116,7 +112,7 @@ SearchElementType SequentialSearch_MTF(SearchElementType targetEnumerableSet[],
 		}
 	}
 
-	throw std::runtime_error(std::string(__func__) + std::string(" : Not found"));
+	throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 }
 
 /// <summary>
@@ -147,7 +143,7 @@ SearchElementType SequentialSearch_Transpose(SearchElementType targetEnumerableS
 		}
 	}
 
-	throw std::runtime_error(std::string(__func__) + std::string(" : Not found"));
+	throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 }
 
 /// <summary>
@@ -260,6 +256,6 @@ SearchElementType BinarySearch(const SearchElementType srcOrderedEnumerableSet[]
 		}
 	}
 
-	throw std::runtime_error(std::string(__func__) + std::string(" : Not found"));
+	throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 }
 #endif

@@ -169,6 +169,9 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\lib\lib\lib.vcxproj">
+      <Project>{30e376ac-0d9b-4adc-8a9b-e985fea0d7c3}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\수식 트리 계산기.vcxproj">
       <Project>{250cf230-9cf5-484e-b279-e3d1caee1800}</Project>
     </ProjectReference>
