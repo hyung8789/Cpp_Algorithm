@@ -42,9 +42,13 @@ void BST_RemoveNode(Node** srcRootNode, const DataType& targetData, bool dealloc
 
 		1) 삭제 대상 노드가 자식 노드를 갖고 있지 않을 경우
 
-			1-1) 삭제 대상 노드의 부모 노드로부터 연결 해제
+			1-1) 삭제 대상 노드가 루트 노드일 경우
+			: do nothing
 
-			1-2) 삭제 대상 노드 삭제
+			1-2) 삭제 대상 노드가 루트 노드가 아닐 경우
+			: 삭제 대상 노드의 부모 노드로부터 연결 해제
+
+			1-3) 삭제 대상 노드 삭제
 
 		2) 삭제 대상 노드가 왼쪽, 오른쪽 자식 노드 중 하나를 갖고 있을 경우
 
@@ -57,15 +61,15 @@ void BST_RemoveNode(Node** srcRootNode, const DataType& targetData, bool dealloc
 			2-3) 삭제 대상 노드 삭제
 
 		3) 삭제 대상 노드가 왼쪽, 오른쪽 자식 노드를 모두 갖고 있을 경우
-			
+
 			3-1) 삭제 대상 노드가 루트 노드일 경우
 
-				3-1-1) 이동 대상 노드 (삭제 대상 노드의 오른쪽 하위 트리의 노드 중 가장 작은 노드) 를 최상위 루트 노드로 변경
+				3-1-1) 삭제 대상 노드의 오른쪽 하위 트리의 노드 중 가장 작은 노드 (이하, 이동 대상 노드) 를 최상위 루트 노드로 변경
 				: 이동 대상 노드는 해당 하위 트리에서 가장 작은 노드이므로, 왼쪽 자식 노드가 존재하지 않음
 
 			3-2) 삭제 대상 노드가 루트 노드가 아닐 경우
 
-				3-2-1) 이동 대상 노드 (삭제 대상 노드의 오른쪽 하위 트리의 노드 중 가장 작은 노드) 를 삭제 대상 노드가 연결 되었던 상위 부모 노드로 연결
+				3-2-1) 이동 대상 노드를 삭제 대상 노드가 연결 되었던 상위 부모 노드로 연결
 				: 이동 대상 노드는 해당 하위 트리에서 가장 작은 노드이므로, 왼쪽 자식 노드가 존재하지 않음
 
 			3-3) 이동 대상 노드의 남아있는 오른쪽 하위 트리 존재 여부에 따라,
@@ -73,18 +77,18 @@ void BST_RemoveNode(Node** srcRootNode, const DataType& targetData, bool dealloc
 				3-3-1) 이동 대상 노드의 오른쪽 하위 트리가 존재 할 경우
 				: 이동 대상 노드의 오른쪽 하위 트리의 루트 노드를 이동 대상 노드가 이동이 발생하기 전 연결되었던 상위 부모 노드로 연결
 
-				3-3=2) 이동 대상 노드의 오른쪽 하위 트리가 존재하지 않을 경우
+				3-3-2) 이동 대상 노드의 오른쪽 하위 트리가 존재하지 않을 경우
 				: 이동 대상 노드가 이동이 발생하기 전 연결 되었던 상위 부모 노드로부터의 연결 해제
 
 			3-4) 이동 대상 노드의 왼쪽 및 오른쪽 자식 노드를 삭제 대상 노드의 왼쪽 및 오른쪽 자식 노드로 연결
 
 			3-5) 삭제 대상 노드 삭제
 	***/
-	
+
 	if ((*srcRootNode) == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	std::tuple<Node*, Node*> removeTargetNodeWithParentNodeTuple = 
+	std::tuple<Node*, Node*> removeTargetNodeWithParentNodeTuple =
 		BST_SearchNodeWithParentNode((*srcRootNode), targetData); //삭제 대상 노드와 삭제 대상 노드의 상위 부모 노드가 포함 된 튜플
 	Node* removeTargetNode = std::get<0>(removeTargetNodeWithParentNodeTuple); //삭제 대상 노드
 	Node* removeTargetParentNode = std::get<1>(removeTargetNodeWithParentNodeTuple); //삭제 대상 노드의 부모 노드
@@ -103,28 +107,39 @@ void BST_RemoveNode(Node** srcRootNode, const DataType& targetData, bool dealloc
 	switch (REMOVE_TARGET_NODE_STATE & (REMOVE_TARGET_NODE_LEFT_CHILD_EXISTS | REMOVE_TARGET_NODE_RIGHT_CHILD_EXISTS)) //삭제 대상 노드 상태에 따라
 	{
 	case FALSE: //삭제 대상 노드가 자식 노드를 갖고 있지 않을 경우
-		(removeTargetParentNode->_left == removeTargetNode) ?
-			removeTargetParentNode->_left = NULL : 
-			removeTargetParentNode->_right = NULL; //삭제 대상 노드의 부모 노드로부터 연결 해제
+		if (removeTargetNode != (*srcRootNode)) //삭제 대상 노드가 루트 노드가 아닐 경우
+		{
+			//삭제 대상 노드의 부모 노드로부터 연결 해제
+			(removeTargetParentNode->_left == removeTargetNode) ?
+				removeTargetParentNode->_left = NULL : removeTargetParentNode->_right = NULL;
+		}
 
 		break;
 
 	case (REMOVE_TARGET_NODE_LEFT_CHILD_EXISTS | REMOVE_TARGET_NODE_RIGHT_CHILD_EXISTS): //삭제 대상 노드가 왼쪽, 오른쪽 자식 노드를 모두 갖고 있을 경우
 		if (removeTargetNode == (*srcRootNode)) //삭제 대상 노드가 루트 노드일 경우
+		{
 			(*srcRootNode) = moveTargetNode; //이동 대상 노드를 최상위 루트 노드로 변경
+		}
 		else //삭제 대상 노드가 루트 노드가 아닐 경우
+		{
+			//이동 대상 노드를 삭제 대상 노드가 연결 되었던 상위 부모 노드로 연결
 			(removeTargetParentNode->_left == removeTargetNode) ?
-				removeTargetParentNode->_left = moveTargetNode :
-				removeTargetParentNode->_right = moveTargetNode; //이동 대상 노드를 삭제 대상 노드가 연결 되었던 상위 부모 노드로 연결
+				removeTargetParentNode->_left = moveTargetNode : removeTargetParentNode->_right = moveTargetNode;
+		}
 
 		if (moveTargetNode->_right != NULL) //이동 대상 노드의 오른쪽 하위 트리가 존재 할 경우
+		{
+			//이동 대상 노드의 오른쪽 하위 트리의 루트 노드를 이동 대상 노드가 이동이 발생하기 전 연결되었던 상위 부모 노드로 연결
 			(moveTargetParentNode->_left == moveTargetNode) ?
-				moveTargetParentNode->_left = moveTargetNode->_right :
-				moveTargetParentNode->_right = moveTargetNode->_right; //이동 대상 노드의 오른쪽 하위 트리의 루트 노드를 이동 대상 노드가 이동이 발생하기 전 연결되었던 상위 부모 노드로 연결
+				moveTargetParentNode->_left = moveTargetNode->_right : moveTargetParentNode->_right = moveTargetNode->_right;
+		}
 		else //이동 대상 노드의 오른쪽 하위 트리가 존재하지 않을 경우 
+		{
+			//이동 대상 노드가 이동이 발생하기 전 연결 되었던 상위 부모 노드로부터의 연결 해제
 			(moveTargetParentNode->_left == moveTargetNode) ?
-				moveTargetParentNode->_left = NULL :
-				moveTargetParentNode->_right = NULL; //이동 대상 노드가 이동이 발생하기 전 연결 되었던 상위 부모 노드로부터의 연결 해제
+				moveTargetParentNode->_left = NULL : moveTargetParentNode->_right = NULL;
+		}
 
 		//이동 대상 노드의 왼쪽 및 오른쪽 자식 노드를 삭제 대상 노드의 왼쪽 및 오른쪽 자식 노드로 연결
 		moveTargetNode->_left = removeTargetNode->_left;
@@ -134,22 +149,28 @@ void BST_RemoveNode(Node** srcRootNode, const DataType& targetData, bool dealloc
 
 	default: //삭제 대상 노드가 왼쪽, 오른쪽 자식 노드 중 하나를 갖고 있을 경우
 		if (removeTargetNode == (*srcRootNode)) //삭제 대상 노드가 루트 노드일 경우
-			(*srcRootNode) = (removeTargetNode->_left != NULL) ? 
-				removeTargetNode->_left :
-				removeTargetNode->_right; //삭제 대상 노드가 가지고 있던 자식 노드를 최상위 루트 노드로 변경
+		{
+			//삭제 대상 노드가 가지고 있던 자식 노드를 최상위 루트 노드로 변경
+			(*srcRootNode) = (removeTargetNode->_left != NULL) ?
+				removeTargetNode->_left : removeTargetNode->_right;
+		}
 		else //삭제 대상 노드가 루트 노드가 아닐 경우
 		{
 			//삭제 대상 노드가 가지고 있던 자식 노드를 삭제 대상 노드가 연결 되었던 상위 부모 노드로 연결
 			if (REMOVE_TARGET_NODE_STATE & REMOVE_TARGET_NODE_LEFT_CHILD_EXISTS) //삭제 대상 노드가 왼쪽 자식을 보유 할 경우
+			{
 				(removeTargetParentNode->_left == removeTargetNode) ?
-					removeTargetParentNode->_left = removeTargetNode->_left :
-					removeTargetParentNode->_right = removeTargetNode->_left;
+					removeTargetParentNode->_left = removeTargetNode->_left : removeTargetParentNode->_right = removeTargetNode->_left;
+			}
 			else if (REMOVE_TARGET_NODE_STATE & REMOVE_TARGET_NODE_RIGHT_CHILD_EXISTS) //삭제 대상 노드가 오른쪽 자식을 보유 할 경우
+			{
 				(removeTargetParentNode->_left == removeTargetNode) ?
-					removeTargetParentNode->_left = removeTargetNode->_right :
-					removeTargetParentNode->_right = removeTargetNode->_right;
+					removeTargetParentNode->_left = removeTargetNode->_right : removeTargetParentNode->_right = removeTargetNode->_right;
+			}
 			else
+			{
 				throw std::logic_error(std::string(__func__) + std::string(" : Invalid State"));
+			}
 		}
 
 		break;
@@ -185,19 +206,15 @@ Node* BST_SearchNode(Node* srcRootNode, const DataType& targetData)
 /// <param name="targetData">찾고자 하는 대상 데이터</param>
 /// <param name="targetParentNode">찾고자 하는 대상 데이터가 포함 된 노드의 상위 부모 노드</param>
 /// <returns>대상 데이터가 포함 된 노드와 해당 노드의 상위 부모 노드가 포함 된 튜플
-/// (pos 0 : 대상 데이터가 포함 된 노드, pos 1 : 해당 노드의 상위 부모 노드 (존재하지 않을 경우 pos 0과 동일)</returns>
+/// <para>(arg 0 : 대상 데이터가 포함 된 노드, arg 1 : 해당 노드의 상위 부모 노드 (존재하지 않을 경우 NULL))</para></returns>
 std::tuple<Node*, Node*> BST_SearchNodeWithParentNode(Node* srcRootNode, const DataType& targetData, Node* targetParentNode)
 {
 	if (srcRootNode == NULL)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
 	if (srcRootNode->_data == targetData) //현재 노드가 찾고자 하는 대상 데이터와 일치할 경우
-	{
-		if (targetParentNode != NULL) //현재 노드의 상위 부모 노드가 존재 할 경우
-			return std::make_tuple(srcRootNode, targetParentNode);
-		else //현재 노드의 상위 부모 노드가 존재하지 않을 경우
-			return std::make_tuple(srcRootNode, srcRootNode);
-	}
+		return std::make_tuple(srcRootNode, targetParentNode);
+
 	if (srcRootNode->_data > targetData) //현재 노드 > 찾고자 하는 대상 데이터인 경우
 		return BST_SearchNodeWithParentNode(srcRootNode->_left, targetData, srcRootNode); //현재 노드 기준 왼쪽으로 탐색 수행
 	else //현재 노드 < 찾고자 하는 대상 데이터인 경우
@@ -221,26 +238,19 @@ Node* BST_SearchMinNode(Node* srcRootNode)
 }
 
 /// <summary>
-///	대상 이진 탐색 트리의 최소값인 데이터가 포함 된 노드와 해당 노드의 상위 부모 노드가 포함 된 튜플 반환
+/// 대상 이진 탐색 트리의 최소값인 데이터가 포함 된 노드와 해당 노드의 상위 부모 노드가 포함 된 튜플 반환
 /// </summary>
 /// <param name="srcRootNode">대상 이진 탐색 트리의 최상위 루트 노드</param>
 /// <param name="targetParentNode">대상 이진 탐색 트리의 최소값인 데이터가 포함 된 노드의 상위 부모 노드</param>
 /// <returns>최소값인 데이터가 포함 된 노드와 해당 노드의 상위 부모 노드가 포함 된 튜플
-/// (pos 0 : 최소값인 데이터가 포함 된 노드, pos 1 : 해당 노드의 상위 부모 노드 (존재하지 않을 경우 pos 0과 동일)</returns>
+/// <para>(arg 0 : 최소값인 데이터가 포함 된 노드, arg 1 : 해당 노드의 상위 부모 노드 (존재하지 않을 경우 NULL))</para></returns>
 std::tuple<Node*, Node*> BST_SearchMinNodeWithParentNode(Node* srcRootNode, Node* targetParentNode)
 {
 	if (srcRootNode == NULL)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
 	if (srcRootNode->_left != NULL) //현재 노드의 왼쪽 하위 트리가 존재 할 경우
-	{
 		return BST_SearchMinNodeWithParentNode(srcRootNode->_left, srcRootNode);
-	}
 	else //현재 노드의 왼쪽 하위 트리가 존재하지 않을 경우
-	{
-		if (targetParentNode != NULL) //현재 노드의 상위 부모 노드가 존재 할 경우
-			return std::make_tuple(srcRootNode, targetParentNode);
-		else //현재 노드의 상위 부모 노드가 존재하지 않을 경우
-			return std::make_tuple(srcRootNode, srcRootNode);
-	}
+		return std::make_tuple(srcRootNode, targetParentNode);
 }
