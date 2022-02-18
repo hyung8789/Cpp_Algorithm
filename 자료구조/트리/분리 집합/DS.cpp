@@ -11,8 +11,8 @@ Node* DS_CreateNode(void* srcData)
 	if (retVal == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-	retVal->data = srcData;
-	retVal->parent = NULL;
+	retVal->_data = srcData;
+	retVal->_parent = NULL;
 
 	return retVal;
 }
@@ -47,7 +47,7 @@ void DS_UnionSet(Node** originSetNode, Node* targetSetNode)
 	else
 	{
 		targetSetNode = DS_FindSet(targetSetNode); //통합 될 원본 집합에 통합 할 집합의 최상위 부모 노드
-		targetSetNode->parent = DS_FindSet((*originSetNode));
+		targetSetNode->_parent = DS_FindSet((*originSetNode));
 	}
 }
 
@@ -61,9 +61,9 @@ Node* DS_FindSet(Node* targetSetNode)
 	if (targetSetNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	while (targetSetNode->parent != NULL) //최상위 부모 노드 탐색
+	while (targetSetNode->_parent != NULL) //최상위 부모 노드 탐색
 	{
-		targetSetNode = targetSetNode->parent;
+		targetSetNode = targetSetNode->_parent;
 	}
 
 	return targetSetNode;

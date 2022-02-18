@@ -125,10 +125,10 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr)
 	{
 		GenNextToken(&srcInfixExpr[srcInfixExprNextReadIndex], &token, EXPR_READ_DIRECTION::LEFT_TO_RIGHT); //현재까지 읽은 위치부터 토큰 생성
 
-		switch (token.symbolType)
+		switch (token._symbolType)
 		{
 		case SYMBOL_TYPE::LEFT_PARENTHESIS:
-			LLS_Push(&stack, LLS_CreateNode(token.str)); //현재 분리 된 토큰의 기호를 스택에 삽입
+			LLS_Push(&stack, LLS_CreateNode(token._str)); //현재 분리 된 토큰의 기호를 스택에 삽입
 			break;
 
 		case SYMBOL_TYPE::RIGHT_PARENTHESIS:
@@ -138,7 +138,7 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr)
 			{
 				Node* poppedNode = LLS_Pop(&stack);
 
-				if (CharToSymbolType(poppedNode->data[0]) == SYMBOL_TYPE::LEFT_PARENTHESIS) //'(' 를 만날 경우
+				if (CharToSymbolType(poppedNode->_data[0]) == SYMBOL_TYPE::LEFT_PARENTHESIS) //'(' 를 만날 경우
 				{
 					isValidExpr = true;
 					LLS_DeallocateNode(&poppedNode);
@@ -146,7 +146,7 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr)
 				}
 				else //피연산자, 연산자인 경우
 				{
-					if (strcat_s(dstPostfixExpr, MAX_STR_LEN - 1, poppedNode->data) != 0) //후위 표현식에 출력
+					if (strcat_s(dstPostfixExpr, MAX_STR_LEN - 1, poppedNode->_data) != 0) //후위 표현식에 출력
 						throw std::runtime_error(std::string(__func__) + std::string(" : src, dst is null or wrong size"));
 
 					LLS_DeallocateNode(&poppedNode);
@@ -158,7 +158,7 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr)
 			break;
 
 		case SYMBOL_TYPE::OPERAND:
-			if (strcat_s(dstPostfixExpr, MAX_STR_LEN - 1, token.str) != 0) //현재 분리 된 토큰의 기호를 후위 표현식에 출력
+			if (strcat_s(dstPostfixExpr, MAX_STR_LEN - 1, token._str) != 0) //현재 분리 된 토큰의 기호를 후위 표현식에 출력
 				throw std::runtime_error(std::string(__func__) + std::string(" : src, dst is null or wrong size"));
 		case SYMBOL_TYPE::SPACE:
 			if (strcat_s(dstPostfixExpr, MAX_STR_LEN - 1, " ") != 0) //피연산자 간 구분을 위한 공백을 후위 표현식에 출력
@@ -171,16 +171,16 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr)
 		default: //연산자인 경우
 			while (!LLS_IsEmpty(&stack)) //우선순위가 높은 연산자에 대해 먼저 계산을 위해, 후위 표현식의 결과로서 출력 위한 연산자 우선순위 판별
 			{
-				SYMBOL_TYPE peekedNodeSymbolType = CharToSymbolType(LLS_Peek(&stack)->data[0]); //현재 스택의 최상위 노드의 연산자에 대한 기호 타입
+				SYMBOL_TYPE peekedNodeSymbolType = CharToSymbolType(LLS_Peek(&stack)->_data[0]); //현재 스택의 최상위 노드의 연산자에 대한 기호 타입
 
 				if (GetSymbolTypePriority(peekedNodeSymbolType) >=
-					GetSymbolTypePriority(token.symbolType)) //현재 스택의 최상위 노드의 기호 타입에 대한 우선순위 >= 현재 분리 된 토큰의 기호 타입에 대한 우선순위
+					GetSymbolTypePriority(token._symbolType)) //현재 스택의 최상위 노드의 기호 타입에 대한 우선순위 >= 현재 분리 된 토큰의 기호 타입에 대한 우선순위
 				{
 					Node* poppedNode = LLS_Pop(&stack);
 
 					if (peekedNodeSymbolType != SYMBOL_TYPE::LEFT_PARENTHESIS) //'(' 가 아닌 경우에만 우선순위가 높은 연산자에 대해 먼저 계산을 위해 후위 표현식으로 출력
 					{
-						if (strcat_s(dstPostfixExpr, MAX_STR_LEN - 1, poppedNode->data) != 0)
+						if (strcat_s(dstPostfixExpr, MAX_STR_LEN - 1, poppedNode->_data) != 0)
 							throw std::runtime_error(std::string(__func__) + std::string(" : src, dst is null or wrong size"));
 					}
 
@@ -192,21 +192,21 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr)
 				}
 			}
 
-			LLS_Push(&stack, LLS_CreateNode(token.str)); //현재 분리 된 토큰의 기호를 스택에 삽입
+			LLS_Push(&stack, LLS_CreateNode(token._str)); //현재 분리 된 토큰의 기호를 스택에 삽입
 			break;
 		}
 
-		srcInfixExprNextReadIndex += token.readCount; //다음에 읽을 위치부터 다시 토큰 생성
+		srcInfixExprNextReadIndex += token._readCount; //다음에 읽을 위치부터 다시 토큰 생성
 	}
 
 	while (!LLS_IsEmpty(&stack)) //스택에 남은 노드의 기호들을 순차적으로 모두 변환 된 후위 표현식의 결과로서 출력
 	{
 		Node* poppedNode = LLS_Pop(&stack);
 
-		if (CharToSymbolType(poppedNode->data[0]) == SYMBOL_TYPE::LEFT_PARENTHESIS) //')'와 쌍이 맞지 않는 '(' 가 남아있는 경우
+		if (CharToSymbolType(poppedNode->_data[0]) == SYMBOL_TYPE::LEFT_PARENTHESIS) //')'와 쌍이 맞지 않는 '(' 가 남아있는 경우
 			throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (wrong InfixExpr)"));
 
-		if (strcat_s(dstPostfixExpr, MAX_STR_LEN - 1, poppedNode->data) != 0) //후위 표현식에 출력
+		if (strcat_s(dstPostfixExpr, MAX_STR_LEN - 1, poppedNode->_data) != 0) //후위 표현식에 출력
 			throw std::runtime_error(std::string(__func__) + std::string(" : src, dst is null or wrong size"));
 
 		LLS_DeallocateNode(&poppedNode);
@@ -267,7 +267,7 @@ double CalcPostfixExpr(const char* srcPostfixExpr)
 	{
 		GenNextToken(&srcPostfixExpr[srcPostfixExprNextReadIndex], &token, EXPR_READ_DIRECTION::LEFT_TO_RIGHT); //현재까지 읽은 위치부터 토큰 생성
 
-		switch (token.symbolType)
+		switch (token._symbolType)
 		{
 		case SYMBOL_TYPE::LEFT_PARENTHESIS:
 		case SYMBOL_TYPE::RIGHT_PARENTHESIS:
@@ -278,7 +278,7 @@ double CalcPostfixExpr(const char* srcPostfixExpr)
 			break;
 
 		case SYMBOL_TYPE::OPERAND:
-			LLS_Push(&stack, LLS_CreateNode(token.str));
+			LLS_Push(&stack, LLS_CreateNode(token._str));
 			break;
 
 		default: //연산자인 경우
@@ -287,7 +287,7 @@ double CalcPostfixExpr(const char* srcPostfixExpr)
 
 			Node* operandNode1 = LLS_Pop(&stack); //연산자 뒤에 들어 갈 피연산자
 			Node* operandNode2 = LLS_Pop(&stack); //연산자 앞에 들어 갈 피연산자
-			double tmpResult = CalcOperation(atof(operandNode2->data), token.symbolType, atof(operandNode1->data)); //중간 계산 결과
+			double tmpResult = CalcOperation(atof(operandNode2->_data), token._symbolType, atof(operandNode1->_data)); //중간 계산 결과
 			char tmpResultBuffer[_CVTBUFSIZE] = { '\0', }; //중간 계산 결과 변환 위한 버퍼
 
 			_gcvt_s(tmpResultBuffer, _CVTBUFSIZE, tmpResult, 10); //실수를 문자열로 변환
@@ -298,11 +298,11 @@ double CalcPostfixExpr(const char* srcPostfixExpr)
 			break;
 		}
 
-		srcPostfixExprNextReadIndex += token.readCount; //다음에 읽을 위치부터 다시 토큰 생성
+		srcPostfixExprNextReadIndex += token._readCount; //다음에 읽을 위치부터 다시 토큰 생성
 	}
 
 	Node* resultNode = LLS_Pop(&stack);
-	retVal = atof(resultNode->data);
+	retVal = atof(resultNode->_data);
 	LLS_DeallocateNode(&resultNode);
 	LLS_DeallocateLinkedListStack(&stack);
 

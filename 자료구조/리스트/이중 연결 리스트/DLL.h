@@ -6,9 +6,10 @@ typedef int NodePositionType; //노드 위치 타입
 
 typedef struct NodeType 
 {
-	DataType data; //노드의 데이터
-	NodeType* prev; //이전 노드
-	NodeType* next; //다음 노드
+	DataType _data; //노드의 데이터
+
+	NodeType* _prev; //이전 노드
+	NodeType* _next; //다음 노드
 }Node;
 
 Node* DLL_CreateNode(DataType);

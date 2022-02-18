@@ -3,8 +3,9 @@
 
 typedef struct NodeType
 {
-	void* data; //노드의 데이터
-	NodeType* parent; //한 단계 상위 부모 노드
+	void* _data; //노드의 데이터
+
+	NodeType* _parent; //한 단계 상위 부모 노드
 }Node;
 
 Node* DS_CreateNode(void*);

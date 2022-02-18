@@ -11,8 +11,8 @@ Node* LCRS_CreateNode(DataType srcData)
 	if (retVal == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-	retVal->data = srcData;
-	retVal->leftChild = retVal->rightSibling = NULL;
+	retVal->_data = srcData;
+	retVal->_leftChild = retVal->_rightSibling = NULL;
 
 	return retVal;
 }
@@ -39,13 +39,13 @@ void LCRS_DeallocateTree(Node** srcRootNode)
 	if ((*srcRootNode) != NULL)
 	{
 #ifdef RECURSIVE_METHOD
-		if ((*srcRootNode)->leftChild != NULL)
-			LCRS_DeallocateTree(&((*srcRootNode)->leftChild));
+		if ((*srcRootNode)->_leftChild != NULL)
+			LCRS_DeallocateTree(&((*srcRootNode)->_leftChild));
 
-		if ((*srcRootNode)->rightSibling != NULL)
-			LCRS_DeallocateTree(&((*srcRootNode)->rightSibling));
+		if ((*srcRootNode)->_rightSibling != NULL)
+			LCRS_DeallocateTree(&((*srcRootNode)->_rightSibling));
 
-		//std::cout << "Dealloc : " << (*srcRootNode)->data << std::endl;
+		//std::cout << "Dealloc : " << (*srcRootNode)->_data << std::endl;
 		LCRS_DeallocateNode(srcRootNode);
 
 #elif defined ITERATIVE_METHOD
@@ -106,24 +106,24 @@ void LCRS_DeallocateTree(Node** srcRootNode)
 			}
 
 		VISIT_LEFT_CHILD_PROC: //0x0
-			if (currentNode->leftChild != NULL) //현재 노드의 왼쪽 자식 노드가 존재 할 경우
+			if (currentNode->_leftChild != NULL) //현재 노드의 왼쪽 자식 노드가 존재 할 경우
 			{
 				std::get<1>(callStack.top()) = (0x1); //헌재 노드에 대해 다음 번 실행 시 오른쪽 형제 노드를 방문
-				callStack.push(std::make_tuple(currentNode->leftChild, (0x0)));
+				callStack.push(std::make_tuple(currentNode->_leftChild, (0x0)));
 				continue;
 			}
 
 		VISIT_RIGHT_SIBLING_PROC: //0x1
-			if (currentNode->rightSibling != NULL) //현재 노드의 오른쪽 형제 노드가 존재 할 경우
+			if (currentNode->_rightSibling != NULL) //현재 노드의 오른쪽 형제 노드가 존재 할 경우
 			{
 				std::get<1>(callStack.top()) = (0x2); //현재 노드에 대해 다음 번 실행 시 Call Stack에서 pop 및 필요 할 경우 마지막 작업 수행
-				callStack.push(std::make_tuple(currentNode->rightSibling, (0x0)));
+				callStack.push(std::make_tuple(currentNode->_rightSibling, (0x0)));
 				continue;
 			}
 
 		FINALIZE_PROC: //0x2
 			callStack.pop();
-			//std::cout << "Dealloc : " << currentNode->data << std::endl;
+			//std::cout << "Dealloc : " << currentNode->_data << std::endl;
 			LCRS_DeallocateNode(&currentNode);
 		}
 #endif
@@ -141,20 +141,20 @@ void LCRS_AppendNode(Node* srcTargetNode, Node* srcNewNode)
 	if (srcTargetNode == NULL || srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	if (srcTargetNode->leftChild == NULL) //대상 노드의 자식 노드가 존재하지 않으면
+	if (srcTargetNode->_leftChild == NULL) //대상 노드의 자식 노드가 존재하지 않으면
 	{
-		srcTargetNode->leftChild = srcNewNode; //새 노드를 대상 노드의 왼쪽 자식으로 연결
+		srcTargetNode->_leftChild = srcNewNode; //새 노드를 대상 노드의 왼쪽 자식으로 연결
 	}
 	else //대상 노드의 자식 노드가 존재하면
 	{
-		Node* targetChildNode = srcTargetNode->leftChild; //대상 노드의 자식 노드
+		Node* targetChildNode = srcTargetNode->_leftChild; //대상 노드의 자식 노드
 
-		while (targetChildNode->rightSibling != NULL)
+		while (targetChildNode->_rightSibling != NULL)
 		{
-			targetChildNode = targetChildNode->rightSibling;
+			targetChildNode = targetChildNode->_rightSibling;
 		}
 
-		targetChildNode->rightSibling = srcNewNode; //대상 노드의 자식 노드의 마지막 형제 노드 다음에 새 노드를 연결
+		targetChildNode->_rightSibling = srcNewNode; //대상 노드의 자식 노드의 마지막 형제 노드 다음에 새 노드를 연결
 	}
 }
 
@@ -171,14 +171,14 @@ void LCRS_DispTreeNodesAt(Node* srcRootNode, TreeDepthType targetNodeDepth)
 #ifdef RECURSIVE_METHOD
 	if (targetNodeDepth == 0) //대상 특정 노드의 깊이에 도달 시
 	{
-		std::cout << "- " << srcRootNode->data << std::endl;
+		std::cout << "- " << srcRootNode->_data << std::endl;
 	}
 
-	if (srcRootNode->leftChild != NULL && targetNodeDepth > 0)
-		LCRS_DispTreeNodesAt(srcRootNode->leftChild, targetNodeDepth - 1);
+	if (srcRootNode->_leftChild != NULL && targetNodeDepth > 0)
+		LCRS_DispTreeNodesAt(srcRootNode->_leftChild, targetNodeDepth - 1);
 	
-	if(srcRootNode->rightSibling != NULL)
-		LCRS_DispTreeNodesAt(srcRootNode->rightSibling, targetNodeDepth);
+	if(srcRootNode->_rightSibling != NULL)
+		LCRS_DispTreeNodesAt(srcRootNode->_rightSibling, targetNodeDepth);
 
 #elif defined ITERATIVE_METHOD
 	Node* currentNode = srcRootNode; //현재 노드
@@ -226,22 +226,22 @@ void LCRS_DispTreeNodesAt(Node* srcRootNode, TreeDepthType targetNodeDepth)
 
 		if (currentNodeDepth == targetNodeDepth) //특정 노드의 깊이에 도달 시
 		{
-			std::cout << "- " << currentNode->data << std::endl;
+			std::cout << "- " << currentNode->_data << std::endl;
 		}
 		
 	VISIT_LEFT_CHILD_PROC: //0x1
-		if (currentNode->leftChild != NULL && currentNodeDepth < targetNodeDepth) //현재 노드의 왼쪽 자식 노드가 존재하며, 현재 노드가 특정 노드의 깊이보다 상위 노드일 경우
+		if (currentNode->_leftChild != NULL && currentNodeDepth < targetNodeDepth) //현재 노드의 왼쪽 자식 노드가 존재하며, 현재 노드가 특정 노드의 깊이보다 상위 노드일 경우
 		{
 			std::get<2>(callStack.top()) = (0x2); //헌재 노드에 대해 다음 번 실행 시 오른쪽 형제 노드를 방문
-			callStack.push(std::make_tuple(currentNode->leftChild, currentNodeDepth + 1, (0x0)));
+			callStack.push(std::make_tuple(currentNode->_leftChild, currentNodeDepth + 1, (0x0)));
 			continue;
 		}
 
 	VISIT_RIGHT_SIBLING_PROC: //0x2
-		if (currentNode->rightSibling != NULL) //현재 노드의 오른쪽 형제 노드가 존재 할 경우
+		if (currentNode->_rightSibling != NULL) //현재 노드의 오른쪽 형제 노드가 존재 할 경우
 		{
 			std::get<2>(callStack.top()) = (0x3); //현재 노드에 대해 다음 번 실행 시 Call Stack에서 pop 및 마지막 작업 수행
-			callStack.push(std::make_tuple(currentNode->rightSibling, currentNodeDepth, (0x0)));
+			callStack.push(std::make_tuple(currentNode->_rightSibling, currentNodeDepth, (0x0)));
 			continue;
 		}
 
@@ -266,13 +266,13 @@ void LCRS_DispTree(Node* srcRootNode, TreeDepthType rootNodeDepth)
 	{
 		std::cout << "|";
 	}
-	std::cout << "- " << srcRootNode->data << std::endl;
+	std::cout << "- " << srcRootNode->_data << std::endl;
 
-	if (srcRootNode->leftChild != NULL)
-		LCRS_DispTree(srcRootNode->leftChild, rootNodeDepth + 1);
+	if (srcRootNode->_leftChild != NULL)
+		LCRS_DispTree(srcRootNode->_leftChild, rootNodeDepth + 1);
 
-	if (srcRootNode->rightSibling != NULL)
-		LCRS_DispTree(srcRootNode->rightSibling, rootNodeDepth);
+	if (srcRootNode->_rightSibling != NULL)
+		LCRS_DispTree(srcRootNode->_rightSibling, rootNodeDepth);
 
 #elif defined ITERATIVE_METHOD
 	Node* currentNode = srcRootNode; //현재 노드
@@ -322,21 +322,21 @@ void LCRS_DispTree(Node* srcRootNode, TreeDepthType rootNodeDepth)
 		{
 			std::cout << "|";
 		}
-		std::cout << "- " << currentNode->data << std::endl;
+		std::cout << "- " << currentNode->_data << std::endl;
 
 	VISIT_LEFT_CHILD_PROC: //0x1
-		if (currentNode->leftChild != NULL)
+		if (currentNode->_leftChild != NULL)
 		{
 			std::get<2>(callStack.top()) = (0x2); //헌재 노드에 대해 다음 번 실행 시 오른쪽 형제 노드를 방문
-			callStack.push(std::make_tuple(currentNode->leftChild, currentNodeDepth + 1, (0x0)));
+			callStack.push(std::make_tuple(currentNode->_leftChild, currentNodeDepth + 1, (0x0)));
 			continue;
 		}
 
 	VISIT_RIGHT_SIBLING_PROC: //0x2
-		if (currentNode->rightSibling != NULL)
+		if (currentNode->_rightSibling != NULL)
 		{
 			std::get<2>(callStack.top()) = (0x3); //현재 노드에 대해 다음 번 실행 시 Call Stack에서 pop 및 필요 할 경우 마지막 작업 수행
-			callStack.push(std::make_tuple(currentNode->rightSibling, currentNodeDepth, (0x0)));
+			callStack.push(std::make_tuple(currentNode->_rightSibling, currentNodeDepth, (0x0)));
 			continue;
 		}
 

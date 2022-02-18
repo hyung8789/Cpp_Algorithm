@@ -11,8 +11,8 @@ Node* DLL_CreateNode(DataType srcData)
 	if (retVal == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-	retVal->data = srcData;
-	retVal->prev = retVal->next = NULL;
+	retVal->_data = srcData;
+	retVal->_prev = retVal->_next = NULL;
 
 	return retVal;
 }
@@ -40,7 +40,7 @@ void DLL_DeallocateNodeList(Node** srcList)
 	{
 		Node* tmp = (*srcList); //삭제 할 노드
 
-		(*srcList) = (*srcList)->next; //헤드 노드를 다음 노드로 이동 후 삭제
+		(*srcList) = (*srcList)->_next; //헤드 노드를 다음 노드로 이동 후 삭제
 		DLL_DeallocateNode(&tmp);
 	}
 
@@ -65,9 +65,9 @@ void DLL_AppendNode(Node** srcList, Node* srcNewNode)
 	{
 		Node* tail = (*srcList); //꼬리 노드
 
-		while (tail->next != NULL) //끝으로 이동
+		while (tail->_next != NULL) //끝으로 이동
 		{
-			tail = tail->next;
+			tail = tail->_next;
 		}
 
 		DLL_InsertNodeAfter(tail, srcNewNode);
@@ -89,7 +89,7 @@ Node* DLL_GetNodeAt(Node** srcList, NodePositionType position)
 
 	while (retVal != NULL && (--position) >= 0) //반환 대상 노드 위치까지 이동
 	{
-		retVal = retVal->next;
+		retVal = retVal->_next;
 	}
 
 	if (retVal == NULL)
@@ -113,7 +113,7 @@ void DLL_RemoveNodeAt(Node** srcList, NodePositionType position, bool deallocate
 
 	while (current != NULL && (--position) >= 0) //삭제 대상 노드 위치까지 이동
 	{
-		current = current->next;
+		current = current->_next;
 	}
 
 	if (current == NULL)
@@ -155,21 +155,21 @@ void DLL_RemoveNode(Node** srcList, Node* srcTargetNode, bool deallocateAfterRem
 
 	if (srcTargetNode == (*srcList)) //F T (삭제 대상 노드가 헤드 노드인 경우)
 	{
-		(*srcList) = srcTargetNode->next; //헤드 노드를 삭제 대상 노드의 다음 노드로 변경
+		(*srcList) = srcTargetNode->_next; //헤드 노드를 삭제 대상 노드의 다음 노드로 변경
 	}
 
-	if (srcTargetNode->next != NULL) //- T
+	if (srcTargetNode->_next != NULL) //- T
 	{
-		srcTargetNode->next->prev = srcTargetNode->prev; //삭제 대상 노드의 다음 노드의 이전을 삭제 대상 노드의 이전 노드로 연결
+		srcTargetNode->_next->_prev = srcTargetNode->_prev; //삭제 대상 노드의 다음 노드의 이전을 삭제 대상 노드의 이전 노드로 연결
 	}
 
-	if (srcTargetNode->prev != NULL) //T -
+	if (srcTargetNode->_prev != NULL) //T -
 	{
-		srcTargetNode->prev->next = srcTargetNode->next; //삭제 대상 노드의 이전 노드의 다음을 삭제 대상 노드의 다음 노드로 연결
+		srcTargetNode->_prev->_next = srcTargetNode->_next; //삭제 대상 노드의 이전 노드의 다음을 삭제 대상 노드의 다음 노드로 연결
 	}
 
-	srcTargetNode->prev = NULL;
-	srcTargetNode->next = NULL;
+	srcTargetNode->_prev = NULL;
+	srcTargetNode->_next = NULL;
 
 	if (deallocateAfterRemove)
 	{
@@ -213,15 +213,15 @@ void DLL_InsertNodeAfter(Node* srcTargetNode, Node* srcNewNode)
 	if (srcTargetNode == NULL || srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	srcNewNode->prev = srcTargetNode; //새 노드의 이전을 대상 노드로 연결
-	srcNewNode->next = srcTargetNode->next; //새 노드의 다음을 대상 노드의 다음 노드로 연결
+	srcNewNode->_prev = srcTargetNode; //새 노드의 이전을 대상 노드로 연결
+	srcNewNode->_next = srcTargetNode->_next; //새 노드의 다음을 대상 노드의 다음 노드로 연결
 
-	if (srcTargetNode->next != NULL) //대상 노드의 다음 노드가 존재 할 경우
+	if (srcTargetNode->_next != NULL) //대상 노드의 다음 노드가 존재 할 경우
 	{
-		srcTargetNode->next->prev = srcNewNode; //대상 노드의 다음 노드의 이전을 새 노드로 연결
+		srcTargetNode->_next->_prev = srcNewNode; //대상 노드의 다음 노드의 이전을 새 노드로 연결
 	}
 
-	srcTargetNode->next = srcNewNode; //대상 노드의 다음을 새 노드로 연결
+	srcTargetNode->_next = srcNewNode; //대상 노드의 다음을 새 노드로 연결
 }
 
 /// <summary>
@@ -255,8 +255,8 @@ void DLL_InsertNodeBefore(Node** srcList, Node* srcTargetNode, Node* srcNewNode)
 	if (srcTargetNode == NULL || srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	srcNewNode->next = srcTargetNode; //새 노드의 다음을 대상 노드로 연결
-	srcNewNode->prev = srcTargetNode->prev; //새 노드의 이전을 대상 노드의 이전 노드로 연결
+	srcNewNode->_next = srcTargetNode; //새 노드의 다음을 대상 노드로 연결
+	srcNewNode->_prev = srcTargetNode->_prev; //새 노드의 이전을 대상 노드의 이전 노드로 연결
 
 	if (srcTargetNode == (*srcList)) //T
 	{
@@ -264,10 +264,10 @@ void DLL_InsertNodeBefore(Node** srcList, Node* srcTargetNode, Node* srcNewNode)
 	}
 	else //F
 	{
-		srcTargetNode->prev->next = srcNewNode; //대상 노드의 이전 노드의 다음을 새 노드로 연결
+		srcTargetNode->_prev->_next = srcNewNode; //대상 노드의 이전 노드의 다음을 새 노드로 연결
 	}
 
-	srcTargetNode->prev = srcNewNode; //대상 노드의 이전을 새 노드로 연결
+	srcTargetNode->_prev = srcNewNode; //대상 노드의 이전을 새 노드로 연결
 }
 
 /// <summary>
@@ -282,7 +282,7 @@ NodePositionType DLL_GetTotalNodeCount(Node** srcList)
 
 	while (current != NULL)
 	{
-		current = current->next;
+		current = current->_next;
 		totalNodeCount++;
 	}
 
@@ -300,9 +300,9 @@ void DLL_DispNodeList(Node** srcList)
 
 	while (current != NULL)
 	{
-		std::cout << "List [" << currentPosition << "] : " << current->data << std::endl;
+		std::cout << "List [" << currentPosition << "] : " << current->_data << std::endl;
 
-		current = current->next;
+		current = current->_next;
 		currentPosition++;
 	}
 }

@@ -71,19 +71,19 @@ Node* EXPRT_CreateNode(DataType srcData)
 
 	if (typeid(srcData) == typeid(char*)) //문자열 공간 할당 및 문자열 복사
 	{
-		retVal->data = (char*)malloc(strlen(srcData) + 1); //'\0' 포함 크기
-		if (retVal->data == NULL)
+		retVal->_data = (char*)malloc(strlen(srcData) + 1); //'\0' 포함 크기
+		if (retVal->_data == NULL)
 			throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-		if (strcpy_s(retVal->data, strlen(srcData) + 1, srcData) != 0)
+		if (strcpy_s(retVal->_data, strlen(srcData) + 1, srcData) != 0)
 			throw std::runtime_error(std::string(__func__) + std::string(" : src, dst is null or wrong size"));
 	}
 	else //값 할당
 	{
-		retVal->data = srcData;
+		retVal->_data = srcData;
 	}
 
-	retVal->left = retVal->right = NULL;
+	retVal->_left = retVal->_right = NULL;
 
 	return retVal;
 }
@@ -96,10 +96,10 @@ void EXPRT_DeallocateNode(Node** srcNode)
 {
 	if ((*srcNode) != NULL)
 	{
-		if (typeid((*srcNode)->data) == typeid(char*) && (*srcNode)->data != NULL)
+		if (typeid((*srcNode)->_data) == typeid(char*) && (*srcNode)->_data != NULL)
 		{
-			free((*srcNode)->data);
-			(*srcNode)->data = NULL;
+			free((*srcNode)->_data);
+			(*srcNode)->_data = NULL;
 		}
 
 		free(*srcNode);
@@ -115,11 +115,11 @@ void EXPRT_DeallocateTree(Node** srcRootNode)
 {
 	if ((*srcRootNode) != NULL) //후위 순회로 왼쪽 끝 노드부터 해제 
 	{
-		if ((*srcRootNode)->left != NULL)
-			EXPRT_DeallocateTree(&((*srcRootNode)->left));
+		if ((*srcRootNode)->_left != NULL)
+			EXPRT_DeallocateTree(&((*srcRootNode)->_left));
 
-		if ((*srcRootNode)->right != NULL)
-			EXPRT_DeallocateTree(&((*srcRootNode)->right));
+		if ((*srcRootNode)->_right != NULL)
+			EXPRT_DeallocateTree(&((*srcRootNode)->_right));
 
 		EXPRT_DeallocateNode(srcRootNode);
 		(*srcRootNode) = NULL;
@@ -181,10 +181,10 @@ void EXPRT_BulidTreeFromPostfixExpr(Node** srcRootNode, char srcPostfixExpr[])
 	do
 	{
 		GenNextToken(srcPostfixExpr, &token, EXPR_READ_DIRECTION::RIGHT_TO_LEFT);
-		memset(&srcPostfixExpr[strlen(srcPostfixExpr) - token.readCount], '\0', token.readCount); //대상 후위 표현식의 토큰에서 읽은 문자 개수만큼 제거
-	} while (token.symbolType == SYMBOL_TYPE::SPACE); //토큰의 기호 타입이 ' ' (피연산자 간 구분을 위한 공백)가 아닐 때까지 재 생성
+		memset(&srcPostfixExpr[strlen(srcPostfixExpr) - token._readCount], '\0', token._readCount); //대상 후위 표현식의 토큰에서 읽은 문자 개수만큼 제거
+	} while (token._symbolType == SYMBOL_TYPE::SPACE); //토큰의 기호 타입이 ' ' (피연산자 간 구분을 위한 공백)가 아닐 때까지 재 생성
 
-	switch (token.symbolType)
+	switch (token._symbolType)
 	{
 	case SYMBOL_TYPE::LEFT_PARENTHESIS:
 	case SYMBOL_TYPE::RIGHT_PARENTHESIS:
@@ -192,20 +192,20 @@ void EXPRT_BulidTreeFromPostfixExpr(Node** srcRootNode, char srcPostfixExpr[])
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (wrong srcPostfixExpr)"));
 
 	case SYMBOL_TYPE::SPACE:
-		throw std::runtime_error(std::string(__func__) + std::string(" : Mem corruption"));
+		throw myexception::MEM_CORRUPTION_EXCEPTION(std::string(__func__) + std::string(" : Mem corruption"));
 
 	case SYMBOL_TYPE::PLUS:
 	case SYMBOL_TYPE::MINUS:
 	case SYMBOL_TYPE::MULTIPLY:
 	case SYMBOL_TYPE::DIVIDE:
-		(*srcRootNode) = EXPRT_CreateNode(token.str); //연산자인 경우 해당 토큰은 초기 루트 노드 혹은 가지 노드
+		(*srcRootNode) = EXPRT_CreateNode(token._str); //연산자인 경우 해당 토큰은 초기 루트 노드 혹은 가지 노드
 
-		EXPRT_BulidTreeFromPostfixExpr(&((*srcRootNode)->right), srcPostfixExpr); //현재 노드의 오른쪽 하위 트리 생성
-		EXPRT_BulidTreeFromPostfixExpr(&((*srcRootNode)->left), srcPostfixExpr); //현재 노드의 왼쪽 하위 트리 생성
+		EXPRT_BulidTreeFromPostfixExpr(&((*srcRootNode)->_right), srcPostfixExpr); //현재 노드의 오른쪽 하위 트리 생성
+		EXPRT_BulidTreeFromPostfixExpr(&((*srcRootNode)->_left), srcPostfixExpr); //현재 노드의 왼쪽 하위 트리 생성
 		break;
 
 	default: //피연산자인 경우
-		(*srcRootNode) = EXPRT_CreateNode(token.str); //피연산자인 경우 해당 토큰은 잎 노드
+		(*srcRootNode) = EXPRT_CreateNode(token._str); //피연산자인 경우 해당 토큰은 잎 노드
 		break;
 	}
 }
@@ -234,7 +234,7 @@ double EXPRT_EvaluateTree(Node* srcRootNode)
 	double leftTreeOpResult = 0.0; //현재 노드의 왼쪽 하위 트리의 연산 결과
 	double rightTreeOpResult = 0.0; //현재 노드의 오른쪽 하위 트리의 연산 결과
 
-	switch (StrToSymbolType(srcRootNode->data))
+	switch (StrToSymbolType(srcRootNode->_data))
 	{
 	case SYMBOL_TYPE::LEFT_PARENTHESIS:
 	case SYMBOL_TYPE::RIGHT_PARENTHESIS:
@@ -243,17 +243,17 @@ double EXPRT_EvaluateTree(Node* srcRootNode)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Invalid Expression Tree"));
 
 	case SYMBOL_TYPE::OPERAND:
-		retVal = StrToDouble(srcRootNode->data); //피연산자인 경우, 현재 노드의 상위 노드로 현재 노드의 값 전달
+		retVal = StrToDouble(srcRootNode->_data); //피연산자인 경우, 현재 노드의 상위 노드로 현재 노드의 값 전달
 		break;
 
 	default: //연산자인 경우
-		if (srcRootNode->left == NULL || srcRootNode->right == NULL)
+		if (srcRootNode->_left == NULL || srcRootNode->_right == NULL)
 			throw std::runtime_error(std::string(__func__) + std::string(" : Invalid Expression Tree"));
 
-		leftTreeOpResult = EXPRT_EvaluateTree(srcRootNode->left); //현재 노드의 왼쪽 하위 트리로 이동
-		rightTreeOpResult = EXPRT_EvaluateTree(srcRootNode->right); //현재 노드의 오른쪽 하위 트리로 이동
+		leftTreeOpResult = EXPRT_EvaluateTree(srcRootNode->_left); //현재 노드의 왼쪽 하위 트리로 이동
+		rightTreeOpResult = EXPRT_EvaluateTree(srcRootNode->_right); //현재 노드의 오른쪽 하위 트리로 이동
 
-		retVal = CalcOperation(leftTreeOpResult, StrToSymbolType(srcRootNode->data), rightTreeOpResult);
+		retVal = CalcOperation(leftTreeOpResult, StrToSymbolType(srcRootNode->_data), rightTreeOpResult);
 		break;
 	}
 
@@ -274,33 +274,33 @@ void EXPRT_DispOrderedTree(Node* srcRootNode, TRAVERSAL_MODE traversalMode, std:
 	switch (traversalMode)
 	{
 	case TRAVERSAL_MODE::PREORDER:
-		os << srcRootNode->data << " ";
+		os << srcRootNode->_data << " ";
 
-		if (srcRootNode->left != NULL)
-			EXPRT_DispOrderedTree(srcRootNode->left, traversalMode, os);
+		if (srcRootNode->_left != NULL)
+			EXPRT_DispOrderedTree(srcRootNode->_left, traversalMode, os);
 
-		if (srcRootNode->right != NULL)
-			EXPRT_DispOrderedTree(srcRootNode->right, traversalMode, os);
+		if (srcRootNode->_right != NULL)
+			EXPRT_DispOrderedTree(srcRootNode->_right, traversalMode, os);
 		break;
 
 	case TRAVERSAL_MODE::INORDER:
-		if (srcRootNode->left != NULL)
-			EXPRT_DispOrderedTree(srcRootNode->left, traversalMode, os);
+		if (srcRootNode->_left != NULL)
+			EXPRT_DispOrderedTree(srcRootNode->_left, traversalMode, os);
 
-		os << " '" << srcRootNode->data << "' ";
+		os << " '" << srcRootNode->_data << "' ";
 
-		if (srcRootNode->right != NULL)
-			EXPRT_DispOrderedTree(srcRootNode->right, traversalMode, os);
+		if (srcRootNode->_right != NULL)
+			EXPRT_DispOrderedTree(srcRootNode->_right, traversalMode, os);
 		break;
 
 	case TRAVERSAL_MODE::POSTORDER:
-		if (srcRootNode->left != NULL)
-			EXPRT_DispOrderedTree(srcRootNode->left, traversalMode, os);
+		if (srcRootNode->_left != NULL)
+			EXPRT_DispOrderedTree(srcRootNode->_left, traversalMode, os);
 
-		if (srcRootNode->right != NULL)
-			EXPRT_DispOrderedTree(srcRootNode->right, traversalMode, os);
+		if (srcRootNode->_right != NULL)
+			EXPRT_DispOrderedTree(srcRootNode->_right, traversalMode, os);
 
-		os << srcRootNode->data << " ";
+		os << srcRootNode->_data << " ";
 		break;
 	}
 }

@@ -32,12 +32,12 @@ unsigned int Fibonacci(unsigned int n)
 	return Fibonacci(n - 1) + Fibonacci(n - 2);
 
 #elif defined ITERATIVE_METHOD
-	int f1 = 1;
-	int f2 = 1;
+	unsigned int f1 = 1;
+	unsigned int f2 = 1;
 
-	for (int i = 2; i < n; i++) //앞의 두 항을 더하여 누적
+	for (unsigned int i = 2; i < n; i++) //앞의 두 항을 더하여 누적
 	{
-		int acc = f2 + f1;
+		unsigned int acc = f2 + f1;
 		f1 = f2;
 		f2 = acc;
 	}

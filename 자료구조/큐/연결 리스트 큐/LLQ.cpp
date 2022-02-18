@@ -13,8 +13,8 @@ void LLQ_CreateQueue(LinkedListQueue** srcLinkedListQueue)
 	if ((*srcLinkedListQueue) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-	(*srcLinkedListQueue)->front = (*srcLinkedListQueue)->rear = NULL;
-	(*srcLinkedListQueue)->totalNodeCount = 0;
+	(*srcLinkedListQueue)->_front = (*srcLinkedListQueue)->_rear = NULL;
+	(*srcLinkedListQueue)->_totalNodeCount = 0;
 }
 
 /// <summary>
@@ -47,8 +47,8 @@ Node* LLQ_CreateNode(DataType srcData)
 	if (retVal == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-	retVal->data = srcData;
-	retVal->next = NULL;
+	retVal->_data = srcData;
+	retVal->_next = NULL;
 
 	return retVal;
 }
@@ -81,15 +81,15 @@ void LLQ_Enqueue(LinkedListQueue** srcLinkedListQueue, Node* srcNewNode)
 
 	if (LLQ_IsEmpty(srcLinkedListQueue)) //큐가 비어있으면
 	{
-		(*srcLinkedListQueue)->front = (*srcLinkedListQueue)->rear = srcNewNode;
+		(*srcLinkedListQueue)->_front = (*srcLinkedListQueue)->_rear = srcNewNode;
 	}
 	else
 	{
-		(*srcLinkedListQueue)->rear->next = srcNewNode; //후단 노드의 다음을 새 노드로 연결
-		(*srcLinkedListQueue)->rear = srcNewNode; //후단 노드를 새 노드로 변경
+		(*srcLinkedListQueue)->_rear->_next = srcNewNode; //후단 노드의 다음을 새 노드로 연결
+		(*srcLinkedListQueue)->_rear = srcNewNode; //후단 노드를 새 노드로 변경
 	}
 
-	(*srcLinkedListQueue)->totalNodeCount++;
+	(*srcLinkedListQueue)->_totalNodeCount++;
 }
 
 /// <summary>
@@ -105,12 +105,12 @@ Node* LLQ_Dequeue(LinkedListQueue** srcLinkedListQueue)
 	if (LLQ_IsEmpty(srcLinkedListQueue)) //공백 상태일 경우
 		throw std::logic_error(std::string(__func__) + std::string(" : Queue is Empty"));
 
-	Node* retVal = (*srcLinkedListQueue)->front;
-	(*srcLinkedListQueue)->front = (*srcLinkedListQueue)->front->next;
-	(*srcLinkedListQueue)->totalNodeCount--;
+	Node* retVal = (*srcLinkedListQueue)->_front;
+	(*srcLinkedListQueue)->_front = (*srcLinkedListQueue)->_front->_next;
+	(*srcLinkedListQueue)->_totalNodeCount--;
 
 	if (LLQ_IsEmpty(srcLinkedListQueue)) //제거에 의한 공백 상태가 될 경우
-		(*srcLinkedListQueue)->rear = NULL; //제거 된 노드에 대해 관리하지 않음
+		(*srcLinkedListQueue)->_rear = NULL; //제거 된 노드에 대해 관리하지 않음
 
 	return retVal;
 }
@@ -125,7 +125,7 @@ QueueIndexType LLQ_GetTotalNodeCount(LinkedListQueue** srcLinkedListQueue)
 	if ((*srcLinkedListQueue) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	return (*srcLinkedListQueue)->totalNodeCount;
+	return (*srcLinkedListQueue)->_totalNodeCount;
 }
 
 /// <summary>
@@ -138,5 +138,5 @@ bool LLQ_IsEmpty(LinkedListQueue** srcLinkedListQueue)
 	if ((*srcLinkedListQueue) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	return ((*srcLinkedListQueue)->totalNodeCount == 0);
+	return ((*srcLinkedListQueue)->_totalNodeCount == 0);
 }

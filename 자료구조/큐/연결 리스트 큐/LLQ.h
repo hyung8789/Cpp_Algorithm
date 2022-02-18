@@ -6,15 +6,17 @@ typedef int QueueIndexType; //큐 인덱스 타입
 
 typedef struct NodeType
 {
-	DataType data; //노드의 데이터
-	NodeType* next; //다음 노드
+	DataType _data; //노드의 데이터
+
+	NodeType* _next; //다음 노드
 }Node;
 
 typedef struct LinkedListQueueType
 {
-	Node* front; //전단 노드
-	Node* rear; //후단 노드
-	QueueIndexType totalNodeCount; //전체 노드 수
+	Node* _front; //전단 노드
+	Node* _rear; //후단 노드
+
+	QueueIndexType _totalNodeCount; //전체 노드 수
 }LinkedListQueue;
 
 void LLQ_CreateQueue(LinkedListQueue**);

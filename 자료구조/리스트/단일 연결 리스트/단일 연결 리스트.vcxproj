@@ -154,6 +154,11 @@
     <ClInclude Include="SLL_Core.h" />
     <ClInclude Include="SLL.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\common_lib\common_lib\common_lib.vcxproj">
+      <Project>{30e376ac-0d9b-4adc-8a9b-e985fea0d7c3}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

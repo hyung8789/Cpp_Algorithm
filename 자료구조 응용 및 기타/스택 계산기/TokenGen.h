@@ -42,9 +42,9 @@ enum class EXPR_READ_DIRECTION : const int
 
 typedef struct
 {
-	char str[MAX_STR_LEN]; //읽은 문자열
-	SYMBOL_TYPE symbolType; //기호 타입
-	size_t readCount; //읽은 문자 개수
+	char _str[MAX_STR_LEN]; //읽은 문자열
+	SYMBOL_TYPE _symbolType; //기호 타입
+	size_t _readCount; //읽은 문자 개수
 }Token;
 
 SYMBOL_TYPE CharToSymbolType(char);

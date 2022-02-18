@@ -32,10 +32,10 @@ int main()
 			LLQ_Enqueue(&queue, LLQ_CreateNode(i));
 
 			std::cout << "Enqueue data : " << i;
-			if (queue->front != NULL)
-				std::cout << ", Front data : " << queue->front->data;
-			if (queue->rear != NULL)
-				std::cout << ", Rear data : " << queue->rear->data;
+			if (queue->_front != NULL)
+				std::cout << ", Front data : " << queue->_front->_data;
+			if (queue->_rear != NULL)
+				std::cout << ", Rear data : " << queue->_rear->_data;
 			std::cout << "\n";
 		}
 		std::cout << "전체 노드 수 : " << LLQ_GetTotalNodeCount(&queue) << std::endl;
@@ -45,11 +45,11 @@ int main()
 		{
 			Node* tmp = LLQ_Dequeue(&queue);
 
-			std::cout << "Dequeue data : " << tmp->data;
-			if (queue->front != NULL)
-				std::cout << ", Front data : " << queue->front->data;
-			if(queue->rear != NULL)
-				std::cout << ", Rear data : " << queue->rear->data;
+			std::cout << "Dequeue data : " << tmp->_data;
+			if (queue->_front != NULL)
+				std::cout << ", Front data : " << queue->_front->_data;
+			if(queue->_rear != NULL)
+				std::cout << ", Rear data : " << queue->_rear->_data;
 			std::cout << "\n";
 
 			LLQ_DeallocateNode(&tmp);

@@ -58,9 +58,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "탐색", "탐색", "{0E267F
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "탐색", "탐색\탐색\탐색.vcxproj", "{0CABCF38-9789-4BD6-8C44-49B37E7C160A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{2F871E40-EA30-4EF0-97BC-7E383AC3AAA3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common_lib", "common_lib", "{2F871E40-EA30-4EF0-97BC-7E383AC3AAA3}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lib", "lib\lib\lib.vcxproj", "{30E376AC-0D9B-4ADC-8A9B-E985FEA0D7C3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common_lib", "common_lib\common_lib\common_lib.vcxproj", "{30E376AC-0D9B-4ADC-8A9B-E985FEA0D7C3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Red-Black (레드-블랙) 트리", "자료구조\트리\Red-Black (레드-블랙) 트리\Red-Black (레드-블랙) 트리.vcxproj", "{05A422E0-162D-4946-B1D6-3590FACB0364}"
 EndProject

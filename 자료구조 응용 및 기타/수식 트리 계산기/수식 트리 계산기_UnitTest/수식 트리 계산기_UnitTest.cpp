@@ -160,7 +160,7 @@ namespace 수식_트리_계산기_UnitTest
 					GenNextToken(&input[currentReadCount], &token, EXPR_READ_DIRECTION::LEFT_TO_RIGHT);
 
 					if (LOGGING_DEBUG_RESULT)
-						Logger::WriteMessage((std::string("Current Token Str (Left -> Right) : ") + std::string(token.str)).c_str());
+						Logger::WriteMessage((std::string("Current Token Str (Left -> Right) : ") + std::string(token._str)).c_str());
 				}
 				catch (const std::exception& ex)
 				{
@@ -170,7 +170,7 @@ namespace 수식_트리_계산기_UnitTest
 					Assert::Fail();
 				}
 
-				currentReadCount += token.readCount;
+				currentReadCount += token._readCount;
 			}
 		}
 		/// <summary>
@@ -196,7 +196,7 @@ namespace 수식_트리_계산기_UnitTest
 					GenNextToken(slicedStr.c_str(), &token, EXPR_READ_DIRECTION::RIGHT_TO_LEFT);
 
 					if (LOGGING_DEBUG_RESULT)
-						Logger::WriteMessage((std::string("Current Token Str (Right -> Left) : ") + std::string(token.str)).c_str());
+						Logger::WriteMessage((std::string("Current Token Str (Right -> Left) : ") + std::string(token._str)).c_str());
 				}
 				catch (const std::exception& ex)
 				{
@@ -206,7 +206,7 @@ namespace 수식_트리_계산기_UnitTest
 					Assert::Fail();
 				}
 
-				currentReadCount += token.readCount;
+				currentReadCount += token._readCount;
 			}
 		}
 	};

@@ -22,14 +22,14 @@ int main()
 			dummyNode[i] = BT_CreateNode((char)(66 + i)); //B부터 할당
 		}
 
-		rootNode->left = dummyNode[0]; //root -> B
-		rootNode->right = dummyNode[1]; //root -> C
+		rootNode->_left = dummyNode[0]; //root -> B
+		rootNode->_right = dummyNode[1]; //root -> C
 
-		dummyNode[0]->left = dummyNode[2]; //B -> D
-		dummyNode[0]->right = dummyNode[3]; //B -> E
+		dummyNode[0]->_left = dummyNode[2]; //B -> D
+		dummyNode[0]->_right = dummyNode[3]; //B -> E
 
-		dummyNode[1]->left = dummyNode[4]; //C -> F
-		dummyNode[1]->right = dummyNode[5]; //C -> G
+		dummyNode[1]->_left = dummyNode[4]; //C -> F
+		dummyNode[1]->_right = dummyNode[5]; //C -> G
 
 
 		std::cout << "\n전위 순회 (Root -> Left -> Right) : ";

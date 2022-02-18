@@ -17,12 +17,12 @@ void CQ_CreateQueue(CircularQueue** srcCircularQueue, QueueIndexType capacity)
 	if ((*srcCircularQueue) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-	(*srcCircularQueue)->nodeArray = (Node*)malloc(sizeof(Node) * (capacity + 1)); //할당 크기만큼 삽입 위해 할당 크기 + 1로 할당
-	if ((*srcCircularQueue)->nodeArray == NULL)
+	(*srcCircularQueue)->_nodeArray = (Node*)malloc(sizeof(Node) * (capacity + 1)); //할당 크기만큼 삽입 위해 할당 크기 + 1로 할당
+	if ((*srcCircularQueue)->_nodeArray == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-	(*srcCircularQueue)->front = (*srcCircularQueue)->rear = 0;
-	(*srcCircularQueue)->capacity = capacity + 1; //할당 크기만큼 삽입 위해 할당 크기 + 1로 할당
+	(*srcCircularQueue)->_front = (*srcCircularQueue)->_rear = 0;
+	(*srcCircularQueue)->_capacity = capacity + 1; //할당 크기만큼 삽입 위해 할당 크기 + 1로 할당
 }
 
 /// <summary>
@@ -33,8 +33,8 @@ void CQ_DeallocateQueue(CircularQueue** srcCircularQueue)
 {
 	if ((*srcCircularQueue) != NULL)
 	{
-		free((*srcCircularQueue)->nodeArray);
-		(*srcCircularQueue)->nodeArray = NULL;
+		free((*srcCircularQueue)->_nodeArray);
+		(*srcCircularQueue)->_nodeArray = NULL;
 
 		free(*srcCircularQueue);
 		(*srcCircularQueue) = NULL;
@@ -54,8 +54,8 @@ void CQ_Enqueue(CircularQueue** srcCircularQueue, DataType srcData)
 	if (CQ_IsFull(srcCircularQueue)) //포화 상태일 경우
 		throw std::logic_error(std::string(__func__) + std::string(" : Queue is Full"));
 
-	(*srcCircularQueue)->rear = ((*srcCircularQueue)->rear + 1) % (*srcCircularQueue)->capacity;
-	(*srcCircularQueue)->nodeArray[(*srcCircularQueue)->rear].data = srcData;
+	(*srcCircularQueue)->_rear = ((*srcCircularQueue)->_rear + 1) % (*srcCircularQueue)->_capacity;
+	(*srcCircularQueue)->_nodeArray[(*srcCircularQueue)->_rear]._data = srcData;
 }
 
 /// <summary>
@@ -71,8 +71,8 @@ DataType CQ_Dequeue(CircularQueue** srcCircularQueue)
 	if (CQ_IsEmpty(srcCircularQueue)) //공백 상태일 경우
 		throw std::logic_error(std::string(__func__) + std::string(" : Queue is Empty"));
 
-	(*srcCircularQueue)->front = ((*srcCircularQueue)->front + 1) % (*srcCircularQueue)->capacity;
-	return (*srcCircularQueue)->nodeArray[(*srcCircularQueue)->front].data;
+	(*srcCircularQueue)->_front = ((*srcCircularQueue)->_front + 1) % (*srcCircularQueue)->_capacity;
+	return (*srcCircularQueue)->_nodeArray[(*srcCircularQueue)->_front]._data;
 }
 
 /// <summary>
@@ -85,7 +85,7 @@ QueueIndexType CQ_GetTotalNodeDataCount(CircularQueue** srcCircularQueue)
 	if ((*srcCircularQueue) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	return ((*srcCircularQueue)->rear - (*srcCircularQueue)->front);
+	return ((*srcCircularQueue)->_rear - (*srcCircularQueue)->_front);
 }
 
 /// <summary>
@@ -98,7 +98,7 @@ bool CQ_IsEmpty(CircularQueue** srcCircularQueue)
 	if ((*srcCircularQueue) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	return ((*srcCircularQueue)->front == (*srcCircularQueue)->rear); //전단과 후단이 만나는 시점에 공백 상태
+	return ((*srcCircularQueue)->_front == (*srcCircularQueue)->_rear); //전단과 후단이 만나는 시점에 공백 상태
 }
 
 /// <summary>
@@ -111,5 +111,5 @@ bool CQ_IsFull(CircularQueue** srcCircularQueue)
 	if ((*srcCircularQueue) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	return ((*srcCircularQueue)->rear + 1) % (*srcCircularQueue)->capacity == (*srcCircularQueue)->front; //다음에 삽입 될 후단의 위치에서 전단을 만나면 포화 상태
+	return ((*srcCircularQueue)->_rear + 1) % (*srcCircularQueue)->_capacity == (*srcCircularQueue)->_front; //다음에 삽입 될 후단의 위치에서 전단을 만나면 포화 상태
 }

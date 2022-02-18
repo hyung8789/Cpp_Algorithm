@@ -21,7 +21,7 @@ int main()
 		{
 			std::cout << "현재 검색 대상 데이터 : " << targetData;
 			Node* result = DLL_SequentialSearch_MTF(&list, targetData);
-			if (result->data != targetData)
+			if (result->_data != targetData)
 				throw std::logic_error(std::string(__func__) + std::string(" : Search Logic Error"));
 			else
 				std::cout << " - found\n";
@@ -35,7 +35,7 @@ int main()
 		{
 			std::cout << "현재 검색 대상 데이터 : " << targetData;
 			Node* result = DLL_SequentialSearch_Transpose(&list, targetData);
-			if (result->data != targetData)
+			if (result->_data != targetData)
 				throw std::logic_error(std::string(__func__) + std::string(" : Search Logic Error"));
 			else
 				std::cout << " - found\n";

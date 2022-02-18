@@ -152,7 +152,7 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\lib\lib\lib.vcxproj">
+    <ProjectReference Include="..\..\common_lib\common_lib\common_lib.vcxproj">
       <Project>{30e376ac-0d9b-4adc-8a9b-e985fea0d7c3}</Project>
     </ProjectReference>
   </ItemGroup>

@@ -1,5 +1,5 @@
-#ifndef _LIB_CORE_H_
-#define _LIB_CORE_H_
+#ifndef _COMMON_LIB_CORE_H_
+#define _COMMON_LIB_CORE_H_
 
 #include <iostream>
 #include <string>

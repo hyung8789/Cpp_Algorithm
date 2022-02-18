@@ -20,12 +20,12 @@ int main()
 
 			std::cout << "-------------------------------------------\n";
 			std::cout << "--- Before Pop ---\n";
-			std::cout << "Peek Data : " << LLS_Peek(&stack)->data << std::endl;
+			std::cout << "Peek Data : " << LLS_Peek(&stack)->_data << std::endl;
 			std::cout << "IsEmpty : " << (LLS_IsEmpty(&stack) ? "true" : "false") << std::endl;
 			std::cout << "전체 노드 데이터 개수 : " << LLS_GetTotalNodeCount(&stack) << std::endl;
 			poppedNode = LLS_Pop(&stack);
 			std::cout << "--- After Pop ---\n";
-			std::cout << "Pop Data : " << poppedNode->data << std::endl;
+			std::cout << "Pop Data : " << poppedNode->_data << std::endl;
 			std::cout << "IsEmpty : " << (LLS_IsEmpty(&stack) ? "true" : "false") << std::endl;
 			std::cout << "전체 노드 데이터 개수 : " << LLS_GetTotalNodeCount(&stack) << std::endl;
 			std::cout << "-------------------------------------------\n";

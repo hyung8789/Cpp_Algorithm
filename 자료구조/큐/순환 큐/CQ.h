@@ -6,14 +6,15 @@ typedef int QueueIndexType; //큐 인덱스 타입
 
 typedef struct NodeType
 {
-	DataType data; //노드의 데이터
+	DataType _data; //노드의 데이터
 }Node;
 
 typedef struct CircularQueueType
 {
-	QueueIndexType capacity; //할당 크기
-	QueueIndexType front, rear; //전단, 후단 인덱스
-	Node* nodeArray; //노드 배열
+	QueueIndexType _capacity; //할당 크기
+	QueueIndexType _front, _rear; //전단, 후단 인덱스
+
+	Node* _nodeArray; //노드 배열
 }CircularQueue;
 
 void CQ_CreateQueue(CircularQueue**, QueueIndexType);

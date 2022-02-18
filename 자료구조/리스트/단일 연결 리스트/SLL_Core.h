@@ -10,7 +10,7 @@
 #include <iostream>
 
 //해당 프로젝트 속성에서 정적 라이브러리 (lib)로 빌드 할 것
-#include "../../../lib/lib/LIB_Core.h"
+#include "../../../common_lib/common_lib/Common_LIB_Core.h"
 
 #include "SLL.h"
 #endif

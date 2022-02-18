@@ -10,21 +10,21 @@
 /// <returns>대상 데이터가 포함 된 최초 노드</returns>
 Node* DLL_SequentialSearch_MTF(Node** srcList, const DataType& targetData)
 {
-	Node* current = (*srcList); //현재 노드
+	Node* currentNode = (*srcList); //현재 노드
 	Node* retVal = NULL; //찾은 노드
 
-	while (current != NULL)
+	while (currentNode != NULL)
 	{
-		if (COMPARE(current->data, targetData) == 0) //찾고자 하는 대상 데이터를 발견 시
+		if (COMPARE(currentNode->_data, targetData) == 0) //찾고자 하는 대상 데이터를 발견 시
 		{
-			retVal = current;
+			retVal = currentNode;
 			break;
 		}
 
-		current = current->next;
+		currentNode = currentNode->_next;
 	}
 
-	if (current == NULL || COMPARE(current->data, targetData) != 0)
+	if (currentNode == NULL || COMPARE(currentNode->_data, targetData) != 0)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
 	if (retVal != (*srcList)) //찾은 노드가 헤드 노드가 아닌 경우
@@ -48,29 +48,29 @@ Node* DLL_SequentialSearch_MTF(Node** srcList, const DataType& targetData)
 /// <returns>대상 데이터가 포함 된 최초 노드</returns>
 Node* DLL_SequentialSearch_Transpose(Node** srcList, const DataType& targetData)
 {
-	Node* current = (*srcList); //현재 노드
+	Node* currentNode = (*srcList); //현재 노드
 	Node* retVal = NULL; //찾은 노드
-	Node* insertTarget = NULL; //삽입 대상 노드
+	Node* insertTargetNode = NULL; //삽입 대상 노드
 
-	while (current != NULL)
+	while (currentNode != NULL)
 	{
-		if (COMPARE(current->data, targetData) == 0) //찾고자 하는 대상 데이터를 발견 시
+		if (COMPARE(currentNode->_data, targetData) == 0) //찾고자 하는 대상 데이터를 발견 시
 		{
-			retVal = current;
+			retVal = currentNode;
 			break;
 		}
 
-		current = current->next;
+		currentNode = currentNode->_next;
 	}
 
-	if (current == NULL || COMPARE(current->data, targetData) != 0)
+	if (currentNode == NULL || COMPARE(currentNode->_data, targetData) != 0)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
-	if (retVal->prev != NULL) //찾은 노드의 앞 노드가 존재하면
+	if (retVal->_prev != NULL) //찾은 노드의 앞 노드가 존재하면
 	{
-		insertTarget = retVal->prev; //삽입 대상 노드는 찾은 노드의 앞 노드
+		insertTargetNode = retVal->_prev; //삽입 대상 노드는 찾은 노드의 앞 노드
 		DLL_RemoveNode(srcList, retVal, false); //찾은 노드를 리스트에서 분리
-		DLL_InsertNodeBefore(srcList, insertTarget, retVal); //삽입 대상 노드의 앞에 삽입
+		DLL_InsertNodeBefore(srcList, insertTargetNode, retVal); //삽입 대상 노드의 앞에 삽입
 	}
 	else //찾은 노드의 앞 노드가 존재하지 않으면
 	{
@@ -183,8 +183,8 @@ SearchElementType BinarySearch(const SearchElementType srcOrderedEnumerableSet[]
 				: 탐색 성공, 찾은 요소 반환
 
 				M2-2-2) 찾고자 하는 요소와 처음 요소가 불일치
-				: 이는 해당 집합의 모든 요소가 동일한 값을 가지고 있음에도 찾고자 하는 요소와 불일치하거나,
-				해당 집합은 정렬되어 있지 않으므로, 이진 탐색을 수행 불가 예외 발생
+				: 해당 집합의 모든 요소가 동일한 값을 가지고 있음에도 찾고자 하는 요소와 불일치하거나,
+				해당 집합은 정렬되어 있지 않으므로, 이진 탐색 수행 불가
 
 			M2-3) 처음 요소 < 마지막 요소
 			: 이미 정렬 된 순차적으로 열거 가능 한 요소들의 집합은 오름차순으로 정렬되어있음을 가정
@@ -222,7 +222,7 @@ SearchElementType BinarySearch(const SearchElementType srcOrderedEnumerableSet[]
 		if (COMPARE(srcOrderedEnumerableSet[leftIndex], targetData) == 0) //찾고자 하는 요소와 처음 요소가 일치
 			return srcOrderedEnumerableSet[leftIndex];
 
-		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (Unordered EnumerableSet or Not found)"));
+		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Unordered EnumerableSet or Not found"));
 
 	default:
 		break;
@@ -252,7 +252,7 @@ SearchElementType BinarySearch(const SearchElementType srcOrderedEnumerableSet[]
 			break;
 
 		default:
-			throw std::out_of_range(std::string(__func__) + std::string(" : Mem corruption"));
+			throw myexception::MEM_CORRUPTION_EXCEPTION(std::string(__func__) + std::string(" : Mem corruption"));
 		}
 	}
 

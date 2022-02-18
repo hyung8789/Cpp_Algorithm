@@ -6,9 +6,10 @@ typedef int TreeDepthType; //트리 깊이 타입
 
 typedef struct NodeType
 {
-	DataType data; //노드의 데이터
-	NodeType* leftChild; //왼쪽 자식 노드
-	NodeType* rightSibling; //오른쪽 형제 노드
+	DataType _data; //노드의 데이터
+
+	NodeType* _leftChild; //왼쪽 자식 노드
+	NodeType* _rightSibling; //오른쪽 형제 노드
 }Node;
 
 //#define RECURSIVE_METHOD //재귀적 방법 (주석 처리 : 반복적 방법 사용)

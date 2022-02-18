@@ -23,13 +23,13 @@ int main()
 			std::cout << "-------------------------------------------\n";
 			std::cout << "--- Before Pop ---\n";
 			std::cout << "Peek Data : " << AS_Peek(&stack) << std::endl;
-			std::cout << "Top Index : " << stack->top << std::endl;
+			std::cout << "Top Index : " << stack->_top << std::endl;
 			std::cout << "IsEmpty : " << (AS_IsEmpty(&stack) ? "true" : "false") << std::endl;
 			std::cout << "IsFull : " << (AS_IsFull(&stack) ? "true" : "false") << std::endl;
 			std::cout << "전체 노드 데이터 개수 : " << AS_GetTotalNodeDataCount(&stack) << std::endl;
 			std::cout << "--- After Pop ---\n";
 			std::cout << "Pop Data : " << AS_Pop(&stack) << std::endl;
-			std::cout << "Top Index : " << stack->top << std::endl;
+			std::cout << "Top Index : " << stack->_top << std::endl;
 			std::cout << "IsEmpty : " << (AS_IsEmpty(&stack) ? "true" : "false") << std::endl;
 			std::cout << "IsFull : " << (AS_IsFull(&stack) ? "true" : "false") << std::endl;
 			std::cout << "전체 노드 데이터 개수 : " << AS_GetTotalNodeDataCount(&stack) << std::endl;
@@ -41,12 +41,12 @@ int main()
 		for (int i = 0; i < reallocTestSize; i++) //초기 할당 크기를 초과하여 데이터 삽입
 		{
 			AS_Push(&stack, i);
-			std::cout << "Current Capacity : " << stack->capacity << std::endl;
+			std::cout << "Current Capacity : " << stack->_capacity << std::endl;
 		}
 		for (int i = 0; i < reallocTestSize; i++)
 		{
 			AS_Pop(&stack);
-			std::cout << "Current Capacity : " << stack->capacity << std::endl;
+			std::cout << "Current Capacity : " << stack->_capacity << std::endl;
 		}
 
 		AS_DeallocateArrayStack(&stack);

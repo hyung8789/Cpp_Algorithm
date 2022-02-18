@@ -11,8 +11,8 @@ Node* BT_CreateNode(DataType srcData)
 	if (retVal == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-	retVal->data = srcData;
-	retVal->left = retVal->right = NULL;
+	retVal->_data = srcData;
+	retVal->_left = retVal->_right = NULL;
 
 	return retVal;
 }
@@ -38,11 +38,11 @@ void BT_DeallocateTree(Node** srcRootNode)
 {
 	if ((*srcRootNode) != NULL) //후위 순회로 왼쪽 끝 노드부터 해제 
 	{
-		if ((*srcRootNode)->left != NULL)
-			BT_DeallocateTree(&((*srcRootNode)->left));
+		if ((*srcRootNode)->_left != NULL)
+			BT_DeallocateTree(&((*srcRootNode)->_left));
 
-		if((*srcRootNode)->right != NULL)
-			BT_DeallocateTree(&((*srcRootNode)->right));
+		if((*srcRootNode)->_right != NULL)
+			BT_DeallocateTree(&((*srcRootNode)->_right));
 
 		BT_DeallocateNode(srcRootNode);
 		(*srcRootNode) = NULL;
@@ -62,33 +62,33 @@ void BT_DispOrderedTree(Node* srcRootNode, TRAVERSAL_MODE traversalMode)
 	switch (traversalMode)
 	{
 	case TRAVERSAL_MODE::PREORDER:
-		std::cout << srcRootNode->data << " ";
+		std::cout << srcRootNode->_data << " ";
 
-		if(srcRootNode->left != NULL)
-			BT_DispOrderedTree(srcRootNode->left, traversalMode);
+		if(srcRootNode->_left != NULL)
+			BT_DispOrderedTree(srcRootNode->_left, traversalMode);
 
-		if (srcRootNode->right != NULL)
-			BT_DispOrderedTree(srcRootNode->right, traversalMode);
+		if (srcRootNode->_right != NULL)
+			BT_DispOrderedTree(srcRootNode->_right, traversalMode);
 		break;
 
 	case TRAVERSAL_MODE::INORDER:
-		if (srcRootNode->left != NULL)
-			BT_DispOrderedTree(srcRootNode->left, traversalMode);
+		if (srcRootNode->_left != NULL)
+			BT_DispOrderedTree(srcRootNode->_left, traversalMode);
 
-		std::cout << srcRootNode->data << " ";
+		std::cout << srcRootNode->_data << " ";
 
-		if (srcRootNode->right != NULL)
-			BT_DispOrderedTree(srcRootNode->right, traversalMode);
+		if (srcRootNode->_right != NULL)
+			BT_DispOrderedTree(srcRootNode->_right, traversalMode);
 		break;
 
 	case TRAVERSAL_MODE::POSTORDER:
-		if (srcRootNode->left != NULL)
-			BT_DispOrderedTree(srcRootNode->left, traversalMode);
+		if (srcRootNode->_left != NULL)
+			BT_DispOrderedTree(srcRootNode->_left, traversalMode);
 
-		if (srcRootNode->right != NULL)
-			BT_DispOrderedTree(srcRootNode->right, traversalMode);
+		if (srcRootNode->_right != NULL)
+			BT_DispOrderedTree(srcRootNode->_right, traversalMode);
 
-		std::cout << srcRootNode->data << " ";
+		std::cout << srcRootNode->_data << " ";
 		break;
 	}
 }

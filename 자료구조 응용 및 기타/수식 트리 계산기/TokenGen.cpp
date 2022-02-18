@@ -121,11 +121,11 @@ void GenNextToken(const char* srcExpr, Token* dstToken, EXPR_READ_DIRECTION expr
 	if (srcExpr == NULL || dstToken == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	if (strlen(srcExpr) > sizeof(dstToken->str) - 1) //대상 표현식이 출력 버퍼의 '\0' 제외 한 크기를 초과 할 경우
+	if (strlen(srcExpr) > sizeof(dstToken->_str) - 1) //대상 표현식이 출력 버퍼의 '\0' 제외 한 크기를 초과 할 경우
 		throw std::out_of_range(std::string(__func__) + std::string(" : out of range"));
 
-	memset(dstToken->str, '\0', sizeof(dstToken->str));
-	dstToken->readCount = 0;
+	memset(dstToken->_str, '\0', sizeof(dstToken->_str));
+	dstToken->_readCount = 0;
 
 	/***
 		< '.'을 포함하는 실수의 조건 >
@@ -176,21 +176,21 @@ void GenNextToken(const char* srcExpr, Token* dstToken, EXPR_READ_DIRECTION expr
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args")); //대상 표현식의 다음에 읽을 인덱스
 	bool isDotAlreadyExists = false; //실수 표현을 위한 '.' 의 최초 한 번 존재 여부
 
-	while (dstToken->readCount < srcExprLen) //대상 표현식을 다 읽을 때 까지
+	while (dstToken->_readCount < srcExprLen) //대상 표현식을 다 읽을 때 까지
 	{
-		dstToken->str[dstToken->readCount] = srcExpr[srcExprNextReadIndex]; //한 문자씩 처리
-		dstToken->symbolType = CharToSymbolType(srcExpr[srcExprNextReadIndex]); //읽은 문자에 대한 기호 타입 할당
-		dstToken->readCount++; //읽은 문자 개수 증가
+		dstToken->_str[dstToken->_readCount] = srcExpr[srcExprNextReadIndex]; //한 문자씩 처리
+		dstToken->_symbolType = CharToSymbolType(srcExpr[srcExprNextReadIndex]); //읽은 문자에 대한 기호 타입 할당
+		dstToken->_readCount++; //읽은 문자 개수 증가
 
 		srcExprNextReadIndex =
 			(exprReadDirection == EXPR_READ_DIRECTION::LEFT_TO_RIGHT) ? srcExprNextReadIndex + 1 :
 			(exprReadDirection == EXPR_READ_DIRECTION::RIGHT_TO_LEFT) ? srcExprNextReadIndex - 1 :
 			throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args")); //대상 표현식의 다음에 읽을 위치 할당
 
-		switch (dstToken->symbolType)
+		switch (dstToken->_symbolType)
 		{
 		case SYMBOL_TYPE::OPERAND:
-			if (dstToken->readCount < srcExprLen) //현재 문자의 다음 문자가 존재 할 경우
+			if (dstToken->_readCount < srcExprLen) //현재 문자의 다음 문자가 존재 할 경우
 			{
 				switch (CharToSymbolType(srcExpr[srcExprNextReadIndex]))
 				{
@@ -200,7 +200,7 @@ void GenNextToken(const char* srcExpr, Token* dstToken, EXPR_READ_DIRECTION expr
 
 				default: //현재 문자의 다음 문자의 기호 타입이 '(', ')', 연산자, 피연산자 간 구분을 위한 공백인 경우
 					if (exprReadDirection == EXPR_READ_DIRECTION::RIGHT_TO_LEFT) //오른쪽에서 왼쪽으로 읽었을 경우
-						ReverseInplaceStr(dstToken->str); //현재까지 읽은 문자열에 대해 좌우반전
+						ReverseInplaceStr(dstToken->_str); //현재까지 읽은 문자열에 대해 좌우반전
 
 					goto END_PROC; //현재까지 읽은 문자에 대해 처리를 위하여 읽기 중지
 				}
@@ -210,12 +210,12 @@ void GenNextToken(const char* srcExpr, Token* dstToken, EXPR_READ_DIRECTION expr
 
 		case SYMBOL_TYPE::DOT:
 			if (isDotAlreadyExists ||
-				!(dstToken->readCount >= 2 && dstToken->readCount < srcExprLen)) //이미 '.'가 존재하거나, 현재 문자의 이전, 다음 문자가 존재하지 않을 경우
+				!(dstToken->_readCount >= 2 && dstToken->_readCount < srcExprLen)) //이미 '.'가 존재하거나, 현재 문자의 이전, 다음 문자가 존재하지 않을 경우
 				throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (wrong srcExpr)"));
 
 			isDotAlreadyExists = true;
 
-			if (!(CharToSymbolType(dstToken->str[dstToken->readCount - 2]) == SYMBOL_TYPE::OPERAND &&
+			if (!(CharToSymbolType(dstToken->_str[dstToken->_readCount - 2]) == SYMBOL_TYPE::OPERAND &&
 				CharToSymbolType(srcExpr[srcExprNextReadIndex]) == SYMBOL_TYPE::OPERAND)) //현재 문자의 이전, 다음 문자의 기호 타입이 피연산자가 아닐 경우
 				throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (wrong srcExpr)"));
 

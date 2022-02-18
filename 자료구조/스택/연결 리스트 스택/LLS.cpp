@@ -13,8 +13,8 @@ void LLS_CreateStack(LinkedListStack** srcLinkedListStack)
 	if ((*srcLinkedListStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-	(*srcLinkedListStack)->head = (*srcLinkedListStack)->top = NULL;
-	(*srcLinkedListStack)->totalNodeCount = 0;
+	(*srcLinkedListStack)->_head = (*srcLinkedListStack)->_top = NULL;
+	(*srcLinkedListStack)->_totalNodeCount = 0;
 }
 
 /// <summary>
@@ -50,14 +50,14 @@ Node* LLS_CreateNode(const char* srcData)
 	if (retVal == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-	retVal->data = (char*)malloc(strlen(srcData) + 1); //'\0' 포함 크기
-	if (retVal->data == NULL)
+	retVal->_data = (char*)malloc(strlen(srcData) + 1); //'\0' 포함 크기
+	if (retVal->_data == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-	if (strcpy_s(retVal->data, strlen(srcData) + 1, srcData) != 0)
+	if (strcpy_s(retVal->_data, strlen(srcData) + 1, srcData) != 0)
 		throw std::runtime_error(std::string(__func__) + std::string(" : src, dst is null or wrong size"));
 
-	retVal->next = NULL;
+	retVal->_next = NULL;
 
 	return retVal;
 }
@@ -70,10 +70,10 @@ void LLS_DeallocateNode(Node** srcNode)
 {
 	if ((*srcNode) != NULL)
 	{
-		if ((*srcNode)->data != NULL)
+		if ((*srcNode)->_data != NULL)
 		{
-			free((*srcNode)->data);
-			(*srcNode)->data = NULL;
+			free((*srcNode)->_data);
+			(*srcNode)->_data = NULL;
 		}
 
 		free(*srcNode);
@@ -94,17 +94,17 @@ void LLS_Push(LinkedListStack** srcLinkedListStack, Node* srcNewNode)
 	if (srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	if ((*srcLinkedListStack)->head == NULL)
+	if ((*srcLinkedListStack)->_head == NULL)
 	{
-		(*srcLinkedListStack)->head = (*srcLinkedListStack)->top = srcNewNode;
+		(*srcLinkedListStack)->_head = (*srcLinkedListStack)->_top = srcNewNode;
 	}
 	else //최상위 노드 다음에 새 노드 연결 및 최상위 노드 변경
 	{
-		(*srcLinkedListStack)->top->next = srcNewNode;
-		(*srcLinkedListStack)->top = srcNewNode; //최상위 노드 변경
+		(*srcLinkedListStack)->_top->_next = srcNewNode;
+		(*srcLinkedListStack)->_top = srcNewNode; //최상위 노드 변경
 	}
 
-	(*srcLinkedListStack)->totalNodeCount++; //전체 노드 수 증가
+	(*srcLinkedListStack)->_totalNodeCount++; //전체 노드 수 증가
 }
 
 /// <summary>
@@ -122,27 +122,27 @@ Node* LLS_Pop(LinkedListStack** srcLinkedListStack)
 	if (LLS_IsEmpty(srcLinkedListStack)) //비어있으면
 		throw std::logic_error(std::string(__func__) + std::string(" : Empty Stack"));
 
-	retVal = (*srcLinkedListStack)->top;
-	(*srcLinkedListStack)->totalNodeCount--; //전체 노드 수 감소
+	retVal = (*srcLinkedListStack)->_top;
+	(*srcLinkedListStack)->_totalNodeCount--; //전체 노드 수 감소
 
-	if (retVal == (*srcLinkedListStack)->head) //최상위 노드가 헤드 노드일 경우
+	if (retVal == (*srcLinkedListStack)->_head) //최상위 노드가 헤드 노드일 경우
 	{
-		(*srcLinkedListStack)->top = (*srcLinkedListStack)->head = NULL;
+		(*srcLinkedListStack)->_top = (*srcLinkedListStack)->_head = NULL;
 	}
 	else //단일 연결 리스트이므로, 순차적으로 최상위 노드의 이전을 탐색
 	{
-		Node* current = (*srcLinkedListStack)->head;
+		Node* current = (*srcLinkedListStack)->_head;
 
-		while (current != NULL && current->next != retVal)
+		while (current != NULL && current->_next != retVal)
 		{
-			current = current->next;
+			current = current->_next;
 		}
 
 		if (current == NULL)
 			throw std::runtime_error(std::string(__func__) + std::string(" : Unknown Err"));
 
-		(*srcLinkedListStack)->top = current; //최상위 노드를 최상위 노드의 이전 노드로 변경
-		current->next = NULL;
+		(*srcLinkedListStack)->_top = current; //최상위 노드를 최상위 노드의 이전 노드로 변경
+		current->_next = NULL;
 	}
 
 	return retVal;
@@ -163,7 +163,7 @@ Node* LLS_Peek(LinkedListStack** srcLinkedListStack)
 	if (LLS_IsEmpty(srcLinkedListStack)) //비어있으면
 		throw std::logic_error(std::string(__func__) + std::string(" : Empty Stack"));
 
-	retVal = (*srcLinkedListStack)->top;
+	retVal = (*srcLinkedListStack)->_top;
 
 	return retVal;
 }
@@ -178,7 +178,7 @@ StackIndexType LLS_GetTotalNodeCount(LinkedListStack** srcLinkedListStack)
 	if ((*srcLinkedListStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	return (*srcLinkedListStack)->totalNodeCount;
+	return (*srcLinkedListStack)->_totalNodeCount;
 }
 
 /// <summary>
@@ -191,5 +191,5 @@ bool LLS_IsEmpty(LinkedListStack** srcLinkedListStack)
 	if ((*srcLinkedListStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	return ((*srcLinkedListStack)->totalNodeCount == 0);
+	return ((*srcLinkedListStack)->_totalNodeCount == 0);
 }

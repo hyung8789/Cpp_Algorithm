@@ -1,6 +1,9 @@
 #ifndef _MACRO_H_
 #define _MACRO_H_
 
+#define TRUE (0x1)
+#define FALSE (0x0)
+
 #define FP_DIFF_THRESHOLD 0.0001 //부동 소수점 차이 임계값 (epsilon)
 #define LENGTH(array) ((sizeof(array)) / (sizeof(array[0])))
 #define COMPARE(x, y) ((x) > (y) ? 1 : (x) == (y) ? 0 : -1) //x > y : 1, x == y : 0, x < y : -1

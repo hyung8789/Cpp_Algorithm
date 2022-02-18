@@ -17,9 +17,10 @@ typedef int TreeDepthType; //트리 깊이 타입
 
 typedef struct NodeType
 {
-	DataType data; //노드의 데이터
-	NodeType* left; //왼쪽 노드
-	NodeType* right; //오른쪽 노드
+	DataType _data; //노드의 데이터
+
+	NodeType* _left; //왼쪽 노드
+	NodeType* _right; //오른쪽 노드
 }Node;
 
 enum class TRAVERSAL_MODE : const int

@@ -37,21 +37,21 @@ int main()
 		{
 			dummyNode[i] = DS_CreateNode((int*)dummy[i]);
 			DS_UnionSet(&originSet, dummyNode[i]);
-			std::cout << (int)dummyNode[i]->data << std::endl;
+			std::cout << (int)dummyNode[i]->_data << std::endl;
 		}
-		std::cout << "원본 집합의 최상위 부모 노드 : "<< (int)DS_FindSet(dummyNode[1])->data << std::endl;
+		std::cout << "원본 집합의 최상위 부모 노드 : "<< (int)DS_FindSet(dummyNode[1])->_data << std::endl;
 
 		std::cout << "\n--- 원본 집합과 통합 할 집합 ---" << std::endl;
 		for (int i = 4; i <= 5; i++) //원본과 통합 할 집합
 		{
 			dummyNode[i] = DS_CreateNode((int*)dummy[i]);
 			DS_UnionSet(&newSet, dummyNode[i]);
-			std::cout << (int)dummyNode[i]->data << std::endl;
+			std::cout << (int)dummyNode[i]->_data << std::endl;
 		}
-		std::cout << "원본 집합과 통합 할 집합의 최상위 부모 노드 : " << (int)DS_FindSet(dummyNode[4])->data << std::endl;
+		std::cout << "원본 집합과 통합 할 집합의 최상위 부모 노드 : " << (int)DS_FindSet(dummyNode[4])->_data << std::endl;
 
 		DS_UnionSet(&originSet, newSet);
-		std::cout << "\n통합 된 후 집합의 최상위 부모 노드 : " << (int)DS_FindSet(dummyNode[4])->data << std::endl;
+		std::cout << "\n통합 된 후 집합의 최상위 부모 노드 : " << (int)DS_FindSet(dummyNode[4])->_data << std::endl;
 		
 		for(int i=0;i<6;i++)
 			DS_DeallocateNode(&dummyNode[i]);
