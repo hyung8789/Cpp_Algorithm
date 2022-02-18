@@ -4,7 +4,7 @@
 #define TRUE (0x1)
 #define FALSE (0x0)
 
-#define FP_DIFF_THRESHOLD 0.0001 //ºÎµ¿ ¼Ò¼öÁ¡ Â÷ÀÌ ÀÓ°è°ª (epsilon)
+#define FP_DIFF_THRESHOLD 0.0001 //ë¶€ë™ ì†Œìˆ˜ì  ì°¨ì´ ìž„ê³„ê°’ (epsilon)
 
 #define LENGTH(array) ((sizeof(array)) / (sizeof(array[0])))
 #define COMPARE(x, y) ((x) > (y) ? 1 : (x) == (y) ? 0 : -1) //x > y : 1, x == y : 0, x < y : -1

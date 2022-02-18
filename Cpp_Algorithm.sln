@@ -64,6 +64,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common_lib", "common_lib\co
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Red-Black (레드-블랙) 트리", "자료구조\트리\Red-Black (레드-블랙) 트리\Red-Black (레드-블랙) 트리.vcxproj", "{05A422E0-162D-4946-B1D6-3590FACB0364}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1768FF6E-301A-43DB-BD33-CF9773DA8461}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
