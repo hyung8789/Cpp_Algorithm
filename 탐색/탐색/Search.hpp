@@ -222,7 +222,8 @@ SearchElementType BinarySearch(const SearchElementType srcOrderedEnumerableSet[]
 		if (COMPARE(srcOrderedEnumerableSet[leftIndex], targetData) == 0) //찾고자 하는 요소와 처음 요소가 일치
 			return srcOrderedEnumerableSet[leftIndex];
 
-		if (leftIndex + 1 < rightIndex && srcOrderedEnumerableSet[leftIndex + 1] != srcOrderedEnumerableSet[rightIndex))
+		if (leftIndex + 1 < rightIndex && 
+			srcOrderedEnumerableSet[leftIndex + 1] != srcOrderedEnumerableSet[rightIndex)) //요소가 2개 이상이며, 정렬되어 있지 않을 경우
 			throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (Unordered EnumerableSet)"));
 
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));

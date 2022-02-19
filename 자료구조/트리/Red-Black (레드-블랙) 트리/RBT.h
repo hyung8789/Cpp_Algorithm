@@ -29,8 +29,8 @@ enum class COLOR : const int
 
 typedef struct NodeType
 {
-	COLOR color;
 	DataType _data; //노드의 데이터
+	COLOR _color; //노드 색
 
 	Node* _parent; //부모 노드
 	NodeType* _left; //왼쪽 노드
@@ -43,4 +43,13 @@ enum class TRAVERSAL_MODE : const int
 	INORDER, //중위 순회 (Left -> Root -> Right)
 	POSTORDER //후위 순회 (Left -> Right -> Root)
 };
+
+enum class ROTATE_DIRECTION : const int
+{
+	RIGHT = 0, //우회전 (왼쪽 자식과 왼쪽 자식의 부모 교환) 
+	LEFT //좌회전 (오른쪽 자식과 오른쪽 자식의 부모 교환)
+};
+
+void RBT_InsertNode(Node**, Node*);
+void RBT_RotateTree(Node**, Node* , ROTATE_DIRECTION);
 #endif

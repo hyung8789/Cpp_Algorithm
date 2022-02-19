@@ -212,7 +212,6 @@ void BST_RemoveNode(Node** srcRootNode, const DataType& targetData, bool dealloc
 		Node* moveTargetNode; //이동 대상 노드 (삭제 대상 노드의 오른쪽 하위 트리의 노드 중 가장 작은 노드)
 		Node* moveTargetParentNode; //이동 대상 노드의 부모 노드
 		Node** moveTargetParentToChildConnection; //이동 대상 노드의 부모 노드에서 이동 대상 노드로의 연결
-
 		std::tie(moveTargetNode, moveTargetParentNode, moveTargetParentToChildConnection) = tmpMoveTargetTuple;
 
 		if (removeTargetNode == (*srcRootNode)) //삭제 대상 노드가 루트 노드일 경우
