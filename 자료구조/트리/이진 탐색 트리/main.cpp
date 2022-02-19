@@ -1,9 +1,9 @@
-#include "BST_Core.h"
+ï»¿#include "BST_Core.h"
 
 int main()
 {
 	_CrtMemState oldState, newState, lastState;
-	_CrtMemCheckpoint(&oldState); //ÇÒ´ç Àü »óÅÂ
+	_CrtMemCheckpoint(&oldState); //í• ë‹¹ ì „ ìƒíƒœ
 
 	try
 	{
@@ -13,46 +13,67 @@ int main()
 				1				16					50
 			0		9		12		20
 			
-			10 »èÁ¦ Àü ÁßÀ§ ¼øÈ¸ : 0 1 9 10 12 16 20 23 50 100
-			10 »èÁ¦ ÈÄ,
+			ì „ìœ„ ìˆœíšŒ (Root -> Left -> Right) : 23 10 1 0 9 16 12 20 100 50
+			ì¤‘ìœ„ ìˆœíšŒ (Left -> Root -> Right) : 0 1 9 10 12 16 20 23 50 100
+			í›„ìœ„ ìˆœíšŒ (Left -> Right -> Root) : 0 9 1 12 20 16 10 50 100 23
+
+			---
+
+			ì¤‘ê°„ ë…¸ë“œ 10 ì‚­ì œ í›„,
 
 										23 (Root)
 						12									100
 				1				16						50
 			0		9				20
 
-			10 »èÁ¦ ÈÄ ÁßÀ§ ¼øÈ¸ : 0 1 9 12 16 20 23 50 100
-			·çÆ® ³ëµå 23 »èÁ¦ ÈÄ ÁßÀ§ ¼øÈ¸ : 0 1 9 12 16 20 50 100
-		***/
-		//TODO : ¸ğµç ½ÇÇà ºĞ±â¿¡ ´ëÇÑ Å×½ºÆ®
+			ì¤‘ê°„ ë…¸ë“œ 10 ì‚­ì œ í›„ ì¤‘ìœ„ ìˆœíšŒ : 0 1 9 12 16 20 23 50 100
 
+			---
+
+			ë£¨íŠ¸ ë…¸ë“œ 23 ì‚­ì œ í›„ ì¤‘ìœ„ ìˆœíšŒ : 0 1 9 12 16 20 50 100
+			ë‹¨ë§ ë…¸ë“œ 9 ì‚­ì œ í›„ ì¤‘ìœ„ ìˆœíšŒ : 0 1 12 16 20 50 100
+			ì¤‘ê°„ ë…¸ë“œ 1 ì‚­ì œ í›„ ì¤‘ìœ„ ìˆœíšŒ : 0 12 16 20 50 100
+		***/
 
 		int inputData[] = 
 		{
-			10,100,1,16,50,0,9,12,20
-		}; //ÀÔ·Â µ¥ÀÌÅÍ (·çÆ® ³ëµå 23)
+			23, 10,100,1,16,50,0,9,12,20
+		}; //ì…ë ¥ ë°ì´í„° (ë£¨íŠ¸ ë…¸ë“œ 23)
 
-		Node* rootNode = BT_CreateNode(23); //ÃÖ»óÀ§ ·çÆ® ³ëµå
+		Node* rootNode = BST_CreateNode(inputData[0]); //ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œ
 
-		for (int i = 0; i < LENGTH(inputData); i++)
+		for (int i = 1; i < LENGTH(inputData); i++)
 		{
-			BST_InsertNode(&rootNode, BT_CreateNode(inputData[i]));
+			BST_InsertNode(&rootNode, BST_CreateNode(inputData[i]));
 		}
 
-		std::cout << "\n10 »èÁ¦ Àü ÁßÀ§ ¼øÈ¸ (Left -> Root -> Right) : ";
-		BT_DispOrderedTree(rootNode, TRAVERSAL_MODE::INORDER);
-		
-		std::cout << "\n10 »èÁ¦ ÈÄ ÁßÀ§ ¼øÈ¸ (Left -> Root -> Right) : ";
-		BST_RemoveNode(&rootNode, 10);
-		BT_DispOrderedTree(rootNode, TRAVERSAL_MODE::INORDER);
+		std::cout << "\nì „ìœ„ ìˆœíšŒ (Root -> Left -> Right) : ";
+		BST_DispOrderedTree(rootNode, TRAVERSAL_MODE::PREORDER);
 
+		std::cout << "\nì¤‘ìœ„ ìˆœíšŒ (Left -> Root -> Right) : ";
+		BST_DispOrderedTree(rootNode, TRAVERSAL_MODE::INORDER);
 		
-		std::cout << "\n·çÆ® ³ëµå 23 »èÁ¦ ÈÄ ÁßÀ§ ¼øÈ¸ (Left -> Root -> Right) : ";
+		std::cout << "\ní›„ìœ„ ìˆœíšŒ (Left -> Right -> Root) : ";
+		BST_DispOrderedTree(rootNode, TRAVERSAL_MODE::POSTORDER);
+
+		std::cout << "\nì¤‘ê°„ ë…¸ë“œ 10 ì‚­ì œ í›„ ì¤‘ìœ„ ìˆœíšŒ (Left -> Root -> Right) : ";
+		BST_RemoveNode(&rootNode, 10);
+		BST_DispOrderedTree(rootNode, TRAVERSAL_MODE::INORDER);
+		
+		std::cout << "\në£¨íŠ¸ ë…¸ë“œ 23 ì‚­ì œ í›„ ì¤‘ìœ„ ìˆœíšŒ (Left -> Root -> Right) : ";
 		BST_RemoveNode(&rootNode, 23);
-		BT_DispOrderedTree(rootNode, TRAVERSAL_MODE::INORDER);
+		BST_DispOrderedTree(rootNode, TRAVERSAL_MODE::INORDER);
 		
+		std::cout << "\në‹¨ë§ ë…¸ë“œ 9 ì‚­ì œ í›„ ì¤‘ìœ„ ìˆœíšŒ (Left -> Root -> Right) : ";
+		BST_RemoveNode(&rootNode, 9);
+		BST_DispOrderedTree(rootNode, TRAVERSAL_MODE::INORDER);
+
+		std::cout << "\nì¤‘ê°„ ë…¸ë“œ 1 ì‚­ì œ í›„ ì¤‘ìœ„ ìˆœíšŒ (Left -> Root -> Right) : ";
+		BST_RemoveNode(&rootNode, 1);
+		BST_DispOrderedTree(rootNode, TRAVERSAL_MODE::INORDER);
+
 		std::cout << "\n";
-		BT_DeallocateTree(&rootNode);
+		BST_DeallocateTree(&rootNode);
 	}
 	catch (const std::exception& ex)
 	{
@@ -60,7 +81,7 @@ int main()
 		exit(EXIT_FAILURE);
 	}
 
-	_CrtMemCheckpoint(&newState); //ÇÒ´ç ÇØÁ¦ ÈÄ »óÅÂ
+	_CrtMemCheckpoint(&newState); //í• ë‹¹ í•´ì œ í›„ ìƒíƒœ
 	_CrtDumpMemoryLeaks();
 	if (_CrtMemDifference(&lastState, &oldState, &newState))
 		_CrtMemDumpStatistics(&lastState);

@@ -1,21 +1,21 @@
-#ifndef _SEARCH_HPP_
+ï»¿#ifndef _SEARCH_HPP_
 #define _SEARCH_HPP_
 
 #ifdef _DLL_H_
 /// <summary>
-/// ´ë»ó ¸®½ºÆ®¿¡¼­ ¼øÂ÷Å½»ö - ÀüÁø ÀÌµ¿¹ı (Move To Front)À¸·Î ´ë»ó µ¥ÀÌÅÍ°¡ Æ÷ÇÔ µÈ ÃÖÃÊ ³ëµå ¹İÈ¯
+/// ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸ì—ì„œ ìˆœì°¨íƒìƒ‰ - ì „ì§„ ì´ë™ë²• (Move To Front)ìœ¼ë¡œ ëŒ€ìƒ ë°ì´í„°ê°€ í¬í•¨ ëœ ìµœì´ˆ ë…¸ë“œ ë°˜í™˜
 /// </summary>
-/// <param name="srcList">´ë»ó ¸®½ºÆ®</param>
-/// <param name="targetData">Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ</param>
-/// <returns>´ë»ó µ¥ÀÌÅÍ°¡ Æ÷ÇÔ µÈ ÃÖÃÊ ³ëµå</returns>
+/// <param name="srcList">ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸</param>
+/// <param name="targetData">ì°¾ê³ ì í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°</param>
+/// <returns>ëŒ€ìƒ ë°ì´í„°ê°€ í¬í•¨ ëœ ìµœì´ˆ ë…¸ë“œ</returns>
 Node* DLL_SequentialSearch_MTF(Node** srcList, const DataType& targetData)
 {
-	Node* currentNode = (*srcList); //ÇöÀç ³ëµå
-	Node* retVal = NULL; //Ã£Àº ³ëµå
+	Node* currentNode = (*srcList); //í˜„ì¬ ë…¸ë“œ
+	Node* retVal = NULL; //ì°¾ì€ ë…¸ë“œ
 
 	while (currentNode != NULL)
 	{
-		if (COMPARE(currentNode->_data, targetData) == 0) //Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ¸¦ ¹ß°ß ½Ã
+		if (COMPARE(currentNode->_data, targetData) == 0) //ì°¾ê³ ì í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°ë¥¼ ë°œê²¬ ì‹œ
 		{
 			retVal = currentNode;
 			break;
@@ -27,12 +27,12 @@ Node* DLL_SequentialSearch_MTF(Node** srcList, const DataType& targetData)
 	if (currentNode == NULL || COMPARE(currentNode->_data, targetData) != 0)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
-	if (retVal != (*srcList)) //Ã£Àº ³ëµå°¡ Çìµå ³ëµå°¡ ¾Æ´Ñ °æ¿ì
+	if (retVal != (*srcList)) //ì°¾ì€ ë…¸ë“œê°€ í—¤ë“œ ë…¸ë“œê°€ ì•„ë‹Œ ê²½ìš°
 	{
-		DLL_RemoveNode(srcList, retVal, false); //Ã£Àº ³ëµå¸¦ ¸®½ºÆ®¿¡¼­ ºĞ¸®
-		DLL_InsertNewHead(srcList, retVal); //Ã£Àº ³ëµå¸¦ ¸®½ºÆ®ÀÇ ¸Ç ¾Õ¿¡ »ğÀÔ
+		DLL_RemoveNode(srcList, retVal, false); //ì°¾ì€ ë…¸ë“œë¥¼ ë¦¬ìŠ¤íŠ¸ì—ì„œ ë¶„ë¦¬
+		DLL_InsertNewHead(srcList, retVal); //ì°¾ì€ ë…¸ë“œë¥¼ ë¦¬ìŠ¤íŠ¸ì˜ ë§¨ ì•ì— ì‚½ì…
 	}
-	else //Ã£Àº ³ëµå°¡ Çìµå ³ëµåÀÎ °æ¿ì
+	else //ì°¾ì€ ë…¸ë“œê°€ í—¤ë“œ ë…¸ë“œì¸ ê²½ìš°
 	{
 		//do nothing 
 	}
@@ -41,20 +41,20 @@ Node* DLL_SequentialSearch_MTF(Node** srcList, const DataType& targetData)
 }
 
 /// <summary>
-/// ´ë»ó ¸®½ºÆ®¿¡¼­ ¼øÂ÷Å½»ö - ÀüÀ§¹ı (Transpose)À¸·Î ´ë»ó µ¥ÀÌÅÍ°¡ Æ÷ÇÔ µÈ ÃÖÃÊ ³ëµå ¹İÈ¯
+/// ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸ì—ì„œ ìˆœì°¨íƒìƒ‰ - ì „ìœ„ë²• (Transpose)ìœ¼ë¡œ ëŒ€ìƒ ë°ì´í„°ê°€ í¬í•¨ ëœ ìµœì´ˆ ë…¸ë“œ ë°˜í™˜
 /// </summary>
-/// <param name="srcList">´ë»ó ¸®½ºÆ®</param>
-/// <param name="targetData">Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ</param>
-/// <returns>´ë»ó µ¥ÀÌÅÍ°¡ Æ÷ÇÔ µÈ ÃÖÃÊ ³ëµå</returns>
+/// <param name="srcList">ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸</param>
+/// <param name="targetData">ì°¾ê³ ì í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°</param>
+/// <returns>ëŒ€ìƒ ë°ì´í„°ê°€ í¬í•¨ ëœ ìµœì´ˆ ë…¸ë“œ</returns>
 Node* DLL_SequentialSearch_Transpose(Node** srcList, const DataType& targetData)
 {
-	Node* currentNode = (*srcList); //ÇöÀç ³ëµå
-	Node* retVal = NULL; //Ã£Àº ³ëµå
-	Node* insertTargetNode = NULL; //»ğÀÔ ´ë»ó ³ëµå
+	Node* currentNode = (*srcList); //í˜„ì¬ ë…¸ë“œ
+	Node* retVal = NULL; //ì°¾ì€ ë…¸ë“œ
+	Node* insertTargetNode = NULL; //ì‚½ì… ëŒ€ìƒ ë…¸ë“œ
 
 	while (currentNode != NULL)
 	{
-		if (COMPARE(currentNode->_data, targetData) == 0) //Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ¸¦ ¹ß°ß ½Ã
+		if (COMPARE(currentNode->_data, targetData) == 0) //ì°¾ê³ ì í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°ë¥¼ ë°œê²¬ ì‹œ
 		{
 			retVal = currentNode;
 			break;
@@ -66,15 +66,15 @@ Node* DLL_SequentialSearch_Transpose(Node** srcList, const DataType& targetData)
 	if (currentNode == NULL || COMPARE(currentNode->_data, targetData) != 0)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
-	if (retVal->_prev != NULL) //Ã£Àº ³ëµåÀÇ ¾Õ ³ëµå°¡ Á¸ÀçÇÏ¸é
+	if (retVal->_prev != NULL) //ì°¾ì€ ë…¸ë“œì˜ ì• ë…¸ë“œê°€ ì¡´ì¬í•˜ë©´
 	{
-		insertTargetNode = retVal->_prev; //»ğÀÔ ´ë»ó ³ëµå´Â Ã£Àº ³ëµåÀÇ ¾Õ ³ëµå
-		DLL_RemoveNode(srcList, retVal, false); //Ã£Àº ³ëµå¸¦ ¸®½ºÆ®¿¡¼­ ºĞ¸®
-		DLL_InsertNodeBefore(srcList, insertTargetNode, retVal); //»ğÀÔ ´ë»ó ³ëµåÀÇ ¾Õ¿¡ »ğÀÔ
+		insertTargetNode = retVal->_prev; //ì‚½ì… ëŒ€ìƒ ë…¸ë“œëŠ” ì°¾ì€ ë…¸ë“œì˜ ì• ë…¸ë“œ
+		DLL_RemoveNode(srcList, retVal, false); //ì°¾ì€ ë…¸ë“œë¥¼ ë¦¬ìŠ¤íŠ¸ì—ì„œ ë¶„ë¦¬
+		DLL_InsertNodeBefore(srcList, insertTargetNode, retVal); //ì‚½ì… ëŒ€ìƒ ë…¸ë“œì˜ ì•ì— ì‚½ì…
 	}
-	else //Ã£Àº ³ëµåÀÇ ¾Õ ³ëµå°¡ Á¸ÀçÇÏÁö ¾ÊÀ¸¸é
+	else //ì°¾ì€ ë…¸ë“œì˜ ì• ë…¸ë“œê°€ ì¡´ì¬í•˜ì§€ ì•Šìœ¼ë©´
 	{
-		//do nothing (Ã£Àº ³ëµå´Â ÀÌ¹Ì Çìµå ³ëµå)
+		//do nothing (ì°¾ì€ ë…¸ë“œëŠ” ì´ë¯¸ í—¤ë“œ ë…¸ë“œ)
 	}
 
 	return retVal;
@@ -82,13 +82,13 @@ Node* DLL_SequentialSearch_Transpose(Node** srcList, const DataType& targetData)
 #endif
 
 /// <summary>
-/// ¼øÂ÷Å½»ö - ÀüÁø ÀÌµ¿¹ı (Move To Front) (Best Case : O(1), Average, Worst Case : O(n))
+/// ìˆœì°¨íƒìƒ‰ - ì „ì§„ ì´ë™ë²• (Move To Front) (Best Case : O(1), Average, Worst Case : O(n))
 /// </summary>
-/// <typeparam name="SearchElementType">°Ë»ö ¿ä¼Ò Å¸ÀÔ</typeparam>
-/// <param name="targetEnumerableSet">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕ</param>
-/// <param name="elementCount">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕÀÇ ¿ä¼ÒµéÀÇ °³¼ö</param>
-/// <param name="targetData">Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ</param>
-/// <returns>Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ¿Í ÀÏÄ¡ÇÏ´Â ÃÖÃÊ·Î Ã£Àº µ¥ÀÌÅÍ</returns>
+/// <typeparam name="SearchElementType">ê²€ìƒ‰ ìš”ì†Œ íƒ€ì…</typeparam>
+/// <param name="targetEnumerableSet">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©</param>
+/// <param name="elementCount">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ìš”ì†Œë“¤ì˜ ê°œìˆ˜</param>
+/// <param name="targetData">ì°¾ê³ ì í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°</param>
+/// <returns>ì°¾ê³ ì í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°ì™€ ì¼ì¹˜í•˜ëŠ” ìµœì´ˆë¡œ ì°¾ì€ ë°ì´í„°</returns>
 template<typename SearchElementType>
 SearchElementType SequentialSearch_MTF(SearchElementType targetEnumerableSet[],
 	size_t elementCount, const SearchElementType& targetData)
@@ -97,7 +97,7 @@ SearchElementType SequentialSearch_MTF(SearchElementType targetEnumerableSet[],
 
 	for (size_t i = 0; i < elementCount; i++)
 	{
-		if (COMPARE(targetEnumerableSet[i], targetData) == 0) //Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ¸¦ ¹ß°ß ½Ã
+		if (COMPARE(targetEnumerableSet[i], targetData) == 0) //ì°¾ê³ ì í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°ë¥¼ ë°œê²¬ ì‹œ
 		{
 			tmp = targetEnumerableSet[i];
 
@@ -105,9 +105,9 @@ SearchElementType SequentialSearch_MTF(SearchElementType targetEnumerableSet[],
 				sizeof(targetEnumerableSet[0]) * i,
 				&targetEnumerableSet[0],
 				sizeof(targetEnumerableSet[0]) * i
-			); //Ã£Àº µ¥ÀÌÅÍÀÇ ¹Ù·Î ¾Õ±îÁöÀÇ ¿ä¼Ò ³»ÀÇ ¹üÀ§ÀÇ ¿ä¼ÒµéÀ» µÚ·Î ÇÑ Ä­¾¿ ÀÌµ¿
+			); //ì°¾ì€ ë°ì´í„°ì˜ ë°”ë¡œ ì•ê¹Œì§€ì˜ ìš”ì†Œ ë‚´ì˜ ë²”ìœ„ì˜ ìš”ì†Œë“¤ì„ ë’¤ë¡œ í•œ ì¹¸ì”© ì´ë™
 
-			targetEnumerableSet[0] = tmp; //Ã£Àº µ¥ÀÌÅÍ¸¦ ¸Ç ¾ÕÀ¸·Î »ğÀÔ
+			targetEnumerableSet[0] = tmp; //ì°¾ì€ ë°ì´í„°ë¥¼ ë§¨ ì•ìœ¼ë¡œ ì‚½ì…
 			return targetEnumerableSet[0];
 		}
 	}
@@ -116,13 +116,13 @@ SearchElementType SequentialSearch_MTF(SearchElementType targetEnumerableSet[],
 }
 
 /// <summary>
-/// ¼øÂ÷Å½»ö - ÀüÀ§¹ı (Transpose) (Best Case : O(1), Average, Worst Case : O(n))
+/// ìˆœì°¨íƒìƒ‰ - ì „ìœ„ë²• (Transpose) (Best Case : O(1), Average, Worst Case : O(n))
 /// </summary>
-/// <typeparam name="SearchElementType">°Ë»ö ¿ä¼Ò Å¸ÀÔ</typeparam>
-/// <param name="targetEnumerableSet">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕ</param>
-/// <param name="elementCount">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕÀÇ ¿ä¼ÒµéÀÇ °³¼ö</param>
-/// <param name="targetData">Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ</param>
-/// <returns>Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ¿Í ÀÏÄ¡ÇÏ´Â ÃÖÃÊ·Î Ã£Àº µ¥ÀÌÅÍ</returns>
+/// <typeparam name="SearchElementType">ê²€ìƒ‰ ìš”ì†Œ íƒ€ì…</typeparam>
+/// <param name="targetEnumerableSet">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©</param>
+/// <param name="elementCount">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ìš”ì†Œë“¤ì˜ ê°œìˆ˜</param>
+/// <param name="targetData">ì°¾ê³ ì í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°</param>
+/// <returns>ì°¾ê³ ì í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°ì™€ ì¼ì¹˜í•˜ëŠ” ìµœì´ˆë¡œ ì°¾ì€ ë°ì´í„°</returns>
 template<typename SearchElementType>
 SearchElementType SequentialSearch_Transpose(SearchElementType targetEnumerableSet[],
 	size_t elementCount, const SearchElementType& targetData)
@@ -131,15 +131,15 @@ SearchElementType SequentialSearch_Transpose(SearchElementType targetEnumerableS
 
 	for (size_t i = 0; i < elementCount; i++)
 	{
-		if (COMPARE(targetEnumerableSet[i], targetData) == 0) //Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ¸¦ ¹ß°ß ½Ã
+		if (COMPARE(targetEnumerableSet[i], targetData) == 0) //ì°¾ê³ ì í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°ë¥¼ ë°œê²¬ ì‹œ
 		{
-			if (i > 0) //Ã£Àº µ¥ÀÌÅÍÀÇ ¾Õ¿¡ µ¥ÀÌÅÍ°¡ Á¸ÀçÇÏ¸é
+			if (i > 0) //ì°¾ì€ ë°ì´í„°ì˜ ì•ì— ë°ì´í„°ê°€ ì¡´ì¬í•˜ë©´
 			{
-				SWAP(targetEnumerableSet[i], targetEnumerableSet[i - 1], tmp); //Ã£Àº µ¥ÀÌÅÍ¸¦ ¹Ù·Î ¾ÕÀÇ ¿ä¼Ò¿Í ±³È¯
+				SWAP(targetEnumerableSet[i], targetEnumerableSet[i - 1], tmp); //ì°¾ì€ ë°ì´í„°ë¥¼ ë°”ë¡œ ì•ì˜ ìš”ì†Œì™€ êµí™˜
 				return targetEnumerableSet[i - 1];
 			}
 
-			return targetEnumerableSet[i]; //Ã£Àº µ¥ÀÌÅÍ°¡ ÀÌ¹Ì ¸Ç ¾ÕÀÇ ¿ä¼ÒÀÎ °æ¿ì
+			return targetEnumerableSet[i]; //ì°¾ì€ ë°ì´í„°ê°€ ì´ë¯¸ ë§¨ ì•ì˜ ìš”ì†Œì¸ ê²½ìš°
 		}
 	}
 
@@ -147,108 +147,111 @@ SearchElementType SequentialSearch_Transpose(SearchElementType targetEnumerableS
 }
 
 /// <summary>
-/// ÀÌÁø Å½»ö (Best Case : O(1), Average, Worst Case : O(log2(n)))
+/// ì´ì§„ íƒìƒ‰ (Best Case : O(1), Average, Worst Case : O(log2(n)))
 /// </summary>
-/// <typeparam name="SearchElementType">Å½»ö ¿ä¼Ò Å¸ÀÔ</typeparam>
-/// <param name="srcOrderedEnumerableSet">ÀÌ¹Ì Á¤·Ä µÈ ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕ</param>
-/// <param name="elementCount">ÀÌ¹Ì Á¤·Ä µÈ ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕÀÇ ¿ä¼ÒµéÀÇ °³¼ö</param>
-/// <param name="targetData">Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ</param>
-/// <returns>Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ¿Í ÀÏÄ¡ÇÏ´Â ÃÖÃÊ·Î Ã£Àº µ¥ÀÌÅÍ</returns>
+/// <typeparam name="SearchElementType">íƒìƒ‰ ìš”ì†Œ íƒ€ì…</typeparam>
+/// <param name="srcOrderedEnumerableSet">ì´ë¯¸ ì •ë ¬ ëœ ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©</param>
+/// <param name="elementCount">ì´ë¯¸ ì •ë ¬ ëœ ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ìš”ì†Œë“¤ì˜ ê°œìˆ˜</param>
+/// <param name="targetData">ì°¾ê³ ì í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°</param>
+/// <returns>ì°¾ê³ ì í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°ì™€ ì¼ì¹˜í•˜ëŠ” ìµœì´ˆë¡œ ì°¾ì€ ë°ì´í„°</returns>
 template<typename SearchElementType>
 SearchElementType BinarySearch(const SearchElementType srcOrderedEnumerableSet[],
 	size_t elementCount, SearchElementType targetData)
 {
 	/***
-		< ÀÌÁø Å½»öÀÇ Á¤·Ä ¹æÇâ ÆÇº° >
+		< ì´ì§„ íƒìƒ‰ì˜ ì •ë ¬ ë°©í–¥ íŒë³„ >
 
-		M1) Á¤·Ä ¹æÇâÀ» ÆÄ¶ó¹ÌÅÍ·Î ¹Ş´Â ¹æ¹ı
+		M1) ì •ë ¬ ë°©í–¥ì„ íŒŒë¼ë¯¸í„°ë¡œ ë°›ëŠ” ë°©ë²•
 
-			M1-1) »ç¿ëÀÚ°¡ ÀÌ¹Ì Á¤·Ä µÈ ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕÀÌ ¾î¶°ÇÑ ¹æÇâÀ¸·Î Á¤·ÄµÇ¾îÀÖ´ÂÁö ¾Ë°í ÀÖÀ» °æ¿ì
-			: ÀÌÁø Å½»ö ½Ã Å½»ö ¹üÀ§¸¦ ÁÙ¿©³ª°¥ À§Ä¡¸¦ ÆÇº° °¡´É
+			M1-1) ì‚¬ìš©ìê°€ ì´ë¯¸ ì •ë ¬ ëœ ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì´ ì–´ë– í•œ ë°©í–¥ìœ¼ë¡œ ì •ë ¬ë˜ì–´ìˆëŠ”ì§€ ì•Œê³  ìˆì„ ê²½ìš°
+			: ì´ì§„ íƒìƒ‰ ì‹œ íƒìƒ‰ ë²”ìœ„ë¥¼ ì¤„ì—¬ë‚˜ê°ˆ ìœ„ì¹˜ë¥¼ íŒë³„ ê°€ëŠ¥
 
-			M1-2) »ç¿ëÀÚ°¡ ÀÌ¹Ì Á¤·Ä µÈ ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕÀÌ ¾î¶°ÇÑ ¹æÇâÀ¸·Î Á¤·ÄµÇ¾îÀÖ´ÂÁö ¸ğ¸¦ °æ¿ì
-			: ÀÌÁø Å½»öÀ» ¼öÇà ÇÒ ¼ö ¾øÀ¸¸ç, ÀÌ´Â ÀÌÀüÀÇ Á¤·Ä ¼öÇà ¹æ¹ı¿¡ ÀÇÁ¸Àû
+			M1-2) ì‚¬ìš©ìê°€ ì´ë¯¸ ì •ë ¬ ëœ ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì´ ì–´ë– í•œ ë°©í–¥ìœ¼ë¡œ ì •ë ¬ë˜ì–´ìˆëŠ”ì§€ ëª¨ë¥¼ ê²½ìš°
+			: ì´ì§„ íƒìƒ‰ì„ ìˆ˜í–‰ í•  ìˆ˜ ì—†ìœ¼ë©°, ì´ëŠ” ì´ì „ì˜ ì •ë ¬ ìˆ˜í–‰ ë°©ë²•ì— ì˜ì¡´ì 
 
-		M2) ÀÌ¹Ì Á¤·Ä µÈ ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕÀÇ Ã³À½ ¿ä¼Ò¿Í ¸¶Áö¸· ¿ä¼Ò¸¦ ÅëÇÑ ÆÇº°
+		M2) ì´ë¯¸ ì •ë ¬ ëœ ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ì²˜ìŒ ìš”ì†Œì™€ ë§ˆì§€ë§‰ ìš”ì†Œë¥¼ í†µí•œ íŒë³„
 
-			M2-1) Ã³À½ ¿ä¼Ò > ¸¶Áö¸· ¿ä¼Ò
-			: ÀÌ¹Ì Á¤·Ä µÈ ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕÀº ³»¸²Â÷¼øÀ¸·Î Á¤·ÄµÇ¾îÀÖÀ½À» °¡Á¤
+			M2-1) ì²˜ìŒ ìš”ì†Œ > ë§ˆì§€ë§‰ ìš”ì†Œ
+			: ì´ë¯¸ ì •ë ¬ ëœ ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì€ ë‚´ë¦¼ì°¨ìˆœìœ¼ë¡œ ì •ë ¬ë˜ì–´ìˆìŒì„ ê°€ì •
 
-			M2-2) Ã³À½ ¿ä¼Ò == ¸¶Áö¸· ¿ä¼Ò
-			: ÇØ´ç ÁıÇÕÀÇ ¸ğµç ¿ä¼Ò°¡ µ¿ÀÏÇÑ °ªÀ» °¡Áö°í ÀÖ°Å³ª, ÇØ´ç ÁıÇÕÀº Á¤·ÄµÇ¾î ÀÖÁö ¾ÊÀ½
-			(ex) 3 1 3 È¤Àº 1 1 ÀÇ µÎ ÁıÇÕ¿¡ ´ëÇØ, ¾ÕÀÇ ÁıÇÕÀº Á¤·ÄµÇ¾î ÀÖÁö ¾ÊÀ¸¸ç, µÚÀÇ ÁıÇÕÀº ¸ğµç ¿ä¼Ò°¡ µ¿ÀÏÇÑ °ªÀ» °¡Áü)
-			ÀÌ¿¡ µû¶ó, Á¤·ÄµÇ¾î ÀÖÁö ¾ÊÀº ÁıÇÕ¿¡ ´ëÇØ, Ã£°íÀÚ ÇÏ´Â ¿ä¼Ò¿Í Ã³À½ ¿ä¼Ò°¡ ÀÏÄ¡ÇÑÁö ÆÇº°
+			M2-2) ì²˜ìŒ ìš”ì†Œ == ë§ˆì§€ë§‰ ìš”ì†Œ
+			: í•´ë‹¹ ì§‘í•©ì˜ ëª¨ë“  ìš”ì†Œê°€ ë™ì¼í•œ ê°’ì„ ê°€ì§€ê³  ìˆê±°ë‚˜, í•´ë‹¹ ì§‘í•©ì€ ì •ë ¬ë˜ì–´ ìˆì§€ ì•ŠìŒ
+			(ex) 3 1 3 í˜¹ì€ 1 1 ì˜ ë‘ ì§‘í•©ì— ëŒ€í•´, ì•ì˜ ì§‘í•©ì€ ì •ë ¬ë˜ì–´ ìˆì§€ ì•Šìœ¼ë©°, ë’¤ì˜ ì§‘í•©ì€ ëª¨ë“  ìš”ì†Œê°€ ë™ì¼í•œ ê°’ì„ ê°€ì§)
+			ì´ì— ë”°ë¼, ì •ë ¬ë˜ì–´ ìˆì§€ ì•Šì€ ì§‘í•©ì— ëŒ€í•´, ì°¾ê³ ì í•˜ëŠ” ìš”ì†Œì™€ ì²˜ìŒ ìš”ì†Œê°€ ì¼ì¹˜í•œì§€ íŒë³„
 
-				M2-2-1) Ã£°íÀÚ ÇÏ´Â ¿ä¼Ò¿Í Ã³À½ ¿ä¼Ò°¡ ÀÏÄ¡
-				: Å½»ö ¼º°ø, Ã£Àº ¿ä¼Ò ¹İÈ¯
+				M2-2-1) ì°¾ê³ ì í•˜ëŠ” ìš”ì†Œì™€ ì²˜ìŒ ìš”ì†Œê°€ ì¼ì¹˜
+				: íƒìƒ‰ ì„±ê³µ, ì°¾ì€ ìš”ì†Œ ë°˜í™˜
 
-				M2-2-2) Ã£°íÀÚ ÇÏ´Â ¿ä¼Ò¿Í Ã³À½ ¿ä¼Ò°¡ ºÒÀÏÄ¡
-				: ÇØ´ç ÁıÇÕÀÇ ¸ğµç ¿ä¼Ò°¡ µ¿ÀÏÇÑ °ªÀ» °¡Áö°í ÀÖÀ½¿¡µµ Ã£°íÀÚ ÇÏ´Â ¿ä¼Ò¿Í ºÒÀÏÄ¡ÇÏ°Å³ª,
-				ÇØ´ç ÁıÇÕÀº Á¤·ÄµÇ¾î ÀÖÁö ¾ÊÀ¸¹Ç·Î, ÀÌÁø Å½»ö ¼öÇà ºÒ°¡
+				M2-2-2) ì°¾ê³ ì í•˜ëŠ” ìš”ì†Œì™€ ì²˜ìŒ ìš”ì†Œê°€ ë¶ˆì¼ì¹˜
+				: í•´ë‹¹ ì§‘í•©ì˜ ëª¨ë“  ìš”ì†Œê°€ ë™ì¼í•œ ê°’ì„ ê°€ì§€ê³  ìˆìŒì—ë„ ì°¾ê³ ì í•˜ëŠ” ìš”ì†Œì™€ ë¶ˆì¼ì¹˜í•˜ê±°ë‚˜,
+				í•´ë‹¹ ì§‘í•©ì€ ì •ë ¬ë˜ì–´ ìˆì§€ ì•Šìœ¼ë¯€ë¡œ, ì´ì§„ íƒìƒ‰ ìˆ˜í–‰ ë¶ˆê°€
 
-			M2-3) Ã³À½ ¿ä¼Ò < ¸¶Áö¸· ¿ä¼Ò
-			: ÀÌ¹Ì Á¤·Ä µÈ ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕÀº ¿À¸§Â÷¼øÀ¸·Î Á¤·ÄµÇ¾îÀÖÀ½À» °¡Á¤
+			M2-3) ì²˜ìŒ ìš”ì†Œ < ë§ˆì§€ë§‰ ìš”ì†Œ
+			: ì´ë¯¸ ì •ë ¬ ëœ ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì€ ì˜¤ë¦„ì°¨ìˆœìœ¼ë¡œ ì •ë ¬ë˜ì–´ìˆìŒì„ ê°€ì •
 
 		---
 
-		< Å½»ö È½¼ö >
+		< íƒìƒ‰ íšŸìˆ˜ >
 
-		n : ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕÀÇ ¿ä¼ÒµéÀÇ °³¼ö
-		Å½»ö °úÁ¤¿¡¼­ ¿ä¼ÒµéÀÇ °³¼ö (Å½»ö ¹üÀ§) 1/2 ¾¿ °¨¼Ò
+		n : ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ìš”ì†Œë“¤ì˜ ê°œìˆ˜
+		íƒìƒ‰ ê³¼ì •ì—ì„œ ìš”ì†Œë“¤ì˜ ê°œìˆ˜ (íƒìƒ‰ ë²”ìœ„) 1/2 ì”© ê°ì†Œ
 
-		1 (ÃÖÁ¾ Å½»ö ¹üÀ§) = n * (1 / 2)^Å½»ö È½¼ö
-		1 = n * 1 / 2^Å½»ö È½¼ö
-		2^Å½»ö È½¼ö = n
-		Å½»ö È½¼ö = log2(n)
+		1 (ìµœì¢… íƒìƒ‰ ë²”ìœ„) = n * (1 / 2)^íƒìƒ‰ íšŸìˆ˜
+		1 = n * 1 / 2^íƒìƒ‰ íšŸìˆ˜
+		2^íƒìƒ‰ íšŸìˆ˜ = n
+		íƒìƒ‰ íšŸìˆ˜ = log2(n)
 	***/
 
-	size_t leftIndex = 0; //¿ŞÂÊ ÀÎµ¦½º
-	size_t rightIndex = elementCount - 1; //¿À¸¥ÂÊ ÀÎµ¦½º
-	size_t midIndex; //°¡¿îµ¥ ÀÎµ¦½º
+	size_t leftIndex = 0; //ì™¼ìª½ ì¸ë±ìŠ¤
+	size_t rightIndex = elementCount - 1; //ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤
+	size_t midIndex; //ê°€ìš´ë° ì¸ë±ìŠ¤
 
 	/***
-		< ÀÌ¹Ì Á¤·Ä µÈ ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕÀÇ ¿À¸§Â÷¼ø Á¤·Ä ¿©ºÎ >
+		< ì´ë¯¸ ì •ë ¬ ëœ ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ì˜¤ë¦„ì°¨ìˆœ ì •ë ¬ ì—¬ë¶€ >
 
-		1: ¿À¸§Â÷¼ø Á¤·Ä (right > left)
-		-1 : ³»¸²Â÷¼ø Á¤·Ä (right < left)
-		0 : ¸ğµç ¿ä¼Ò°¡ µ¿ÀÏÇÑ °ªÀ» °¡Áö°í ÀÖ°Å³ª, ÇØ´ç ÁıÇÕÀº Á¤·ÄµÇ¾î ÀÖÁö ¾ÊÀ½ (left == right)
+		1: ì˜¤ë¦„ì°¨ìˆœ ì •ë ¬ (right > left)
+		-1 : ë‚´ë¦¼ì°¨ìˆœ ì •ë ¬ (right < left)
+		0 : ëª¨ë“  ìš”ì†Œê°€ ë™ì¼í•œ ê°’ì„ ê°€ì§€ê³  ìˆê±°ë‚˜, í•´ë‹¹ ì§‘í•©ì€ ì •ë ¬ë˜ì–´ ìˆì§€ ì•ŠìŒ (left == right)
 	***/
 
 	char isOrderByAscending = COMPARE(srcOrderedEnumerableSet[rightIndex], srcOrderedEnumerableSet[leftIndex]);
 
 	switch (isOrderByAscending)
 	{
-	case 0: //¸ğµç ¿ä¼Ò°¡ µ¿ÀÏÇÑ °ªÀ» °¡Áö°í ÀÖ°Å³ª, ÇØ´ç ÁıÇÕÀº Á¤·ÄµÇ¾î ÀÖÁö ¾ÊÀ½ 
-		if (COMPARE(srcOrderedEnumerableSet[leftIndex], targetData) == 0) //Ã£°íÀÚ ÇÏ´Â ¿ä¼Ò¿Í Ã³À½ ¿ä¼Ò°¡ ÀÏÄ¡
+	case 0: //ëª¨ë“  ìš”ì†Œê°€ ë™ì¼í•œ ê°’ì„ ê°€ì§€ê³  ìˆê±°ë‚˜, í•´ë‹¹ ì§‘í•©ì€ ì •ë ¬ë˜ì–´ ìˆì§€ ì•ŠìŒ 
+		if (COMPARE(srcOrderedEnumerableSet[leftIndex], targetData) == 0) //ì°¾ê³ ì í•˜ëŠ” ìš”ì†Œì™€ ì²˜ìŒ ìš”ì†Œê°€ ì¼ì¹˜
 			return srcOrderedEnumerableSet[leftIndex];
 
-		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Unordered EnumerableSet or Not found"));
+		if (leftIndex + 1 < rightIndex && srcOrderedEnumerableSet[leftIndex + 1] != srcOrderedEnumerableSet[rightIndex))
+			throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (Unordered EnumerableSet)"));
+
+		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
 	default:
 		break;
 	}
 
-	while (leftIndex <= rightIndex) //Å½»ö ¹üÀ§°¡ Á¸ÀçÇÏ´Â µ¿¾È
+	while (leftIndex <= rightIndex) //íƒìƒ‰ ë²”ìœ„ê°€ ì¡´ì¬í•˜ëŠ” ë™ì•ˆ
 	{
-		midIndex = leftIndex + ((rightIndex - leftIndex) >> 1); //base : leftIndex, offset : rightIndex¿Í leftIndexÀÇ Áß°£¸¸Å­ Áõ°¡ (overflow ¹æÁö)
+		midIndex = leftIndex + ((rightIndex - leftIndex) >> 1); //base : leftIndex, offset : rightIndexì™€ leftIndexì˜ ì¤‘ê°„ë§Œí¼ ì¦ê°€ (overflow ë°©ì§€)
 
 		if (COMPARE(srcOrderedEnumerableSet[midIndex], targetData) == 0)
 			return srcOrderedEnumerableSet[midIndex];
 
 		switch (isOrderByAscending)
 		{
-		case 1: //¿À¸§Â÷¼ø Á¤·Ä
+		case 1: //ì˜¤ë¦„ì°¨ìˆœ ì •ë ¬
 			if (COMPARE(srcOrderedEnumerableSet[midIndex], targetData) == -1) //mid < target
-				leftIndex = midIndex + 1; //ÇöÀç °¡¿îµ¥ ÀÎµ¦½º ±âÁØ ¿À¸¥ÂÊÀ¸·Î Å½»ö
+				leftIndex = midIndex + 1; //í˜„ì¬ ê°€ìš´ë° ì¸ë±ìŠ¤ ê¸°ì¤€ ì˜¤ë¥¸ìª½ìœ¼ë¡œ íƒìƒ‰
 			else //mid > target
-				rightIndex = midIndex - 1; //ÇöÀç °¡¿îµ¥ ÀÎµ¦½º ±âÁØ ¿ŞÂÊÀ¸·Î Å½»ö
+				rightIndex = midIndex - 1; //í˜„ì¬ ê°€ìš´ë° ì¸ë±ìŠ¤ ê¸°ì¤€ ì™¼ìª½ìœ¼ë¡œ íƒìƒ‰
 			break;
 
-		case -1: //³»¸²Â÷¼ø Á¤·Ä
+		case -1: //ë‚´ë¦¼ì°¨ìˆœ ì •ë ¬
 			if (COMPARE(srcOrderedEnumerableSet[midIndex], targetData) == -1) //mid < target
-				rightIndex = midIndex - 1; //ÇöÀç °¡¿îµ¥ ÀÎµ¦½º ±âÁØ ¿ŞÂÊÀ¸·Î Å½»ö
+				rightIndex = midIndex - 1; //í˜„ì¬ ê°€ìš´ë° ì¸ë±ìŠ¤ ê¸°ì¤€ ì™¼ìª½ìœ¼ë¡œ íƒìƒ‰
 			else //mid > target
-				leftIndex = midIndex + 1; //ÇöÀç °¡¿îµ¥ ÀÎµ¦½º ±âÁØ ¿À¸¥ÂÊÀ¸·Î Å½»ö
+				leftIndex = midIndex + 1; //í˜„ì¬ ê°€ìš´ë° ì¸ë±ìŠ¤ ê¸°ì¤€ ì˜¤ë¥¸ìª½ìœ¼ë¡œ íƒìƒ‰
 			break;
 
 		default:

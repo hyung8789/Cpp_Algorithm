@@ -1,22 +1,22 @@
 #ifndef _BT_H_
 #define _BT_H_
 
-typedef int DataType; //³ëµåÀÇ µ¥ÀÌÅÍ Å¸ÀÔ
-typedef int TreeDepthType; //Æ®¸® ±íÀÌ Å¸ÀÔ
+typedef char DataType; //ë…¸ë“œì˜ ë°ì´í„° íƒ€ìž…
+typedef int TreeDepthType; //íŠ¸ë¦¬ ê¹Šì´ íƒ€ìž…
 
 typedef struct NodeType
 {
-	DataType _data; //³ëµåÀÇ µ¥ÀÌÅÍ
+	DataType _data; //ë…¸ë“œì˜ ë°ì´í„°
 
-	NodeType* _left; //¿ÞÂÊ ³ëµå
-	NodeType* _right; //¿À¸¥ÂÊ ³ëµå
+	NodeType* _left; //ì™¼ìª½ ë…¸ë“œ
+	NodeType* _right; //ì˜¤ë¥¸ìª½ ë…¸ë“œ
 }Node;
 
 enum class TRAVERSAL_MODE : const int
 {
-	PREORDER = 0, //ÀüÀ§ ¼øÈ¸ (Root -> Left -> Right)
-	INORDER, //ÁßÀ§ ¼øÈ¸ (Left -> Root -> Right)
-	POSTORDER //ÈÄÀ§ ¼øÈ¸ (Left -> Right -> Root)
+	PREORDER = 0, //ì „ìœ„ ìˆœíšŒ (Root -> Left -> Right)
+	INORDER, //ì¤‘ìœ„ ìˆœíšŒ (Left -> Root -> Right)
+	POSTORDER //í›„ìœ„ ìˆœíšŒ (Left -> Right -> Root)
 };
 
 Node* BT_CreateNode(DataType);

@@ -1,10 +1,10 @@
-#include "LCRS_Core.h"
+ï»¿#include "LCRS_Core.h"
 
 /// <summary>
-/// »õ·Î¿î ³ëµå »ý¼º ¹× »ý¼º µÈ ³ëµå ¹ÝÈ¯
+/// ìƒˆë¡œìš´ ë…¸ë“œ ìƒì„± ë° ìƒì„± ëœ ë…¸ë“œ ë°˜í™˜
 /// </summary>
-/// <param name="srcData">³ëµåÀÇ µ¥ÀÌÅÍ</param>
-/// <returns>»ý¼º µÈ ³ëµå</returns>
+/// <param name="srcData">ë…¸ë“œì˜ ë°ì´í„°</param>
+/// <returns>ìƒì„± ëœ ë…¸ë“œ</returns>
 Node* LCRS_CreateNode(DataType srcData)
 {
 	Node* retVal = (Node*)malloc(sizeof(Node));
@@ -18,9 +18,9 @@ Node* LCRS_CreateNode(DataType srcData)
 }
 
 /// <summary>
-/// ´ë»ó ³ëµå¿¡ ÇÒ´ç µÈ ¸Þ¸ð¸® ÇØÁ¦
+/// ëŒ€ìƒ ë…¸ë“œì— í• ë‹¹ ëœ ë©”ëª¨ë¦¬ í•´ì œ
 /// </summary>
-/// <param name="srcNode">´ë»ó ³ëµå</param>
+/// <param name="srcNode">ëŒ€ìƒ ë…¸ë“œ</param>
 void LCRS_DeallocateNode(Node** srcNode)
 {
 	if ((*srcNode) != NULL)
@@ -31,9 +31,9 @@ void LCRS_DeallocateNode(Node** srcNode)
 }
 
 /// <summary>
-/// ´ë»ó Æ®¸®¿¡ ÇÒ´ç µÈ ¸ðµç ³ëµåÀÇ ¸Þ¸ð¸® ÇØÁ¦
+/// ëŒ€ìƒ íŠ¸ë¦¬ì— í• ë‹¹ ëœ ëª¨ë“  ë…¸ë“œì˜ ë©”ëª¨ë¦¬ í•´ì œ
 /// </summary>
-/// <param name="srcRootNode">´ë»ó Æ®¸®ÀÇ ÃÖ»óÀ§ ·çÆ® ³ëµå</param>
+/// <param name="srcRootNode">ëŒ€ìƒ íŠ¸ë¦¬ì˜ ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œ</param>
 void LCRS_DeallocateTree(Node** srcRootNode)
 {
 	if ((*srcRootNode) != NULL)
@@ -50,36 +50,36 @@ void LCRS_DeallocateTree(Node** srcRootNode)
 
 #elif defined ITERATIVE_METHOD
 		/***
-			< RECURSIVE_METHODÀÇ Call Stack ±¸Çö >
+			< RECURSIVE_METHODì˜ Call Stack êµ¬í˜„ >
 
-			1) ÃÖÃÊ Call Stack¿¡ ÃÊ±â ·çÆ® ³ëµå¿Í ½ÇÇà ºÐ±â ´ÜÀÏ ÇÃ·¡±× »ðÀÔ
+			1) ìµœì´ˆ Call Stackì— ì´ˆê¸° ë£¨íŠ¸ ë…¸ë“œì™€ ì‹¤í–‰ ë¶„ê¸° ë‹¨ì¼ í”Œëž˜ê·¸ ì‚½ìž…
 
-			2) Call StackÀÌ ºô ¶§±îÁö ÀÌÇÏ ¹Ýº¹
+			2) Call Stackì´ ë¹Œ ë•Œê¹Œì§€ ì´í•˜ ë°˜ë³µ
 
-			3) ÇöÀç ³ëµå (Call StackÀÇ ÃÖ»óÀ§ ³ëµå) ¹× ÇöÀç ³ëµåÀÇ ½ÇÇà ºÐ±â ´ÜÀÏ ÇÃ·¡±× ÇÒ´ç
+			3) í˜„ìž¬ ë…¸ë“œ (Call Stackì˜ ìµœìƒìœ„ ë…¸ë“œ) ë° í˜„ìž¬ ë…¸ë“œì˜ ì‹¤í–‰ ë¶„ê¸° ë‹¨ì¼ í”Œëž˜ê·¸ í• ë‹¹
 
-			4) ÇöÀç ³ëµåÀÇ ¿ÞÂÊ ÀÚ½Ä ³ëµå°¡ Á¸ÀçÇÒ °æ¿ì
-				4-1) ÇåÀç ³ëµå¿¡ ´ëÇØ ´ÙÀ½ ¹ø ½ÇÇà ½Ã ¿À¸¥ÂÊ ÇüÁ¦ ³ëµå¸¦ ¹æ¹®
-				4-2) ÇöÀç ³ëµåÀÇ ¿ÞÂÊ ÀÚ½Ä ³ëµå·Î ÀÌµ¿
+			4) í˜„ìž¬ ë…¸ë“œì˜ ì™¼ìª½ ìžì‹ ë…¸ë“œê°€ ì¡´ìž¬í•  ê²½ìš°
+				4-1) í—Œìž¬ ë…¸ë“œì— ëŒ€í•´ ë‹¤ìŒ ë²ˆ ì‹¤í–‰ ì‹œ ì˜¤ë¥¸ìª½ í˜•ì œ ë…¸ë“œë¥¼ ë°©ë¬¸
+				4-2) í˜„ìž¬ ë…¸ë“œì˜ ì™¼ìª½ ìžì‹ ë…¸ë“œë¡œ ì´ë™
 
-			5) ÇöÀç ³ëµåÀÇ ¿À¸¥ÂÊ ÇüÁ¦ ³ëµå°¡ Á¸ÀçÇÒ °æ¿ì
-				5-1) ÇöÀç ³ëµå¿¡ ´ëÇØ ´ÙÀ½ ¹ø ½ÇÇà ½Ã Call Stack¿¡¼­ pop ¹× ¸¶Áö¸· ÀÛ¾÷ ¼öÇà
-				5-2) ÇöÀç ³ëµåÀÇ ¿À¸¥ÂÊ ÇüÁ¦ ³ëµå·Î ÀÌµ¿
+			5) í˜„ìž¬ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ í˜•ì œ ë…¸ë“œê°€ ì¡´ìž¬í•  ê²½ìš°
+				5-1) í˜„ìž¬ ë…¸ë“œì— ëŒ€í•´ ë‹¤ìŒ ë²ˆ ì‹¤í–‰ ì‹œ Call Stackì—ì„œ pop ë° ë§ˆì§€ë§‰ ìž‘ì—… ìˆ˜í–‰
+				5-2) í˜„ìž¬ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ í˜•ì œ ë…¸ë“œë¡œ ì´ë™
 
-			6) ÇöÀç ³ëµå¿¡¼­ ´õ ÀÌ»ó ¿ÞÂÊ ÀÚ½Ä ³ëµå¿Í ¿À¸¥ÂÊ ÀÚ½Ä ³ëµå¿¡ ´ëÇØ ÀÌµ¿ÀÌ ºÒ°¡´É ÇÒ °æ¿ì
-				6-1) ¸Þ¸ð¸® ÇÒ´ç ÇØÁ¦ ´ë»óÀÎ Call StackÀÇ ÃÖ»óÀ§ ³ëµå Á¦°Å ¹× ÇöÀç ³ëµå ¸Þ¸ð¸® ÇÒ´ç ÇØÁ¦
-				6-2) ÇöÀç ³ëµå¿¡ µµ´ÞÇÏ±â Àü ³ëµå·Î ÀÌµ¿
+			6) í˜„ìž¬ ë…¸ë“œì—ì„œ ë” ì´ìƒ ì™¼ìª½ ìžì‹ ë…¸ë“œì™€ ì˜¤ë¥¸ìª½ ìžì‹ ë…¸ë“œì— ëŒ€í•´ ì´ë™ì´ ë¶ˆê°€ëŠ¥ í•  ê²½ìš°
+				6-1) ë©”ëª¨ë¦¬ í• ë‹¹ í•´ì œ ëŒ€ìƒì¸ Call Stackì˜ ìµœìƒìœ„ ë…¸ë“œ ì œê±° ë° í˜„ìž¬ ë…¸ë“œ ë©”ëª¨ë¦¬ í• ë‹¹ í•´ì œ
+				6-2) í˜„ìž¬ ë…¸ë“œì— ë„ë‹¬í•˜ê¸° ì „ ë…¸ë“œë¡œ ì´ë™
 		***/
 
-		Node* currentNode = (*srcRootNode); //ÇöÀç ³ëµå
-		char execBranchSingleFlag = (0x0); //½ÇÇà ºÐ±â ´ÜÀÏ ÇÃ·¡±×
+		Node* currentNode = (*srcRootNode); //í˜„ìž¬ ë…¸ë“œ
+		char execBranchSingleFlag = (0x0); //ì‹¤í–‰ ë¶„ê¸° ë‹¨ì¼ í”Œëž˜ê·¸
 
 		/***
-			< ½ÇÇà ºÐ±â ´ÜÀÏ ÇÃ·¡±× >
+			< ì‹¤í–‰ ë¶„ê¸° ë‹¨ì¼ í”Œëž˜ê·¸ >
 
-			0000(2) : Left Child ¹æ¹®
-			0001(2) : Right Sibling ¹æ¹®
-			0010(2) : pop ¹× ÇÊ¿ä ÇÒ °æ¿ì ÇØ´ç ¿ä¼Ò¿¡ ´ëÇÑ ¸¶Áö¸· ÀÛ¾÷ ¼öÇà
+			0000(2) : Left Child ë°©ë¬¸
+			0001(2) : Right Sibling ë°©ë¬¸
+			0010(2) : pop ë° í•„ìš” í•  ê²½ìš° í•´ë‹¹ ìš”ì†Œì— ëŒ€í•œ ë§ˆì§€ë§‰ ìž‘ì—… ìˆ˜í–‰
 		***/
 
 		std::stack<std::tuple<Node*, char>> callStack; //Call Stack
@@ -87,44 +87,35 @@ void LCRS_DeallocateTree(Node** srcRootNode)
 
 		while (!callStack.empty())
 		{
-			currentNode = std::get<0>(callStack.top());
-			execBranchSingleFlag = std::get<1>(callStack.top());
+			std::tie(currentNode, execBranchSingleFlag) = callStack.top();
 
 			switch (execBranchSingleFlag)
 			{
-			case (0x0): //Left Child ¹æ¹®
-				goto VISIT_LEFT_CHILD_PROC;
+			case (0x0): //Left Child ë°©ë¬¸
+				if (currentNode->_leftChild != NULL) //í˜„ìž¬ ë…¸ë“œì˜ ì™¼ìª½ ìžì‹ ë…¸ë“œê°€ ì¡´ìž¬ í•  ê²½ìš°
+				{
+					std::get<1>(callStack.top()) = (0x1); //í—Œìž¬ ë…¸ë“œì— ëŒ€í•´ ë‹¤ìŒ ë²ˆ ì‹¤í–‰ ì‹œ ì˜¤ë¥¸ìª½ í˜•ì œ ë…¸ë“œë¥¼ ë°©ë¬¸
+					callStack.push(std::make_tuple(currentNode->_leftChild, (0x0)));
+					continue;
+				}
 
-			case (0x1): //Right Sibling ¹æ¹®
-				goto VISIT_RIGHT_SIBLING_PROC;
+			case (0x1): //Right Sibling ë°©ë¬¸
+				if (currentNode->_rightSibling != NULL) //í˜„ìž¬ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ í˜•ì œ ë…¸ë“œê°€ ì¡´ìž¬ í•  ê²½ìš°
+				{
+					std::get<1>(callStack.top()) = (0x2); //í˜„ìž¬ ë…¸ë“œì— ëŒ€í•´ ë‹¤ìŒ ë²ˆ ì‹¤í–‰ ì‹œ Call Stackì—ì„œ pop ë° í•„ìš” í•  ê²½ìš° ë§ˆì§€ë§‰ ìž‘ì—… ìˆ˜í–‰
+					callStack.push(std::make_tuple(currentNode->_rightSibling, (0x0)));
+					continue;
+				}
 
-			case (0x2): //pop ¹× ÇÊ¿ä ÇÒ °æ¿ì ÇØ´ç ¿ä¼Ò¿¡ ´ëÇÑ ¸¶Áö¸· ÀÛ¾÷ ¼öÇà
-				goto FINALIZE_PROC;
+			case (0x2): //pop ë° í•„ìš” í•  ê²½ìš° í•´ë‹¹ ìš”ì†Œì— ëŒ€í•œ ë§ˆì§€ë§‰ ìž‘ì—… ìˆ˜í–‰
+				callStack.pop();
+				//std::cout << "Dealloc : " << currentNode->_data << std::endl;
+				LCRS_DeallocateNode(&currentNode);
+				break;
 
 			default:
 				throw std::logic_error(std::string(__func__) + std::string(" : Invalid Flag"));
 			}
-
-		VISIT_LEFT_CHILD_PROC: //0x0
-			if (currentNode->_leftChild != NULL) //ÇöÀç ³ëµåÀÇ ¿ÞÂÊ ÀÚ½Ä ³ëµå°¡ Á¸Àç ÇÒ °æ¿ì
-			{
-				std::get<1>(callStack.top()) = (0x1); //ÇåÀç ³ëµå¿¡ ´ëÇØ ´ÙÀ½ ¹ø ½ÇÇà ½Ã ¿À¸¥ÂÊ ÇüÁ¦ ³ëµå¸¦ ¹æ¹®
-				callStack.push(std::make_tuple(currentNode->_leftChild, (0x0)));
-				continue;
-			}
-
-		VISIT_RIGHT_SIBLING_PROC: //0x1
-			if (currentNode->_rightSibling != NULL) //ÇöÀç ³ëµåÀÇ ¿À¸¥ÂÊ ÇüÁ¦ ³ëµå°¡ Á¸Àç ÇÒ °æ¿ì
-			{
-				std::get<1>(callStack.top()) = (0x2); //ÇöÀç ³ëµå¿¡ ´ëÇØ ´ÙÀ½ ¹ø ½ÇÇà ½Ã Call Stack¿¡¼­ pop ¹× ÇÊ¿ä ÇÒ °æ¿ì ¸¶Áö¸· ÀÛ¾÷ ¼öÇà
-				callStack.push(std::make_tuple(currentNode->_rightSibling, (0x0)));
-				continue;
-			}
-
-		FINALIZE_PROC: //0x2
-			callStack.pop();
-			//std::cout << "Dealloc : " << currentNode->_data << std::endl;
-			LCRS_DeallocateNode(&currentNode);
 		}
 #endif
 		(*srcRootNode) = NULL;
@@ -132,66 +123,66 @@ void LCRS_DeallocateTree(Node** srcRootNode)
 }
 
 /// <summary>
-/// ´ë»ó ³ëµå¿¡ »õ ³ëµå ¿¬°á
+/// ëŒ€ìƒ ë…¸ë“œì— ìƒˆ ë…¸ë“œ ì—°ê²°
 /// </summary>
-/// <param name="srcTargetNode">´ë»ó ³ëµå</param>
-/// <param name="srcNewNode">´ë»ó ³ëµå¿¡ ¿¬°á µÉ »õ ³ëµå</param>
+/// <param name="srcTargetNode">ëŒ€ìƒ ë…¸ë“œ</param>
+/// <param name="srcNewNode">ëŒ€ìƒ ë…¸ë“œì— ì—°ê²° ë  ìƒˆ ë…¸ë“œ</param>
 void LCRS_AppendNode(Node* srcTargetNode, Node* srcNewNode)
 {
 	if (srcTargetNode == NULL || srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	if (srcTargetNode->_leftChild == NULL) //´ë»ó ³ëµåÀÇ ÀÚ½Ä ³ëµå°¡ Á¸ÀçÇÏÁö ¾ÊÀ¸¸é
+	if (srcTargetNode->_leftChild == NULL) //ëŒ€ìƒ ë…¸ë“œì˜ ìžì‹ ë…¸ë“œê°€ ì¡´ìž¬í•˜ì§€ ì•Šìœ¼ë©´
 	{
-		srcTargetNode->_leftChild = srcNewNode; //»õ ³ëµå¸¦ ´ë»ó ³ëµåÀÇ ¿ÞÂÊ ÀÚ½ÄÀ¸·Î ¿¬°á
+		srcTargetNode->_leftChild = srcNewNode; //ìƒˆ ë…¸ë“œë¥¼ ëŒ€ìƒ ë…¸ë“œì˜ ì™¼ìª½ ìžì‹ìœ¼ë¡œ ì—°ê²°
 	}
-	else //´ë»ó ³ëµåÀÇ ÀÚ½Ä ³ëµå°¡ Á¸ÀçÇÏ¸é
+	else //ëŒ€ìƒ ë…¸ë“œì˜ ìžì‹ ë…¸ë“œê°€ ì¡´ìž¬í•˜ë©´
 	{
-		Node* targetChildNode = srcTargetNode->_leftChild; //´ë»ó ³ëµåÀÇ ÀÚ½Ä ³ëµå
+		Node* targetChildNode = srcTargetNode->_leftChild; //ëŒ€ìƒ ë…¸ë“œì˜ ìžì‹ ë…¸ë“œ
 
 		while (targetChildNode->_rightSibling != NULL)
 		{
 			targetChildNode = targetChildNode->_rightSibling;
 		}
 
-		targetChildNode->_rightSibling = srcNewNode; //´ë»ó ³ëµåÀÇ ÀÚ½Ä ³ëµåÀÇ ¸¶Áö¸· ÇüÁ¦ ³ëµå ´ÙÀ½¿¡ »õ ³ëµå¸¦ ¿¬°á
+		targetChildNode->_rightSibling = srcNewNode; //ëŒ€ìƒ ë…¸ë“œì˜ ìžì‹ ë…¸ë“œì˜ ë§ˆì§€ë§‰ í˜•ì œ ë…¸ë“œ ë‹¤ìŒì— ìƒˆ ë…¸ë“œë¥¼ ì—°ê²°
 	}
 }
 
 /// <summary>
-/// ´ë»ó Æ®¸®ÀÇ Æ¯Á¤ ±íÀÌÀÇ ¸ðµç ³ëµå Ãâ·Â
+/// ëŒ€ìƒ íŠ¸ë¦¬ì˜ íŠ¹ì • ê¹Šì´ì˜ ëª¨ë“  ë…¸ë“œ ì¶œë ¥
 /// </summary>
-/// <param name="">´ë»ó Æ®¸®ÀÇ ÃÖ»óÀ§ ·çÆ® ³ëµå</param>
-/// <param name="targetNodeDepth">´ë»ó Æ®¸®ÀÇ ´ë»ó Æ¯Á¤ ³ëµåÀÇ ±íÀÌ</param>
+/// <param name="">ëŒ€ìƒ íŠ¸ë¦¬ì˜ ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œ</param>
+/// <param name="targetNodeDepth">ëŒ€ìƒ íŠ¸ë¦¬ì˜ ëŒ€ìƒ íŠ¹ì • ë…¸ë“œì˜ ê¹Šì´</param>
 void LCRS_DispTreeNodesAt(Node* srcRootNode, TreeDepthType targetNodeDepth)
 {
 	if (srcRootNode == NULL || targetNodeDepth < 0)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
 #ifdef RECURSIVE_METHOD
-	if (targetNodeDepth == 0) //´ë»ó Æ¯Á¤ ³ëµåÀÇ ±íÀÌ¿¡ µµ´Þ ½Ã
+	if (targetNodeDepth == 0) //ëŒ€ìƒ íŠ¹ì • ë…¸ë“œì˜ ê¹Šì´ì— ë„ë‹¬ ì‹œ
 	{
 		std::cout << "- " << srcRootNode->_data << std::endl;
 	}
 
 	if (srcRootNode->_leftChild != NULL && targetNodeDepth > 0)
 		LCRS_DispTreeNodesAt(srcRootNode->_leftChild, targetNodeDepth - 1);
-	
-	if(srcRootNode->_rightSibling != NULL)
+
+	if (srcRootNode->_rightSibling != NULL)
 		LCRS_DispTreeNodesAt(srcRootNode->_rightSibling, targetNodeDepth);
 
 #elif defined ITERATIVE_METHOD
-	Node* currentNode = srcRootNode; //ÇöÀç ³ëµå
-	TreeDepthType currentNodeDepth = 0; //ÇöÀç ³ëµåÀÇ ±íÀÌ
-	char execBranchSingleFlag = (0x0); //½ÇÇà ºÐ±â ´ÜÀÏ ÇÃ·¡±×
+	Node* currentNode = srcRootNode; //í˜„ìž¬ ë…¸ë“œ
+	TreeDepthType currentNodeDepth = 0; //í˜„ìž¬ ë…¸ë“œì˜ ê¹Šì´
+	char execBranchSingleFlag = (0x0); //ì‹¤í–‰ ë¶„ê¸° ë‹¨ì¼ í”Œëž˜ê·¸
 
 	/***
-		< ½ÇÇà ºÐ±â ´ÜÀÏ ÇÃ·¡±× >
+		< ì‹¤í–‰ ë¶„ê¸° ë‹¨ì¼ í”Œëž˜ê·¸ >
 
-		0000(2) : Æ¯Á¤ ³ëµåÀÇ ±íÀÌ¿¡ µµ´Þ ½Ã ÇöÀç ³ëµå Ãâ·Â
-		0001(2) : ÇöÀç ³ëµå°¡ ´ë»ó Æ¯Á¤ ³ëµåÀÇ ±íÀÌº¸´Ù »óÀ§ ³ëµåÀÏ °æ¿ì Left Child ¹æ¹®
-		0010(2) : Right Sibling ¹æ¹®
-		0011(2) : pop ¹× ÇÊ¿ä ÇÒ °æ¿ì ÇØ´ç ¿ä¼Ò¿¡ ´ëÇÑ ¸¶Áö¸· ÀÛ¾÷ ¼öÇà
+		0000(2) : íŠ¹ì • ë…¸ë“œì˜ ê¹Šì´ì— ë„ë‹¬ ì‹œ í˜„ìž¬ ë…¸ë“œ ì¶œë ¥
+		0001(2) : í˜„ìž¬ ë…¸ë“œê°€ ëŒ€ìƒ íŠ¹ì • ë…¸ë“œì˜ ê¹Šì´ë³´ë‹¤ ìƒìœ„ ë…¸ë“œì¼ ê²½ìš° Left Child ë°©ë¬¸
+		0010(2) : Right Sibling ë°©ë¬¸
+		0011(2) : pop ë° í•„ìš” í•  ê²½ìš° í•´ë‹¹ ìš”ì†Œì— ëŒ€í•œ ë§ˆì§€ë§‰ ìž‘ì—… ìˆ˜í–‰
 	***/
 
 	std::stack<std::tuple<Node*, TreeDepthType, char>> callStack; //Call Stack
@@ -199,63 +190,50 @@ void LCRS_DispTreeNodesAt(Node* srcRootNode, TreeDepthType targetNodeDepth)
 
 	while (!callStack.empty())
 	{
-		currentNode = std::get<0>(callStack.top());
-		currentNodeDepth = std::get<1>(callStack.top());
-		execBranchSingleFlag = std::get<2>(callStack.top());
+		std::tie(currentNode, currentNodeDepth, execBranchSingleFlag) = callStack.top();
 
 		switch (execBranchSingleFlag)
 		{
-		case (0x0): //´ë»ó Æ¯Á¤ ³ëµåÀÇ ±íÀÌ¿¡ µµ´Þ ½Ã ÇöÀç ³ëµå Ãâ·Â
-			goto DISP_CURRENT_NODE_PROC;
+		case (0x0): //ëŒ€ìƒ íŠ¹ì • ë…¸ë“œì˜ ê¹Šì´ì— ë„ë‹¬ ì‹œ í˜„ìž¬ ë…¸ë“œ ì¶œë ¥
+			std::get<2>(callStack.top()) = (0x1); //í—Œìž¬ ë…¸ë“œì— ëŒ€í•´ ë‹¤ìŒ ë²ˆ ì‹¤í–‰ ì‹œ í˜„ìž¬ ë…¸ë“œê°€ íŠ¹ì • ë…¸ë“œì˜ ê¹Šì´ë³´ë‹¤ ìƒìœ„ ë…¸ë“œì¼ ê²½ìš° Left Child ë°©ë¬¸
 
-		case (0x1): //ÇöÀç ³ëµå°¡ ´ë»ó Æ¯Á¤ ³ëµåÀÇ ±íÀÌº¸´Ù »óÀ§ ³ëµåÀÏ °æ¿ì Left Child ¹æ¹®
-			goto VISIT_LEFT_CHILD_PROC;
+			if (currentNodeDepth == targetNodeDepth) //íŠ¹ì • ë…¸ë“œì˜ ê¹Šì´ì— ë„ë‹¬ ì‹œ
+			{
+				std::cout << "- " << currentNode->_data << std::endl;
+			}
 
-		case (0x2): //Right Sibling ¹æ¹®
-			goto VISIT_RIGHT_SIBLING_PROC;
+		case (0x1): //í˜„ìž¬ ë…¸ë“œê°€ ëŒ€ìƒ íŠ¹ì • ë…¸ë“œì˜ ê¹Šì´ë³´ë‹¤ ìƒìœ„ ë…¸ë“œì¼ ê²½ìš° Left Child ë°©ë¬¸
+			if (currentNode->_leftChild != NULL && currentNodeDepth < targetNodeDepth) //í˜„ìž¬ ë…¸ë“œì˜ ì™¼ìª½ ìžì‹ ë…¸ë“œê°€ ì¡´ìž¬í•˜ë©°, í˜„ìž¬ ë…¸ë“œê°€ íŠ¹ì • ë…¸ë“œì˜ ê¹Šì´ë³´ë‹¤ ìƒìœ„ ë…¸ë“œì¼ ê²½ìš°
+			{
+				std::get<2>(callStack.top()) = (0x2); //í—Œìž¬ ë…¸ë“œì— ëŒ€í•´ ë‹¤ìŒ ë²ˆ ì‹¤í–‰ ì‹œ ì˜¤ë¥¸ìª½ í˜•ì œ ë…¸ë“œë¥¼ ë°©ë¬¸
+				callStack.push(std::make_tuple(currentNode->_leftChild, currentNodeDepth + 1, (0x0)));
+				continue;
+			}
 
-		case (0x3): //pop ¹× ÇÊ¿ä ÇÒ °æ¿ì ÇØ´ç ¿ä¼Ò¿¡ ´ëÇÑ ¸¶Áö¸· ÀÛ¾÷ ¼öÇà
-			goto FINALIZE_PROC;
+		case (0x2): //Right Sibling ë°©ë¬¸
+			if (currentNode->_rightSibling != NULL) //í˜„ìž¬ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ í˜•ì œ ë…¸ë“œê°€ ì¡´ìž¬ í•  ê²½ìš°
+			{
+				std::get<2>(callStack.top()) = (0x3); //í˜„ìž¬ ë…¸ë“œì— ëŒ€í•´ ë‹¤ìŒ ë²ˆ ì‹¤í–‰ ì‹œ Call Stackì—ì„œ pop ë° ë§ˆì§€ë§‰ ìž‘ì—… ìˆ˜í–‰
+				callStack.push(std::make_tuple(currentNode->_rightSibling, currentNodeDepth, (0x0)));
+				continue;
+			}
+
+		case (0x3): //pop ë° í•„ìš” í•  ê²½ìš° í•´ë‹¹ ìš”ì†Œì— ëŒ€í•œ ë§ˆì§€ë§‰ ìž‘ì—… ìˆ˜í–‰
+			callStack.pop();
+			break;
 
 		default:
 			throw std::logic_error(std::string(__func__) + std::string(" : Invalid Flag"));
 		}
-
-	DISP_CURRENT_NODE_PROC: //0x0
-		std::get<2>(callStack.top()) = (0x1); //ÇåÀç ³ëµå¿¡ ´ëÇØ ´ÙÀ½ ¹ø ½ÇÇà ½Ã ÇöÀç ³ëµå°¡ Æ¯Á¤ ³ëµåÀÇ ±íÀÌº¸´Ù »óÀ§ ³ëµåÀÏ °æ¿ì Left Child ¹æ¹®
-
-		if (currentNodeDepth == targetNodeDepth) //Æ¯Á¤ ³ëµåÀÇ ±íÀÌ¿¡ µµ´Þ ½Ã
-		{
-			std::cout << "- " << currentNode->_data << std::endl;
-		}
-		
-	VISIT_LEFT_CHILD_PROC: //0x1
-		if (currentNode->_leftChild != NULL && currentNodeDepth < targetNodeDepth) //ÇöÀç ³ëµåÀÇ ¿ÞÂÊ ÀÚ½Ä ³ëµå°¡ Á¸ÀçÇÏ¸ç, ÇöÀç ³ëµå°¡ Æ¯Á¤ ³ëµåÀÇ ±íÀÌº¸´Ù »óÀ§ ³ëµåÀÏ °æ¿ì
-		{
-			std::get<2>(callStack.top()) = (0x2); //ÇåÀç ³ëµå¿¡ ´ëÇØ ´ÙÀ½ ¹ø ½ÇÇà ½Ã ¿À¸¥ÂÊ ÇüÁ¦ ³ëµå¸¦ ¹æ¹®
-			callStack.push(std::make_tuple(currentNode->_leftChild, currentNodeDepth + 1, (0x0)));
-			continue;
-		}
-
-	VISIT_RIGHT_SIBLING_PROC: //0x2
-		if (currentNode->_rightSibling != NULL) //ÇöÀç ³ëµåÀÇ ¿À¸¥ÂÊ ÇüÁ¦ ³ëµå°¡ Á¸Àç ÇÒ °æ¿ì
-		{
-			std::get<2>(callStack.top()) = (0x3); //ÇöÀç ³ëµå¿¡ ´ëÇØ ´ÙÀ½ ¹ø ½ÇÇà ½Ã Call Stack¿¡¼­ pop ¹× ¸¶Áö¸· ÀÛ¾÷ ¼öÇà
-			callStack.push(std::make_tuple(currentNode->_rightSibling, currentNodeDepth, (0x0)));
-			continue;
-		}
-
-	FINALIZE_PROC: //0x3
-		callStack.pop();
 	}
 #endif
 }
 
 /// <summary>
-/// ´ë»ó Æ®¸®ÀÇ ¸ðµç ³ëµå Ãâ·Â
+/// ëŒ€ìƒ íŠ¸ë¦¬ì˜ ëª¨ë“  ë…¸ë“œ ì¶œë ¥
 /// </summary>
-/// <param name="srcRootNode">´ë»ó Æ®¸®ÀÇ ÃÖ»óÀ§ ·çÆ® ³ëµå</param>
-/// <param name="rootNodeDepth">´ë»ó Æ®¸®ÀÇ ÃÖ»óÀ§ ·çÆ® ³ëµåÀÇ ±íÀÌ</param>
+/// <param name="srcRootNode">ëŒ€ìƒ íŠ¸ë¦¬ì˜ ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œ</param>
+/// <param name="rootNodeDepth">ëŒ€ìƒ íŠ¸ë¦¬ì˜ ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œì˜ ê¹Šì´</param>
 void LCRS_DispTree(Node* srcRootNode, TreeDepthType rootNodeDepth)
 {
 	if (srcRootNode == NULL || rootNodeDepth < 0)
@@ -275,17 +253,17 @@ void LCRS_DispTree(Node* srcRootNode, TreeDepthType rootNodeDepth)
 		LCRS_DispTree(srcRootNode->_rightSibling, rootNodeDepth);
 
 #elif defined ITERATIVE_METHOD
-	Node* currentNode = srcRootNode; //ÇöÀç ³ëµå
-	TreeDepthType currentNodeDepth = rootNodeDepth; //ÇöÀç ³ëµåÀÇ ±íÀÌ
-	char execBranchSingleFlag = (0x0); //½ÇÇà ºÐ±â ´ÜÀÏ ÇÃ·¡±×
+	Node* currentNode = srcRootNode; //í˜„ìž¬ ë…¸ë“œ
+	TreeDepthType currentNodeDepth = rootNodeDepth; //í˜„ìž¬ ë…¸ë“œì˜ ê¹Šì´
+	char execBranchSingleFlag = (0x0); //ì‹¤í–‰ ë¶„ê¸° ë‹¨ì¼ í”Œëž˜ê·¸
 
 	/***
-		< ½ÇÇà ºÐ±â ´ÜÀÏ ÇÃ·¡±× >
+		< ì‹¤í–‰ ë¶„ê¸° ë‹¨ì¼ í”Œëž˜ê·¸ >
 
-		0000(2) : ÇöÀç ³ëµå Ãâ·Â
-		0001(2) : Left Child ¹æ¹®
-		0010(2) : Right Sibling ¹æ¹®
-		0011(2) : pop ¹× ÇÊ¿ä ÇÒ °æ¿ì ÇØ´ç ¿ä¼Ò¿¡ ´ëÇÑ ¸¶Áö¸· ÀÛ¾÷ ¼öÇà
+		0000(2) : í˜„ìž¬ ë…¸ë“œ ì¶œë ¥
+		0001(2) : Left Child ë°©ë¬¸
+		0010(2) : Right Sibling ë°©ë¬¸
+		0011(2) : pop ë° í•„ìš” í•  ê²½ìš° í•´ë‹¹ ìš”ì†Œì— ëŒ€í•œ ë§ˆì§€ë§‰ ìž‘ì—… ìˆ˜í–‰
 	***/
 
 	std::stack<std::tuple<Node*, TreeDepthType, char>> callStack; //Call Stack
@@ -293,55 +271,42 @@ void LCRS_DispTree(Node* srcRootNode, TreeDepthType rootNodeDepth)
 
 	while (!callStack.empty())
 	{
-		currentNode = std::get<0>(callStack.top());
-		currentNodeDepth = std::get<1>(callStack.top());
-		execBranchSingleFlag = std::get<2>(callStack.top());
+		std::tie(currentNode, currentNodeDepth, execBranchSingleFlag) = callStack.top();
 
 		switch (execBranchSingleFlag)
 		{
-		case (0x0): //ÇöÀç ³ëµå Ãâ·Â
-			goto DISP_CURRENT_NODE_PROC;
+		case (0x0): //í˜„ìž¬ ë…¸ë“œ ì¶œë ¥
+			std::get<2>(callStack.top()) = (0x1); //í—Œìž¬ ë…¸ë“œì— ëŒ€í•´ ë‹¤ìŒ ë²ˆ ì‹¤í–‰ ì‹œ ì™¼ìª½ ìžì‹ ë…¸ë“œë¥¼ ë°©ë¬¸
 
-		case (0x1): //Left Child ¹æ¹®
-			goto VISIT_LEFT_CHILD_PROC;
+			for (TreeDepthType i = 0; i < currentNodeDepth; i++)
+			{
+				std::cout << "|";
+			}
+			std::cout << "- " << currentNode->_data << std::endl;
 
-		case (0x2): //Right Sibling ¹æ¹®
-			goto VISIT_RIGHT_SIBLING_PROC;
+		case (0x1): //Left Child ë°©ë¬¸
+			if (currentNode->_leftChild != NULL)
+			{
+				std::get<2>(callStack.top()) = (0x2); //í—Œìž¬ ë…¸ë“œì— ëŒ€í•´ ë‹¤ìŒ ë²ˆ ì‹¤í–‰ ì‹œ ì˜¤ë¥¸ìª½ í˜•ì œ ë…¸ë“œë¥¼ ë°©ë¬¸
+				callStack.push(std::make_tuple(currentNode->_leftChild, currentNodeDepth + 1, (0x0)));
+				continue;
+			}
 
-		case (0x3): //pop ¹× ÇÊ¿ä ÇÒ °æ¿ì ÇØ´ç ¿ä¼Ò¿¡ ´ëÇÑ ¸¶Áö¸· ÀÛ¾÷ ¼öÇà
-			goto FINALIZE_PROC;
+		case (0x2): //Right Sibling ë°©ë¬¸
+			if (currentNode->_rightSibling != NULL)
+			{
+				std::get<2>(callStack.top()) = (0x3); //í˜„ìž¬ ë…¸ë“œì— ëŒ€í•´ ë‹¤ìŒ ë²ˆ ì‹¤í–‰ ì‹œ Call Stackì—ì„œ pop ë° í•„ìš” í•  ê²½ìš° ë§ˆì§€ë§‰ ìž‘ì—… ìˆ˜í–‰
+				callStack.push(std::make_tuple(currentNode->_rightSibling, currentNodeDepth, (0x0)));
+				continue;
+			}
+
+		case (0x3): //pop ë° í•„ìš” í•  ê²½ìš° í•´ë‹¹ ìš”ì†Œì— ëŒ€í•œ ë§ˆì§€ë§‰ ìž‘ì—… ìˆ˜í–‰
+			callStack.pop();
+			break;
 
 		default:
 			throw std::logic_error(std::string(__func__) + std::string(" : Invalid Flag"));
 		}
-
-	DISP_CURRENT_NODE_PROC: //0x0
-		std::get<2>(callStack.top()) = (0x1); //ÇåÀç ³ëµå¿¡ ´ëÇØ ´ÙÀ½ ¹ø ½ÇÇà ½Ã ¿ÞÂÊ ÀÚ½Ä ³ëµå¸¦ ¹æ¹®
-
-		for (TreeDepthType i = 0; i < currentNodeDepth; i++)
-		{
-			std::cout << "|";
-		}
-		std::cout << "- " << currentNode->_data << std::endl;
-
-	VISIT_LEFT_CHILD_PROC: //0x1
-		if (currentNode->_leftChild != NULL)
-		{
-			std::get<2>(callStack.top()) = (0x2); //ÇåÀç ³ëµå¿¡ ´ëÇØ ´ÙÀ½ ¹ø ½ÇÇà ½Ã ¿À¸¥ÂÊ ÇüÁ¦ ³ëµå¸¦ ¹æ¹®
-			callStack.push(std::make_tuple(currentNode->_leftChild, currentNodeDepth + 1, (0x0)));
-			continue;
-		}
-
-	VISIT_RIGHT_SIBLING_PROC: //0x2
-		if (currentNode->_rightSibling != NULL)
-		{
-			std::get<2>(callStack.top()) = (0x3); //ÇöÀç ³ëµå¿¡ ´ëÇØ ´ÙÀ½ ¹ø ½ÇÇà ½Ã Call Stack¿¡¼­ pop ¹× ÇÊ¿ä ÇÒ °æ¿ì ¸¶Áö¸· ÀÛ¾÷ ¼öÇà
-			callStack.push(std::make_tuple(currentNode->_rightSibling, currentNodeDepth, (0x0)));
-			continue;
-		}
-
-	FINALIZE_PROC: //0x3
-		callStack.pop();
 	}
 #endif
 }

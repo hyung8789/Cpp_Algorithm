@@ -1,10 +1,10 @@
 #include "BT_Core.h"
 
 /// <summary>
-/// »õ·Î¿î ³ëµå »ý¼º ¹× »ý¼º µÈ ³ëµå ¹ÝÈ¯
+/// ìƒˆë¡œìš´ ë…¸ë“œ ìƒì„± ë° ìƒì„± ëœ ë…¸ë“œ ë°˜í™˜
 /// </summary>
-/// <param name="srcData">³ëµåÀÇ µ¥ÀÌÅÍ</param>
-/// <returns>»ý¼º µÈ ³ëµå</returns>
+/// <param name="srcData">ë…¸ë“œì˜ ë°ì´í„°</param>
+/// <returns>ìƒì„± ëœ ë…¸ë“œ</returns>
 Node* BT_CreateNode(DataType srcData)
 {
 	Node* retVal = (Node*)malloc(sizeof(Node));
@@ -18,9 +18,9 @@ Node* BT_CreateNode(DataType srcData)
 }
 
 /// <summary>
-/// ´ë»ó ³ëµå¿¡ ÇÒ´ç µÈ ¸Þ¸ð¸® ÇØÁ¦
+/// ëŒ€ìƒ ë…¸ë“œì— í• ë‹¹ ëœ ë©”ëª¨ë¦¬ í•´ì œ
 /// </summary>
-/// <param name="srcNode">´ë»ó ³ëµå</param>
+/// <param name="srcNode">ëŒ€ìƒ ë…¸ë“œ</param>
 void BT_DeallocateNode(Node** srcNode)
 {
 	if ((*srcNode) != NULL)
@@ -31,12 +31,12 @@ void BT_DeallocateNode(Node** srcNode)
 }
 
 /// <summary>
-/// ´ë»ó Æ®¸®¿¡ ÇÒ´ç µÈ ¸ðµç ³ëµåÀÇ ¸Þ¸ð¸® ÇØÁ¦
+/// ëŒ€ìƒ íŠ¸ë¦¬ì— í• ë‹¹ ëœ ëª¨ë“  ë…¸ë“œì˜ ë©”ëª¨ë¦¬ í•´ì œ
 /// </summary>
-/// <param name="srcRootNode">´ë»ó Æ®¸®ÀÇ ÃÖ»óÀ§ ·çÆ® ³ëµå</param>
+/// <param name="srcRootNode">ëŒ€ìƒ íŠ¸ë¦¬ì˜ ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œ</param>
 void BT_DeallocateTree(Node** srcRootNode)
 {
-	if ((*srcRootNode) != NULL) //ÈÄÀ§ ¼øÈ¸·Î ¿ÞÂÊ ³¡ ³ëµåºÎÅÍ ÇØÁ¦ 
+	if ((*srcRootNode) != NULL) //í›„ìœ„ ìˆœíšŒë¡œ ì™¼ìª½ ë ë…¸ë“œë¶€í„° í•´ì œ 
 	{
 		if ((*srcRootNode)->_left != NULL)
 			BT_DeallocateTree(&((*srcRootNode)->_left));
@@ -50,10 +50,10 @@ void BT_DeallocateTree(Node** srcRootNode)
 }
 
 /// <summary>
-/// ¼øÈ¸ ¸ðµå¿¡ µû¸¥ ´ë»ó Æ®¸® Ãâ·Â
+/// ìˆœíšŒ ëª¨ë“œì— ë”°ë¥¸ ëŒ€ìƒ íŠ¸ë¦¬ ì¶œë ¥
 /// </summary>
-/// <param name="srcRootNode">´ë»ó Æ®¸®ÀÇ ÃÖ»óÀ§ ·çÆ® ³ëµå</param>
-/// <param name="traversalMode">¼øÈ¸ ¸ðµå</param>
+/// <param name="srcRootNode">ëŒ€ìƒ íŠ¸ë¦¬ì˜ ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œ</param>
+/// <param name="traversalMode">ìˆœíšŒ ëª¨ë“œ</param>
 void BT_DispOrderedTree(Node* srcRootNode, TRAVERSAL_MODE traversalMode)
 {
 	if (srcRootNode == NULL)

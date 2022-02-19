@@ -1,256 +1,340 @@
-#include "BST_Core.h"
+ï»¿#include "BST_Core.h"
 
 /// <summary>
-/// ´ë»ó ÀÌÁø Å½»ö Æ®¸®¿¡ »õ ³ëµå »ðÀÔ
+/// ìƒˆë¡œìš´ ë…¸ë“œ ìƒì„± ë° ìƒì„± ëœ ë…¸ë“œ ë°˜í™˜
 /// </summary>
-/// <param name="srcRootNode">´ë»ó ÀÌÁø Å½»ö Æ®¸®ÀÇ ÃÖ»óÀ§ ·çÆ® ³ëµå</param>
-/// <param name="srcNewNode">»õ ³ëµå</param>
+/// <param name="srcData">ë…¸ë“œì˜ ë°ì´í„°</param>
+/// <returns>ìƒì„± ëœ ë…¸ë“œ</returns>
+Node* BST_CreateNode(DataType srcData)
+{
+	Node* retVal = (Node*)malloc(sizeof(Node));
+	if (retVal == NULL)
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
+
+	retVal->_data = srcData;
+	retVal->_left = retVal->_right = NULL;
+
+	return retVal;
+}
+
+/// <summary>
+/// ëŒ€ìƒ ë…¸ë“œì— í• ë‹¹ ëœ ë©”ëª¨ë¦¬ í•´ì œ
+/// </summary>
+/// <param name="srcNode">ëŒ€ìƒ ë…¸ë“œ</param>
+void BST_DeallocateNode(Node** srcNode)
+{
+	if ((*srcNode) != NULL)
+	{
+		free(*srcNode);
+		(*srcNode) = NULL;
+	}
+}
+
+/// <summary>
+/// ëŒ€ìƒ íŠ¸ë¦¬ì— í• ë‹¹ ëœ ëª¨ë“  ë…¸ë“œì˜ ë©”ëª¨ë¦¬ í•´ì œ
+/// </summary>
+/// <param name="srcRootNode">ëŒ€ìƒ íŠ¸ë¦¬ì˜ ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œ</param>
+void BST_DeallocateTree(Node** srcRootNode)
+{
+	if ((*srcRootNode) != NULL) //í›„ìœ„ ìˆœíšŒë¡œ ì™¼ìª½ ë ë…¸ë“œë¶€í„° í•´ì œ 
+	{
+		if ((*srcRootNode)->_left != NULL)
+			BST_DeallocateTree(&((*srcRootNode)->_left));
+
+		if ((*srcRootNode)->_right != NULL)
+			BST_DeallocateTree(&((*srcRootNode)->_right));
+
+		BST_DeallocateNode(srcRootNode);
+		(*srcRootNode) = NULL;
+	}
+}
+
+/// <summary>
+/// ìˆœíšŒ ëª¨ë“œì— ë”°ë¥¸ ëŒ€ìƒ íŠ¸ë¦¬ ì¶œë ¥
+/// </summary>
+/// <param name="srcRootNode">ëŒ€ìƒ íŠ¸ë¦¬ì˜ ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œ</param>
+/// <param name="traversalMode">ìˆœíšŒ ëª¨ë“œ</param>
+void BST_DispOrderedTree(Node* srcRootNode, TRAVERSAL_MODE traversalMode)
+{
+	if (srcRootNode == NULL)
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
+
+	switch (traversalMode)
+	{
+	case TRAVERSAL_MODE::PREORDER:
+		std::cout << srcRootNode->_data << " ";
+
+		if (srcRootNode->_left != NULL)
+			BST_DispOrderedTree(srcRootNode->_left, traversalMode);
+
+		if (srcRootNode->_right != NULL)
+			BST_DispOrderedTree(srcRootNode->_right, traversalMode);
+		break;
+
+	case TRAVERSAL_MODE::INORDER:
+		if (srcRootNode->_left != NULL)
+			BST_DispOrderedTree(srcRootNode->_left, traversalMode);
+
+		std::cout << srcRootNode->_data << " ";
+
+		if (srcRootNode->_right != NULL)
+			BST_DispOrderedTree(srcRootNode->_right, traversalMode);
+		break;
+
+	case TRAVERSAL_MODE::POSTORDER:
+		if (srcRootNode->_left != NULL)
+			BST_DispOrderedTree(srcRootNode->_left, traversalMode);
+
+		if (srcRootNode->_right != NULL)
+			BST_DispOrderedTree(srcRootNode->_right, traversalMode);
+
+		std::cout << srcRootNode->_data << " ";
+		break;
+	}
+}
+
+/// <summary>
+/// ëŒ€ìƒ íŠ¸ë¦¬ì— ìƒˆ ë…¸ë“œ ì‚½ìž…
+/// </summary>
+/// <param name="srcRootNode">ëŒ€ìƒ íŠ¸ë¦¬ì˜ ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œ</param>
+/// <param name="srcNewNode">ìƒˆ ë…¸ë“œ</param>
 void BST_InsertNode(Node** srcRootNode, Node* srcNewNode)
 {
 	if (srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	if ((*srcRootNode) == NULL) //»ðÀÔ ÇÒ ÀûÀýÇÑ À§Ä¡ÀÎ °æ¿ì
+	if ((*srcRootNode) == NULL) //ì‚½ìž… í•  ì ì ˆí•œ ìœ„ì¹˜ì¸ ê²½ìš°
 	{
 		(*srcRootNode) = srcNewNode;
 	}
 	else
 	{
-		if ((*srcRootNode)->_data == srcNewNode->_data) //Áßº¹ µ¥ÀÌÅÍ°¡ Á¸Àç ÇÒ °æ¿ì
+		if ((*srcRootNode)->_data == srcNewNode->_data) //ì¤‘ë³µ ë°ì´í„°ê°€ ì¡´ìž¬ í•  ê²½ìš°
 			throw myexception::NOT_ALLOWED_DUPLICATE_DATA_EXCEPTION(std::string(__func__) + std::string(" : Not allowed duplicate data"));
 
-		if ((*srcRootNode)->_data > srcNewNode->_data) //ÇöÀç ³ëµåÀÇ µ¥ÀÌÅÍ > »ðÀÔÇÏ°íÀÚ ÇÏ´Â ³ëµåÀÇ µ¥ÀÌÅÍÀÎ °æ¿ì
-			BST_InsertNode(&((*srcRootNode)->_left), srcNewNode); //ÇöÀç ³ëµå ±âÁØ ¿ÞÂÊÀ¸·Î Å½»ö ¼öÇà
-		else //ÇöÀç ³ëµåÀÇ µ¥ÀÌÅÍ < »ðÀÔÇÏ°íÀÚ ÇÏ´Â ³ëµåÀÇ µ¥ÀÌÅÍÀÎ °æ¿ì
-			BST_InsertNode(&((*srcRootNode)->_right), srcNewNode); //ÇöÀç ³ëµå ±âÁØ ¿À¸¥ÂÊÀ¸·Î Å½»ö ¼öÇà
+		if ((*srcRootNode)->_data > srcNewNode->_data) //í˜„ìž¬ ë…¸ë“œì˜ ë°ì´í„° > ì‚½ìž…í•˜ê³ ìž í•˜ëŠ” ë…¸ë“œì˜ ë°ì´í„°ì¸ ê²½ìš°
+			BST_InsertNode(&((*srcRootNode)->_left), srcNewNode); //í˜„ìž¬ ë…¸ë“œ ê¸°ì¤€ ì™¼ìª½ìœ¼ë¡œ íƒìƒ‰ ìˆ˜í–‰
+		else //í˜„ìž¬ ë…¸ë“œì˜ ë°ì´í„° < ì‚½ìž…í•˜ê³ ìž í•˜ëŠ” ë…¸ë“œì˜ ë°ì´í„°ì¸ ê²½ìš°
+			BST_InsertNode(&((*srcRootNode)->_right), srcNewNode); //í˜„ìž¬ ë…¸ë“œ ê¸°ì¤€ ì˜¤ë¥¸ìª½ìœ¼ë¡œ íƒìƒ‰ ìˆ˜í–‰
 	}
 }
 
 /// <summary>
-/// ´ë»ó ÀÌÁø Å½»ö Æ®¸®¿¡ »èÁ¦ÇÏ°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ°¡ Æ÷ÇÔ µÈ ³ëµå »èÁ¦
+/// ëŒ€ìƒ íŠ¸ë¦¬ì— ì‚­ì œí•˜ê³ ìž í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°ê°€ í¬í•¨ ëœ ë…¸ë“œ ì‚­ì œ
 /// </summary>
-/// <param name="srcRootNode">´ë»ó ÀÌÁø Å½»ö Æ®¸®ÀÇ ÃÖ»óÀ§ ·çÆ® ³ëµå</param>
-/// <param name="targetData">»èÁ¦ÇÏ°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ</param>
-/// <param name="deallocateAfterRemove">»èÁ¦ ´ë»ó ³ëµå¿¡ ´ëÇÑ ¸Þ¸ð¸® ÇØÁ¦ ¼öÇà ¿©ºÎ</param>
+/// <param name="srcRootNode">ëŒ€ìƒ íŠ¸ë¦¬ì˜ ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œ</param>
+/// <param name="targetData">ì‚­ì œí•˜ê³ ìž í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°</param>
+/// <param name="deallocateAfterRemove">ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì— ëŒ€í•œ ë©”ëª¨ë¦¬ í•´ì œ ìˆ˜í–‰ ì—¬ë¶€</param>
 /// <summary>
 void BST_RemoveNode(Node** srcRootNode, const DataType& targetData, bool deallocateAfterRemove)
 {
 	/***
-		< »èÁ¦ÇÏ°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ°¡ Æ÷ÇÔ µÈ ³ëµå (»èÁ¦ ´ë»ó ³ëµå)ÀÇ ÀÚ½Ä ³ëµå À¯¹«¿¡ µû¸¥ Ã³¸® >
+		< ì‚­ì œí•˜ê³ ìž í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°ê°€ í¬í•¨ ëœ ë…¸ë“œ (ì‚­ì œ ëŒ€ìƒ ë…¸ë“œ)ì˜ ìžì‹ ë…¸ë“œ ìœ ë¬´ì— ë”°ë¥¸ ì²˜ë¦¬ >
 
-		! ·çÆ® ³ëµå¿¡ ´ëÇÑ »èÁ¦°¡ ¹ß»ý ÇÒ °æ¿ì, º°µµÀÇ Ã³¸® ¿ä±¸
+		! ë£¨íŠ¸ ë…¸ë“œì— ëŒ€í•œ ì‚­ì œê°€ ë°œìƒ í•  ê²½ìš°, ë³„ë„ì˜ ì²˜ë¦¬ ìš”êµ¬
 
-		1) »èÁ¦ ´ë»ó ³ëµå°¡ ÀÚ½Ä ³ëµå¸¦ °®°í ÀÖÁö ¾ÊÀ» °æ¿ì
+		1) ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ìžì‹ ë…¸ë“œë¥¼ ê°–ê³  ìžˆì§€ ì•Šì„ ê²½ìš°
 
-			1-1) »èÁ¦ ´ë»ó ³ëµå°¡ ·çÆ® ³ëµåÀÏ °æ¿ì
+			1-1) ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ë£¨íŠ¸ ë…¸ë“œì¼ ê²½ìš°
 			: do nothing
 
-			1-2) »èÁ¦ ´ë»ó ³ëµå°¡ ·çÆ® ³ëµå°¡ ¾Æ´Ò °æ¿ì
-			: »èÁ¦ ´ë»ó ³ëµåÀÇ ºÎ¸ð ³ëµå·ÎºÎÅÍ ¿¬°á ÇØÁ¦
+			1-2) ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ë£¨íŠ¸ ë…¸ë“œê°€ ì•„ë‹ ê²½ìš°
+			: ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ë¶€ëª¨ ë…¸ë“œë¡œë¶€í„° ì—°ê²° í•´ì œ
 
-			1-3) »èÁ¦ ´ë»ó ³ëµå »èÁ¦
+		2) ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ì™¼ìª½, ì˜¤ë¥¸ìª½ ìžì‹ ë…¸ë“œ ì¤‘ í•˜ë‚˜ë¥¼ ê°–ê³  ìžˆì„ ê²½ìš°
 
-		2) »èÁ¦ ´ë»ó ³ëµå°¡ ¿ÞÂÊ, ¿À¸¥ÂÊ ÀÚ½Ä ³ëµå Áß ÇÏ³ª¸¦ °®°í ÀÖÀ» °æ¿ì
+			2-1) ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ë£¨íŠ¸ ë…¸ë“œì¼ ê²½ìš°
+			: ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ê°€ì§€ê³  ìžˆë˜ ìžì‹ ë…¸ë“œë¥¼ ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œë¡œ ë³€ê²½
 
-			2-1) »èÁ¦ ´ë»ó ³ëµå°¡ ·çÆ® ³ëµåÀÏ °æ¿ì
-			: »èÁ¦ ´ë»ó ³ëµå°¡ °¡Áö°í ÀÖ´ø ÀÚ½Ä ³ëµå¸¦ ÃÖ»óÀ§ ·çÆ® ³ëµå·Î º¯°æ
+			2-2) ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ë£¨íŠ¸ ë…¸ë“œê°€ ì•„ë‹ ê²½ìš°
+			: ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ê°€ì§€ê³  ìžˆë˜ ìžì‹ ë…¸ë“œë¥¼ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ì—°ê²° ë˜ì—ˆë˜ ìƒìœ„ ë¶€ëª¨ ë…¸ë“œë¡œ ì—°ê²°
 
-			2-2) »èÁ¦ ´ë»ó ³ëµå°¡ ·çÆ® ³ëµå°¡ ¾Æ´Ò °æ¿ì
-			: »èÁ¦ ´ë»ó ³ëµå°¡ °¡Áö°í ÀÖ´ø ÀÚ½Ä ³ëµå¸¦ »èÁ¦ ´ë»ó ³ëµå°¡ ¿¬°á µÇ¾ú´ø »óÀ§ ºÎ¸ð ³ëµå·Î ¿¬°á
+		3) ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ì™¼ìª½, ì˜¤ë¥¸ìª½ ìžì‹ ë…¸ë“œë¥¼ ëª¨ë‘ ê°–ê³  ìžˆì„ ê²½ìš°
 
-			2-3) »èÁ¦ ´ë»ó ³ëµå »èÁ¦
+			3-1) ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ë£¨íŠ¸ ë…¸ë“œì¼ ê²½ìš°
 
-		3) »èÁ¦ ´ë»ó ³ëµå°¡ ¿ÞÂÊ, ¿À¸¥ÂÊ ÀÚ½Ä ³ëµå¸¦ ¸ðµÎ °®°í ÀÖÀ» °æ¿ì
+				3-1-1) ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ í•˜ìœ„ íŠ¸ë¦¬ì˜ ë…¸ë“œ ì¤‘ ê°€ìž¥ ìž‘ì€ ë…¸ë“œ (ì´í•˜, ì´ë™ ëŒ€ìƒ ë…¸ë“œ) ë¥¼ ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œë¡œ ë³€ê²½
+				: ì´ë™ ëŒ€ìƒ ë…¸ë“œëŠ” í•´ë‹¹ í•˜ìœ„ íŠ¸ë¦¬ì—ì„œ ê°€ìž¥ ìž‘ì€ ë…¸ë“œì´ë¯€ë¡œ, ì™¼ìª½ ìžì‹ ë…¸ë“œê°€ ì¡´ìž¬í•˜ì§€ ì•ŠìŒ
 
-			3-1) »èÁ¦ ´ë»ó ³ëµå°¡ ·çÆ® ³ëµåÀÏ °æ¿ì
+			3-2) ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ë£¨íŠ¸ ë…¸ë“œê°€ ì•„ë‹ ê²½ìš°
 
-				3-1-1) »èÁ¦ ´ë»ó ³ëµåÀÇ ¿À¸¥ÂÊ ÇÏÀ§ Æ®¸®ÀÇ ³ëµå Áß °¡Àå ÀÛÀº ³ëµå (ÀÌÇÏ, ÀÌµ¿ ´ë»ó ³ëµå) ¸¦ ÃÖ»óÀ§ ·çÆ® ³ëµå·Î º¯°æ
-				: ÀÌµ¿ ´ë»ó ³ëµå´Â ÇØ´ç ÇÏÀ§ Æ®¸®¿¡¼­ °¡Àå ÀÛÀº ³ëµåÀÌ¹Ç·Î, ¿ÞÂÊ ÀÚ½Ä ³ëµå°¡ Á¸ÀçÇÏÁö ¾ÊÀ½
+				3-2-1) ì´ë™ ëŒ€ìƒ ë…¸ë“œë¥¼ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ì—°ê²° ë˜ì—ˆë˜ ìƒìœ„ ë¶€ëª¨ ë…¸ë“œë¡œ ì—°ê²°
+				: ì´ë™ ëŒ€ìƒ ë…¸ë“œëŠ” í•´ë‹¹ í•˜ìœ„ íŠ¸ë¦¬ì—ì„œ ê°€ìž¥ ìž‘ì€ ë…¸ë“œì´ë¯€ë¡œ, ì™¼ìª½ ìžì‹ ë…¸ë“œê°€ ì¡´ìž¬í•˜ì§€ ì•ŠìŒ
 
-			3-2) »èÁ¦ ´ë»ó ³ëµå°¡ ·çÆ® ³ëµå°¡ ¾Æ´Ò °æ¿ì
+			3-3) ì´ë™ ëŒ€ìƒ ë…¸ë“œì˜ ë‚¨ì•„ìžˆëŠ” ì˜¤ë¥¸ìª½ í•˜ìœ„ íŠ¸ë¦¬ ì¡´ìž¬ ì—¬ë¶€ì— ë”°ë¼,
 
-				3-2-1) ÀÌµ¿ ´ë»ó ³ëµå¸¦ »èÁ¦ ´ë»ó ³ëµå°¡ ¿¬°á µÇ¾ú´ø »óÀ§ ºÎ¸ð ³ëµå·Î ¿¬°á
-				: ÀÌµ¿ ´ë»ó ³ëµå´Â ÇØ´ç ÇÏÀ§ Æ®¸®¿¡¼­ °¡Àå ÀÛÀº ³ëµåÀÌ¹Ç·Î, ¿ÞÂÊ ÀÚ½Ä ³ëµå°¡ Á¸ÀçÇÏÁö ¾ÊÀ½
+				3-3-1) ì´ë™ ëŒ€ìƒ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ í•˜ìœ„ íŠ¸ë¦¬ê°€ ì¡´ìž¬ í•  ê²½ìš°
+				: ì´ë™ ëŒ€ìƒ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ í•˜ìœ„ íŠ¸ë¦¬ì˜ ë£¨íŠ¸ ë…¸ë“œë¥¼ ì´ë™ ëŒ€ìƒ ë…¸ë“œê°€ ì´ë™ì´ ë°œìƒí•˜ê¸° ì „ ì—°ê²°ë˜ì—ˆë˜ ìƒìœ„ ë¶€ëª¨ ë…¸ë“œë¡œ ì—°ê²°
 
-			3-3) ÀÌµ¿ ´ë»ó ³ëµåÀÇ ³²¾ÆÀÖ´Â ¿À¸¥ÂÊ ÇÏÀ§ Æ®¸® Á¸Àç ¿©ºÎ¿¡ µû¶ó,
+				3-3-2) ì´ë™ ëŒ€ìƒ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ í•˜ìœ„ íŠ¸ë¦¬ê°€ ì¡´ìž¬í•˜ì§€ ì•Šì„ ê²½ìš°
+				: ì´ë™ ëŒ€ìƒ ë…¸ë“œê°€ ì´ë™ì´ ë°œìƒí•˜ê¸° ì „ ì—°ê²° ë˜ì—ˆë˜ ìƒìœ„ ë¶€ëª¨ ë…¸ë“œë¡œë¶€í„°ì˜ ì—°ê²° í•´ì œ
 
-				3-3-1) ÀÌµ¿ ´ë»ó ³ëµåÀÇ ¿À¸¥ÂÊ ÇÏÀ§ Æ®¸®°¡ Á¸Àç ÇÒ °æ¿ì
-				: ÀÌµ¿ ´ë»ó ³ëµåÀÇ ¿À¸¥ÂÊ ÇÏÀ§ Æ®¸®ÀÇ ·çÆ® ³ëµå¸¦ ÀÌµ¿ ´ë»ó ³ëµå°¡ ÀÌµ¿ÀÌ ¹ß»ýÇÏ±â Àü ¿¬°áµÇ¾ú´ø »óÀ§ ºÎ¸ð ³ëµå·Î ¿¬°á
+			3-4) ì´ë™ ëŒ€ìƒ ë…¸ë“œì˜ ì™¼ìª½ ë° ì˜¤ë¥¸ìª½ ìžì‹ ë…¸ë“œë¥¼ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ì™¼ìª½ ë° ì˜¤ë¥¸ìª½ ìžì‹ ë…¸ë“œë¡œ ì—°ê²°
 
-				3-3-2) ÀÌµ¿ ´ë»ó ³ëµåÀÇ ¿À¸¥ÂÊ ÇÏÀ§ Æ®¸®°¡ Á¸ÀçÇÏÁö ¾ÊÀ» °æ¿ì
-				: ÀÌµ¿ ´ë»ó ³ëµå°¡ ÀÌµ¿ÀÌ ¹ß»ýÇÏ±â Àü ¿¬°á µÇ¾ú´ø »óÀ§ ºÎ¸ð ³ëµå·ÎºÎÅÍÀÇ ¿¬°á ÇØÁ¦
-
-			3-4) ÀÌµ¿ ´ë»ó ³ëµåÀÇ ¿ÞÂÊ ¹× ¿À¸¥ÂÊ ÀÚ½Ä ³ëµå¸¦ »èÁ¦ ´ë»ó ³ëµåÀÇ ¿ÞÂÊ ¹× ¿À¸¥ÂÊ ÀÚ½Ä ³ëµå·Î ¿¬°á
-
-			3-5) »èÁ¦ ´ë»ó ³ëµå »èÁ¦
+		4) ì‚­ì œ ëŒ€ìƒ ë…¸ë“œ ì‚­ì œ
 	***/
 
 	if ((*srcRootNode) == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	std::tuple<Node*, Node*> removeTargetNodeWithParentNodeTuple =
-		BST_SearchNodeWithParentNode((*srcRootNode), targetData); //»èÁ¦ ´ë»ó ³ëµå¿Í »èÁ¦ ´ë»ó ³ëµåÀÇ »óÀ§ ºÎ¸ð ³ëµå°¡ Æ÷ÇÔ µÈ Æ©ÇÃ
-	Node* removeTargetNode = std::get<0>(removeTargetNodeWithParentNodeTuple); //»èÁ¦ ´ë»ó ³ëµå
-	Node* removeTargetParentNode = std::get<1>(removeTargetNodeWithParentNodeTuple); //»èÁ¦ ´ë»ó ³ëµåÀÇ ºÎ¸ð ³ëµå
+	auto tmpRemoveTargetTuple = BST_SearchNodeWithParentNode((*srcRootNode), targetData); //ì‚­ì œ ëŒ€ìƒ íŠœí”Œ
+	Node* removeTargetNode; //ì‚­ì œ ëŒ€ìƒ ë…¸ë“œ
+	Node* removeTargetParentNode; //ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ë¶€ëª¨ ë…¸ë“œ
+	Node** removeTargetParentToChildConnection; //ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ë¶€ëª¨ ë…¸ë“œì—ì„œ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œë¡œì˜ ì—°ê²°
+	std::tie(removeTargetNode, removeTargetParentNode, removeTargetParentToChildConnection) = tmpRemoveTargetTuple;
 
-	std::tuple<Node*, Node*> moveTargetNodeWithParentNodeTuple =
-		BST_SearchMinNodeWithParentNode(removeTargetNode->_right); //ÀÌµ¿ ´ë»ó ³ëµå¿Í ÀÌµ¿ ´ë»ó ³ëµåÀÇ »óÀ§ ºÎ¸ð ³ëµå°¡ Æ÷ÇÔ µÈ Æ©ÇÃ
-	Node* moveTargetNode = std::get<0>(moveTargetNodeWithParentNodeTuple); //ÀÌµ¿ ´ë»ó ³ëµå (»èÁ¦ ´ë»ó ³ëµåÀÇ ¿À¸¥ÂÊ ÇÏÀ§ Æ®¸®ÀÇ ³ëµå Áß °¡Àå ÀÛÀº ³ëµå)
-	Node* moveTargetParentNode = std::get<1>(moveTargetNodeWithParentNodeTuple); //ÀÌµ¿ ´ë»ó ³ëµåÀÇ ºÎ¸ð ³ëµå
-
-	const unsigned char REMOVE_TARGET_NODE_LEFT_CHILD_EXISTS = (0x1) << 0; //»èÁ¦ ´ë»ó ³ëµåÀÇ ¿ÞÂÊ ÀÚ½Ä ³ëµå º¸À¯ ¿©ºÎ (0001)
-	const unsigned char REMOVE_TARGET_NODE_RIGHT_CHILD_EXISTS = (0x1) << 1; //»èÁ¦ ´ë»ó ³ëµåÀÇ ¿À¸¥ÂÊ ÀÚ½Ä ³ëµå º¸À¯ ¿©ºÎ (0010)
-	const unsigned char REMOVE_TARGET_NODE_STATE =
-		((removeTargetNode->_left != NULL) ? REMOVE_TARGET_NODE_LEFT_CHILD_EXISTS : FALSE) |
-		((removeTargetNode->_right != NULL) ? REMOVE_TARGET_NODE_RIGHT_CHILD_EXISTS : FALSE); //»èÁ¦ ´ë»ó ³ëµå »óÅÂ (¿ÞÂÊ ÀÚ½Ä ¹× ¿À¸¥ÂÊ ÀÚ½Ä º¸À¯ ¿©ºÎ¿¡ µû¸¥)
-
-	switch (REMOVE_TARGET_NODE_STATE & (REMOVE_TARGET_NODE_LEFT_CHILD_EXISTS | REMOVE_TARGET_NODE_RIGHT_CHILD_EXISTS)) //»èÁ¦ ´ë»ó ³ëµå »óÅÂ¿¡ µû¶ó
+	if (removeTargetNode->_left == NULL && removeTargetNode->_right == NULL) //ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ìžì‹ ë…¸ë“œë¥¼ ê°–ê³  ìžˆì§€ ì•Šì„ ê²½ìš°
 	{
-	case FALSE: //»èÁ¦ ´ë»ó ³ëµå°¡ ÀÚ½Ä ³ëµå¸¦ °®°í ÀÖÁö ¾ÊÀ» °æ¿ì
-		if (removeTargetNode != (*srcRootNode)) //»èÁ¦ ´ë»ó ³ëµå°¡ ·çÆ® ³ëµå°¡ ¾Æ´Ò °æ¿ì
+		if (removeTargetNode != (*srcRootNode)) //ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ë£¨íŠ¸ ë…¸ë“œê°€ ì•„ë‹ ê²½ìš°
+			(*removeTargetParentToChildConnection) = NULL; //ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ë¶€ëª¨ ë…¸ë“œë¡œë¶€í„° ì—°ê²° í•´ì œ
+	}
+	else if ((removeTargetNode->_left != NULL && removeTargetNode->_right == NULL) ||
+		(removeTargetNode->_left == NULL && removeTargetNode->_right != NULL)) //ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ì™¼ìª½, ì˜¤ë¥¸ìª½ ìžì‹ ë…¸ë“œ ì¤‘ í•˜ë‚˜ë¥¼ ê°–ê³  ìžˆì„ ê²½ìš°
+	{
+		if (removeTargetNode == (*srcRootNode)) //ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ë£¨íŠ¸ ë…¸ë“œì¼ ê²½ìš°
 		{
-			//»èÁ¦ ´ë»ó ³ëµåÀÇ ºÎ¸ð ³ëµå·ÎºÎÅÍ ¿¬°á ÇØÁ¦
-			(removeTargetParentNode->_left == removeTargetNode) ?
-				removeTargetParentNode->_left = NULL : removeTargetParentNode->_right = NULL;
+			//ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ê°€ì§€ê³  ìžˆë˜ ìžì‹ ë…¸ë“œë¥¼ ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œë¡œ ë³€ê²½
+			(removeTargetNode->_left) != NULL ?
+				(*srcRootNode) = removeTargetNode->_left :
+				(*srcRootNode) = removeTargetNode->_right;
+		}
+		else //ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ë£¨íŠ¸ ë…¸ë“œê°€ ì•„ë‹ ê²½ìš°
+		{
+			//ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ê°€ì§€ê³  ìžˆë˜ ìžì‹ ë…¸ë“œë¥¼ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ì—°ê²° ë˜ì—ˆë˜ ìƒìœ„ ë¶€ëª¨ ë…¸ë“œë¡œ ì—°ê²°
+			(removeTargetNode->_left) != NULL ?
+				(*removeTargetParentToChildConnection) = removeTargetNode->_left :
+				(*removeTargetParentToChildConnection) = removeTargetNode->_right;
+		}
+	}
+	else //ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ì™¼ìª½, ì˜¤ë¥¸ìª½ ìžì‹ ë…¸ë“œë¥¼ ëª¨ë‘ ê°–ê³  ìžˆì„ ê²½ìš°
+	{
+		auto tmpMoveTargetTuple = BST_SearchMinNodeWithParentNode(removeTargetNode->_right); //ì´ë™ ëŒ€ìƒ íŠœí”Œ
+		Node* moveTargetNode; //ì´ë™ ëŒ€ìƒ ë…¸ë“œ (ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ í•˜ìœ„ íŠ¸ë¦¬ì˜ ë…¸ë“œ ì¤‘ ê°€ìž¥ ìž‘ì€ ë…¸ë“œ)
+		Node* moveTargetParentNode; //ì´ë™ ëŒ€ìƒ ë…¸ë“œì˜ ë¶€ëª¨ ë…¸ë“œ
+		Node** moveTargetParentToChildConnection; //ì´ë™ ëŒ€ìƒ ë…¸ë“œì˜ ë¶€ëª¨ ë…¸ë“œì—ì„œ ì´ë™ ëŒ€ìƒ ë…¸ë“œë¡œì˜ ì—°ê²°
+
+		std::tie(moveTargetNode, moveTargetParentNode, moveTargetParentToChildConnection) = tmpMoveTargetTuple;
+
+		if (removeTargetNode == (*srcRootNode)) //ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ë£¨íŠ¸ ë…¸ë“œì¼ ê²½ìš°
+		{
+			//ì´ë™ ëŒ€ìƒ ë…¸ë“œë¥¼ ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œë¡œ ë³€ê²½
+			(*srcRootNode) = moveTargetNode;
+		}
+		else //ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ë£¨íŠ¸ ë…¸ë“œê°€ ì•„ë‹ ê²½ìš°
+		{
+			//ì´ë™ ëŒ€ìƒ ë…¸ë“œë¥¼ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ ì—°ê²° ë˜ì—ˆë˜ ìƒìœ„ ë¶€ëª¨ ë…¸ë“œë¡œ ì—°ê²°
+			(*removeTargetParentToChildConnection) = moveTargetNode;
 		}
 
-		break;
-
-	case (REMOVE_TARGET_NODE_LEFT_CHILD_EXISTS | REMOVE_TARGET_NODE_RIGHT_CHILD_EXISTS): //»èÁ¦ ´ë»ó ³ëµå°¡ ¿ÞÂÊ, ¿À¸¥ÂÊ ÀÚ½Ä ³ëµå¸¦ ¸ðµÎ °®°í ÀÖÀ» °æ¿ì
-		if (removeTargetNode == (*srcRootNode)) //»èÁ¦ ´ë»ó ³ëµå°¡ ·çÆ® ³ëµåÀÏ °æ¿ì
+		if (moveTargetNode->_right != NULL) //ì´ë™ ëŒ€ìƒ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ í•˜ìœ„ íŠ¸ë¦¬ê°€ ì¡´ìž¬ í•  ê²½ìš°
 		{
-			(*srcRootNode) = moveTargetNode; //ÀÌµ¿ ´ë»ó ³ëµå¸¦ ÃÖ»óÀ§ ·çÆ® ³ëµå·Î º¯°æ
+			//ì´ë™ ëŒ€ìƒ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ í•˜ìœ„ íŠ¸ë¦¬ì˜ ë£¨íŠ¸ ë…¸ë“œë¥¼ ì´ë™ ëŒ€ìƒ ë…¸ë“œê°€ ì´ë™ì´ ë°œìƒí•˜ê¸° ì „ ì—°ê²°ë˜ì—ˆë˜ ìƒìœ„ ë¶€ëª¨ ë…¸ë“œë¡œ ì—°ê²°
+			(*moveTargetParentToChildConnection) = moveTargetNode->_right;
 		}
-		else //»èÁ¦ ´ë»ó ³ëµå°¡ ·çÆ® ³ëµå°¡ ¾Æ´Ò °æ¿ì
+		else //ì´ë™ ëŒ€ìƒ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ í•˜ìœ„ íŠ¸ë¦¬ê°€ ì¡´ìž¬í•˜ì§€ ì•Šì„ ê²½ìš°
 		{
-			//ÀÌµ¿ ´ë»ó ³ëµå¸¦ »èÁ¦ ´ë»ó ³ëµå°¡ ¿¬°á µÇ¾ú´ø »óÀ§ ºÎ¸ð ³ëµå·Î ¿¬°á
-			(removeTargetParentNode->_left == removeTargetNode) ?
-				removeTargetParentNode->_left = moveTargetNode : removeTargetParentNode->_right = moveTargetNode;
+			//ì´ë™ ëŒ€ìƒ ë…¸ë“œê°€ ì´ë™ì´ ë°œìƒí•˜ê¸° ì „ ì—°ê²° ë˜ì—ˆë˜ ìƒìœ„ ë¶€ëª¨ ë…¸ë“œë¡œë¶€í„°ì˜ ì—°ê²° í•´ì œ
+			(*moveTargetParentToChildConnection) = NULL;
 		}
 
-		if (moveTargetNode->_right != NULL) //ÀÌµ¿ ´ë»ó ³ëµåÀÇ ¿À¸¥ÂÊ ÇÏÀ§ Æ®¸®°¡ Á¸Àç ÇÒ °æ¿ì
-		{
-			//ÀÌµ¿ ´ë»ó ³ëµåÀÇ ¿À¸¥ÂÊ ÇÏÀ§ Æ®¸®ÀÇ ·çÆ® ³ëµå¸¦ ÀÌµ¿ ´ë»ó ³ëµå°¡ ÀÌµ¿ÀÌ ¹ß»ýÇÏ±â Àü ¿¬°áµÇ¾ú´ø »óÀ§ ºÎ¸ð ³ëµå·Î ¿¬°á
-			(moveTargetParentNode->_left == moveTargetNode) ?
-				moveTargetParentNode->_left = moveTargetNode->_right : moveTargetParentNode->_right = moveTargetNode->_right;
-		}
-		else //ÀÌµ¿ ´ë»ó ³ëµåÀÇ ¿À¸¥ÂÊ ÇÏÀ§ Æ®¸®°¡ Á¸ÀçÇÏÁö ¾ÊÀ» °æ¿ì 
-		{
-			//ÀÌµ¿ ´ë»ó ³ëµå°¡ ÀÌµ¿ÀÌ ¹ß»ýÇÏ±â Àü ¿¬°á µÇ¾ú´ø »óÀ§ ºÎ¸ð ³ëµå·ÎºÎÅÍÀÇ ¿¬°á ÇØÁ¦
-			(moveTargetParentNode->_left == moveTargetNode) ?
-				moveTargetParentNode->_left = NULL : moveTargetParentNode->_right = NULL;
-		}
-
-		//ÀÌµ¿ ´ë»ó ³ëµåÀÇ ¿ÞÂÊ ¹× ¿À¸¥ÂÊ ÀÚ½Ä ³ëµå¸¦ »èÁ¦ ´ë»ó ³ëµåÀÇ ¿ÞÂÊ ¹× ¿À¸¥ÂÊ ÀÚ½Ä ³ëµå·Î ¿¬°á
+		//ì´ë™ ëŒ€ìƒ ë…¸ë“œì˜ ì™¼ìª½ ë° ì˜¤ë¥¸ìª½ ìžì‹ ë…¸ë“œë¥¼ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ì™¼ìª½ ë° ì˜¤ë¥¸ìª½ ìžì‹ ë…¸ë“œë¡œ ì—°ê²°
 		moveTargetNode->_left = removeTargetNode->_left;
 		moveTargetNode->_right = removeTargetNode->_right;
-
-		break;
-
-	default: //»èÁ¦ ´ë»ó ³ëµå°¡ ¿ÞÂÊ, ¿À¸¥ÂÊ ÀÚ½Ä ³ëµå Áß ÇÏ³ª¸¦ °®°í ÀÖÀ» °æ¿ì
-		if (removeTargetNode == (*srcRootNode)) //»èÁ¦ ´ë»ó ³ëµå°¡ ·çÆ® ³ëµåÀÏ °æ¿ì
-		{
-			//»èÁ¦ ´ë»ó ³ëµå°¡ °¡Áö°í ÀÖ´ø ÀÚ½Ä ³ëµå¸¦ ÃÖ»óÀ§ ·çÆ® ³ëµå·Î º¯°æ
-			(*srcRootNode) = (removeTargetNode->_left != NULL) ?
-				removeTargetNode->_left : removeTargetNode->_right;
-		}
-		else //»èÁ¦ ´ë»ó ³ëµå°¡ ·çÆ® ³ëµå°¡ ¾Æ´Ò °æ¿ì
-		{
-			//»èÁ¦ ´ë»ó ³ëµå°¡ °¡Áö°í ÀÖ´ø ÀÚ½Ä ³ëµå¸¦ »èÁ¦ ´ë»ó ³ëµå°¡ ¿¬°á µÇ¾ú´ø »óÀ§ ºÎ¸ð ³ëµå·Î ¿¬°á
-			if (REMOVE_TARGET_NODE_STATE & REMOVE_TARGET_NODE_LEFT_CHILD_EXISTS) //»èÁ¦ ´ë»ó ³ëµå°¡ ¿ÞÂÊ ÀÚ½ÄÀ» º¸À¯ ÇÒ °æ¿ì
-			{
-				(removeTargetParentNode->_left == removeTargetNode) ?
-					removeTargetParentNode->_left = removeTargetNode->_left : removeTargetParentNode->_right = removeTargetNode->_left;
-			}
-			else if (REMOVE_TARGET_NODE_STATE & REMOVE_TARGET_NODE_RIGHT_CHILD_EXISTS) //»èÁ¦ ´ë»ó ³ëµå°¡ ¿À¸¥ÂÊ ÀÚ½ÄÀ» º¸À¯ ÇÒ °æ¿ì
-			{
-				(removeTargetParentNode->_left == removeTargetNode) ?
-					removeTargetParentNode->_left = removeTargetNode->_right : removeTargetParentNode->_right = removeTargetNode->_right;
-			}
-			else
-			{
-				throw std::logic_error(std::string(__func__) + std::string(" : Invalid State"));
-			}
-		}
-
-		break;
 	}
 
 	if (deallocateAfterRemove)
-		BT_DeallocateNode(&removeTargetNode);
+		BST_DeallocateNode(&removeTargetNode);
 }
 
 /// <summary>
-/// ´ë»ó ÀÌÁø Å½»ö Æ®¸®¿¡ Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ°¡ Æ÷ÇÔ µÈ ³ëµå ¹ÝÈ¯
+/// ëŒ€ìƒ íŠ¸ë¦¬ì— ì°¾ê³ ìž í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°ê°€ í¬í•¨ ëœ ë…¸ë“œ ë°˜í™˜
 /// </summary>
-/// <param name="srcRootNode">´ë»ó ÀÌÁø Å½»ö Æ®¸®ÀÇ ÃÖ»óÀ§ ·çÆ® ³ëµå</param>
-/// <param name="targetData">Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ</param>
-/// <returns>Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ°¡ Æ÷ÇÔ µÈ ³ëµå</returns>
+/// <param name="srcRootNode">ëŒ€ìƒ íŠ¸ë¦¬ì˜ ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œ</param>
+/// <param name="targetData">ì°¾ê³ ìž í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°</param>
+/// <returns>ì°¾ê³ ìž í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°ê°€ í¬í•¨ ëœ ë…¸ë“œ</returns>
 Node* BST_SearchNode(Node* srcRootNode, const DataType& targetData)
 {
 	if (srcRootNode == NULL)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
-	if (srcRootNode->_data == targetData) //ÇöÀç ³ëµå°¡ Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ¿Í ÀÏÄ¡ÇÒ °æ¿ì
+	if (srcRootNode->_data == targetData) //í˜„ìž¬ ë…¸ë“œê°€ ì°¾ê³ ìž í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°ì™€ ì¼ì¹˜í•  ê²½ìš°
 		return srcRootNode;
-	else if (srcRootNode->_data > targetData) //ÇöÀç ³ëµå > Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍÀÎ °æ¿ì
-		return BST_SearchNode(srcRootNode->_left, targetData); //ÇöÀç ³ëµå ±âÁØ ¿ÞÂÊÀ¸·Î Å½»ö ¼öÇà
-	else //ÇöÀç ³ëµå < Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍÀÎ °æ¿ì
-		return BST_SearchNode(srcRootNode->_right, targetData); //ÇöÀç ³ëµå ±âÁØ ¿À¸¥ÂÊÀ¸·Î Å½»ö ¼öÇà
+	else if (srcRootNode->_data > targetData) //í˜„ìž¬ ë…¸ë“œ > ì°¾ê³ ìž í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°ì¸ ê²½ìš°
+		return BST_SearchNode(srcRootNode->_left, targetData); //í˜„ìž¬ ë…¸ë“œ ê¸°ì¤€ ì™¼ìª½ìœ¼ë¡œ íƒìƒ‰ ìˆ˜í–‰
+	else //í˜„ìž¬ ë…¸ë“œ < ì°¾ê³ ìž í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°ì¸ ê²½ìš°
+		return BST_SearchNode(srcRootNode->_right, targetData); //í˜„ìž¬ ë…¸ë“œ ê¸°ì¤€ ì˜¤ë¥¸ìª½ìœ¼ë¡œ íƒìƒ‰ ìˆ˜í–‰
 }
 
 /// <summary>
-/// ´ë»ó ÀÌÁø Å½»ö Æ®¸®¿¡ Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ°¡ Æ÷ÇÔ µÈ ³ëµå¿Í ÇØ´ç ³ëµåÀÇ »óÀ§ ºÎ¸ð ³ëµå°¡ Æ÷ÇÔ µÈ Æ©ÇÃ ¹ÝÈ¯
+/// ëŒ€ìƒ íŠ¸ë¦¬ì— ì°¾ê³ ìž í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°ê°€ í¬í•¨ ëœ ë…¸ë“œì™€ í•´ë‹¹ ë…¸ë“œì˜ ìƒìœ„ ë¶€ëª¨ ë…¸ë“œ ë° ìžì‹ ë…¸ë“œë¡œì˜ ì—°ê²°ì´ í¬í•¨ ëœ íŠœí”Œ ë°˜í™˜
 /// </summary>
-/// <param name="srcRootNode">´ë»ó ÀÌÁø Å½»ö Æ®¸®ÀÇ ÃÖ»óÀ§ ·çÆ® ³ëµå</param>
-/// <param name="targetData">Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ</param>
-/// <param name="targetParentNode">Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ°¡ Æ÷ÇÔ µÈ ³ëµåÀÇ »óÀ§ ºÎ¸ð ³ëµå</param>
-/// <returns>´ë»ó µ¥ÀÌÅÍ°¡ Æ÷ÇÔ µÈ ³ëµå¿Í ÇØ´ç ³ëµåÀÇ »óÀ§ ºÎ¸ð ³ëµå°¡ Æ÷ÇÔ µÈ Æ©ÇÃ
-/// <para>(arg 0 : ´ë»ó µ¥ÀÌÅÍ°¡ Æ÷ÇÔ µÈ ³ëµå, arg 1 : ÇØ´ç ³ëµåÀÇ »óÀ§ ºÎ¸ð ³ëµå (Á¸ÀçÇÏÁö ¾ÊÀ» °æ¿ì NULL))</para></returns>
-std::tuple<Node*, Node*> BST_SearchNodeWithParentNode(Node* srcRootNode, const DataType& targetData, Node* targetParentNode)
+/// <param name="srcRootNode">ëŒ€ìƒ íŠ¸ë¦¬ì˜ ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œ</param>
+/// <param name="targetData">ì°¾ê³ ìž í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°</param>
+/// <param name="targetParentNode">ì°¾ê³ ìž í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°ê°€ í¬í•¨ ëœ ë…¸ë“œì˜ ìƒìœ„ ë¶€ëª¨ ë…¸ë“œ</param>
+/// <returns>ëŒ€ìƒ ë°ì´í„°ê°€ í¬í•¨ ëœ ë…¸ë“œì™€ í•´ë‹¹ ë…¸ë“œì˜ ìƒìœ„ ë¶€ëª¨ ë…¸ë“œê°€ í¬í•¨ ëœ íŠœí”Œ
+/// <para>tuple arg 0 : ëŒ€ìƒ ë°ì´í„°ê°€ í¬í•¨ ëœ ë…¸ë“œ</para>
+/// <para>tuple arg 1 : í•´ë‹¹ ë…¸ë“œì˜ ìƒìœ„ ë¶€ëª¨ ë…¸ë“œ (ì¡´ìž¬í•˜ì§€ ì•Šì„ ê²½ìš° NULL)</para>
+/// <para>tuple arg 2 : í•´ë‹¹ ë…¸ë“œì˜ ìƒìœ„ ë¶€ëª¨ ë…¸ë“œì—ì„œ ëŒ€ìƒ ë°ì´í„°ê°€ í¬í•¨ ëœ ë…¸ë“œë¡œì˜ ì—°ê²° (ì¡´ìž¬í•˜ì§€ ì•Šì„ ê²½ìš° NULL)</para></returns>
+std::tuple<Node*, Node*, Node**> BST_SearchNodeWithParentNode(Node* srcRootNode, const DataType& targetData, Node* targetParentNode)
 {
 	if (srcRootNode == NULL)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
-	if (srcRootNode->_data == targetData) //ÇöÀç ³ëµå°¡ Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍ¿Í ÀÏÄ¡ÇÒ °æ¿ì
-		return std::make_tuple(srcRootNode, targetParentNode);
+	if (srcRootNode->_data == targetData) //í˜„ìž¬ ë…¸ë“œê°€ ì°¾ê³ ìž í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°ì™€ ì¼ì¹˜í•  ê²½ìš°
+	{
+		Node** targetParentToChildConnection =
+			(targetParentNode == NULL) ? NULL :
+			(targetParentNode->_left == srcRootNode) ? &(targetParentNode->_left) : &(targetParentNode->_right); //ìƒìœ„ ë¶€ëª¨ ë…¸ë“œì—ì„œ ìžì‹ ë…¸ë“œë¡œì˜ ì—°ê²°
 
-	if (srcRootNode->_data > targetData) //ÇöÀç ³ëµå > Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍÀÎ °æ¿ì
-		return BST_SearchNodeWithParentNode(srcRootNode->_left, targetData, srcRootNode); //ÇöÀç ³ëµå ±âÁØ ¿ÞÂÊÀ¸·Î Å½»ö ¼öÇà
-	else //ÇöÀç ³ëµå < Ã£°íÀÚ ÇÏ´Â ´ë»ó µ¥ÀÌÅÍÀÎ °æ¿ì
-		return BST_SearchNodeWithParentNode(srcRootNode->_right, targetData, srcRootNode); //ÇöÀç ³ëµå ±âÁØ ¿À¸¥ÂÊÀ¸·Î Å½»ö ¼öÇà
+		return std::make_tuple(srcRootNode, targetParentNode, targetParentToChildConnection);
+	}
+
+	if (srcRootNode->_data > targetData) //í˜„ìž¬ ë…¸ë“œ > ì°¾ê³ ìž í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°ì¸ ê²½ìš°
+		return BST_SearchNodeWithParentNode(srcRootNode->_left, targetData, srcRootNode); //í˜„ìž¬ ë…¸ë“œ ê¸°ì¤€ ì™¼ìª½ìœ¼ë¡œ íƒìƒ‰ ìˆ˜í–‰
+	else //í˜„ìž¬ ë…¸ë“œ < ì°¾ê³ ìž í•˜ëŠ” ëŒ€ìƒ ë°ì´í„°ì¸ ê²½ìš°
+		return BST_SearchNodeWithParentNode(srcRootNode->_right, targetData, srcRootNode); //í˜„ìž¬ ë…¸ë“œ ê¸°ì¤€ ì˜¤ë¥¸ìª½ìœ¼ë¡œ íƒìƒ‰ ìˆ˜í–‰
 }
 
 /// <summary>
-/// ´ë»ó ÀÌÁø Å½»ö Æ®¸®ÀÇ ÃÖ¼Ò°ªÀÎ µ¥ÀÌÅÍ°¡ Æ÷ÇÔ µÈ ³ëµå ¹ÝÈ¯
+/// ëŒ€ìƒ íŠ¸ë¦¬ì˜ ìµœì†Œê°’ì¸ ë°ì´í„°ê°€ í¬í•¨ ëœ ë…¸ë“œ ë°˜í™˜
 /// </summary>
-/// <param name="srcRootNode">´ë»ó ÀÌÁø Å½»ö Æ®¸®ÀÇ ÃÖ»óÀ§ ·çÆ® ³ëµå</param>
-/// <returns>ÃÖ¼Ò°ªÀÎ µ¥ÀÌÅÍ°¡ Æ÷ÇÔ µÈ ³ëµå</returns>
+/// <param name="srcRootNode">ëŒ€ìƒ íŠ¸ë¦¬ì˜ ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œ</param>
+/// <returns>ìµœì†Œê°’ì¸ ë°ì´í„°ê°€ í¬í•¨ ëœ ë…¸ë“œ</returns>
 Node* BST_SearchMinNode(Node* srcRootNode)
 {
 	if (srcRootNode == NULL)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
-	if (srcRootNode->_left != NULL) //ÇöÀç ³ëµåÀÇ ¿ÞÂÊ ÇÏÀ§ Æ®¸®°¡ Á¸Àç ÇÒ °æ¿ì
+	if (srcRootNode->_left != NULL) //í˜„ìž¬ ë…¸ë“œì˜ ì™¼ìª½ í•˜ìœ„ íŠ¸ë¦¬ê°€ ì¡´ìž¬ í•  ê²½ìš°
 		return BST_SearchMinNode(srcRootNode->_left);
-	else //ÇöÀç ³ëµåÀÇ ¿ÞÂÊ ÇÏÀ§ Æ®¸®°¡ Á¸ÀçÇÏÁö ¾ÊÀ» °æ¿ì
+	else //í˜„ìž¬ ë…¸ë“œì˜ ì™¼ìª½ í•˜ìœ„ íŠ¸ë¦¬ê°€ ì¡´ìž¬í•˜ì§€ ì•Šì„ ê²½ìš°
 		return srcRootNode;
 }
 
 /// <summary>
-/// ´ë»ó ÀÌÁø Å½»ö Æ®¸®ÀÇ ÃÖ¼Ò°ªÀÎ µ¥ÀÌÅÍ°¡ Æ÷ÇÔ µÈ ³ëµå¿Í ÇØ´ç ³ëµåÀÇ »óÀ§ ºÎ¸ð ³ëµå°¡ Æ÷ÇÔ µÈ Æ©ÇÃ ¹ÝÈ¯
+/// ëŒ€ìƒ íŠ¸ë¦¬ì˜ ìµœì†Œê°’ì¸ ë°ì´í„°ê°€ í¬í•¨ ëœ ë…¸ë“œì™€ í•´ë‹¹ ë…¸ë“œì˜ ìƒìœ„ ë¶€ëª¨ ë…¸ë“œ ë° ìžì‹ ë…¸ë“œë¡œì˜ ì—°ê²°ì´ í¬í•¨ ëœ íŠœí”Œ ë°˜í™˜
 /// </summary>
-/// <param name="srcRootNode">´ë»ó ÀÌÁø Å½»ö Æ®¸®ÀÇ ÃÖ»óÀ§ ·çÆ® ³ëµå</param>
-/// <param name="targetParentNode">´ë»ó ÀÌÁø Å½»ö Æ®¸®ÀÇ ÃÖ¼Ò°ªÀÎ µ¥ÀÌÅÍ°¡ Æ÷ÇÔ µÈ ³ëµåÀÇ »óÀ§ ºÎ¸ð ³ëµå</param>
-/// <returns>ÃÖ¼Ò°ªÀÎ µ¥ÀÌÅÍ°¡ Æ÷ÇÔ µÈ ³ëµå¿Í ÇØ´ç ³ëµåÀÇ »óÀ§ ºÎ¸ð ³ëµå°¡ Æ÷ÇÔ µÈ Æ©ÇÃ
-/// <para>(arg 0 : ÃÖ¼Ò°ªÀÎ µ¥ÀÌÅÍ°¡ Æ÷ÇÔ µÈ ³ëµå, arg 1 : ÇØ´ç ³ëµåÀÇ »óÀ§ ºÎ¸ð ³ëµå (Á¸ÀçÇÏÁö ¾ÊÀ» °æ¿ì NULL))</para></returns>
-std::tuple<Node*, Node*> BST_SearchMinNodeWithParentNode(Node* srcRootNode, Node* targetParentNode)
+/// <param name="srcRootNode">ëŒ€ìƒ íŠ¸ë¦¬ì˜ ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œ</param>
+/// <param name="targetParentNode">ëŒ€ìƒ íŠ¸ë¦¬ì˜ ìµœì†Œê°’ì¸ ë°ì´í„°ê°€ í¬í•¨ ëœ ë…¸ë“œì˜ ìƒìœ„ ë¶€ëª¨ ë…¸ë“œ</param>
+/// <returns>ìµœì†Œê°’ì¸ ë°ì´í„°ê°€ í¬í•¨ ëœ ë…¸ë“œì™€ í•´ë‹¹ ë…¸ë“œì˜ ìƒìœ„ ë¶€ëª¨ ë…¸ë“œê°€ í¬í•¨ ëœ íŠœí”Œ
+/// <para>tuple arg 0 : ìµœì†Œê°’ì¸ ë°ì´í„°ê°€ í¬í•¨ ëœ ë…¸ë“œ</para>
+/// <para>tuple arg 1 : í•´ë‹¹ ë…¸ë“œì˜ ìƒìœ„ ë¶€ëª¨ ë…¸ë“œ (ì¡´ìž¬í•˜ì§€ ì•Šì„ ê²½ìš° NULL)</para>
+/// <para>tuple arg 2 : í•´ë‹¹ ë…¸ë“œì˜ ìƒìœ„ ë¶€ëª¨ ë…¸ë“œì—ì„œ ëŒ€ìƒ ë°ì´í„°ê°€ í¬í•¨ ëœ ë…¸ë“œë¡œì˜ ì—°ê²° (ì¡´ìž¬í•˜ì§€ ì•Šì„ ê²½ìš° NULL)</para></returns>
+std::tuple<Node*, Node*, Node**> BST_SearchMinNodeWithParentNode(Node* srcRootNode, Node* targetParentNode)
 {
 	if (srcRootNode == NULL)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
-	if (srcRootNode->_left != NULL) //ÇöÀç ³ëµåÀÇ ¿ÞÂÊ ÇÏÀ§ Æ®¸®°¡ Á¸Àç ÇÒ °æ¿ì
+	if (srcRootNode->_left != NULL) //í˜„ìž¬ ë…¸ë“œì˜ ì™¼ìª½ í•˜ìœ„ íŠ¸ë¦¬ê°€ ì¡´ìž¬ í•  ê²½ìš°
+	{
 		return BST_SearchMinNodeWithParentNode(srcRootNode->_left, srcRootNode);
-	else //ÇöÀç ³ëµåÀÇ ¿ÞÂÊ ÇÏÀ§ Æ®¸®°¡ Á¸ÀçÇÏÁö ¾ÊÀ» °æ¿ì
-		return std::make_tuple(srcRootNode, targetParentNode);
+	}
+	else //í˜„ìž¬ ë…¸ë“œì˜ ì™¼ìª½ í•˜ìœ„ íŠ¸ë¦¬ê°€ ì¡´ìž¬í•˜ì§€ ì•Šì„ ê²½ìš°
+	{
+		Node** targetParentToChildConnection =
+			(targetParentNode == NULL) ? NULL :
+			(targetParentNode->_left == srcRootNode) ? &(targetParentNode->_left) : &(targetParentNode->_right); //ìƒìœ„ ë¶€ëª¨ ë…¸ë“œì—ì„œ ìžì‹ ë…¸ë“œë¡œì˜ ì—°ê²°
+
+		return std::make_tuple(srcRootNode, targetParentNode, targetParentToChildConnection);
+	}
 }

@@ -1,4 +1,4 @@
-#ifndef _BST_CORE_H_
+ï»¿#ifndef _BST_CORE_H_
 #define _BST_CORE_H_
 
 #define _CRTDBG_MAP_ALLOC
@@ -11,9 +11,8 @@
 #include <stdexcept>
 #include <tuple>
 
-//ÇØ´ç ÇÁ·ÎÁ§Æ® ¼Ó¼º¿¡¼­ Á¤Àû ¶óÀÌºê·¯¸® (lib)·Î ºôµå ÇÒ °Í
+//í•´ë‹¹ í”„ë¡œì íŠ¸ ì†ì„±ì—ì„œ ì •ì  ë¼ì´ë¸ŒëŸ¬ë¦¬ (lib)ë¡œ ë¹Œë“œ í•  ê²ƒ
 #include "../../../common_lib/common_lib/Common_LIB_Core.h"
-#include "../ÀÌÁø Æ®¸®/BT_Core.h"
 
 #include "BST.h"
 #endif

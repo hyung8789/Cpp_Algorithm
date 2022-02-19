@@ -1,4 +1,4 @@
-#ifndef _MACRO_H_
+﻿#ifndef _MACRO_H_
 #define _MACRO_H_
 
 #define TRUE (0x1)
