@@ -1,14 +1,14 @@
-#include "Core.h"
+ï»¿#include "Core.h"
 
-static const int ELEMENT_COUNT = 50; //¿ä¼Ò °³¼ö
-static const int TEST_PASSES = 12; //Å×½ºÆ® È½¼ö
-static const int LOGGING_LEVEL = 0; //·Î±ë ·¹º§ (0 : Ãâ·Â ¾ÈÇÔ, 1 : °£·«ÇÑ ³»¿ë, 2 : »ó¼¼ ³»¿ë (Áß°£ °úÁ¤ Ãâ·Â À§ÇÑ ¼öÇà ½Ã°£ ¿ÀÂ÷ ¹ß»ı))
-static const bool VALIDATE_AFTER_SORT = true; //Á¤·Ä ÈÄ Á¤·Ä µÈ ÁıÇÕ¿¡ ´ëÇÑ À¯È¿¼º °Ë»ç ¼öÇà
+static const int ELEMENT_COUNT = 50; //ìš”ì†Œ ê°œìˆ˜
+static const int TEST_PASSES = 12; //í…ŒìŠ¤íŠ¸ íšŸìˆ˜
+static const int LOGGING_LEVEL = 0; //ë¡œê¹… ë ˆë²¨ (0 : ì¶œë ¥ ì•ˆí•¨, 1 : ê°„ëµí•œ ë‚´ìš©, 2 : ìƒì„¸ ë‚´ìš© (ì¤‘ê°„ ê³¼ì • ì¶œë ¥ ìœ„í•œ ìˆ˜í–‰ ì‹œê°„ ì˜¤ì°¨ ë°œìƒ))
+static const bool VALIDATE_AFTER_SORT = true; //ì •ë ¬ í›„ ì •ë ¬ ëœ ì§‘í•©ì— ëŒ€í•œ ìœ íš¨ì„± ê²€ì‚¬ ìˆ˜í–‰
 
 int main()
 {
 	_CrtMemState oldState, newState, lastState;
-	_CrtMemCheckpoint(&oldState); //ÇÒ´ç Àü »óÅÂ
+	_CrtMemCheckpoint(&oldState); //í• ë‹¹ ì „ ìƒíƒœ
 
 	try
 	{
@@ -22,42 +22,42 @@ int main()
 			GenRandPatternEnumerableSet<MySortElementType>(originData, ELEMENT_COUNT); 
 			
 			/***
-				< ÀÌ¹Ì Á¤·Ä µÇ¾î ÀÖ´Â »óÈ² (Best Case) : 0 1 2 ¿¡ ´ëÇÑ ¿À¸§Â÷¼ø Á¤·ÄÀÇ ºñ±³ È½¼ö Å×½ºÆ® >
+				< ì´ë¯¸ ì •ë ¬ ë˜ì–´ ìˆëŠ” ìƒí™© (Best Case) : 0 1 2 ì— ëŒ€í•œ ì˜¤ë¦„ì°¨ìˆœ ì •ë ¬ì˜ ë¹„êµ íšŸìˆ˜ í…ŒìŠ¤íŠ¸ >
 
-				1) ELEMENT_COUNT ¸¦ 3°³·Î ÇÒ °Í
-				2) SequntialPattern »ı¼º ½Ã ORDER_BY::ASCENDING À¸·Î ÇÒ °Í
-				3) RunSinglePassSortTrace ÀÇ ³»ºÎ È£Ãâ ¼ø¼­¸¦ ORDER_BY::ASCENDING À» ¸ÕÀú ¼öÇà ÇÒ °Í
-				4) LOGGING_LEVELÀ» 2·Î ÇÒ °Í
-				5) ºñ±³ °úÁ¤ ½Ã LOGGING_LEVEL == 2¿¡ µû¸¥ Áß°£¿¡ ºñ±³ ¹ß»ı ³»¿ëÀ» Ãâ·Â À§ÇØ ¼öÇà ½Ã°£¿¡ ¿ÀÂ÷°¡ ¹ß»ıÇÏ¹Ç·Î, ¼öÇà ½Ã°£Àº ¹«½Ã ÇÒ °Í
+				1) ELEMENT_COUNT ë¥¼ 3ê°œë¡œ í•  ê²ƒ
+				2) SequntialPattern ìƒì„± ì‹œ ORDER_BY::ASCENDING ìœ¼ë¡œ í•  ê²ƒ
+				3) RunSinglePassSortTrace ì˜ ë‚´ë¶€ í˜¸ì¶œ ìˆœì„œë¥¼ ORDER_BY::ASCENDING ì„ ë¨¼ì € ìˆ˜í–‰ í•  ê²ƒ
+				4) LOGGING_LEVELì„ 2ë¡œ í•  ê²ƒ
+				5) ë¹„êµ ê³¼ì • ì‹œ LOGGING_LEVEL == 2ì— ë”°ë¥¸ ì¤‘ê°„ì— ë¹„êµ ë°œìƒ ë‚´ìš©ì„ ì¶œë ¥ ìœ„í•´ ìˆ˜í–‰ ì‹œê°„ì— ì˜¤ì°¨ê°€ ë°œìƒí•˜ë¯€ë¡œ, ìˆ˜í–‰ ì‹œê°„ì€ ë¬´ì‹œ í•  ê²ƒ
 			***/
 			
 			//GenSequentialPatternEnumerableSet<MySortElementType>(originData, ELEMENT_COUNT, ORDER_BY::ASCENDING);
 
 			/***
-				< Á¤·ÄÇÏ°íÀÚ ÇÏ´Â ¹æ¹ı°ú ¹İ´ë·Î Á¤·Ä µÇ¾î ÀÖ´Â »óÈ² (Worst Case) : 2 1 0 ¿¡ ´ëÇÑ ¿À¸§Â÷¼ø Á¤·ÄÀÇ ºñ±³ È½¼ö Å×½ºÆ® >
+				< ì •ë ¬í•˜ê³ ì í•˜ëŠ” ë°©ë²•ê³¼ ë°˜ëŒ€ë¡œ ì •ë ¬ ë˜ì–´ ìˆëŠ” ìƒí™© (Worst Case) : 2 1 0 ì— ëŒ€í•œ ì˜¤ë¦„ì°¨ìˆœ ì •ë ¬ì˜ ë¹„êµ íšŸìˆ˜ í…ŒìŠ¤íŠ¸ >
 				
-				1) ELEMENT_COUNT ¸¦ 3°³·Î ÇÒ °Í
-				2) SequntialPattern »ı¼º ½Ã ORDER_BY::DESCENDING À¸·Î ÇÒ °Í
-				3) RunSinglePassSortTrace ÀÇ ³»ºÎ È£Ãâ ¼ø¼­¸¦ ORDER_BY::ASCENDING À» ¸ÕÀú ¼öÇà ÇÒ °Í
-				4) LOGGING_LEVEL À» 2·Î ÇÒ °Í
-				5) ºñ±³ °úÁ¤ ½Ã LOGGING_LEVEL == 2¿¡ µû¸¥ Áß°£¿¡ ºñ±³ ¹ß»ı ³»¿ëÀ» Ãâ·Â À§ÇØ ¼öÇà ½Ã°£¿¡ ¿ÀÂ÷°¡ ¹ß»ıÇÏ¹Ç·Î, ¼öÇà ½Ã°£Àº ¹«½Ã ÇÒ °Í
+				1) ELEMENT_COUNT ë¥¼ 3ê°œë¡œ í•  ê²ƒ
+				2) SequntialPattern ìƒì„± ì‹œ ORDER_BY::DESCENDING ìœ¼ë¡œ í•  ê²ƒ
+				3) RunSinglePassSortTrace ì˜ ë‚´ë¶€ í˜¸ì¶œ ìˆœì„œë¥¼ ORDER_BY::ASCENDING ì„ ë¨¼ì € ìˆ˜í–‰ í•  ê²ƒ
+				4) LOGGING_LEVEL ì„ 2ë¡œ í•  ê²ƒ
+				5) ë¹„êµ ê³¼ì • ì‹œ LOGGING_LEVEL == 2ì— ë”°ë¥¸ ì¤‘ê°„ì— ë¹„êµ ë°œìƒ ë‚´ìš©ì„ ì¶œë ¥ ìœ„í•´ ìˆ˜í–‰ ì‹œê°„ì— ì˜¤ì°¨ê°€ ë°œìƒí•˜ë¯€ë¡œ, ìˆ˜í–‰ ì‹œê°„ì€ ë¬´ì‹œ í•  ê²ƒ
 			***/
 
 			//GenSequentialPatternEnumerableSet<MySortElementType>(originData, ELEMENT_COUNT, ORDER_BY::DESCENDING);
 			
-			for (int i = 0; i < totalSortFuncCount; i++) //°¢ sort¿¡¼­ »ç¿ëÇÏ±â À§ÇØ ¿øº» µ¥ÀÌÅÍ º¹»ç
+			for (int i = 0; i < totalSortFuncCount; i++) //ê° sortì—ì„œ ì‚¬ìš©í•˜ê¸° ìœ„í•´ ì›ë³¸ ë°ì´í„° ë³µì‚¬
 			{
 				memcpy_s(&copiedData[i * ELEMENT_COUNT], sizeof(MySortElementType) * ELEMENT_COUNT,
 					originData, sizeof(MySortElementType) * ELEMENT_COUNT);
 			}
 
-			std::promise<TRACE_RESULT> promiseArray[totalSortFuncCount]; //thread¿¡ ÀÇÇØ °á°ú°¡ ÀúÀå µÉ °ÍÀÌ¶ó´Â ¾à¼Ó
-			std::future<TRACE_RESULT> futureArray[totalSortFuncCount]; //¾à¼Ó¿¡ ÀÇÇØ ¹Ì·¡¿¡ thread·ÎºÎÅÍ °á°ú¸¦ ¹ŞÀ» °³Ã¼
+			std::promise<TRACE_RESULT> promiseArray[totalSortFuncCount]; //threadì— ì˜í•´ ê²°ê³¼ê°€ ì €ì¥ ë  ê²ƒì´ë¼ëŠ” ì•½ì†
+			std::future<TRACE_RESULT> futureArray[totalSortFuncCount]; //ì•½ì†ì— ì˜í•´ ë¯¸ë˜ì— threadë¡œë¶€í„° ê²°ê³¼ë¥¼ ë°›ì„ ê°œì²´
 			std::thread threadArray[totalSortFuncCount];
 			
 			for (int i = 0; i < totalSortFuncCount; i++)
 			{
-				futureArray[i] = promiseArray[i].get_future(); //¾à¼ÓÀ¸·ÎºÎÅÍ ¹Ì·¡ »ç»ó
+				futureArray[i] = promiseArray[i].get_future(); //ì•½ì†ìœ¼ë¡œë¶€í„° ë¯¸ë˜ ì‚¬ìƒ
 
 				SORT_UNIQUE_MAPPED_INDEX sortUniqueMappedIndex = (SORT_UNIQUE_MAPPED_INDEX)i;
 
@@ -72,17 +72,17 @@ int main()
 			{
 				SORT_UNIQUE_MAPPED_INDEX sortUniqueMappedIndex = (SORT_UNIQUE_MAPPED_INDEX)i;
 
-				//thread¿¡ ÀÇÇØ °á°ú°¡ ¹İÈ¯µÇ´Â ½ÃÁ¡±îÁö ´ë±âÇÏ¿´´Ù°¡ ÇÒ´ç (¼Ò¿ä ½Ã°£ ´©Àû °è»ê)
+				//threadì— ì˜í•´ ê²°ê³¼ê°€ ë°˜í™˜ë˜ëŠ” ì‹œì ê¹Œì§€ ëŒ€ê¸°í•˜ì˜€ë‹¤ê°€ í• ë‹¹ (ì†Œìš” ì‹œê°„ ëˆ„ì  ê³„ì‚°)
 				SORT_MAPPER::GetInstance().GetRefTraceResult(sortUniqueMappedIndex) += futureArray[i].get();
 
-				//´ÜÀÏ pass¿¡ ´ëÇØ ÇØ´ç thread°¡ ¿ÏÀüÈ÷ Á¾·á µÉ ¶§±îÁö ´ë±â
+				//ë‹¨ì¼ passì— ëŒ€í•´ í•´ë‹¹ threadê°€ ì™„ì „íˆ ì¢…ë£Œ ë  ë•Œê¹Œì§€ ëŒ€ê¸°
 				threadArray[i].join();
 			}
 		}
 
 		/***
-			ÀÌ·Ğ »ó Á¤·ÄÇÏ°íÀÚ ÇÏ´Â ¹æ¹ı°ú ¿ª¼øÀ¸·Î Á¤·Ä µÈ µ¥ÀÌÅÍ (Worst Case)¿¡ ´ëÇØ Á¤·Ä ½Ãµµ ½Ã
-			Average Case º¸´Ù ¿À·¡ °É·Á¾ß Á¤»óÀÌÁö¸¸ CPUÀÇ Branch Prediction¿¡ ÀÇÇØ ´õ ºü¸£°Ô ³ª¿È
+			ì´ë¡  ìƒ ì •ë ¬í•˜ê³ ì í•˜ëŠ” ë°©ë²•ê³¼ ì—­ìˆœìœ¼ë¡œ ì •ë ¬ ëœ ë°ì´í„° (Worst Case)ì— ëŒ€í•´ ì •ë ¬ ì‹œë„ ì‹œ
+			Average Case ë³´ë‹¤ ì˜¤ë˜ ê±¸ë ¤ì•¼ ì •ìƒì´ì§€ë§Œ CPUì˜ Branch Predictionì— ì˜í•´ ë” ë¹ ë¥´ê²Œ ë‚˜ì˜´
 		***/
 
 		for (size_t i = 0; i < totalSortFuncCount; i++)
@@ -105,7 +105,7 @@ int main()
 		exit(EXIT_FAILURE);
 	}
 
-	_CrtMemCheckpoint(&newState); //ÇÒ´ç ÇØÁ¦ ÈÄ »óÅÂ
+	_CrtMemCheckpoint(&newState); //í• ë‹¹ í•´ì œ í›„ ìƒíƒœ
 	_CrtDumpMemoryLeaks();
 	if (_CrtMemDifference(&lastState, &oldState, &newState))
 		_CrtMemDumpStatistics(&lastState);

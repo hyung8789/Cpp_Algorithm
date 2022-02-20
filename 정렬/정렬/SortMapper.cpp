@@ -1,7 +1,7 @@
-#include "Core.h"
+ï»¿#include "Core.h"
 
 /// <summary>
-/// SORT_METADATA »ý¼ºÀÚ
+/// SORT_METADATA ìƒì„±ìž
 /// </summary>
 SORT_METADATA::SORT_METADATA()
 {
@@ -12,11 +12,11 @@ SORT_METADATA::SORT_METADATA()
 }
 
 /// <summary>
-/// SORT_METADATA »ý¼ºÀÚ
+/// SORT_METADATA ìƒì„±ìž
 /// </summary>
-/// <param name="sortFuncAddr">Á¤·Ä ÇÔ¼ö ÁÖ¼Ò</param>
-/// <param name="sortFuncName">Á¤·Ä ÇÔ¼ö ÀÌ¸§</param>
-/// <param name="optionalAlternativeSortFuncName">´ëÃ¼ Á¤·Ä ÇÔ¼ö ÀÌ¸§ (Optional)</param>
+/// <param name="sortFuncAddr">ì •ë ¬ í•¨ìˆ˜ ì£¼ì†Œ</param>
+/// <param name="sortFuncName">ì •ë ¬ í•¨ìˆ˜ ì´ë¦„</param>
+/// <param name="optionalAlternativeSortFuncName">ëŒ€ì²´ ì •ë ¬ í•¨ìˆ˜ ì´ë¦„ (Optional)</param>
 SORT_METADATA::SORT_METADATA(SortFuncAddrType<MySortElementType> sortFuncAddr, const char* sortFuncName, const char* optionalAlternativeSortFuncName)
 {
 	if (sortFuncAddr == NULL || sortFuncName == NULL)
@@ -33,13 +33,13 @@ SORT_METADATA::SORT_METADATA(SortFuncAddrType<MySortElementType> sortFuncAddr, c
 	this->_traceResult = TRACE_RESULT();
 }
 
-SORT_MAPPER* SORT_MAPPER::_instance = NULL; //SORT_MAPPER °íÀ¯ ÀÎ½ºÅÏ½º ÃÊ±âÈ­
+SORT_MAPPER* SORT_MAPPER::_instance = NULL; //SORT_MAPPER ê³ ìœ  ì¸ìŠ¤í„´ìŠ¤ ì´ˆê¸°í™”
 
 /// <summary>
-/// ÀÚ½ÅÀÇ °íÀ¯ ÀÎ½ºÅÏ½º ÂüÁ¶ ¹ÝÈ¯
+/// ìžì‹ ì˜ ê³ ìœ  ì¸ìŠ¤í„´ìŠ¤ ì°¸ì¡° ë°˜í™˜
 /// </summary>
-/// <typeparam name="SortElementType">Á¤·Ä ¿ä¼Ò Å¸ÀÔ</typeparam>
-/// <returns>ÀÚ½ÅÀÇ °íÀ¯ ÀÎ½ºÅÏ½º ÂüÁ¶</returns>
+/// <typeparam name="SortElementType">ì •ë ¬ ìš”ì†Œ íƒ€ìž…</typeparam>
+/// <returns>ìžì‹ ì˜ ê³ ìœ  ì¸ìŠ¤í„´ìŠ¤ ì°¸ì¡°</returns>
 SORT_MAPPER& SORT_MAPPER::GetInstance()
 {
 	if (_instance == NULL)
@@ -49,7 +49,7 @@ SORT_MAPPER& SORT_MAPPER::GetInstance()
 }
 
 /// <summary>
-/// ÀÚ½ÅÀÇ °íÀ¯ ÀÎ½ºÅÏ½º ¸Þ¸ð¸® ÇÒ´ç ÇØÁ¦
+/// ìžì‹ ì˜ ê³ ìœ  ì¸ìŠ¤í„´ìŠ¤ ë©”ëª¨ë¦¬ í• ë‹¹ í•´ì œ
 /// </summary>
 void SORT_MAPPER::Dispose()
 {
@@ -60,29 +60,29 @@ void SORT_MAPPER::Dispose()
 }
 
 /// <summary>
-/// Á¤·ÄÀÇ °íÀ¯ »ç»ó ÀÎµ¦½º¿¡ ´ëÇÑ Á¤·Ä ÇÔ¼ö ÀÌ¸§ ¹®ÀÚ¿­ ¹ÝÈ¯
+/// ì •ë ¬ì˜ ê³ ìœ  ì‚¬ìƒ ì¸ë±ìŠ¤ì— ëŒ€í•œ ì •ë ¬ í•¨ìˆ˜ ì´ë¦„ ë¬¸ìžì—´ ë°˜í™˜
 /// </summary>
-/// <param name="index">Á¤·ÄÀÇ °íÀ¯ »ç»ó ÀÎµ¦½º</param>
-/// <returns>Á¤·Ä ÇÔ¼ö ÀÌ¸§ ¹®ÀÚ¿­</returns>
+/// <param name="index">ì •ë ¬ì˜ ê³ ìœ  ì‚¬ìƒ ì¸ë±ìŠ¤</param>
+/// <returns>ì •ë ¬ í•¨ìˆ˜ ì´ë¦„ ë¬¸ìžì—´</returns>
 const char* SORT_MAPPER::SortUniqueMappedIndexToSortFuncNameStr(SORT_UNIQUE_MAPPED_INDEX index) const
 {
 	return this->_sortMetaDataTable[(const int)index]._sortFuncName;
 }
 
 /// <summary>
-/// Á¤·Ä ÇÔ¼ö ÀÌ¸§ ¹®ÀÚ¿­¿¡ ´ëÇÑ Á¤·ÄÀÇ °íÀ¯ »ç»ó ÀÎµ¦½º ¹ÝÈ¯
+/// ì •ë ¬ í•¨ìˆ˜ ì´ë¦„ ë¬¸ìžì—´ì— ëŒ€í•œ ì •ë ¬ì˜ ê³ ìœ  ì‚¬ìƒ ì¸ë±ìŠ¤ ë°˜í™˜
 /// </summary>
-/// <param name="sortFuncNameStr">Á¤·Ä ÇÔ¼ö ÀÌ¸§ ¹®ÀÚ¿­</param>
-/// <returns>Á¤·ÄÀÇ °íÀ¯ »ç»ó ÀÎµ¦½º</returns>
+/// <param name="sortFuncNameStr">ì •ë ¬ í•¨ìˆ˜ ì´ë¦„ ë¬¸ìžì—´</param>
+/// <returns>ì •ë ¬ì˜ ê³ ìœ  ì‚¬ìƒ ì¸ë±ìŠ¤</returns>
 SORT_UNIQUE_MAPPED_INDEX SORT_MAPPER::SortFuncNameStrToSortUniqueMappedIndex(const char* sortFuncNameStr) const
 {
 	for (int i = 0; i < (const int)SORT_UNIQUE_MAPPED_INDEX::TOTAL_SORT_FUNC_COUNT; i++)
 	{
-		if (strcmp(sortFuncNameStr, this->_sortMetaDataTable[i]._sortFuncName) == 0) //Á¤·Ä ÇÔ¼ö ÀÌ¸§ ºñ±³
+		if (strcmp(sortFuncNameStr, this->_sortMetaDataTable[i]._sortFuncName) == 0) //ì •ë ¬ í•¨ìˆ˜ ì´ë¦„ ë¹„êµ
 			return (SORT_UNIQUE_MAPPED_INDEX)i;
 
-		if (this->_sortMetaDataTable[i]._optionalAlternativeSortFuncName != NULL) //´ëÃ¼ Á¤·Ä ÇÔ¼ö ÀÌ¸§ Á¸Àç ½Ã
-			if (strcmp(sortFuncNameStr, this->_sortMetaDataTable[i]._optionalAlternativeSortFuncName) == 0) //´ëÃ¼ Á¤·Ä ÇÔ¼ö ÀÌ¸§ ºñ±³
+		if (this->_sortMetaDataTable[i]._optionalAlternativeSortFuncName != NULL) //ëŒ€ì²´ ì •ë ¬ í•¨ìˆ˜ ì´ë¦„ ì¡´ìž¬ ì‹œ
+			if (strcmp(sortFuncNameStr, this->_sortMetaDataTable[i]._optionalAlternativeSortFuncName) == 0) //ëŒ€ì²´ ì •ë ¬ í•¨ìˆ˜ ì´ë¦„ ë¹„êµ
 				return (SORT_UNIQUE_MAPPED_INDEX)i;
 	}
 
@@ -90,41 +90,42 @@ SORT_UNIQUE_MAPPED_INDEX SORT_MAPPER::SortFuncNameStrToSortUniqueMappedIndex(con
 }
 
 /// <summary>
-/// Á¤·ÄÀÇ °íÀ¯ »ç»ó ÀÎµ¦½º¿¡ ´ëÇÑ Á¤·Ä¿¡ ´ëÇÑ ÀÐ±â Àü¿ë ¸ÞÅ¸µ¥ÀÌÅÍ ÂüÁ¶ ¹ÝÈ¯
+/// ì •ë ¬ì˜ ê³ ìœ  ì‚¬ìƒ ì¸ë±ìŠ¤ì— ëŒ€í•œ ì •ë ¬ì— ëŒ€í•œ ì½ê¸° ì „ìš© ë©”íƒ€ë°ì´í„° ì°¸ì¡° ë°˜í™˜
 /// </summary>
-/// <param name="index">Á¤·ÄÀÇ °íÀ¯ »ç»ó ÀÎµ¦½º</param>
-/// <returns>Á¤·ÄÀÇ °íÀ¯ »ç»ó ÀÎµ¦½º¿¡ ´ëÇÑ Á¤·Ä¿¡ ´ëÇÑ ÀÐ±â Àü¿ë ¸ÞÅ¸µ¥ÀÌÅÍ ÂüÁ¶</returns>
+/// <param name="index">ì •ë ¬ì˜ ê³ ìœ  ì‚¬ìƒ ì¸ë±ìŠ¤</param>
+/// <returns>ì •ë ¬ì˜ ê³ ìœ  ì‚¬ìƒ ì¸ë±ìŠ¤ì— ëŒ€í•œ ì •ë ¬ì— ëŒ€í•œ ì½ê¸° ì „ìš© ë©”íƒ€ë°ì´í„° ì°¸ì¡°</returns>
 const SORT_METADATA& SORT_MAPPER::GetSortMetaData(SORT_UNIQUE_MAPPED_INDEX index) const
 {
 	return this->_sortMetaDataTable[(const int)index];
 }
 
 /// <summary>
-/// Á¤·ÄÀÇ °íÀ¯ »ç»ó ÀÎµ¦½º¿¡ ´ëÇÑ Á¤·Ä¿¡ ´ëÇÑ Trace Result ÂüÁ¶ ¹ÝÈ¯
+/// ì •ë ¬ì˜ ê³ ìœ  ì‚¬ìƒ ì¸ë±ìŠ¤ì— ëŒ€í•œ ì •ë ¬ì— ëŒ€í•œ Trace Result ì°¸ì¡° ë°˜í™˜
 /// </summary>
-/// <param name="index">Á¤·ÄÀÇ °íÀ¯ »ç»ó ÀÎµ¦½º</param>
-/// <returns>Á¤·ÄÀÇ °íÀ¯ »ç»ó ÀÎµ¦½º¿¡ ´ëÇÑ Á¤·Ä¿¡ ´ëÇÑ Trace Result ÂüÁ¶</returns>
+/// <param name="index">ì •ë ¬ì˜ ê³ ìœ  ì‚¬ìƒ ì¸ë±ìŠ¤</param>
+/// <returns>ì •ë ¬ì˜ ê³ ìœ  ì‚¬ìƒ ì¸ë±ìŠ¤ì— ëŒ€í•œ ì •ë ¬ì— ëŒ€í•œ Trace Result ì°¸ì¡°</returns>
 TRACE_RESULT& SORT_MAPPER::GetRefTraceResult(SORT_UNIQUE_MAPPED_INDEX index)
 {
 	return this->_sortMetaDataTable[(const int)index]._traceResult;
 }
 
 /// <summary>
-/// SORT_MAPPER »ý¼ºÀÚ
+/// SORT_MAPPER ìƒì„±ìž
 /// </summary>
 SORT_MAPPER::SORT_MAPPER()
 {
 	this->_sortMetaDataTable[(const int)SORT_UNIQUE_MAPPED_INDEX::BUBBLE_SORT]
-		= SORT_METADATA(BubbleSort<MySortElementType>, "BubbleSort");
+		= SORT_METADATA(&BubbleSort<MySortElementType>, "BubbleSort");
 
 	this->_sortMetaDataTable[(const int)SORT_UNIQUE_MAPPED_INDEX::INSERTION_SORT]
-		= SORT_METADATA(InsertionSort<MySortElementType>, "InsertionSort");
+		= SORT_METADATA(&InsertionSort<MySortElementType>, "InsertionSort");
 
 	this->_sortMetaDataTable[(const int)SORT_UNIQUE_MAPPED_INDEX::SELECTION_SORT]
-		= SORT_METADATA(SelectionSort<MySortElementType>, "SelectionSort");
+		= SORT_METADATA(&SelectionSort<MySortElementType>, "SelectionSort");
 
 	// https://stackoverflow.com/questions/44049407/c-compilation-fails-on-calling-overloaded-function-in-stdthread
-	//¿À¹ö·Îµù µÈ ÅÛÇÃ¸´ ÇÔ¼ö¸¦ thread »ý¼º ½Ã ÄÄÆÄÀÏ·¯°¡ Ãß·Ð ÇÒ ¼ö ¾øÀ¸¹Ç·Î, ÄÄÆÄÀÏ Å¸ÀÓ¿¡ Á¤Àû Ä³½ºÆ®
+	//ì˜¤ë²„ë¡œë”© ëœ í…œí”Œë¦¿ í•¨ìˆ˜ë¥¼ thread ìƒì„± ì‹œ ì»´íŒŒì¼ëŸ¬ê°€ ì¶”ë¡  í•  ìˆ˜ ì—†ìœ¼ë¯€ë¡œ, ì»´íŒŒì¼ íƒ€ìž„ì— ì •ì  ìºìŠ¤íŠ¸
 	this->_sortMetaDataTable[(const int)SORT_UNIQUE_MAPPED_INDEX::QUICK_SORT]
-		= SORT_METADATA(static_cast<void(*)(MySortElementType[], size_t, ORDER_BY)>(QuickSort<MySortElementType>), "QuickSort", "PartitioningProc");
+		= SORT_METADATA((SortFuncAddrType<MySortElementType>)&QuickSort<MySortElementType>, "QuickSort", "PartitioningProc");
+		//= SORT_METADATA(static_cast<void(*)(MySortElementType[], size_t, ORDER_BY)>(&QuickSort<MySortElementType>), "QuickSort", "PartitioningProc");
 }

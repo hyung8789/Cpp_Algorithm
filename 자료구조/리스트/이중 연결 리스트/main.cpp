@@ -1,63 +1,63 @@
-#include "DLL_Core.h"
+ï»¿#include "DLL_Core.h"
 
 #define COUNT 5
 
 int main()
 {
 	_CrtMemState oldState, newState, lastState;
-	_CrtMemCheckpoint(&oldState); //ÇÒ´ç Àü »óÅÂ
+	_CrtMemCheckpoint(&oldState); //í• ë‹¹ ì „ ìƒíƒœ
 
 	try
 	{
-		Node* list = NULL; //³ëµå ¸®½ºÆ®
+		Node* list = NULL; //ë…¸ë“œ ë¦¬ìŠ¤íŠ¸
 
 		for (int i = 0; i < COUNT; i++)
 		{
-			Node* newNode = DLL_CreateNode(i); //»ı¼º
-			DLL_AppendNode(&list, newNode); //»ğÀÔ
+			Node* newNode = DLL_CreateNode(i); //ìƒì„±
+			DLL_AppendNode(&list, newNode); //ì‚½ì…
 		}
 
-		std::cout << "ÀüÃ¼ ³ëµåÀÇ ¼ö : " << DLL_GetTotalNodeCount(&list) << std::endl;
+		std::cout << "ì „ì²´ ë…¸ë“œì˜ ìˆ˜ : " << DLL_GetTotalNodeCount(&list) << std::endl;
 		DLL_DispNodeList(&list);
 
-		std::cout << "--- 0¹ø À§Ä¡ ³ëµå »èÁ¦ (°£Á¢ À§Ä¡ Á¢±Ù) ---\n";
+		std::cout << "--- 0ë²ˆ ìœ„ì¹˜ ë…¸ë“œ ì‚­ì œ (ê°„ì ‘ ìœ„ì¹˜ ì ‘ê·¼) ---\n";
 		DLL_RemoveNodeAt(&list, 0);
-		std::cout << "ÀüÃ¼ ³ëµåÀÇ ¼ö : " << DLL_GetTotalNodeCount(&list) << std::endl;
+		std::cout << "ì „ì²´ ë…¸ë“œì˜ ìˆ˜ : " << DLL_GetTotalNodeCount(&list) << std::endl;
 		DLL_DispNodeList(&list);
 
-		std::cout << "--- 1¹ø À§Ä¡ ³ëµå »èÁ¦ (°£Á¢ À§Ä¡ Á¢±Ù) ---\n";
+		std::cout << "--- 1ë²ˆ ìœ„ì¹˜ ë…¸ë“œ ì‚­ì œ (ê°„ì ‘ ìœ„ì¹˜ ì ‘ê·¼) ---\n";
 		DLL_RemoveNodeAt(&list, 1);
-		std::cout << "ÀüÃ¼ ³ëµåÀÇ ¼ö : " << DLL_GetTotalNodeCount(&list) << std::endl;
+		std::cout << "ì „ì²´ ë…¸ë“œì˜ ìˆ˜ : " << DLL_GetTotalNodeCount(&list) << std::endl;
 		DLL_DispNodeList(&list);
 
-		std::cout << "--- 2¹ø À§Ä¡ ³ëµå »èÁ¦ (Á÷Á¢ ³ëµå Á¢±Ù) ---\n";
+		std::cout << "--- 2ë²ˆ ìœ„ì¹˜ ë…¸ë“œ ì‚­ì œ (ì§ì ‘ ë…¸ë“œ ì ‘ê·¼) ---\n";
 		DLL_RemoveNode(&list, DLL_GetNodeAt(&list, 2));
-		std::cout << "ÀüÃ¼ ³ëµåÀÇ ¼ö : " << DLL_GetTotalNodeCount(&list) << std::endl;
+		std::cout << "ì „ì²´ ë…¸ë“œì˜ ìˆ˜ : " << DLL_GetTotalNodeCount(&list) << std::endl;
 		DLL_DispNodeList(&list);
 
-		std::cout << "--- »õ·Î¿î Çìµå ³ëµå »ğÀÔ (µ¥ÀÌÅÍ : 100) ---\n";
+		std::cout << "--- ìƒˆë¡œìš´ í—¤ë“œ ë…¸ë“œ ì‚½ì… (ë°ì´í„° : 100) ---\n";
 		DLL_InsertNewHead(&list, DLL_CreateNode(100));
-		std::cout << "ÀüÃ¼ ³ëµåÀÇ ¼ö : " << DLL_GetTotalNodeCount(&list) << std::endl;
+		std::cout << "ì „ì²´ ë…¸ë“œì˜ ìˆ˜ : " << DLL_GetTotalNodeCount(&list) << std::endl;
 		DLL_DispNodeList(&list);
 
-		std::cout << "--- 2¹ø À§Ä¡ µÚ¿¡ »õ ³ëµå »ğÀÔ (µ¥ÀÌÅÍ : 200) ---\n";
+		std::cout << "--- 2ë²ˆ ìœ„ì¹˜ ë’¤ì— ìƒˆ ë…¸ë“œ ì‚½ì… (ë°ì´í„° : 200) ---\n";
 		DLL_InsertNodeAfter(DLL_GetNodeAt(&list, 2), DLL_CreateNode(200));
-		std::cout << "ÀüÃ¼ ³ëµåÀÇ ¼ö : " << DLL_GetTotalNodeCount(&list) << std::endl;
+		std::cout << "ì „ì²´ ë…¸ë“œì˜ ìˆ˜ : " << DLL_GetTotalNodeCount(&list) << std::endl;
 		DLL_DispNodeList(&list);
 
-		std::cout << "--- 2¹ø À§Ä¡ ¾Õ¿¡ »õ ³ëµå »ğÀÔ (µ¥ÀÌÅÍ : 300) ---\n";
+		std::cout << "--- 2ë²ˆ ìœ„ì¹˜ ì•ì— ìƒˆ ë…¸ë“œ ì‚½ì… (ë°ì´í„° : 300) ---\n";
 		DLL_InsertNodeBefore(&list, DLL_GetNodeAt(&list, 2), DLL_CreateNode(300));
-		std::cout << "ÀüÃ¼ ³ëµåÀÇ ¼ö : " << DLL_GetTotalNodeCount(&list) << std::endl;
+		std::cout << "ì „ì²´ ë…¸ë“œì˜ ìˆ˜ : " << DLL_GetTotalNodeCount(&list) << std::endl;
 		DLL_DispNodeList(&list);
 
-		std::cout << "--- 0¹ø À§Ä¡ ¾Õ¿¡ »õ ³ëµå »ğÀÔ (µ¥ÀÌÅÍ : 400) ---\n";
+		std::cout << "--- 0ë²ˆ ìœ„ì¹˜ ì•ì— ìƒˆ ë…¸ë“œ ì‚½ì… (ë°ì´í„° : 400) ---\n";
 		DLL_InsertNodeBefore(&list, DLL_GetNodeAt(&list, 0), DLL_CreateNode(400));
-		std::cout << "ÀüÃ¼ ³ëµåÀÇ ¼ö : " << DLL_GetTotalNodeCount(&list) << std::endl;
+		std::cout << "ì „ì²´ ë…¸ë“œì˜ ìˆ˜ : " << DLL_GetTotalNodeCount(&list) << std::endl;
 		DLL_DispNodeList(&list);
 
-		std::cout << "--- ¸®½ºÆ® ÀüÃ¼ ¸Ş¸ğ¸® ÇØÁ¦ ---\n";
+		std::cout << "--- ë¦¬ìŠ¤íŠ¸ ì „ì²´ ë©”ëª¨ë¦¬ í•´ì œ ---\n";
 		DLL_DeallocateNodeList(&list);
-		std::cout << "ÀüÃ¼ ³ëµåÀÇ ¼ö : " << DLL_GetTotalNodeCount(&list) << std::endl;
+		std::cout << "ì „ì²´ ë…¸ë“œì˜ ìˆ˜ : " << DLL_GetTotalNodeCount(&list) << std::endl;
 		DLL_DispNodeList(&list);
 	}
 	catch (const std::exception& ex)
@@ -66,7 +66,7 @@ int main()
 		exit(EXIT_FAILURE);
 	}
 
-	_CrtMemCheckpoint(&newState); //ÇÒ´ç ÇØÁ¦ ÈÄ »óÅÂ
+	_CrtMemCheckpoint(&newState); //í• ë‹¹ í•´ì œ í›„ ìƒíƒœ
 	_CrtDumpMemoryLeaks();
 	if (_CrtMemDifference(&lastState, &oldState, &newState))
 		_CrtMemDumpStatistics(&lastState);
