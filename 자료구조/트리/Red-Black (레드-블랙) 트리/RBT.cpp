@@ -199,14 +199,14 @@ void RBT_RotateTree(Node** srcRootNode, Node* targetParentNode, ROTATE_DIRECTION
 
 	switch (rotateDirection)
 	{
-	case ROTATE_DIRECTION::LEFT:
+	case ROTATE_DIRECTION::RIGHT:
 		moveTargetNode = targetParentNode->_left;
 		moveTargetChildNode = moveTargetNode->_right;
 		moveTargetParentToChildConnection = &(moveTargetNode->_parent->_left);
 		moveTargetToChildConnection = &(moveTargetNode->_right);
 		break;
 
-	case ROTATE_DIRECTION::RIGHT:
+	case ROTATE_DIRECTION::LEFT:
 		moveTargetNode = targetParentNode->_right;
 		moveTargetChildNode = moveTargetNode->_left;
 		moveTargetParentToChildConnection = &(moveTargetNode->_parent->_right);
