@@ -13,7 +13,7 @@ Node* RBT_CreateNode(DataType srcData)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
 	retVal->_data = srcData;
-	retVal->_color = COLOR::RED; //항상 새 노드는 빨간색으로 가정
+	retVal->_color = COLOR::RED; //항상 새 노드는 빨간색
 	retVal->_parent = retVal->_left = retVal->_right = NULL;
 
 	return retVal;
@@ -35,59 +35,24 @@ void RBT_InsertNode(Node** srcRootNode, Node* srcNewNode)
 	if (dummyBlackTerminalNode->_parent != NULL) //검은색 더미 단말 노드에서 부모로의 연결은 허용하지 않음 
 		throw std::logic_error(std::string(__func__) + std::string(" : Not allowed parent connection"));
 
+	RBT_InsertNodeHelper(srcRootNode, srcNewNode); //새 노드 삽입
+	srcNewNode->_left = srcNewNode->_right = dummyBlackTerminalNode;
+	RBT_PostProcAfterInsert(srcRootNode, srcNewNode); //후처리 수행
+}
+
+/// <summary>
+/// 직접적인 대상 트리에 새 노드 삽입 수행
+/// </summary>
+/// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
+/// <param name="srcNewNode">새 노드</param>
+void RBT_InsertNodeHelper(Node** srcRootNode, Node* srcNewNode)
+{
 	if (srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
-
-	/***
-		< 새 노드 삽입에 따른 레드 블랙 트리의 정의 위반에 대한 후속 처리 >
-
-		항상 삽입되는 새 노드는 빨간색으로 가정하며,
-		단말 노드는 항상 검은색인 정의을 만족하기 위해 별도의 검은색 더미 단말 노드를 사용
-		이에 따른, 새 노드 삽입 시 위반되는 정의와 수정 사항은,
-
-		1) 루트 노드는 항상 검은색
-		: 삽입되는 새 노드는 항상 빨간색이므로 위반
-
-			1-1) 삽입되는 새 노드가 루트 노드일 시 검은색으로 변경
-
-		2) 빨간 노드의 한 단계 하위 자식 노드는 항상 검은색
-		: 삽입되는 새 노드는 항상 빨간색이므로, 빨간 노드 다음에 빨간 노드가 삽입 될 경우 위반 (부모 노드와 부모 노드의 자식인 새 노드가 빨간색)
-		삽입되는 새 노드의 부모가 빨간색이면 삽입되는 새 노드를 검은색으로 변경만 할 경우,
-		왜 삼촌
-
-
-			2-1) 새 노드의 부모의 형제 노드 (새 노드의 부모의 부모의 반대쪽 자식 노드 (삼촌))가 존재 할 경우
-			: 새 노드의 부모의 형제 노드의 색에 따라,
-
-				2-1-1) 새 노드의 부모의 형제 노드가 빨간색일 경우
-				:
-
-				2-1-2) 새 노드의 부모의 형제 노드가
-
-			2-2) 새 노드의 부모의 형제 노드가 존재하지 않을 경우
-			:
-
-		---
-
-		ex) 새 노드의 부모의 형제 노드가 존재하지 않을 경우
-
-				5 (Root, Black)
-			3 (Parent, Red)
-		1 (New, Red)
-
-		=> 부모 노드 3를 기준으로 우회전 수행
-
-				3
-					5
-
-
-	***/
 
 	if ((*srcRootNode) == NULL) //초기 루트가 존재하지 않을 경우
 	{
 		(*srcRootNode) = srcNewNode;
-		srcNewNode->_color = COLOR::BLACK; //루트 노드를 검은색으로 변경
-		srcNewNode->_left = srcNewNode->_right = dummyBlackTerminalNode; //단말 노드는 항상 검은색
 	}
 	else //초기 루트 노드가 존재 할 경우
 	{
@@ -98,9 +63,9 @@ void RBT_InsertNode(Node** srcRootNode, Node* srcNewNode)
 		{
 			if ((*srcRootNode)->_left == dummyBlackTerminalNode) //현재 노드의 왼쪽 자식이 검은색 더미 단말 노드일 경우
 			{
+				//현재 노드의 왼쪽에 새 노드 삽입
 				(*srcRootNode)->_left = srcNewNode;
 				srcNewNode->_parent = (*srcRootNode);
-				srcNewNode->_left = srcNewNode->_right = dummyBlackTerminalNode; //단말 노드는 항상 검은색
 			}
 			else
 			{
@@ -111,9 +76,9 @@ void RBT_InsertNode(Node** srcRootNode, Node* srcNewNode)
 		{
 			if ((*srcRootNode)->_right == dummyBlackTerminalNode) //현재 노드의 오른쪽 자식이 검은색 더미 단말 노드일 경우
 			{
+				//현재 노드의 오른쪽에 새 노드 삽입
 				(*srcRootNode)->_right = srcNewNode;
 				srcNewNode->_parent = (*srcRootNode);
-				srcNewNode->_left = srcNewNode->_right = dummyBlackTerminalNode; //단말 노드는 항상 검은색
 			}
 			else
 			{
@@ -121,6 +86,183 @@ void RBT_InsertNode(Node** srcRootNode, Node* srcNewNode)
 			}
 		}
 	}
+}
+
+/// <summary>
+/// 대상 트리에 새 노드 삽입 발생 후 후처리
+/// </summary>
+/// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
+/// <param name="srcNewNode">새 노드</param>
+void RBT_PostProcAfterInsert(Node** srcRootNode, Node* srcNewNode)
+{
+	/***
+		< 새 노드 삽입 발생 후 후처리 >
+
+		! 레드 블랙 트리 정의인 루트 노드 및 단말 노드는 항상 검은색를 만족하기 위해,
+		별도의 검은색 더미 노드를 단말 노드로 이용하며, 이에 따라 어떠한 노드의 왼쪽 자식 노드 혹은 오른쪽 자식 노드는 항상 NULL이 아님
+		! 항상 삽입되는 새 노드는 빨간색
+		! 새 노드 삽입 시 위반될 수 있는 정의와 수정 사항은,
+
+		DEF1) 루트 노드는 항상 검은색
+		: 삽입되는 새 노드는 항상 빨간색이므로 위반, 삽입되는 새 노드가 루트 노드일 시 검은색으로 변경
+
+		DEF2) 빨간 노드의 한 단계 하위 자식 노드는 항상 검은색
+		: 삽입되는 새 노드는 항상 빨간색이므로, 빨간 노드 다음에 빨간 노드가 삽입 될 경우 위반
+
+		---
+
+		< Determining Proc >
+
+		1) 새 노드가 루트 노드이거나, 새 노드의 부모 노드가 검은색인 경우
+		: do nothing
+
+		2) 새 노드의 부모 노드가 새 노드의 부모의 부모의 왼쪽 자식 혹은 오른쪽 자식 여부에 따라, 새 노드의 부모의 형제 노드 (삼촌) 판별
+
+		3) DEF2)의 위반 사항을 해결하기 위해, 새 노드의 부모의 형제 노드 (삼촌)의 색에 따라,
+
+			3-1) 새 노드의 부모의 형제 노드 (삼촌)가 검은색일 경우
+			: goto Restructuring Proc
+
+			3-2) 새 노드의 부모의 형제 노드 (삼촌)가 빨간색일 경우
+			: goto Recoloring Proc
+
+		ex) DEF2)를 만족하기 위해,
+		삽입되는 새 노드의 부모가 빨간색이면 삽입되는 새 노드를 단순히 검은색으로 변경만 할 경우, DEF4)를 위반 할 수 있음
+		(즉, 이진 탐색 트리가 한 쪽 방향으로 기형적으로 성장하는 것처럼 균형이 꺠질 수 있음)
+
+		---
+		
+		< Restructuring Proc >
+
+		! 새 노드의 부모의 형제 노드 (삼촌)가 검은색인 상황에서 트리 재구성 (회전 발생)
+		
+		1) ND : 새 노드의 새 노드의 부모에 대한 자식 방향 (L : 왼쪽 자식, R : 오른쪽 자식)
+		2) NPD : 새 노드의 부모 노드의 새 노드의 부모의 부모에 대한 자식 방향 (L : 왼쪽 자식, R : 오른쪽 자식)
+		3) P : 이에 따른 수행 작업
+		
+		TODO :
+
+		ND | NPD | P
+		L	 L		1) 새 노드의 부모의 부모 노드를 기준으로 오른쪽 회전
+					: 새 노드 < 새 노드의 부모 노드 < 새 노드의 부모의 부모 노드
+
+					2) 새 노드의 부모 노드와 새 노드의 부모의 부모 노드 간의 색상 SWAP
+					: 이에 따라, DEF2)를 만족
+
+		L	 R		새 노드의 부모의 부모 노드 < 새 노드 < 새 노드의 부모 노드
+
+		R	 L		새 노드의 부모 노드 < 새 노드 < 새 노드의 부모의 부모 노드
+
+		R	 R		새 노드의 부모의 부모 노드 < 새 노드의 부모 노드 < 새 노드
+
+		ex) 
+		- LR : 단순히 새 노드의 부모의 부모 노드를 기준으로 오른쪽으로 회전만 수행하지 않고,
+		왜 새 노드의 부모 노드를 기준으로 왼쪽 회전을 먼저 수행하고,
+		이어서, 새 노드의 부모의 부모 노드를 기준으로 오른쪽 회전을 수행하여야 하는가?
+		
+		- RL : 단순히 새 노드의 부모의 부모 노드를 기준으로 왼쪽으로 회전만 수행하지 않고,
+		왜 새 노드의 부모 노드를 기준으로 오른쪽 회전을 먼저 수행하고,
+		이어서, 새 노드의 부모의 부모 노드를 기준으로 왼쪽 회전을 수행하여야 하는가?
+
+		LR에 대해, 다음의 트리 가정,
+
+							4 (Root, 오른쪽 하위 트리 생략)
+					3 (오른쪽 하위 트리 생략)
+			1 (Red)
+				2 (newNode, Red)
+
+		1) 단순히, 새 노드의 부모의 부모 노드 3를 기준으로 오른쪽으로 회전만 수행 할 경우
+
+							4 (Root)
+					1 (Red)
+							3
+						2 (newNode, Red)
+
+		=> 균형이 꺠질 수 있음
+
+		2) 새 노드의 부모 노드 1를 기준으로 왼쪽 회전을 먼저 수행하고,
+		이어서, 새 노드의 부모의 부모 노드 3를 기준으로 오른쪽 회전을 수행 할 경우
+
+			2-1) 새 노드의 부모 노드 1를 기준으로 왼쪽 회전을 먼저 수행
+
+							4 (Root)
+						3 (oldParent)
+					2 (newNode, Red)
+				1 (Red)
+
+			2-2) 이어서, 새 노드의 부모의 부모 노드 3를 기준으로 오른쪽 회전을 수행
+			
+							4 (Root)
+						2 (newNode, Red)
+				1 (Red)		3 (oldParent)
+
+		---
+
+		< Recoloring Proc >
+
+		! 새 노드의 부모의 형제 노드 (삼촌)가 빨간색인 상황에서 색 변경
+
+		1) 새 노드의 부모와 새 노드의 부모의 형제 노드 (삼촌)를 검은색으로 변경
+
+		2) 새 노드의 부모의 부모 노드의 상태에 따라,
+
+			2-1) 새 노드의 부모의 부모 노드 == 루트 노드
+			: do nothing (새 노드의 부모의 부모 노드는 검은색)
+
+			2-2) 새 노드의 부모의 부모 노드 != 루트 노드
+
+				2-2-1) 새 노드의 부모의 부모 노드를 빨간색으로 변경
+
+				2-2-2) 새 노드의 부모의 부모 노드를 삽입이 발생하는 새 노드로 간주
+				: goto Determining Proc (새 노드의 부모의 부모 노드와 새 노드의 부모의 부모의 부모 노드 간에 DEF2)의 위반 사항이 존재하는지 다시 판별)
+	***/
+
+	Node* uncleNode = NULL; //새 노드의 부모의 형제 노드 (삼촌)
+	
+	if (srcNewNode == (*srcRootNode)) //삽입되는 새 노드가 루트 노드일 시
+	{
+		srcNewNode->_color = COLOR::BLACK; //DEF1) 루트 노드는 항상 검은색
+		return;
+	}
+
+DETERMINING_PROC: //판별 처리 루틴
+	if (srcNewNode == (*srcRootNode) || srcNewNode->_parent->_color == COLOR::BLACK) //새 노드가 루트 노드이거나, 새 노드의 부모 노드가 검은색인 경우
+		return;
+
+	uncleNode = (srcNewNode->_parent->_parent->_left == srcNewNode->_parent) ?
+		srcNewNode->_parent->_parent->_right : srcNewNode->_parent->_parent->_left;
+
+	if (uncleNode == NULL)
+		throw std::runtime_error(std::string(__func__) + std::string(" : Invalid Red-Black Tree"));
+
+	switch (uncleNode->_color) //새 노드의 부모의 형제 노드 (삼촌)의 색에 따라,
+	{
+	case COLOR::BLACK:
+		goto RESTRUCTURING_PROC;
+
+	case COLOR::RED:
+		goto RECOLORING_PROC;
+	}
+
+RESTRUCTURING_PROC: //트리 재구성 처리 루틴
+
+
+
+
+RECOLORING_PROC: //색 변경 처리 루틴
+	srcNewNode->_parent->_color = uncleNode->_color = COLOR::BLACK; //새 노드의 부모와 새 노드의 부모의 형제 노드(삼촌)를 검은색으로 변경
+
+	if (srcNewNode->_parent->_parent == (*srcRootNode)) //새 노드의 부모의 부모 노드가 루트 노드인 경우
+		return;
+
+	//새 노드의 부모의 부모 노드가 루트 노드가 아닌 경우, 새 노드의 부모의 부모 노드를 빨간색으로 변경
+	srcNewNode->_parent->_parent->_color = COLOR::RED;
+
+	//새 노드의 부모의 부모 노드를 삽입이 발생하는 새 노드로 간주
+	srcNewNode = srcNewNode->_parent->_parent;
+
+	//새 노드의 부모의 부모 노드와 새 노드의 부모의 부모의 부모 노드 간에 DEF2)의 위반 사항이 존재하는지 다시 판별
+	goto DETERMINING_PROC;
 }
 
 /// <summary>
@@ -135,8 +277,7 @@ void RBT_RotateTree(Node** srcRootNode, Node* targetParentNode, ROTATE_DIRECTION
 		< 트리 회전 - 우회전 >
 
 		! 레드 블랙 트리 정의인 루트 노드 및 단말 노드는 항상 검은색를 만족하기 위해,
-		별도의 검은색 더미 노드를 단말 노드로 이용하며, 
-		이에 따라 어떠한 노드의 왼쪽 자식 노드 혹은 오른쪽 자식 노드는 항상 NULL이 아님
+		별도의 검은색 더미 노드를 단말 노드로 이용하며, 이에 따라 어떠한 노드의 왼쪽 자식 노드 혹은 오른쪽 자식 노드는 항상 NULL이 아님
 
 		! 대상 부모 노드가 루트 노드일 경우 별도의 처리 요구
 
@@ -202,14 +343,14 @@ void RBT_RotateTree(Node** srcRootNode, Node* targetParentNode, ROTATE_DIRECTION
 	case ROTATE_DIRECTION::RIGHT:
 		moveTargetNode = targetParentNode->_left;
 		moveTargetChildNode = moveTargetNode->_right;
-		moveTargetParentToChildConnection = &(moveTargetNode->_parent->_left);
+		moveTargetParentToChildConnection = &(targetParentNode->_left);
 		moveTargetToChildConnection = &(moveTargetNode->_right);
 		break;
 
 	case ROTATE_DIRECTION::LEFT:
 		moveTargetNode = targetParentNode->_right;
 		moveTargetChildNode = moveTargetNode->_left;
-		moveTargetParentToChildConnection = &(moveTargetNode->_parent->_right);
+		moveTargetParentToChildConnection = &(targetParentNode->_right);
 		moveTargetToChildConnection = &(moveTargetNode->_left);
 		break;
 	}
@@ -219,7 +360,7 @@ void RBT_RotateTree(Node** srcRootNode, Node* targetParentNode, ROTATE_DIRECTION
 		throw std::runtime_error(std::string(__func__) + std::string(" : Invalid Red-Black Tree"));
 
 	if (moveTargetNode == dummyBlackTerminalNode)
-		throw std::logic_error(std::string(__func__) + std::string(" : Wrong rotate cond"));
+		throw std::logic_error(std::string(__func__) + std::string(" : Wrong Tree Rotation cond"));
 
 	if (moveTargetChildNode != dummyBlackTerminalNode)
 		moveTargetChildNode->_parent = targetParentNode;
