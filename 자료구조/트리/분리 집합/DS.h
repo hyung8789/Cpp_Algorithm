@@ -1,16 +1,16 @@
 #ifndef _DS_H_
 #define _DS_H_
 
-typedef struct NodeType
+typedef struct NODE_TYPE
 {
 	void* _data; //노드의 데이터
 
-	NodeType* _parent; //한 단계 상위 부모 노드
-}Node;
+	NODE_TYPE* _parent; //한 단계 상위 부모 노드
+}NODE;
 
-Node* DS_CreateNode(void*);
-void DS_DeallocateNode(Node**);
+NODE* DS_CreateNode(void*);
+void DS_DeallocateNode(NODE**);
 
-void DS_UnionSet(Node**, Node*);
-Node* DS_FindSet(Node*);
+void DS_UnionSet(NODE**, NODE*);
+NODE* DS_FindSet(NODE*);
 #endif

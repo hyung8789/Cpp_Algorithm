@@ -5,9 +5,9 @@
 /// </summary>
 /// <param name="srcData">노드의 데이터</param>
 /// <returns>생성 된 노드</returns>
-Node* LCRS_CreateNode(DataType srcData)
+NODE* LCRS_CreateNode(DATA_TYPE srcData)
 {
-	Node* retVal = (Node*)malloc(sizeof(Node));
+	NODE* retVal = (NODE*)malloc(sizeof(NODE));
 	if (retVal == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
@@ -21,7 +21,7 @@ Node* LCRS_CreateNode(DataType srcData)
 /// 대상 노드에 할당 된 메모리 해제
 /// </summary>
 /// <param name="srcNode">대상 노드</param>
-void LCRS_DeallocateNode(Node** srcNode)
+void LCRS_DeallocateNode(NODE** srcNode)
 {
 	if ((*srcNode) != NULL)
 	{
@@ -34,7 +34,7 @@ void LCRS_DeallocateNode(Node** srcNode)
 /// 대상 트리에 할당 된 모든 노드의 메모리 해제
 /// </summary>
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
-void LCRS_DeallocateTree(Node** srcRootNode)
+void LCRS_DeallocateTree(NODE** srcRootNode)
 {
 	if ((*srcRootNode) != NULL)
 	{
@@ -71,7 +71,7 @@ void LCRS_DeallocateTree(Node** srcRootNode)
 				6-2) 현재 노드에 도달하기 전 노드로 이동
 		***/
 
-		Node* currentNode = (*srcRootNode); //현재 노드
+		NODE* currentNode = (*srcRootNode); //현재 노드
 		char execBranchSingleFlag = (0x0); //실행 분기 단일 플래그
 
 		/***
@@ -82,7 +82,7 @@ void LCRS_DeallocateTree(Node** srcRootNode)
 			0010(2) : pop 및 필요 할 경우 해당 요소에 대한 마지막 작업 수행
 		***/
 
-		std::stack<std::tuple<Node*, char>> callStack; //Call Stack
+		std::stack<std::tuple<NODE*, char>> callStack; //Call Stack
 		callStack.push(std::make_tuple(currentNode, execBranchSingleFlag));
 
 		while (!callStack.empty())
@@ -127,7 +127,7 @@ void LCRS_DeallocateTree(Node** srcRootNode)
 /// </summary>
 /// <param name="srcTargetNode">대상 노드</param>
 /// <param name="srcNewNode">대상 노드에 연결 될 새 노드</param>
-void LCRS_AppendNode(Node* srcTargetNode, Node* srcNewNode)
+void LCRS_AppendNode(NODE* srcTargetNode, NODE* srcNewNode)
 {
 	if (srcTargetNode == NULL || srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -138,7 +138,7 @@ void LCRS_AppendNode(Node* srcTargetNode, Node* srcNewNode)
 	}
 	else //대상 노드의 자식 노드가 존재하면
 	{
-		Node* targetChildNode = srcTargetNode->_leftChild; //대상 노드의 자식 노드
+		NODE* targetChildNode = srcTargetNode->_leftChild; //대상 노드의 자식 노드
 
 		while (targetChildNode->_rightSibling != NULL)
 		{
@@ -154,7 +154,7 @@ void LCRS_AppendNode(Node* srcTargetNode, Node* srcNewNode)
 /// </summary>
 /// <param name="">대상 트리의 최상위 루트 노드</param>
 /// <param name="targetNodeDepth">대상 트리의 대상 특정 노드의 깊이</param>
-void LCRS_DispTreeNodesAt(Node* srcRootNode, TreeDepthType targetNodeDepth)
+void LCRS_DispTreeNodesAt(NODE* srcRootNode, TREE_DEPTH_TYPE targetNodeDepth)
 {
 	if (srcRootNode == NULL || targetNodeDepth < 0)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -172,8 +172,8 @@ void LCRS_DispTreeNodesAt(Node* srcRootNode, TreeDepthType targetNodeDepth)
 		LCRS_DispTreeNodesAt(srcRootNode->_rightSibling, targetNodeDepth);
 
 #elif defined ITERATIVE_METHOD
-	Node* currentNode = srcRootNode; //현재 노드
-	TreeDepthType currentNodeDepth = 0; //현재 노드의 깊이
+	NODE* currentNode = srcRootNode; //현재 노드
+	TREE_DEPTH_TYPE currentNodeDepth = 0; //현재 노드의 깊이
 	char execBranchSingleFlag = (0x0); //실행 분기 단일 플래그
 
 	/***
@@ -185,7 +185,7 @@ void LCRS_DispTreeNodesAt(Node* srcRootNode, TreeDepthType targetNodeDepth)
 		0011(2) : pop 및 필요 할 경우 해당 요소에 대한 마지막 작업 수행
 	***/
 
-	std::stack<std::tuple<Node*, TreeDepthType, char>> callStack; //Call Stack
+	std::stack<std::tuple<NODE*, TREE_DEPTH_TYPE, char>> callStack; //Call Stack
 	callStack.push(std::make_tuple(currentNode, currentNodeDepth, execBranchSingleFlag));
 
 	while (!callStack.empty())
@@ -234,13 +234,13 @@ void LCRS_DispTreeNodesAt(Node* srcRootNode, TreeDepthType targetNodeDepth)
 /// </summary>
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 /// <param name="rootNodeDepth">대상 트리의 최상위 루트 노드의 깊이</param>
-void LCRS_DispTree(Node* srcRootNode, TreeDepthType rootNodeDepth)
+void LCRS_DispTree(NODE* srcRootNode, TREE_DEPTH_TYPE rootNodeDepth)
 {
 	if (srcRootNode == NULL || rootNodeDepth < 0)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
 #ifdef RECURSIVE_METHOD
-	for (TreeDepthType i = 0; i < rootNodeDepth; i++)
+	for (TREE_DEPTH_TYPE i = 0; i < rootNodeDepth; i++)
 	{
 		std::cout << "|";
 	}
@@ -253,8 +253,8 @@ void LCRS_DispTree(Node* srcRootNode, TreeDepthType rootNodeDepth)
 		LCRS_DispTree(srcRootNode->_rightSibling, rootNodeDepth);
 
 #elif defined ITERATIVE_METHOD
-	Node* currentNode = srcRootNode; //현재 노드
-	TreeDepthType currentNodeDepth = rootNodeDepth; //현재 노드의 깊이
+	NODE* currentNode = srcRootNode; //현재 노드
+	TREE_DEPTH_TYPE currentNodeDepth = rootNodeDepth; //현재 노드의 깊이
 	char execBranchSingleFlag = (0x0); //실행 분기 단일 플래그
 
 	/***
@@ -266,7 +266,7 @@ void LCRS_DispTree(Node* srcRootNode, TreeDepthType rootNodeDepth)
 		0011(2) : pop 및 필요 할 경우 해당 요소에 대한 마지막 작업 수행
 	***/
 
-	std::stack<std::tuple<Node*, TreeDepthType, char>> callStack; //Call Stack
+	std::stack<std::tuple<NODE*, TREE_DEPTH_TYPE, char>> callStack; //Call Stack
 	callStack.push(std::make_tuple(currentNode, currentNodeDepth, execBranchSingleFlag));
 
 	while (!callStack.empty())
@@ -278,7 +278,7 @@ void LCRS_DispTree(Node* srcRootNode, TreeDepthType rootNodeDepth)
 		case (0x0): //현재 노드 출력
 			std::get<2>(callStack.top()) = (0x1); //헌재 노드에 대해 다음 번 실행 시 왼쪽 자식 노드를 방문
 
-			for (TreeDepthType i = 0; i < currentNodeDepth; i++)
+			for (TREE_DEPTH_TYPE i = 0; i < currentNodeDepth; i++)
 			{
 				std::cout << "|";
 			}

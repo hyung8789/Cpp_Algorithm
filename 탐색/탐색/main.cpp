@@ -9,10 +9,10 @@ int main()
 
 	try
 	{
-		Node* list = NULL; //노드 리스트
+		NODE* list = NULL; //노드 리스트
 		for (int i = 0; i < COUNT; i++)
 		{
-			Node* newNode = DLL_CreateNode(i); //생성
+			NODE* newNode = DLL_CreateNode(i); //생성
 			DLL_AppendNode(&list, newNode); //삽입
 		}
 
@@ -20,7 +20,7 @@ int main()
 		for (int targetData = COUNT - 1; targetData >= 0; targetData--)
 		{
 			std::cout << "현재 검색 대상 데이터 : " << targetData;
-			Node* result = DLL_SequentialSearch_MTF(&list, targetData);
+			NODE* result = DLL_SequentialSearch_MTF(&list, targetData);
 			if (result->_data != targetData)
 				throw std::logic_error(std::string(__func__) + std::string(" : Search Logic Error"));
 			else
@@ -34,7 +34,7 @@ int main()
 		for (int targetData = COUNT - 1; targetData >= 0; targetData--)
 		{
 			std::cout << "현재 검색 대상 데이터 : " << targetData;
-			Node* result = DLL_SequentialSearch_Transpose(&list, targetData);
+			NODE* result = DLL_SequentialSearch_Transpose(&list, targetData);
 			if (result->_data != targetData)
 				throw std::logic_error(std::string(__func__) + std::string(" : Search Logic Error"));
 			else

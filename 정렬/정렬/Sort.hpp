@@ -1,12 +1,12 @@
-#ifndef _SORT_HPP_
+ï»¿#ifndef _SORT_HPP_
 #define _SORT_HPP_
 
-//#define RECURSIVE_METHOD //Àç±ÍÀû ¹æ¹ý (ÁÖ¼® Ã³¸® : ¹Ýº¹Àû ¹æ¹ý »ç¿ë)
+//#define RECURSIVE_METHOD //ìž¬ê·€ì  ë°©ë²• (ì£¼ì„ ì²˜ë¦¬ : ë°˜ë³µì  ë°©ë²• ì‚¬ìš©)
 #ifndef RECURSIVE_METHOD 
-#define ITERATIVE_METHOD //¹Ýº¹Àû ¹æ¹ý
+#define ITERATIVE_METHOD //ë°˜ë³µì  ë°©ë²•
 #endif
 
-#define LOGGING_COMPARE_COUNT //ºñ±³ È½¼ö Ä«¿îÆ® ±â·Ï ¹× Ãâ·Â (ÁÖ¼® Ã³¸® : ºñÈ°¼ºÈ­)
+#define LOGGING_COMPARE_COUNT //ë¹„êµ íšŸìˆ˜ ì¹´ìš´íŠ¸ ê¸°ë¡ ë° ì¶œë ¥ (ì£¼ì„ ì²˜ë¦¬ : ë¹„í™œì„±í™”)
 #ifdef LOGGING_COMPARE_COUNT
 extern class TRACE_RESULT;
 extern enum class SORT_UNIQUE_MAPPED_INDEX;
@@ -17,155 +17,155 @@ extern class SORT_MAPPER;
 GetRefTraceResult(SORT_MAPPER::GetInstance().SortFuncNameStrToSortUniqueMappedIndex(__func__)). \
 IncreaseCompareCount(), \
 ((x) > (y) ? 1 : (x) == (y) ? 0 : -1) //x > y : 1, x == y : 0, x < y : -1
-#define COMPARE(x, y) ALTERNATIVE_COMPARE(x, y) //ºñ±³ È½¼ö Ä«¿îÆ® À§ÇÑ È£Ãâ Ãø ÇÔ¼ö¸í ÀÌ¿ë
+#define COMPARE(x, y) ALTERNATIVE_COMPARE(x, y) //ë¹„êµ íšŸìˆ˜ ì¹´ìš´íŠ¸ ìœ„í•œ í˜¸ì¶œ ì¸¡ í•¨ìˆ˜ëª… ì´ìš©
 #endif
 
 /***
-	< ¹öºí Á¤·Ä ¿ä¼Òµé °£ ºñ±³ È½¼ö >
+	< ë²„ë¸” ì •ë ¬ ìš”ì†Œë“¤ ê°„ ë¹„êµ íšŸìˆ˜ >
 
-	n : ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕÀÇ ¿ä¼ÒµéÀÇ °³¼ö
+	n : ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ìš”ì†Œë“¤ì˜ ê°œìˆ˜
 
-	ex1) ¿ä¼Ò°¡ 6°³ÀÏ ¶§, Ã¹ ¹øÂ° ·çÇÁ¿¡¼­ ºñ±³ ¹üÀ§ ³»ÀÇ ¸ðµç ¿ä¼ÒµéÀ» 5¹ø ºñ±³
-	°¢ ·çÇÁ ¿Ï·á ÈÄ ºñ±³ ¹üÀ§ 1¾¿ °¨¼Ò
+	ex1) ìš”ì†Œê°€ 6ê°œì¼ ë•Œ, ì²« ë²ˆì§¸ ë£¨í”„ì—ì„œ ë¹„êµ ë²”ìœ„ ë‚´ì˜ ëª¨ë“  ìš”ì†Œë“¤ì„ 5ë²ˆ ë¹„êµ
+	ê° ë£¨í”„ ì™„ë£Œ í›„ ë¹„êµ ë²”ìœ„ 1ì”© ê°ì†Œ
 
-	°¢ ·çÇÁ ¿Ï·á ÈÄ ¸Ç µÚºÎÅÍ ¼øÂ÷ÀûÀ¸·Î Á¤·Ä µÈ ¿ä¼Ò¸¦ Á¦¿ÜÇÏ¿© ºñ±³ ÇÒ ¿ä¼Ò °³¼ö ÇÏ³ª¾¿ °¨¼Ò
+	ê° ë£¨í”„ ì™„ë£Œ í›„ ë§¨ ë’¤ë¶€í„° ìˆœì°¨ì ìœ¼ë¡œ ì •ë ¬ ëœ ìš”ì†Œë¥¼ ì œì™¸í•˜ì—¬ ë¹„êµ í•  ìš”ì†Œ ê°œìˆ˜ í•˜ë‚˜ì”© ê°ì†Œ
 	5 + 4 + 3 + 2 + 1
-	= 6 (ÁýÇÕ ³»¿¡¼­ ¾Õ, µÚÀÇ ¿ä¼Ò ½ÖÀÇ ÇÕ) * 2 (ÁýÇÕ ³»¿¡¼­ ¾Õ, µÚÀÇ ¿ä¼Ò ½ÖÀÇ °³¼ö) + 3 (½ÖÀÌ µÇÁö ¸øÇÑ ³ª¸ÓÁö)
-	= 6 (ÁýÇÕ ³»¿¡¼­ ¾Õ, µÚÀÇ ¿ä¼Ò ½ÖÀÇ ÇÕ) * 2.5 (ÁýÇÕ ³»¿¡¼­ ¾Õ, µÚÀÇ ¿ä¼Ò ½ÖÀÇ °³¼ö (nÀÌ Â¦¼ö ÀÏ °æ¿ì, ½ÖÀÌ µÇÁö ¸øÇÑ ³ª¸ÓÁö°¡ Æ÷ÇÔ))
+	= 6 (ì§‘í•© ë‚´ì—ì„œ ì•ž, ë’¤ì˜ ìš”ì†Œ ìŒì˜ í•©) * 2 (ì§‘í•© ë‚´ì—ì„œ ì•ž, ë’¤ì˜ ìš”ì†Œ ìŒì˜ ê°œìˆ˜) + 3 (ìŒì´ ë˜ì§€ ëª»í•œ ë‚˜ë¨¸ì§€)
+	= 6 (ì§‘í•© ë‚´ì—ì„œ ì•ž, ë’¤ì˜ ìš”ì†Œ ìŒì˜ í•©) * 2.5 (ì§‘í•© ë‚´ì—ì„œ ì•ž, ë’¤ì˜ ìš”ì†Œ ìŒì˜ ê°œìˆ˜ (nì´ ì§ìˆ˜ ì¼ ê²½ìš°, ìŒì´ ë˜ì§€ ëª»í•œ ë‚˜ë¨¸ì§€ê°€ í¬í•¨))
 
-	ex2) ¿ä¼Ò°¡ 7°³ÀÏ ¶§,  Ã¹ ¹øÂ° ·çÇÁ¿¡¼­ ºñ±³ ¹üÀ§ ³»ÀÇ ¸ðµç ¿ä¼ÒµéÀ» 6¹ø ºñ±³
-	°¢ ·çÇÁ ¿Ï·á ÈÄ ºñ±³ ¹üÀ§ 1¾¿ °¨¼Ò
+	ex2) ìš”ì†Œê°€ 7ê°œì¼ ë•Œ,  ì²« ë²ˆì§¸ ë£¨í”„ì—ì„œ ë¹„êµ ë²”ìœ„ ë‚´ì˜ ëª¨ë“  ìš”ì†Œë“¤ì„ 6ë²ˆ ë¹„êµ
+	ê° ë£¨í”„ ì™„ë£Œ í›„ ë¹„êµ ë²”ìœ„ 1ì”© ê°ì†Œ
 	6 + 5 + 4 + 3 + 2 + 1
-	= 7 (ÁýÇÕ ³»¿¡¼­ ¾Õ, µÚÀÇ ¿ä¼Ò ½ÖÀÇ ÇÕ) * 3 (ÁýÇÕ ³»¿¡¼­ ¾Õ, µÚÀÇ ¿ä¼Ò ½ÖÀÇ °³¼ö (nÀÌ Â¦¼ö ÀÏ °æ¿ì, ½ÖÀÌ µÇÁö ¸øÇÑ ³ª¸ÓÁö°¡ Æ÷ÇÔ))
+	= 7 (ì§‘í•© ë‚´ì—ì„œ ì•ž, ë’¤ì˜ ìš”ì†Œ ìŒì˜ í•©) * 3 (ì§‘í•© ë‚´ì—ì„œ ì•ž, ë’¤ì˜ ìš”ì†Œ ìŒì˜ ê°œìˆ˜ (nì´ ì§ìˆ˜ ì¼ ê²½ìš°, ìŒì´ ë˜ì§€ ëª»í•œ ë‚˜ë¨¸ì§€ê°€ í¬í•¨))
 
-	ÁýÇÕ ³»¿¡¼­ ¾Õ, µÚÀÇ ¿ä¼Ò ½ÖÀÇ ÇÕ = n
-	ÁýÇÕ ³»¿¡¼­ ¾Õ, µÚÀÇ ¿ä¼Ò ½ÖÀÇ °³¼ö (nÀÌ Â¦¼ö ÀÏ °æ¿ì, ½ÖÀÌ µÇÁö ¸øÇÑ ³ª¸ÓÁö°¡ Æ÷ÇÔ) = (n-1) / 2
-	ÀÌ¹Ç·Î,
+	ì§‘í•© ë‚´ì—ì„œ ì•ž, ë’¤ì˜ ìš”ì†Œ ìŒì˜ í•© = n
+	ì§‘í•© ë‚´ì—ì„œ ì•ž, ë’¤ì˜ ìš”ì†Œ ìŒì˜ ê°œìˆ˜ (nì´ ì§ìˆ˜ ì¼ ê²½ìš°, ìŒì´ ë˜ì§€ ëª»í•œ ë‚˜ë¨¸ì§€ê°€ í¬í•¨) = (n-1) / 2
+	ì´ë¯€ë¡œ,
 	(n-1) + (n-2) + (n-3) + ... + (n-(n-2) + (n-(n-1)) = (n-1) + (n-2) + (n-3) + ... + 2 + 1 = n * ((n-1) / 2)
 
 	---
 
-	< »ðÀÔ Á¤·Ä ¿ä¼Òµé °£ ºñ±³ È½¼ö >
+	< ì‚½ìž… ì •ë ¬ ìš”ì†Œë“¤ ê°„ ë¹„êµ íšŸìˆ˜ >
 
-	n : ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕÀÇ ¿ä¼ÒµéÀÇ °³¼ö
+	n : ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ìš”ì†Œë“¤ì˜ ê°œìˆ˜
 
-	ex) ¿ä¼Ò°¡ 6°³ÀÏ ¶§, Ã¹ ¹øÂ° ·çÇÁ¿¡¼­ ºñ±³ ¹üÀ§ ³»ÀÇ µÎ ¿ä¼Ò¸¦ 1¹ø ºñ±³
-	°¢ ·çÇÁ ¿Ï·á ÈÄ ºñ±³ ¹üÀ§ 1¾¿ Áõ°¡
+	ex) ìš”ì†Œê°€ 6ê°œì¼ ë•Œ, ì²« ë²ˆì§¸ ë£¨í”„ì—ì„œ ë¹„êµ ë²”ìœ„ ë‚´ì˜ ë‘ ìš”ì†Œë¥¼ 1ë²ˆ ë¹„êµ
+	ê° ë£¨í”„ ì™„ë£Œ í›„ ë¹„êµ ë²”ìœ„ 1ì”© ì¦ê°€
 	1 + 2 + 3 + 4 + 5
-	= 6 (ÁýÇÕ ³»¿¡¼­ ¾Õ, µÚÀÇ ¿ä¼Ò ½ÖÀÇ ÇÕ) * 2 (ÁýÇÕ ³»¿¡¼­ ¾Õ, µÚÀÇ ¿ä¼Ò ½ÖÀÇ °³¼ö) + 3 (½ÖÀÌ µÇÁö ¸øÇÑ ³ª¸ÓÁö)
-	= 6 (ÁýÇÕ ³»¿¡¼­ ¾Õ, µÚÀÇ ¿ä¼Ò ½ÖÀÇ ÇÕ) * 2.5 (ÁýÇÕ ³»¿¡¼­ ¾Õ, µÚÀÇ ¿ä¼Ò ½ÖÀÇ °³¼ö (nÀÌ Â¦¼ö ÀÏ °æ¿ì, ½ÖÀÌ µÇÁö ¸øÇÑ ³ª¸ÓÁö°¡ Æ÷ÇÔ))
+	= 6 (ì§‘í•© ë‚´ì—ì„œ ì•ž, ë’¤ì˜ ìš”ì†Œ ìŒì˜ í•©) * 2 (ì§‘í•© ë‚´ì—ì„œ ì•ž, ë’¤ì˜ ìš”ì†Œ ìŒì˜ ê°œìˆ˜) + 3 (ìŒì´ ë˜ì§€ ëª»í•œ ë‚˜ë¨¸ì§€)
+	= 6 (ì§‘í•© ë‚´ì—ì„œ ì•ž, ë’¤ì˜ ìš”ì†Œ ìŒì˜ í•©) * 2.5 (ì§‘í•© ë‚´ì—ì„œ ì•ž, ë’¤ì˜ ìš”ì†Œ ìŒì˜ ê°œìˆ˜ (nì´ ì§ìˆ˜ ì¼ ê²½ìš°, ìŒì´ ë˜ì§€ ëª»í•œ ë‚˜ë¨¸ì§€ê°€ í¬í•¨))
 
 	1 + 2 + 3 + ... + (n-2) + (n-1)
-	ÁýÇÕ ³»¿¡¼­ ¾Õ, µÚÀÇ ¿ä¼Ò ½ÖÀÇ ÇÕ = n
-	ÁýÇÕ ³»¿¡¼­ ¾Õ, µÚÀÇ ¿ä¼Ò ½ÖÀÇ °³¼ö (nÀÌ Â¦¼ö ÀÏ °æ¿ì, ½ÖÀÌ µÇÁö ¸øÇÑ ³ª¸ÓÁö°¡ Æ÷ÇÔ) = (n-1) / 2 ÀÌ¹Ç·Î,
+	ì§‘í•© ë‚´ì—ì„œ ì•ž, ë’¤ì˜ ìš”ì†Œ ìŒì˜ í•© = n
+	ì§‘í•© ë‚´ì—ì„œ ì•ž, ë’¤ì˜ ìš”ì†Œ ìŒì˜ ê°œìˆ˜ (nì´ ì§ìˆ˜ ì¼ ê²½ìš°, ìŒì´ ë˜ì§€ ëª»í•œ ë‚˜ë¨¸ì§€ê°€ í¬í•¨) = (n-1) / 2 ì´ë¯€ë¡œ,
 	1 + 2 + 3 + ... + (n-2) + (n-1) = (n-1) + (n-2) + ... + 2 + 1 = n * ((n-1) / 2)
 
 	---
 
-	< ¹öºí Á¤·Ä°ú »ðÀÔ Á¤·Ä ºñ±³ >
+	< ë²„ë¸” ì •ë ¬ê³¼ ì‚½ìž… ì •ë ¬ ë¹„êµ >
 
-	ÀÌ·ÐÀûÀ¸·Î ¹öºí Á¤·Ä ¹× »ðÀÔ Á¤·ÄÀº n * ((n-1) / 2) ÀÇ ºñ±³ È½¼ö¸¦ °¡Áü
-	±×·¯³ª ¿ä¼ÒÀÇ °³¼ö°¡ Ä¿Áú¼ö·Ï Best Case ¿¡¼­´Â Ç×»ó µ¿ÀÏÇÏ³ª,
-	Worst Case, Average Case ´Â ±Ø´ÜÀûÀ¸·Î »ðÀÔ Á¤·ÄÀÌ ´õ ÀûÀº ºñ±³ È½¼ö¸¦ °¡Áü
+	ì´ë¡ ì ìœ¼ë¡œ ë²„ë¸” ì •ë ¬ ë° ì‚½ìž… ì •ë ¬ì€ n * ((n-1) / 2) ì˜ ë¹„êµ íšŸìˆ˜ë¥¼ ê°€ì§
+	ê·¸ëŸ¬ë‚˜ ìš”ì†Œì˜ ê°œìˆ˜ê°€ ì»¤ì§ˆìˆ˜ë¡ Best Case ì—ì„œëŠ” í•­ìƒ ë™ì¼í•˜ë‚˜,
+	Worst Case, Average Case ëŠ” ê·¹ë‹¨ì ìœ¼ë¡œ ì‚½ìž… ì •ë ¬ì´ ë” ì ì€ ë¹„êµ íšŸìˆ˜ë¥¼ ê°€ì§
 
-	¹öºí Á¤·ÄÀº °ÅÀÇ ´ëºÎºÐ »óÈ²¿¡¼­ n * ((n-1) / 2) ÀÌ°Å³ª °ÅÀÇ °¡±î¿î ¼öÄ¡
-	(Á¤·Ä °úÁ¤ Áß ÇöÀç ºñ±³ ´ë»ó ¹üÀ§¿¡ ´ëÇØ SWAP ÀÌ ÇÑ ¹øµµ ¼öÇàµÇÁö ¾ÊÀº °æ¿ì
-	Áï, ÀÌ¹Ì ³»ºÎ ¿ä¼Ò°¡ ¸ðµÎ Á¤·Ä µÇ¾î ÀÖÀ» °æ¿ì
-	´õ ÀÌ»ó ºñ±³¸¦ ÁßÁöÇÏ¹Ç·Î n * ((n-1) / 2) º¸´Ù Àû°Ô ³ª¿Ã ¼ö ÀÖÀ½)
+	ë²„ë¸” ì •ë ¬ì€ ê±°ì˜ ëŒ€ë¶€ë¶„ ìƒí™©ì—ì„œ n * ((n-1) / 2) ì´ê±°ë‚˜ ê±°ì˜ ê°€ê¹Œìš´ ìˆ˜ì¹˜
+	(ì •ë ¬ ê³¼ì • ì¤‘ í˜„ìž¬ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ì— ëŒ€í•´ SWAP ì´ í•œ ë²ˆë„ ìˆ˜í–‰ë˜ì§€ ì•Šì€ ê²½ìš°
+	ì¦‰, ì´ë¯¸ ë‚´ë¶€ ìš”ì†Œê°€ ëª¨ë‘ ì •ë ¬ ë˜ì–´ ìžˆì„ ê²½ìš°
+	ë” ì´ìƒ ë¹„êµë¥¼ ì¤‘ì§€í•˜ë¯€ë¡œ n * ((n-1) / 2) ë³´ë‹¤ ì ê²Œ ë‚˜ì˜¬ ìˆ˜ ìžˆìŒ)
 
-	»ðÀÔ Á¤·ÄÀÇ ÇöÀç ºñ±³ ´ë»ó ¹üÀ§ ³»¿¡¼­ ºñ±³ ÁßÀÎ µÚÀÇ ¿ä¼Ò°¡ »ðÀÔ µÉ ÀûÀýÇÑ À§Ä¡¸¦
-	ÇöÀç ºñ±³ ´ë»ó ¹üÀ§ÀÇ Ã³À½ºÎÅÍ ¼øÂ÷ÀûÀ¸·Î Å½»ö °úÁ¤¿¡¼­
-	ÃÖÃÊ »ðÀÔÀÌ ¹ß»ýÇÑ ½ÃÁ¡ºÎÅÍ Ç×»ó ÇöÀç ºñ±³ ´ë»ó ¹üÀ§ÀÇ ¸ðµç ¿ä¼ÒµéÀº Á¤·Ä µÈ ¼ø¼­¸¦ À¯ÁöÇÏ°í,
-	´ÙÀ½ ºñ±³ ½Ã ºñ±³ ´ë»ó ¹üÀ§°¡ Áõ°¡ÇÏ³ª, ºñ±³ ´ë»ó ¹üÀ§ Áõ°¡ ÀüÀÇ ¸ðµç ±âÁ¸ ¿ä¼ÒµéÀº ¸¶Âù°¡Áö Á¤·Ä µÈ ¼ø¼­¸¦ À¯ÁöÇÏ¹Ç·Î,
-	ÀÓÀÇÀÇ µ¥ÀÌÅÍ ÆÐÅÏ¿¡ ´ëÇØ Á¤·ÄµÇ¾î ÀÖ´Â ÇöÀç ºñ±³ ´ë»ó ¹üÀ§ ³»ÀÇ ¿ä¼Òµé¿¡ ´ëÇÑ »ðÀÔ ÇÒ À§Ä¡¸¦ Áï½Ã Ã£À» ¼ö ÀÖ°Å³ª,
-	Æò±ÕÀûÀ¸·Î (n-1) + n * ((n-1) / 2) / 2
+	ì‚½ìž… ì •ë ¬ì˜ í˜„ìž¬ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ ë‚´ì—ì„œ ë¹„êµ ì¤‘ì¸ ë’¤ì˜ ìš”ì†Œê°€ ì‚½ìž… ë  ì ì ˆí•œ ìœ„ì¹˜ë¥¼
+	í˜„ìž¬ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ì˜ ì²˜ìŒë¶€í„° ìˆœì°¨ì ìœ¼ë¡œ íƒìƒ‰ ê³¼ì •ì—ì„œ
+	ìµœì´ˆ ì‚½ìž…ì´ ë°œìƒí•œ ì‹œì ë¶€í„° í•­ìƒ í˜„ìž¬ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ì˜ ëª¨ë“  ìš”ì†Œë“¤ì€ ì •ë ¬ ëœ ìˆœì„œë¥¼ ìœ ì§€í•˜ê³ ,
+	ë‹¤ìŒ ë¹„êµ ì‹œ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ê°€ ì¦ê°€í•˜ë‚˜, ë¹„êµ ëŒ€ìƒ ë²”ìœ„ ì¦ê°€ ì „ì˜ ëª¨ë“  ê¸°ì¡´ ìš”ì†Œë“¤ì€ ë§ˆì°¬ê°€ì§€ ì •ë ¬ ëœ ìˆœì„œë¥¼ ìœ ì§€í•˜ë¯€ë¡œ,
+	ìž„ì˜ì˜ ë°ì´í„° íŒ¨í„´ì— ëŒ€í•´ ì •ë ¬ë˜ì–´ ìžˆëŠ” í˜„ìž¬ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ ë‚´ì˜ ìš”ì†Œë“¤ì— ëŒ€í•œ ì‚½ìž… í•  ìœ„ì¹˜ë¥¼ ì¦‰ì‹œ ì°¾ì„ ìˆ˜ ìžˆê±°ë‚˜,
+	í‰ê· ì ìœ¼ë¡œ (n-1) + n * ((n-1) / 2) / 2
 
 	---
 
-	< ¼±ÅÃ Á¤·ÄÀÇ ¿ä¼Òµé °£ ºñ±³ È½¼ö >
+	< ì„ íƒ ì •ë ¬ì˜ ìš”ì†Œë“¤ ê°„ ë¹„êµ íšŸìˆ˜ >
 
-	n : ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕÀÇ ¿ä¼ÒµéÀÇ °³¼ö
+	n : ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ìš”ì†Œë“¤ì˜ ê°œìˆ˜
 
-	ex) ¿ä¼Ò°¡ 6°³ÀÏ ¶§, Ã¹ ¹øÂ° ·çÇÁ¿¡¼­ Á¤·Ä ´ë»ó°ú Á¤·Ä ´ë»óÀ» Á¦¿ÜÇÑ ³ª¸ÓÁö ¿ä¼Òµé Áß Á¤·Ä µÈ Á¶°ÇÀ» ¸¸Á·ÇÏ´Â ¿ä¼Ò¸¦ Ã£±â À§ÇØ 5¹ø ºñ±³
-	°¢ ·çÇÁ ¿Ï·á ÈÄ ºñ±³ ¹üÀ§ 1¾¿ °¨¼Ò
+	ex) ìš”ì†Œê°€ 6ê°œì¼ ë•Œ, ì²« ë²ˆì§¸ ë£¨í”„ì—ì„œ ì •ë ¬ ëŒ€ìƒê³¼ ì •ë ¬ ëŒ€ìƒì„ ì œì™¸í•œ ë‚˜ë¨¸ì§€ ìš”ì†Œë“¤ ì¤‘ ì •ë ¬ ëœ ì¡°ê±´ì„ ë§Œì¡±í•˜ëŠ” ìš”ì†Œë¥¼ ì°¾ê¸° ìœ„í•´ 5ë²ˆ ë¹„êµ
+	ê° ë£¨í”„ ì™„ë£Œ í›„ ë¹„êµ ë²”ìœ„ 1ì”© ê°ì†Œ
 	5 + 4 + 3 + 2 + 1
-	= 6 (ÁýÇÕ ³»¿¡¼­ ¾Õ, µÚÀÇ ¿ä¼Ò ½ÖÀÇ ÇÕ) * 2 (ÁýÇÕ ³»¿¡¼­ ¾Õ, µÚÀÇ ¿ä¼Ò ½ÖÀÇ °³¼ö) + 3 (½ÖÀÌ µÇÁö ¸øÇÑ ³ª¸ÓÁö)
-	= 6 (ÁýÇÕ ³»¿¡¼­ ¾Õ, µÚÀÇ ¿ä¼Ò ½ÖÀÇ ÇÕ) * 2.5 (ÁýÇÕ ³»¿¡¼­ ¾Õ, µÚÀÇ ¿ä¼Ò ½ÖÀÇ °³¼ö (nÀÌ Â¦¼ö ÀÏ °æ¿ì, ½ÖÀÌ µÇÁö ¸øÇÑ ³ª¸ÓÁö°¡ Æ÷ÇÔ))
+	= 6 (ì§‘í•© ë‚´ì—ì„œ ì•ž, ë’¤ì˜ ìš”ì†Œ ìŒì˜ í•©) * 2 (ì§‘í•© ë‚´ì—ì„œ ì•ž, ë’¤ì˜ ìš”ì†Œ ìŒì˜ ê°œìˆ˜) + 3 (ìŒì´ ë˜ì§€ ëª»í•œ ë‚˜ë¨¸ì§€)
+	= 6 (ì§‘í•© ë‚´ì—ì„œ ì•ž, ë’¤ì˜ ìš”ì†Œ ìŒì˜ í•©) * 2.5 (ì§‘í•© ë‚´ì—ì„œ ì•ž, ë’¤ì˜ ìš”ì†Œ ìŒì˜ ê°œìˆ˜ (nì´ ì§ìˆ˜ ì¼ ê²½ìš°, ìŒì´ ë˜ì§€ ëª»í•œ ë‚˜ë¨¸ì§€ê°€ í¬í•¨))
 
 	1 + 2 + 3 + ... + (n-2) + (n-1)
-	ÁýÇÕ ³»¿¡¼­ ¾Õ, µÚÀÇ ¿ä¼Ò ½ÖÀÇ ÇÕ = n
-	ÁýÇÕ ³»¿¡¼­ ¾Õ, µÚÀÇ ¿ä¼Ò ½ÖÀÇ °³¼ö (nÀÌ Â¦¼ö ÀÏ °æ¿ì, ½ÖÀÌ µÇÁö ¸øÇÑ ³ª¸ÓÁö°¡ Æ÷ÇÔ) = (n-1) / 2 ÀÌ¹Ç·Î,
+	ì§‘í•© ë‚´ì—ì„œ ì•ž, ë’¤ì˜ ìš”ì†Œ ìŒì˜ í•© = n
+	ì§‘í•© ë‚´ì—ì„œ ì•ž, ë’¤ì˜ ìš”ì†Œ ìŒì˜ ê°œìˆ˜ (nì´ ì§ìˆ˜ ì¼ ê²½ìš°, ìŒì´ ë˜ì§€ ëª»í•œ ë‚˜ë¨¸ì§€ê°€ í¬í•¨) = (n-1) / 2 ì´ë¯€ë¡œ,
 	1 + 2 + 3 + ... + (n-2) + (n-1) = (n-1) + (n-2) + ... + 2 + 1 = n * ((n-1) / 2)
 
-	¼±ÅÃ Á¤·ÄÀº Ç×»ó Á¤·Ä ´ë»óÀ» Á¦¿ÜÇÑ ³ª¸ÓÁö ¿ä¼Òµé Áß Á¤·Ä µÈ Á¶°ÇÀ» ¸¸Á·ÇÏ´Â ¿ä¼Ò¸¦ Ã£±â À§ÇØ
-	Á¤·Ä ´ë»óÀ» Á¦¿ÜÇÑ ³ª¸ÓÁö ¿ä¼Òµé¿¡ ´ëÇØ ¸ðµÎ ºñ±³°¡ ¹ß»ýÇÏ¹Ç·Î, 
-	¾î¶°ÇÑ µ¥ÀÌÅÍ ÆÐÅÏ¿¡µµ µ¿ÀÏ ÇÑ ºñ±³ È½¼ö¸¦ °¡Áü
+	ì„ íƒ ì •ë ¬ì€ í•­ìƒ ì •ë ¬ ëŒ€ìƒì„ ì œì™¸í•œ ë‚˜ë¨¸ì§€ ìš”ì†Œë“¤ ì¤‘ ì •ë ¬ ëœ ì¡°ê±´ì„ ë§Œì¡±í•˜ëŠ” ìš”ì†Œë¥¼ ì°¾ê¸° ìœ„í•´
+	ì •ë ¬ ëŒ€ìƒì„ ì œì™¸í•œ ë‚˜ë¨¸ì§€ ìš”ì†Œë“¤ì— ëŒ€í•´ ëª¨ë‘ ë¹„êµê°€ ë°œìƒí•˜ë¯€ë¡œ, 
+	ì–´ë– í•œ ë°ì´í„° íŒ¨í„´ì—ë„ ë™ì¼ í•œ ë¹„êµ íšŸìˆ˜ë¥¼ ê°€ì§
 
 	---
 
-	< Äü Á¤·ÄÀÇ ¿ä¼Òµé °£ ºñ±³ È½¼ö >
+	< í€µ ì •ë ¬ì˜ ìš”ì†Œë“¤ ê°„ ë¹„êµ íšŸìˆ˜ >
 
 	https://www.interviewbit.com/tutorial/quicksort-algorithm/#h827ske1ht0ea2fcemd1dxxl7u1ndu40q
 
-	n : ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕÀÇ ¿ä¼ÒµéÀÇ °³¼ö
+	n : ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ìš”ì†Œë“¤ì˜ ê°œìˆ˜
 
-	ex) ¿ä¼Ò°¡ 8°³ÀÏ ¶§, ¸ðµç ºÐÇÒ¸¶´Ù µ¿ÀÏ ÇÑ °³¼öÀÇ ÁýÇÕÀ¸·Î ºÐ¸® µÉ °æ¿ì (Best Case)
-	ÃÖ´ë ºÐÇÒ È½¼ö = 4È¸ (1, 2, 4, 8) = log2(n)
-	°¢ ºÐÇÒ °úÁ¤ ¹ß»ý ½Ã¸¶´Ù ºñ±³ È½¼öÀÇ ÇÕ = nÈ¸
-	°¢ ·¹º§ °£¿¡¼­ÀÇ ºñ±³ È½¼öÀÇ ÇÕ * ÃÖ´ë ºÐÇÒ È½¼ö = n * log2(n)
+	ex) ìš”ì†Œê°€ 8ê°œì¼ ë•Œ, ëª¨ë“  ë¶„í• ë§ˆë‹¤ ë™ì¼ í•œ ê°œìˆ˜ì˜ ì§‘í•©ìœ¼ë¡œ ë¶„ë¦¬ ë  ê²½ìš° (Best Case)
+	ìµœëŒ€ ë¶„í•  íšŸìˆ˜ = 4íšŒ (1, 2, 4, 8) = log2(n)
+	ê° ë¶„í•  ê³¼ì • ë°œìƒ ì‹œë§ˆë‹¤ ë¹„êµ íšŸìˆ˜ì˜ í•© = níšŒ
+	ê° ë ˆë²¨ ê°„ì—ì„œì˜ ë¹„êµ íšŸìˆ˜ì˜ í•© * ìµœëŒ€ ë¶„í•  íšŸìˆ˜ = n * log2(n)
 
-	°¢ ºÐÇÒ¸¶´Ù ÇÏ³ªÀÇ ¿ä¼Ò¿Í ÇØ´ç ¿ä¼Ò¸¦ Á¦¿ÜÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕ (1 : n-1) À¸·Î ºÐ¸® µÉ °æ¿ì (Worst Case)
-	ÀÌ¹Ì Á¤·Ä µÈ ¿ä¼Òµé¿¡ ´ëÇØ Ã¹ ¹øÂ° È¤Àº ¸¶Áö¸· ¿ä¼Ò¸¦ ±âÁØ (pivot)À¸·Î ¼±Á¤ µÈ »óÈ²¿¡¼­ Á¤·ÄÀ» ½Ãµµ ÇÒ °æ¿ì ¹ß»ýÇÏ¸ç,
+	ê° ë¶„í• ë§ˆë‹¤ í•˜ë‚˜ì˜ ìš”ì†Œì™€ í•´ë‹¹ ìš”ì†Œë¥¼ ì œì™¸í•œ ìš”ì†Œë“¤ì˜ ì§‘í•© (1 : n-1) ìœ¼ë¡œ ë¶„ë¦¬ ë  ê²½ìš° (Worst Case)
+	ì´ë¯¸ ì •ë ¬ ëœ ìš”ì†Œë“¤ì— ëŒ€í•´ ì²« ë²ˆì§¸ í˜¹ì€ ë§ˆì§€ë§‰ ìš”ì†Œë¥¼ ê¸°ì¤€ (pivot)ìœ¼ë¡œ ì„ ì • ëœ ìƒí™©ì—ì„œ ì •ë ¬ì„ ì‹œë„ í•  ê²½ìš° ë°œìƒí•˜ë©°,
 
-	ºñ±³ È½¼ö = 7 + 6 + ... 2 + 1 = (n-1) + (n-2) + ... + 2 + 1 = n * ((n-1) / 2)
+	ë¹„êµ íšŸìˆ˜ = 7 + 6 + ... 2 + 1 = (n-1) + (n-2) + ... + 2 + 1 = n * ((n-1) / 2)
 
-	Áß¾Ó°ªÀ» ±âÁØ (pivot)À¸·Î ¼±Á¤ÇÏ°Å³ª ³­¼ö¸¦ »ý¼ºÇÏ¿© ÀÓÀÇÀÇ ±âÁØ (pivot)À» ¼±Á¤ ÇÒ °æ¿ì,
-	ºñ±³ ¿¬»ê ¹× ÇÊ¿ä ÇÒ °æ¿ì SWAP ¿¬»ê¿¡ ÀÖ¾î »ó¼ö ½Ã°£¸¸Å­ ´õ ¼Ò¿äµÇÁö¸¸,
-	O(n^2)¿¡¼­ O(nlog2(n)) À¸·Î ³·Ãâ ¼ö ÀÖÀ½
+	ì¤‘ì•™ê°’ì„ ê¸°ì¤€ (pivot)ìœ¼ë¡œ ì„ ì •í•˜ê±°ë‚˜ ë‚œìˆ˜ë¥¼ ìƒì„±í•˜ì—¬ ìž„ì˜ì˜ ê¸°ì¤€ (pivot)ì„ ì„ ì • í•  ê²½ìš°,
+	ë¹„êµ ì—°ì‚° ë° í•„ìš” í•  ê²½ìš° SWAP ì—°ì‚°ì— ìžˆì–´ ìƒìˆ˜ ì‹œê°„ë§Œí¼ ë” ì†Œìš”ë˜ì§€ë§Œ,
+	O(n^2)ì—ì„œ O(nlog2(n)) ìœ¼ë¡œ ë‚®ì¶œ ìˆ˜ ìžˆìŒ
 ***/
 
 enum class ORDER_BY : const int
 {
-	ASCENDING, //¿À¸§Â÷¼ø
-	DESCENDING //³»¸²Â÷¼ø
-}; //Á¤·Ä ¹æÇâ
+	ASCENDING, //ì˜¤ë¦„ì°¨ìˆœ
+	DESCENDING //ë‚´ë¦¼ì°¨ìˆœ
+}; //ì •ë ¬ ë°©í–¥
 
 /// <summary>
-/// ¹öºí Á¤·Ä (Best Case : O(n), Worst, Average Case : O(n^2))
+/// ë²„ë¸” ì •ë ¬ (Best Case : O(n), Worst, Average Case : O(n^2))
 /// </summary>
-/// <typeparam name="SortElementType">Á¤·Ä ¿ä¼Ò Å¸ÀÔ</typeparam>
-/// <param name="targetEnumerableSet">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕ</param>
-/// <param name="elementCount">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕÀÇ ¿ä¼ÒµéÀÇ °³¼ö</param>
-/// <param name="orderBy">Á¤·Ä ¹æÇâ</param>
-template<typename SortElementType>
-void BubbleSort(SortElementType targetEnumerableSet[],
+/// <typeparam name="SORT_ELEMENT_TYPE">ì •ë ¬ ìš”ì†Œ íƒ€ìž…</typeparam>
+/// <param name="targetEnumerableSet">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©</param>
+/// <param name="elementCount">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ìš”ì†Œë“¤ì˜ ê°œìˆ˜</param>
+/// <param name="orderBy">ì •ë ¬ ë°©í–¥</param>
+template<typename SORT_ELEMENT_TYPE>
+void BubbleSort(SORT_ELEMENT_TYPE targetEnumerableSet[],
 	size_t elementCount, ORDER_BY orderBy = ORDER_BY::ASCENDING)
 {
 	/***
-		< ¹öºí Á¤·Ä - ¿À¸§Â÷¼ø >
+		< ë²„ë¸” ì •ë ¬ - ì˜¤ë¦„ì°¨ìˆœ >
 
-		1) ÃÖÃÊ ºñ±³ ´ë»ó ¹üÀ§´Â ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕ ³»ÀÇ ¸ðµç ¿ä¼Òµé¿¡ ´ëÇØ ½ÃÀÛ
+		1) ìµœì´ˆ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ëŠ” ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•© ë‚´ì˜ ëª¨ë“  ìš”ì†Œë“¤ì— ëŒ€í•´ ì‹œìž‘
 
-		2) ÇöÀç ºñ±³ ´ë»ó ¹üÀ§ ³»ÀÇ ¸ðµç ¿ä¼ÒµéÀ» ÀÌ¿ô ¿ä¼Ò³¢¸® ¼øÂ÷ÀûÀ¸·Î ºñ±³ (Á¤·Ä ¹æÇâ¿¡ µû¶ó ºñ±³ Á¶°Ç º¯µ¿)
-		: ÀÎµ¦½º 0¿Í ÀÎµ¦½º 1ÀÇ ¿ä¼Ò, ÀÎµ¦½º 1°ú ÀÎµ¦½º 2ÀÇ ¿ä¼Ò...
+		2) í˜„ìž¬ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ ë‚´ì˜ ëª¨ë“  ìš”ì†Œë“¤ì„ ì´ì›ƒ ìš”ì†Œë¼ë¦¬ ìˆœì°¨ì ìœ¼ë¡œ ë¹„êµ (ì •ë ¬ ë°©í–¥ì— ë”°ë¼ ë¹„êµ ì¡°ê±´ ë³€ë™)
+		: ì¸ë±ìŠ¤ 0ì™€ ì¸ë±ìŠ¤ 1ì˜ ìš”ì†Œ, ì¸ë±ìŠ¤ 1ê³¼ ì¸ë±ìŠ¤ 2ì˜ ìš”ì†Œ...
 
-			2-1) ºñ±³ ÁßÀÎ µÚÀÇ ¿ä¼Ò < ÀÌ¿ô ÇÑ ¹Ù·Î ¾ÕÀÇ ¿ä¼Ò
-			: µÎ ¿ä¼Ò¸¦ SWAP
+			2-1) ë¹„êµ ì¤‘ì¸ ë’¤ì˜ ìš”ì†Œ < ì´ì›ƒ í•œ ë°”ë¡œ ì•žì˜ ìš”ì†Œ
+			: ë‘ ìš”ì†Œë¥¼ SWAP
 
-			2-2) ºñ±³ ÁßÀÎ µÚÀÇ ¿ä¼Ò >= ÀÌ¿ô ÇÑ ¹Ù·Î ¾ÕÀÇ ¿ä¼Ò
-			: µÎ ¿ä¼Ò¸¦ SWAP ÇÏÁö ¾Ê°í, ´ÙÀ½ ÀÌ¿ô ÇÑ ¿ä¼Òµé¿¡ ´ëÇØ °è¼Ó ºñ±³
+			2-2) ë¹„êµ ì¤‘ì¸ ë’¤ì˜ ìš”ì†Œ >= ì´ì›ƒ í•œ ë°”ë¡œ ì•žì˜ ìš”ì†Œ
+			: ë‘ ìš”ì†Œë¥¼ SWAP í•˜ì§€ ì•Šê³ , ë‹¤ìŒ ì´ì›ƒ í•œ ìš”ì†Œë“¤ì— ëŒ€í•´ ê³„ì† ë¹„êµ
 
-		3) ÇöÀç ºñ±³ ´ë»ó ¹üÀ§ ³»ÀÇ ¸¶Áö¸· ¿ä¼Ò´Â Á¤·Ä µÈ Á¶°ÇÀ» ¸¸Á·ÇÏ¹Ç·Î, ´ÙÀ½ ºñ±³ ´ë»ó ¹üÀ§¿¡¼­ Á¦¿Ü (ºñ±³ ´ë»ó ¹üÀ§ 1 °¨¼Ò)
+		3) í˜„ìž¬ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ ë‚´ì˜ ë§ˆì§€ë§‰ ìš”ì†ŒëŠ” ì •ë ¬ ëœ ì¡°ê±´ì„ ë§Œì¡±í•˜ë¯€ë¡œ, ë‹¤ìŒ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ì—ì„œ ì œì™¸ (ë¹„êµ ëŒ€ìƒ ë²”ìœ„ 1 ê°ì†Œ)
 	***/
 
-	SortElementType tmp;
-	bool swapPerformed = false; //ÇöÀç ºñ±³ ´ë»ó ¹üÀ§¿¡ ´ëÇØ SWAP ¹ß»ý ¿©ºÎ
+	SORT_ELEMENT_TYPE tmp;
+	bool swapPerformed = false; //í˜„ìž¬ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ì— ëŒ€í•´ SWAP ë°œìƒ ì—¬ë¶€
 
-	for (size_t i = 0; i < (elementCount - 1); i++) //¸¶Áö¸· ¿ä¼Ò´Â Á÷Á¢ Á¢±Ù ÇÏÁö ¾ÊÀ¸¸ç, ºñ±³ ½Ã¿¡¸¸ °£Á¢ Á¢±Ù
+	for (size_t i = 0; i < (elementCount - 1); i++) //ë§ˆì§€ë§‰ ìš”ì†ŒëŠ” ì§ì ‘ ì ‘ê·¼ í•˜ì§€ ì•Šìœ¼ë©°, ë¹„êµ ì‹œì—ë§Œ ê°„ì ‘ ì ‘ê·¼
 	{
 		swapPerformed = false;
 
-		for (size_t j = 0; j < ((elementCount - 1) - i); j++) //ÇöÀç ºñ±³ ´ë»ó ¹üÀ§ ³»ÀÇ ¸¶Áö¸· ¿ä¼Ò´Â Á¤·Ä µÈ Á¶°ÇÀ» ¸¸Á·ÇÏ¹Ç·Î, ´ÙÀ½ ºñ±³ ´ë»ó ¹üÀ§¿¡¼­ Á¦¿Ü
+		for (size_t j = 0; j < ((elementCount - 1) - i); j++) //í˜„ìž¬ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ ë‚´ì˜ ë§ˆì§€ë§‰ ìš”ì†ŒëŠ” ì •ë ¬ ëœ ì¡°ê±´ì„ ë§Œì¡±í•˜ë¯€ë¡œ, ë‹¤ìŒ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ì—ì„œ ì œì™¸
 		{
 			switch (orderBy)
 			{
@@ -189,53 +189,53 @@ void BubbleSort(SortElementType targetEnumerableSet[],
 			}
 		}
 
-		if (!swapPerformed) //ÇöÀç ºñ±³ ´ë»ó ¹üÀ§¿¡ ´ëÇØ SWAPÀÌ ÇÑ ¹øµµ ¼öÇàµÇÁö ¾ÊÀº °æ¿ì (ÀÌ¹Ì ³»ºÎ ¿ä¼Ò°¡ ¸ðµÎ Á¤·Ä µÇ¾î ÀÖÀ» °æ¿ì)
+		if (!swapPerformed) //í˜„ìž¬ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ì— ëŒ€í•´ SWAPì´ í•œ ë²ˆë„ ìˆ˜í–‰ë˜ì§€ ì•Šì€ ê²½ìš° (ì´ë¯¸ ë‚´ë¶€ ìš”ì†Œê°€ ëª¨ë‘ ì •ë ¬ ë˜ì–´ ìžˆì„ ê²½ìš°)
 			break;
 	}
 }
 
 /// <summary>
-/// ¼±ÅÃ Á¤·Ä (Best, Worst, Average Case : O(n^2))
+/// ì„ íƒ ì •ë ¬ (Best, Worst, Average Case : O(n^2))
 /// </summary>
-/// <typeparam name="SortElementType">Á¤·Ä ¿ä¼Ò Å¸ÀÔ</typeparam>
-/// <param name="targetEnumerableSet">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕ</param>
-/// <param name="elementCount">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕÀÇ ¿ä¼ÒµéÀÇ °³¼ö</param>
-/// <param name="orderBy">Á¤·Ä ¹æÇâ</param>
-template<typename SortElementType>
-void SelectionSort(SortElementType targetEnumerableSet[],
+/// <typeparam name="SORT_ELEMENT_TYPE">ì •ë ¬ ìš”ì†Œ íƒ€ìž…</typeparam>
+/// <param name="targetEnumerableSet">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©</param>
+/// <param name="elementCount">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ìš”ì†Œë“¤ì˜ ê°œìˆ˜</param>
+/// <param name="orderBy">ì •ë ¬ ë°©í–¥</param>
+template<typename SORT_ELEMENT_TYPE>
+void SelectionSort(SORT_ELEMENT_TYPE targetEnumerableSet[],
 	size_t elementCount, ORDER_BY orderBy = ORDER_BY::ASCENDING)
 {
 	/***
-		< ¼±ÅÃ Á¤·Ä - ¿À¸§Â÷¼ø >
+		< ì„ íƒ ì •ë ¬ - ì˜¤ë¦„ì°¨ìˆœ >
 
-		! ÀÎ°£ÀÌ ¾î¶°ÇÑ ÁýÇÕ ³»¿¡¼­ ¿ä¼ÒµéÀ» Á¤·ÄÇÒ ¶§ °¡Àå ÀÏ¹ÝÀûÀ¸·Î ¼öÇàÇÏ´Â °ÍÃ³·³ ÇÏµÇ,
-		Â÷ÀÌÁ¡Àº Á¤·Ä Á¶°ÇÀ» ¸¸Á·ÇÏ´Â ¿ä¼Ò¸¦ Å½»öÇÒ °æ¿ì, ´Ü¼øÈ÷ ¾ÕÀ¸·Î »ðÀÔÇÏ´Â °ÍÀÌ ¾Æ´Ï¶ó, ÇöÀç Á¤·Ä ´ë»ó ¿ä¼Ò¿Í SWAP ¼öÇà
+		! ì¸ê°„ì´ ì–´ë– í•œ ì§‘í•© ë‚´ì—ì„œ ìš”ì†Œë“¤ì„ ì •ë ¬í•  ë•Œ ê°€ìž¥ ì¼ë°˜ì ìœ¼ë¡œ ìˆ˜í–‰í•˜ëŠ” ê²ƒì²˜ëŸ¼ í•˜ë˜,
+		ì°¨ì´ì ì€ ì •ë ¬ ì¡°ê±´ì„ ë§Œì¡±í•˜ëŠ” ìš”ì†Œë¥¼ íƒìƒ‰í•  ê²½ìš°, ë‹¨ìˆœížˆ ì•žìœ¼ë¡œ ì‚½ìž…í•˜ëŠ” ê²ƒì´ ì•„ë‹ˆë¼, í˜„ìž¬ ì •ë ¬ ëŒ€ìƒ ìš”ì†Œì™€ SWAP ìˆ˜í–‰
 
-		1) ÃÖÃÊ ºñ±³ ´ë»ó ¹üÀ§´Â ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕ ³»ÀÇ ¸ðµç ¿ä¼Òµé¿¡ ´ëÇØ ½ÃÀÛ
+		1) ìµœì´ˆ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ëŠ” ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•© ë‚´ì˜ ëª¨ë“  ìš”ì†Œë“¤ì— ëŒ€í•´ ì‹œìž‘
 
-		2) ÃÖÃÊ Á¤·Ä ´ë»óÀº ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕ ³»ÀÇ Ã³À½ ¿ä¼Ò¿¡ ´ëÇØ ½ÃÀÛ
+		2) ìµœì´ˆ ì •ë ¬ ëŒ€ìƒì€ ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•© ë‚´ì˜ ì²˜ìŒ ìš”ì†Œì— ëŒ€í•´ ì‹œìž‘
 
-		3) ÇöÀç Á¤·Ä ´ë»ó°ú ÇöÀç ºñ±³ ´ë»ó ¹üÀ§ ³»ÀÇ ¸ðµç ¿ä¼Òµé¿¡ ´ëÇØ ¼øÂ÷ÀûÀ¸·Î ºñ±³ (Á¤·Ä ¹æÇâ¿¡ µû¶ó ºñ±³ Á¶°Ç º¯µ¿)
+		3) í˜„ìž¬ ì •ë ¬ ëŒ€ìƒê³¼ í˜„ìž¬ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ ë‚´ì˜ ëª¨ë“  ìš”ì†Œë“¤ì— ëŒ€í•´ ìˆœì°¨ì ìœ¼ë¡œ ë¹„êµ (ì •ë ¬ ë°©í–¥ì— ë”°ë¼ ë¹„êµ ì¡°ê±´ ë³€ë™)
 
-			3-1) ÇöÀç Á¤·Ä ´ë»ó < ºñ±³ ´ë»ó ¹üÀ§ ³»ÀÇ ºñ±³ ÁßÀÎ ¾î¶°ÇÑ ¿ä¼Ò
-			: ÇØ´ç ºñ±³ ´ë»ó ¹üÀ§ ³»ÀÇ ºñ±³ ÁßÀÎ ¾î¶°ÇÑ ¿ä¼Ò¸¦ Á¤·Ä µÈ Á¶°ÇÀ» ¸¸Á·ÇÏ´Â ¿ä¼Ò·Î ¸¶Å·
+			3-1) í˜„ìž¬ ì •ë ¬ ëŒ€ìƒ < ë¹„êµ ëŒ€ìƒ ë²”ìœ„ ë‚´ì˜ ë¹„êµ ì¤‘ì¸ ì–´ë– í•œ ìš”ì†Œ
+			: í•´ë‹¹ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ ë‚´ì˜ ë¹„êµ ì¤‘ì¸ ì–´ë– í•œ ìš”ì†Œë¥¼ ì •ë ¬ ëœ ì¡°ê±´ì„ ë§Œì¡±í•˜ëŠ” ìš”ì†Œë¡œ ë§ˆí‚¹
 
-			3-2) ÇöÀç Á¤·Ä ´ë»ó >= ºñ±³ ´ë»ó ¹üÀ§ ³»ÀÇ ºñ±³ ÁßÀÎ ¾î¶°ÇÑ ¿ä¼Ò
+			3-2) í˜„ìž¬ ì •ë ¬ ëŒ€ìƒ >= ë¹„êµ ëŒ€ìƒ ë²”ìœ„ ë‚´ì˜ ë¹„êµ ì¤‘ì¸ ì–´ë– í•œ ìš”ì†Œ
 			: do nothing
 
-		4) ¸¶Å· µÈ Á¤·Ä µÈ Á¶°ÇÀ» ¸¸Á·ÇÏ´Â ¿ä¼Ò¿Í ÇöÀç Á¤·Ä ´ë»ó ¿ä¼Ò SWAP
+		4) ë§ˆí‚¹ ëœ ì •ë ¬ ëœ ì¡°ê±´ì„ ë§Œì¡±í•˜ëŠ” ìš”ì†Œì™€ í˜„ìž¬ ì •ë ¬ ëŒ€ìƒ ìš”ì†Œ SWAP
 
-		5) ÇöÀç ºñ±³ ´ë»ó ¹üÀ§ ³»ÀÇ Á¤·Ä ´ë»ó ¿ä¼Ò´Â Á¤·Ä µÈ Á¶°ÇÀ» ¸¸Á·ÇÏ¹Ç·Î, ´ÙÀ½ ºñ±³ ´ë»ó ¹üÀ§¿¡¼­ Á¦¿Ü (ºñ±³ ´ë»ó ¹üÀ§ 1 °¨¼Ò)
+		5) í˜„ìž¬ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ ë‚´ì˜ ì •ë ¬ ëŒ€ìƒ ìš”ì†ŒëŠ” ì •ë ¬ ëœ ì¡°ê±´ì„ ë§Œì¡±í•˜ë¯€ë¡œ, ë‹¤ìŒ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ì—ì„œ ì œì™¸ (ë¹„êµ ëŒ€ìƒ ë²”ìœ„ 1 ê°ì†Œ)
 	***/
 
-	size_t swapTargetIndex; //Á¤·Ä µÈ Á¶°ÇÀ» ¸¸Á·ÇÏ´Â SWAP ´ë»ó ÀÎµ¦½º
-	SortElementType tmp;
+	size_t swapTargetIndex; //ì •ë ¬ ëœ ì¡°ê±´ì„ ë§Œì¡±í•˜ëŠ” SWAP ëŒ€ìƒ ì¸ë±ìŠ¤
+	SORT_ELEMENT_TYPE tmp;
 
-	for (size_t i = 0; i < elementCount; i++) //°¢ Á¤·Ä ´ë»ó¿¡ ´ëÇØ
+	for (size_t i = 0; i < elementCount; i++) //ê° ì •ë ¬ ëŒ€ìƒì— ëŒ€í•´
 	{
 		swapTargetIndex = i;
 
-		for (size_t j = i + 1; j < elementCount; j++) //ÇöÀç Á¤·Ä ´ë»óÀ» Á¦¿ÜÇÑ ¿ä¼Òµé¿¡ ´ëÇØ
+		for (size_t j = i + 1; j < elementCount; j++) //í˜„ìž¬ ì •ë ¬ ëŒ€ìƒì„ ì œì™¸í•œ ìš”ì†Œë“¤ì— ëŒ€í•´
 		{
 			switch (orderBy)
 			{
@@ -258,36 +258,36 @@ void SelectionSort(SortElementType targetEnumerableSet[],
 }
 
 /// <summary>
-/// »ðÀÔ Á¤·Ä (Best Case : O(n), Worst, Average Case : O(n^2))
+/// ì‚½ìž… ì •ë ¬ (Best Case : O(n), Worst, Average Case : O(n^2))
 /// </summary>
-/// <typeparam name="SortElementType">Á¤·Ä ¿ä¼Ò Å¸ÀÔ</typeparam>
-/// <param name="targetEnumerableSet">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕ</param>
-/// <param name="elementCount">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕÀÇ ¿ä¼ÒµéÀÇ °³¼ö</param>
-/// <param name="orderBy">Á¤·Ä ¹æÇâ</param>
-template<typename SortElementType>
-void InsertionSort(SortElementType targetEnumerableSet[],
+/// <typeparam name="SORT_ELEMENT_TYPE">ì •ë ¬ ìš”ì†Œ íƒ€ìž…</typeparam>
+/// <param name="targetEnumerableSet">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©</param>
+/// <param name="elementCount">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ìš”ì†Œë“¤ì˜ ê°œìˆ˜</param>
+/// <param name="orderBy">ì •ë ¬ ë°©í–¥</param>
+template<typename SORT_ELEMENT_TYPE>
+void InsertionSort(SORT_ELEMENT_TYPE targetEnumerableSet[],
 	size_t elementCount, ORDER_BY orderBy = ORDER_BY::ASCENDING)
 {
 	/***
-		< »ðÀÔ Á¤·Ä - ¿À¸§Â÷¼ø >
+		< ì‚½ìž… ì •ë ¬ - ì˜¤ë¦„ì°¨ìˆœ >
 
-		1) ÃÖÃÊ ºñ±³ ´ë»ó ¹üÀ§´Â ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕ ³»ÀÇ Ã¹ ¹øÂ° ¿ä¼Ò ~ µÎ ¹øÂ° ¿ä¼ÒÀÇ ¹üÀ§ºÎÅÍ ½ÃÀÛ
+		1) ìµœì´ˆ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ëŠ” ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•© ë‚´ì˜ ì²« ë²ˆì§¸ ìš”ì†Œ ~ ë‘ ë²ˆì§¸ ìš”ì†Œì˜ ë²”ìœ„ë¶€í„° ì‹œìž‘
 
-		2) ÇöÀç ºñ±³ ´ë»ó ¹üÀ§ ³»¿¡¼­ ¸¶Áö¸· ¿ä¼Ò¸¦ ÀÌ¿ô ÇÑ ¹Ù·Î ¾ÕÀÇ ¿ä¼Ò¿Í ºñ±³ (Á¤·Ä ¹æÇâ¿¡ µû¶ó ºñ±³ Á¶°Ç º¯µ¿)
+		2) í˜„ìž¬ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ ë‚´ì—ì„œ ë§ˆì§€ë§‰ ìš”ì†Œë¥¼ ì´ì›ƒ í•œ ë°”ë¡œ ì•žì˜ ìš”ì†Œì™€ ë¹„êµ (ì •ë ¬ ë°©í–¥ì— ë”°ë¼ ë¹„êµ ì¡°ê±´ ë³€ë™)
 
-			2-1) ºñ±³ ÁßÀÎ µÚÀÇ ¿ä¼Ò < ÀÌ¿ô ÇÑ ¹Ù·Î ¾ÕÀÇ ¿ä¼Ò
+			2-1) ë¹„êµ ì¤‘ì¸ ë’¤ì˜ ìš”ì†Œ < ì´ì›ƒ í•œ ë°”ë¡œ ì•žì˜ ìš”ì†Œ
 
-				2-1-1) ÇöÀç ºñ±³ ´ë»ó ¹üÀ§ ³»¿¡¼­ ºñ±³ ÁßÀÎ µÚÀÇ ¿ä¼Ò°¡ »ðÀÔ µÉ ÀûÀýÇÑ À§Ä¡¸¦ ÇöÀç ºñ±³ ´ë»ó ¹üÀ§ÀÇ Ã³À½ºÎÅÍ ¼øÂ÷ÀûÀ¸·Î Å½»ö
+				2-1-1) í˜„ìž¬ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ ë‚´ì—ì„œ ë¹„êµ ì¤‘ì¸ ë’¤ì˜ ìš”ì†Œê°€ ì‚½ìž… ë  ì ì ˆí•œ ìœ„ì¹˜ë¥¼ í˜„ìž¬ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ì˜ ì²˜ìŒë¶€í„° ìˆœì°¨ì ìœ¼ë¡œ íƒìƒ‰
 
-				2-1-2) »ðÀÔ µÉ À§Ä¡ÀÇ ±âÁ¸ ¿ä¼ÒºÎÅÍ ºñ±³ ÁßÀÎ µÚÀÇ ¿ä¼Ò°¡ ÀÌ¿ô ÇÑ ¹Ù·Î ¾ÕÀÇ ¿ä¼Ò ³»ÀÇ ¹üÀ§ÀÇ ¿ä¼ÒµéÀ» µÚ·Î ÇÑ Ä­¾¿ ÀÌµ¿
+				2-1-2) ì‚½ìž… ë  ìœ„ì¹˜ì˜ ê¸°ì¡´ ìš”ì†Œë¶€í„° ë¹„êµ ì¤‘ì¸ ë’¤ì˜ ìš”ì†Œê°€ ì´ì›ƒ í•œ ë°”ë¡œ ì•žì˜ ìš”ì†Œ ë‚´ì˜ ë²”ìœ„ì˜ ìš”ì†Œë“¤ì„ ë’¤ë¡œ í•œ ì¹¸ì”© ì´ë™
 
-				2-1-3) ºñ±³ ÁßÀÎ µÚÀÇ ¿ä¼Ò¸¦ ºó À§Ä¡¿¡ »ðÀÔ
+				2-1-3) ë¹„êµ ì¤‘ì¸ ë’¤ì˜ ìš”ì†Œë¥¼ ë¹ˆ ìœ„ì¹˜ì— ì‚½ìž…
 
-			2-2) ºñ±³ ÁßÀÎ µÚÀÇ ¿ä¼Ò >= ÀÌ¿ô ÇÑ ¹Ù·Î ¾ÕÀÇ ¿ä¼Ò
-			: ÇöÀç ºñ±³ ´ë»ó ¹üÀ§ ³»ÀÇ ¸¶Áö¸· ¿ä¼Ò´Â Á¤·Ä µÈ Á¶°ÇÀ» ¸¸Á·ÇÏ¹Ç·Î, ÇöÀç ºñ±³ ´ë»ó ¹üÀ§ 1 Áõ°¡
+			2-2) ë¹„êµ ì¤‘ì¸ ë’¤ì˜ ìš”ì†Œ >= ì´ì›ƒ í•œ ë°”ë¡œ ì•žì˜ ìš”ì†Œ
+			: í˜„ìž¬ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ ë‚´ì˜ ë§ˆì§€ë§‰ ìš”ì†ŒëŠ” ì •ë ¬ ëœ ì¡°ê±´ì„ ë§Œì¡±í•˜ë¯€ë¡œ, í˜„ìž¬ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ 1 ì¦ê°€
 	***/
 
-	SortElementType tmp;
+	SORT_ELEMENT_TYPE tmp;
 
 	for (size_t i = 1; i < elementCount; i++)
 	{
@@ -296,18 +296,18 @@ void InsertionSort(SortElementType targetEnumerableSet[],
 		case ORDER_BY::ASCENDING:
 			if (COMPARE(targetEnumerableSet[i - 1], targetEnumerableSet[i]) == 1) //a > b
 			{
-				tmp = targetEnumerableSet[i]; //ºñ±³ ÁßÀÎ µÚÀÇ ¿ä¼Ò
+				tmp = targetEnumerableSet[i]; //ë¹„êµ ì¤‘ì¸ ë’¤ì˜ ìš”ì†Œ
 
-				for (size_t j = 0; j < i; j++) //ÇöÀç ºñ±³ ´ë»ó ¹üÀ§ ³»¿¡¼­ ºñ±³ ÁßÀÎ µÚÀÇ ¿ä¼Ò°¡ »ðÀÔ µÉ ÀûÀýÇÑ À§Ä¡ Å½»ö
+				for (size_t j = 0; j < i; j++) //í˜„ìž¬ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ ë‚´ì—ì„œ ë¹„êµ ì¤‘ì¸ ë’¤ì˜ ìš”ì†Œê°€ ì‚½ìž… ë  ì ì ˆí•œ ìœ„ì¹˜ íƒìƒ‰
 				{
-					if (COMPARE(targetEnumerableSet[j], tmp) == 1) //±âÁ¸ ¿ä¼Ò > ºñ±³ ÁßÀÎ µÚÀÇ ¿ä¼Ò
+					if (COMPARE(targetEnumerableSet[j], tmp) == 1) //ê¸°ì¡´ ìš”ì†Œ > ë¹„êµ ì¤‘ì¸ ë’¤ì˜ ìš”ì†Œ
 					{
 						memmove_s(
 							&targetEnumerableSet[j + 1],
 							sizeof(targetEnumerableSet[0]) * (i - j),
 							&targetEnumerableSet[j],
 							sizeof(targetEnumerableSet[0]) * (i - j)
-						); //»ðÀÔ µÉ À§Ä¡ÀÇ ±âÁ¸ ¿ä¼ÒºÎÅÍ ºñ±³ ÁßÀÎ µÚÀÇ ¿ä¼Ò°¡ ÀÌ¿ô ÇÑ ¹Ù·Î ¾ÕÀÇ ¿ä¼Ò ³»ÀÇ ¹üÀ§ÀÇ ¿ä¼ÒµéÀ» µÚ·Î ÇÑ Ä­¾¿ ÀÌµ¿
+						); //ì‚½ìž… ë  ìœ„ì¹˜ì˜ ê¸°ì¡´ ìš”ì†Œë¶€í„° ë¹„êµ ì¤‘ì¸ ë’¤ì˜ ìš”ì†Œê°€ ì´ì›ƒ í•œ ë°”ë¡œ ì•žì˜ ìš”ì†Œ ë‚´ì˜ ë²”ìœ„ì˜ ìš”ì†Œë“¤ì„ ë’¤ë¡œ í•œ ì¹¸ì”© ì´ë™
 						targetEnumerableSet[j] = tmp;
 						break;
 					}
@@ -319,18 +319,18 @@ void InsertionSort(SortElementType targetEnumerableSet[],
 		case ORDER_BY::DESCENDING:
 			if (COMPARE(targetEnumerableSet[i - 1], targetEnumerableSet[i]) == -1) //a < b
 			{
-				tmp = targetEnumerableSet[i]; //ºñ±³ ÁßÀÎ µÚÀÇ ¿ä¼Ò
+				tmp = targetEnumerableSet[i]; //ë¹„êµ ì¤‘ì¸ ë’¤ì˜ ìš”ì†Œ
 
-				for (size_t j = 0; j < i; j++) //ÇöÀç ºñ±³ ´ë»ó ¹üÀ§ ³»¿¡¼­ ºñ±³ ÁßÀÎ µÚÀÇ ¿ä¼Ò°¡ »ðÀÔ µÉ ÀûÀýÇÑ À§Ä¡ Å½»ö
+				for (size_t j = 0; j < i; j++) //í˜„ìž¬ ë¹„êµ ëŒ€ìƒ ë²”ìœ„ ë‚´ì—ì„œ ë¹„êµ ì¤‘ì¸ ë’¤ì˜ ìš”ì†Œê°€ ì‚½ìž… ë  ì ì ˆí•œ ìœ„ì¹˜ íƒìƒ‰
 				{
-					if (COMPARE(targetEnumerableSet[j], tmp) == -1) //±âÁ¸ ¿ä¼Ò < ºñ±³ ÁßÀÎ µÚÀÇ ¿ä¼Ò
+					if (COMPARE(targetEnumerableSet[j], tmp) == -1) //ê¸°ì¡´ ìš”ì†Œ < ë¹„êµ ì¤‘ì¸ ë’¤ì˜ ìš”ì†Œ
 					{
 						memmove_s(
 							&targetEnumerableSet[j + 1],
 							sizeof(targetEnumerableSet[0]) * (i - j),
 							&targetEnumerableSet[j],
 							sizeof(targetEnumerableSet[0]) * (i - j)
-						); //»ðÀÔ µÉ À§Ä¡ÀÇ ±âÁ¸ ¿ä¼ÒºÎÅÍ ºñ±³ ÁßÀÎ µÚÀÇ ¿ä¼Ò°¡ ÀÌ¿ô ÇÑ ¹Ù·Î ¾ÕÀÇ ¿ä¼Ò ³»ÀÇ ¹üÀ§ÀÇ ¿ä¼ÒµéÀ» µÚ·Î ÇÑ Ä­¾¿ ÀÌµ¿
+						); //ì‚½ìž… ë  ìœ„ì¹˜ì˜ ê¸°ì¡´ ìš”ì†Œë¶€í„° ë¹„êµ ì¤‘ì¸ ë’¤ì˜ ìš”ì†Œê°€ ì´ì›ƒ í•œ ë°”ë¡œ ì•žì˜ ìš”ì†Œ ë‚´ì˜ ë²”ìœ„ì˜ ìš”ì†Œë“¤ì„ ë’¤ë¡œ í•œ ì¹¸ì”© ì´ë™
 						targetEnumerableSet[j] = tmp;
 						break;
 					}
@@ -343,47 +343,47 @@ void InsertionSort(SortElementType targetEnumerableSet[],
 }
 
 /// <summary>
-/// ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕ¿¡ ´ëÇØ ±âÁØ (pivot) ¼±Á¤, Á¤·Ä ¹æÇâ¿¡ µû¸¥ Á¤·Ä ¼öÇà ¹× ±âÁØ (pivot)ÀÇ ÃÖÁ¾ Á¤·Ä µÈ À§Ä¡ ¹ÝÈ¯
+/// ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì— ëŒ€í•´ ê¸°ì¤€ (pivot) ì„ ì •, ì •ë ¬ ë°©í–¥ì— ë”°ë¥¸ ì •ë ¬ ìˆ˜í–‰ ë° ê¸°ì¤€ (pivot)ì˜ ìµœì¢… ì •ë ¬ ëœ ìœ„ì¹˜ ë°˜í™˜
 /// </summary>
-/// <typeparam name="SortElementType">Á¤·Ä ¿ä¼Ò Å¸ÀÔ</typeparam>
-/// <param name="targetEnumerableSet">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕ</param>
-/// <param name="srcLeftIndex">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕÀÇ ºÐÇÒ µÈ ¿ÞÂÊ ÀÎµ¦½º (ÃÖÃÊ 0)</param>
-/// <param name="srcRightIndex">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕÀÇ ºÐÇÒ µÈ ¿À¸¥ÂÊ ÀÎµ¦½º (ÃÖÃÊ ¿ä¼ÒµéÀÇ °³¼ö - 1)</param>
-/// <param name="orderBy">Á¤·Ä ¹æÇâ</param>
-/// <returns>±âÁØ (pivot)ÀÇ ÃÖÁ¾ Á¤·Ä µÈ À§Ä¡</returns>
-template<typename SortElementType>
-size_t PartitioningProc(SortElementType targetEnumerableSet[],
+/// <typeparam name="SORT_ELEMENT_TYPE">ì •ë ¬ ìš”ì†Œ íƒ€ìž…</typeparam>
+/// <param name="targetEnumerableSet">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©</param>
+/// <param name="srcLeftIndex">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ë¶„í•  ëœ ì™¼ìª½ ì¸ë±ìŠ¤ (ìµœì´ˆ 0)</param>
+/// <param name="srcRightIndex">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ë¶„í•  ëœ ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤ (ìµœì´ˆ ìš”ì†Œë“¤ì˜ ê°œìˆ˜ - 1)</param>
+/// <param name="orderBy">ì •ë ¬ ë°©í–¥</param>
+/// <returns>ê¸°ì¤€ (pivot)ì˜ ìµœì¢… ì •ë ¬ ëœ ìœ„ì¹˜</returns>
+template<typename SORT_ELEMENT_TYPE>
+size_t PartitioningProc(SORT_ELEMENT_TYPE targetEnumerableSet[],
 	size_t srcLeftIndex, size_t srcRightIndex, ORDER_BY orderBy = ORDER_BY::ASCENDING)
 {
-	size_t midIndex = srcLeftIndex + ((srcRightIndex - srcLeftIndex) >> 1); //base : srcLeftIndex, offset : srcRightIndex¿Í srcLeftIndexÀÇ Áß°£¸¸Å­ Áõ°¡ (overflow ¹æÁö)
-	size_t medianIndex; //Áß¾Ó°ª ÀÎµ¦½º (¿ÞÂÊ ÀÎµ¦½º, °¡¿îµ¥ ÀÎµ¦½º, ¿À¸¥ÂÊ ÀÎµ¦½º¿¡ ´ëÇÑ)
+	size_t midIndex = srcLeftIndex + ((srcRightIndex - srcLeftIndex) >> 1); //base : srcLeftIndex, offset : srcRightIndexì™€ srcLeftIndexì˜ ì¤‘ê°„ë§Œí¼ ì¦ê°€ (overflow ë°©ì§€)
+	size_t medianIndex; //ì¤‘ì•™ê°’ ì¸ë±ìŠ¤ (ì™¼ìª½ ì¸ë±ìŠ¤, ê°€ìš´ë° ì¸ë±ìŠ¤, ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤ì— ëŒ€í•œ)
 
-	size_t pivotIndex; //±âÁØ (pivot) ÀÎµ¦½º
-	size_t orderedPivotIndex; //±âÁØ (pivot)ÀÇ ÃÖÁ¾ Á¤·Ä µÈ À§Ä¡ ÀÎµ¦½º
+	size_t pivotIndex; //ê¸°ì¤€ (pivot) ì¸ë±ìŠ¤
+	size_t orderedPivotIndex; //ê¸°ì¤€ (pivot)ì˜ ìµœì¢… ì •ë ¬ ëœ ìœ„ì¹˜ ì¸ë±ìŠ¤
 
-	SortElementType tmp;
+	SORT_ELEMENT_TYPE tmp;
 
-	if (srcLeftIndex + 1 == srcRightIndex) //ÇöÀç ¿ä¼Ò°¡ 2°³ÀÎ °æ¿ì
+	if (srcLeftIndex + 1 == srcRightIndex) //í˜„ìž¬ ìš”ì†Œê°€ 2ê°œì¸ ê²½ìš°
 	{
 		/***
-			< Äü Á¤·Ä (2°³ÀÇ ¿ä¼Ò¿¡ ´ëÇÑ ´ëÃ¼ Á¤·Ä Ã³¸®) - ¿À¸§Â÷¼ø >
+			< í€µ ì •ë ¬ (2ê°œì˜ ìš”ì†Œì— ëŒ€í•œ ëŒ€ì²´ ì •ë ¬ ì²˜ë¦¬) - ì˜¤ë¦„ì°¨ìˆœ >
 
-			1) µÎ ¿ä¼Òµé °£ ºñ±³ ¹× SWAP (Á¤·Ä ¹æÇâ¿¡ µû¶ó Áß¾Ó°ª ¼±ÅÃ À§ÇÑ ºñ±³ Á¶°Ç º¯µ¿)
+			1) ë‘ ìš”ì†Œë“¤ ê°„ ë¹„êµ ë° SWAP (ì •ë ¬ ë°©í–¥ì— ë”°ë¼ ì¤‘ì•™ê°’ ì„ íƒ ìœ„í•œ ë¹„êµ ì¡°ê±´ ë³€ë™)
 
-			2) ¿ÞÂÊ ÀÎµ¦½º ¿ä¼Ò¿Í ¿À¸¥ÂÊ ÀÎµ¦½º ¿ä¼Ò ºñ±³
+			2) ì™¼ìª½ ì¸ë±ìŠ¤ ìš”ì†Œì™€ ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤ ìš”ì†Œ ë¹„êµ
 
-				2-1) ¿ÞÂÊ ÀÎµ¦½º ¿ä¼Ò > ¿À¸¥ÂÊ ÀÎµ¦½º ¿ä¼Ò
-				: ¿ÞÂÊ ÀÎµ¦½º ¿ä¼Ò¿Í ¿À¸¥ÂÊ ÀÎµ¦½º ¿ä¼Ò SWAP (¿À¸¥ÂÊ ÀÎµ¦½ºÀÇ ¿ä¼Ò°¡ ¿ÞÂÊ ÀÎµ¦½ºÀÇ ¿ä¼ÒÀÇ ¿ÞÂÊ¿¡ À§Ä¡ÇÏ´Â °ÍÀÌ ¿Ã¹Ù¸¥ Á¤·Ä µÈ À§Ä¡)
+				2-1) ì™¼ìª½ ì¸ë±ìŠ¤ ìš”ì†Œ > ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤ ìš”ì†Œ
+				: ì™¼ìª½ ì¸ë±ìŠ¤ ìš”ì†Œì™€ ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤ ìš”ì†Œ SWAP (ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤ì˜ ìš”ì†Œê°€ ì™¼ìª½ ì¸ë±ìŠ¤ì˜ ìš”ì†Œì˜ ì™¼ìª½ì— ìœ„ì¹˜í•˜ëŠ” ê²ƒì´ ì˜¬ë°”ë¥¸ ì •ë ¬ ëœ ìœ„ì¹˜)
 
-				2-2) ¿ÞÂÊ ÀÎµ¦½º ¿ä¼Ò <= °¡¿îµ¥ ÀÎµ¦½º ¿ä¼Ò
+				2-2) ì™¼ìª½ ì¸ë±ìŠ¤ ìš”ì†Œ <= ê°€ìš´ë° ì¸ë±ìŠ¤ ìš”ì†Œ
 				: do nothing
 
-			3) ÇöÀç ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕ³»ÀÇ ¸ðµç ¿ä¼ÒµéÀº Á¤·ÄµÇ¾úÀ¸¹Ç·Î, ¿ÞÂÊ ÀÎµ¦½º ¹ÝÈ¯
+			3) í˜„ìž¬ ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ë‚´ì˜ ëª¨ë“  ìš”ì†Œë“¤ì€ ì •ë ¬ë˜ì—ˆìœ¼ë¯€ë¡œ, ì™¼ìª½ ì¸ë±ìŠ¤ ë°˜í™˜
 
 			---
 
-			±âÁ¸ÀÇ Á¤·Ä Ã³¸® ·çÆ¾ÀÇ 1È¸ÀÇ Á¦ÀÚ¸® SWAP ¿¬»êÀ» ¾ø¾Ö±â À§ÇØ
-			µÎ ¿ä¼Ò °£ ºñ±³ ¹× ÇÊ¿ä ÇÒ °æ¿ì SWAP ¼öÇà
+			ê¸°ì¡´ì˜ ì •ë ¬ ì²˜ë¦¬ ë£¨í‹´ì˜ 1íšŒì˜ ì œìžë¦¬ SWAP ì—°ì‚°ì„ ì—†ì• ê¸° ìœ„í•´
+			ë‘ ìš”ì†Œ ê°„ ë¹„êµ ë° í•„ìš” í•  ê²½ìš° SWAP ìˆ˜í–‰
 		***/
 
 		switch (orderBy)
@@ -401,60 +401,60 @@ size_t PartitioningProc(SortElementType targetEnumerableSet[],
 
 		return srcLeftIndex;
 	}
-	else if ((midIndex + 1) == srcRightIndex) //ÇöÀç ¿ä¼Ò°¡ 3°³ÀÎ °æ¿ì
+	else if ((midIndex + 1) == srcRightIndex) //í˜„ìž¬ ìš”ì†Œê°€ 3ê°œì¸ ê²½ìš°
 	{
 		/***
-			< Äü Á¤·Ä (3°³ÀÇ ¿ä¼Ò¿¡ ´ëÇÑ ´ëÃ¼ Á¤·Ä Ã³¸®) - ¿À¸§Â÷¼ø >
+			< í€µ ì •ë ¬ (3ê°œì˜ ìš”ì†Œì— ëŒ€í•œ ëŒ€ì²´ ì •ë ¬ ì²˜ë¦¬) - ì˜¤ë¦„ì°¨ìˆœ >
 
-			1) °¢ ¿ä¼Òµé °£ ºñ±³ ¹× SWAP (Á¤·Ä ¹æÇâ¿¡ µû¶ó Áß¾Ó°ª ¼±ÅÃ À§ÇÑ ºñ±³ Á¶°Ç º¯µ¿)
+			1) ê° ìš”ì†Œë“¤ ê°„ ë¹„êµ ë° SWAP (ì •ë ¬ ë°©í–¥ì— ë”°ë¼ ì¤‘ì•™ê°’ ì„ íƒ ìœ„í•œ ë¹„êµ ì¡°ê±´ ë³€ë™)
 
-			2) ¿ÞÂÊ ÀÎµ¦½º ¿ä¼Ò¿Í °¡¿îµ¥ ÀÎµ¦½º ¿ä¼Ò ºñ±³
+			2) ì™¼ìª½ ì¸ë±ìŠ¤ ìš”ì†Œì™€ ê°€ìš´ë° ì¸ë±ìŠ¤ ìš”ì†Œ ë¹„êµ
 
-				2-1) ¿ÞÂÊ ÀÎµ¦½º ¿ä¼Ò > °¡¿îµ¥ ÀÎµ¦½º ¿ä¼Ò
-				: °¡¿îµ¥ ÀÎµ¦½º ¿ä¼Ò¿Í ¿ÞÂÊ ÀÎµ¦½º ¿ä¼Ò SWAP (°¡¿îµ¥ ÀÎµ¦½ºÀÇ ¿ä¼Ò°¡ ¿ÞÂÊ ÀÎµ¦½ºÀÇ ¿ä¼ÒÀÇ ¿ÞÂÊ¿¡ À§Ä¡ÇÏ´Â °ÍÀÌ ¿Ã¹Ù¸¥ Á¤·Ä µÈ À§Ä¡)
+				2-1) ì™¼ìª½ ì¸ë±ìŠ¤ ìš”ì†Œ > ê°€ìš´ë° ì¸ë±ìŠ¤ ìš”ì†Œ
+				: ê°€ìš´ë° ì¸ë±ìŠ¤ ìš”ì†Œì™€ ì™¼ìª½ ì¸ë±ìŠ¤ ìš”ì†Œ SWAP (ê°€ìš´ë° ì¸ë±ìŠ¤ì˜ ìš”ì†Œê°€ ì™¼ìª½ ì¸ë±ìŠ¤ì˜ ìš”ì†Œì˜ ì™¼ìª½ì— ìœ„ì¹˜í•˜ëŠ” ê²ƒì´ ì˜¬ë°”ë¥¸ ì •ë ¬ ëœ ìœ„ì¹˜)
 
-				2-2) ¿ÞÂÊ ÀÎµ¦½º ¿ä¼Ò <= °¡¿îµ¥ ÀÎµ¦½º ¿ä¼Ò
+				2-2) ì™¼ìª½ ì¸ë±ìŠ¤ ìš”ì†Œ <= ê°€ìš´ë° ì¸ë±ìŠ¤ ìš”ì†Œ
 				: do nothing
 
-			3) ¿ÞÂÊ ÀÎµ¦½º ¿ä¼Ò¿Í ¿À¸¥ÂÊ ÀÎµ¦½º ¿ä¼Ò ºñ±³
+			3) ì™¼ìª½ ì¸ë±ìŠ¤ ìš”ì†Œì™€ ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤ ìš”ì†Œ ë¹„êµ
 
-				3-1) ¿ÞÂÊ ÀÎµ¦½º ¿ä¼Ò > ¿À¸¥ÂÊ ÀÎµ¦½º ¿ä¼Ò
-				: ¿ÞÂÊ ÀÎµ¦½º ¿ä¼Ò¿Í ¿À¸¥ÂÊ ÀÎµ¦½º ¿ä¼Ò SWAP (¿À¸¥ÂÊ ÀÎµ¦½ºÀÇ ¿ä¼Ò°¡ ¿ÞÂÊ ÀÎµ¦½ºÀÇ ¿ä¼ÒÀÇ ¿ÞÂÊ¿¡ À§Ä¡ÇÏ´Â °ÍÀÌ ¿Ã¹Ù¸¥ Á¤·Ä µÈ À§Ä¡)
+				3-1) ì™¼ìª½ ì¸ë±ìŠ¤ ìš”ì†Œ > ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤ ìš”ì†Œ
+				: ì™¼ìª½ ì¸ë±ìŠ¤ ìš”ì†Œì™€ ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤ ìš”ì†Œ SWAP (ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤ì˜ ìš”ì†Œê°€ ì™¼ìª½ ì¸ë±ìŠ¤ì˜ ìš”ì†Œì˜ ì™¼ìª½ì— ìœ„ì¹˜í•˜ëŠ” ê²ƒì´ ì˜¬ë°”ë¥¸ ì •ë ¬ ëœ ìœ„ì¹˜)
 
-				3-2) ¿ÞÂÊ ÀÎµ¦½º ¿ä¼Ò <= ¿À¸¥ÂÊ ÀÎµ¦½º ¿ä¼Ò
+				3-2) ì™¼ìª½ ì¸ë±ìŠ¤ ìš”ì†Œ <= ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤ ìš”ì†Œ
 				: do nothing
 
-			4) °¡¿îµ¥ ÀÎµ¦½º ¿ä¼Ò¿Í ¿À¸¥ÂÊ ÀÎµ¦½º ¿ä¼Ò ºñ±³
+			4) ê°€ìš´ë° ì¸ë±ìŠ¤ ìš”ì†Œì™€ ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤ ìš”ì†Œ ë¹„êµ
 
-				4-1) °¡¿îµ¥ ÀÎµ¦½º ¿ä¼Ò > ¿À¸¥ÂÊ ÀÎµ¦½º ¿ä¼Ò
-				: ¿À¸¥ÂÊ ¿ä¼Ò¿Í °¡¿îµ¥ ÀÎµ¦½º ¿ä¼Ò SWAP (¿À¸¥ÂÊ ÀÎµ¦½ºÀÇ ¿ä¼Ò°¡ °¡¿îµ¥ ÀÎµ¦½º ¿ä¼ÒÀÇ ¿ÞÂÊ¿¡ À§Ä¡ÇÏ´Â °ÍÀÌ ¿Ã¹Ù¸¥ Á¤·Ä µÈ À§Ä¡)
+				4-1) ê°€ìš´ë° ì¸ë±ìŠ¤ ìš”ì†Œ > ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤ ìš”ì†Œ
+				: ì˜¤ë¥¸ìª½ ìš”ì†Œì™€ ê°€ìš´ë° ì¸ë±ìŠ¤ ìš”ì†Œ SWAP (ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤ì˜ ìš”ì†Œê°€ ê°€ìš´ë° ì¸ë±ìŠ¤ ìš”ì†Œì˜ ì™¼ìª½ì— ìœ„ì¹˜í•˜ëŠ” ê²ƒì´ ì˜¬ë°”ë¥¸ ì •ë ¬ ëœ ìœ„ì¹˜)
 
-				4-2) °¡¿îµ¥ ÀÎµ¦½º ¿ä¼Ò <= ¿À¸¥ÂÊ ÀÎµ¦½º ¿ä¼Ò
+				4-2) ê°€ìš´ë° ì¸ë±ìŠ¤ ìš”ì†Œ <= ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤ ìš”ì†Œ
 				: do nothing
 
-			5) ÇöÀç ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕ³»ÀÇ ¸ðµç ¿ä¼ÒµéÀº Á¤·ÄµÇ¾úÀ¸¹Ç·Î, °¡¿îµ¥ ÀÎµ¦½º ¹ÝÈ¯
+			5) í˜„ìž¬ ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ë‚´ì˜ ëª¨ë“  ìš”ì†Œë“¤ì€ ì •ë ¬ë˜ì—ˆìœ¼ë¯€ë¡œ, ê°€ìš´ë° ì¸ë±ìŠ¤ ë°˜í™˜
 
 			---
 
-			ex) 3 1 2 ÀÇ ¿ä¼Ò¿¡ ´ëÇØ, ¿À¸§Â÷¼øÀ¸·Î ±âÁ¸ Á¤·Ä Ã³¸® ·çÆ¾À» ¼öÇà ÇÒ °æ¿ì,
+			ex) 3 1 2 ì˜ ìš”ì†Œì— ëŒ€í•´, ì˜¤ë¦„ì°¨ìˆœìœ¼ë¡œ ê¸°ì¡´ ì •ë ¬ ì²˜ë¦¬ ë£¨í‹´ì„ ìˆ˜í–‰ í•  ê²½ìš°,
 
-			- 2¹øÀÇ ºñ±³ ¹ß»ý
-			- 2¹øÀÇ Á¦ÀÚ¸® SWAP ºô»ý
-			- ±âÁØ (pivot)ÀÇ Á¤·Ä µÈ À§Ä¡·Î º¯°æÀ» À§ÇÑ 1¹øÀÇ SWAP ¹ß»ý (Á¤·Ä µÈ ¼ø¼­´Â 1 2 3)
+			- 2ë²ˆì˜ ë¹„êµ ë°œìƒ
+			- 2ë²ˆì˜ ì œìžë¦¬ SWAP ë¹Œìƒ
+			- ê¸°ì¤€ (pivot)ì˜ ì •ë ¬ ëœ ìœ„ì¹˜ë¡œ ë³€ê²½ì„ ìœ„í•œ 1ë²ˆì˜ SWAP ë°œìƒ (ì •ë ¬ ëœ ìˆœì„œëŠ” 1 2 3)
 
-			±âÁØ (pivot) 3À» ±âÁØÀ¸·Î ´Ù½Ã ¿ÞÂÊ¿¡ ´ëÇØ ºÐÇÒÇÏ¿©, 1 2 ¿¡ ´ëÇØ ´Ù½Ã Á¤·ÄÀ» ¼öÇà
-			1 2 ¿¡ ´ëÇØ ´Ù½Ã ¿À¸§Â÷¼øÀ¸·Î ±âÁ¸ Á¤·Ä Ã³¸® ·çÆ¾À» ¼öÇà ÇÒ °æ¿ì,
+			ê¸°ì¤€ (pivot) 3ì„ ê¸°ì¤€ìœ¼ë¡œ ë‹¤ì‹œ ì™¼ìª½ì— ëŒ€í•´ ë¶„í• í•˜ì—¬, 1 2 ì— ëŒ€í•´ ë‹¤ì‹œ ì •ë ¬ì„ ìˆ˜í–‰
+			1 2 ì— ëŒ€í•´ ë‹¤ì‹œ ì˜¤ë¦„ì°¨ìˆœìœ¼ë¡œ ê¸°ì¡´ ì •ë ¬ ì²˜ë¦¬ ë£¨í‹´ì„ ìˆ˜í–‰ í•  ê²½ìš°,
 
-			- 1¹øÀÇ ºñ±³ ¹ß»ý
-			- 1¹øÀÇ Á¦ÀÚ¸® SWAP ¹ß»ý
+			- 1ë²ˆì˜ ë¹„êµ ë°œìƒ
+			- 1ë²ˆì˜ ì œìžë¦¬ SWAP ë°œìƒ
 
-			ÃÖÁ¾ÀûÀ¸·Î, ÃÑ 3¹øÀÇ ºñ±³ ¿¬»ê, 4¹øÀÇ SWAP ¿¬»ê ¼öÇà
-			ÀÌ¿Í ºñ±³ÇÏ¿©, 3 1 2 ÀÇ ¿ä¼Ò¿¡ ´ëÇØ 3°³ÀÇ ¿ä¼Ò¿¡ ´ëÇÑ ´ëÃ¼ Á¤·Ä Ã³¸® ·çÆ¾À» ¼öÇà ÇÒ °æ¿ì,
+			ìµœì¢…ì ìœ¼ë¡œ, ì´ 3ë²ˆì˜ ë¹„êµ ì—°ì‚°, 4ë²ˆì˜ SWAP ì—°ì‚° ìˆ˜í–‰
+			ì´ì™€ ë¹„êµí•˜ì—¬, 3 1 2 ì˜ ìš”ì†Œì— ëŒ€í•´ 3ê°œì˜ ìš”ì†Œì— ëŒ€í•œ ëŒ€ì²´ ì •ë ¬ ì²˜ë¦¬ ë£¨í‹´ì„ ìˆ˜í–‰ í•  ê²½ìš°,
 
-			- 3¹øÀÇ ºñ±³ ¹ß»ý
-			- 2¹øÀÇ SWAP ¹ß»ý
+			- 3ë²ˆì˜ ë¹„êµ ë°œìƒ
+			- 2ë²ˆì˜ SWAP ë°œìƒ
 
-			ÃÖ¾ÇÀÇ °æ¿ì (Á¤·ÄÇÏ°íÀÚ ÇÏ´Â ¹æ¹ý°ú ¿ª¼øÀ¸·Î Á¤·Ä µÈ »óÈ²)¿¡ 3¹øÀÇ ºñ±³, 3¹øÀÇ SWAP ¿¬»ê ¹ß»ý
+			ìµœì•…ì˜ ê²½ìš° (ì •ë ¬í•˜ê³ ìž í•˜ëŠ” ë°©ë²•ê³¼ ì—­ìˆœìœ¼ë¡œ ì •ë ¬ ëœ ìƒí™©)ì— 3ë²ˆì˜ ë¹„êµ, 3ë²ˆì˜ SWAP ì—°ì‚° ë°œìƒ
 		***/
 
 		switch (orderBy)
@@ -487,79 +487,79 @@ size_t PartitioningProc(SortElementType targetEnumerableSet[],
 		return midIndex;
 	}
 
-	goto SELECT_MEDIAN_PIVOT_PROC; //ÇöÀç ¿ä¼Ò°¡ 3°³ ÃÊ°úÀÏ °æ¿ì Áß¾Ó°ªÀ¸·Î ±âÁØ (pivot) ¼±ÅÃ Ã³¸® ·çÆ¾
+	goto SELECT_MEDIAN_PIVOT_PROC; //í˜„ìž¬ ìš”ì†Œê°€ 3ê°œ ì´ˆê³¼ì¼ ê²½ìš° ì¤‘ì•™ê°’ìœ¼ë¡œ ê¸°ì¤€ (pivot) ì„ íƒ ì²˜ë¦¬ ë£¨í‹´
 
-SELECT_MEDIAN_PIVOT_PROC: //Áß¾Ó°ªÀ¸·Î ±âÁØ (pivot) ¼±ÅÃ Ã³¸® ·çÆ¾
+SELECT_MEDIAN_PIVOT_PROC: //ì¤‘ì•™ê°’ìœ¼ë¡œ ê¸°ì¤€ (pivot) ì„ íƒ ì²˜ë¦¬ ë£¨í‹´
 	/***
-		< Äü Á¤·Ä (Áß¾Ó°ª ¼±ÅÃ) - ¿À¸§Â÷¼ø >
+		< í€µ ì •ë ¬ (ì¤‘ì•™ê°’ ì„ íƒ) - ì˜¤ë¦„ì°¨ìˆœ >
 
-		1) ÀÌÇÏ, ¹æ¹ý¿¡ µû¶ó Áß¾Ó°ª ¼±Á¤ ¹× ±âÁØ (pivot)À¸·Î »ç¿ëÇÏ±â À§ÇØ ¸Ç ¿ÞÂÊÀ¸·Î ÀÌµ¿
+		1) ì´í•˜, ë°©ë²•ì— ë”°ë¼ ì¤‘ì•™ê°’ ì„ ì • ë° ê¸°ì¤€ (pivot)ìœ¼ë¡œ ì‚¬ìš©í•˜ê¸° ìœ„í•´ ë§¨ ì™¼ìª½ìœ¼ë¡œ ì´ë™
 
-		2) ¿ÞÂÊ ÀÎµ¦½º ¿ä¼Ò, °¡¿îµ¥ ÀÎµ¦½º ¿ä¼Ò, ¿À¸¥ÂÊ ÀÎµ¦½º ¿ä¼Ò¿¡ ´ëÇØ, Áß¾Ó°ªÀÎ ÀÎµ¦½º ¿ä¼Ò Å½»ö
-		: 4¹øÀÇ ºñ±³ ¹ß»ý
+		2) ì™¼ìª½ ì¸ë±ìŠ¤ ìš”ì†Œ, ê°€ìš´ë° ì¸ë±ìŠ¤ ìš”ì†Œ, ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤ ìš”ì†Œì— ëŒ€í•´, ì¤‘ì•™ê°’ì¸ ì¸ë±ìŠ¤ ìš”ì†Œ íƒìƒ‰
+		: 4ë²ˆì˜ ë¹„êµ ë°œìƒ
 
-			2-1) ¿ÞÂÊ ÀÎµ¦½º ¿ä¼Ò, °¡¿îµ¥ ÀÎµ¦½º ¿ä¼Ò Áß ÃÖ¼Ò °ª = a
+			2-1) ì™¼ìª½ ì¸ë±ìŠ¤ ìš”ì†Œ, ê°€ìš´ë° ì¸ë±ìŠ¤ ìš”ì†Œ ì¤‘ ìµœì†Œ ê°’ = a
 
-			2-2) ¿ÞÂÊ ÀÎµ¦½º ¿ä¼Ò, °¡¿îµ¥ ÀÎµ¦½º ¿ä¼Ò Áß ÃÖ´ë °ª = b
+			2-2) ì™¼ìª½ ì¸ë±ìŠ¤ ìš”ì†Œ, ê°€ìš´ë° ì¸ë±ìŠ¤ ìš”ì†Œ ì¤‘ ìµœëŒ€ ê°’ = b
 
-			2-3) b ¿Í ¿À¸¥ÂÊ ÀÎµ¦½º ¿ä¼Ò Áß ÃÖ¼Ò°ª = c
+			2-3) b ì™€ ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤ ìš”ì†Œ ì¤‘ ìµœì†Œê°’ = c
 
-			2-4) a ¿Í c ÁßÀÇ ÃÖ´ë °ª = Áß¾Ó°ª
+			2-4) a ì™€ c ì¤‘ì˜ ìµœëŒ€ ê°’ = ì¤‘ì•™ê°’
 
-		3) ÇØ´ç Áß¾Ó°ª ÀÎµ¦½º°¡ ¿ÞÂÊ ÀÎµ¦½º°¡ ¾Æ´Ò °æ¿ì ¿ÞÂÊ ÀÎµ¦½ºÀÇ ¿ä¼Ò¿Í ÇØ´ç Áß¾Ó°ª ÀÎµ¦½ºÀÇ ¿ä¼Ò SWAP
+		3) í•´ë‹¹ ì¤‘ì•™ê°’ ì¸ë±ìŠ¤ê°€ ì™¼ìª½ ì¸ë±ìŠ¤ê°€ ì•„ë‹ ê²½ìš° ì™¼ìª½ ì¸ë±ìŠ¤ì˜ ìš”ì†Œì™€ í•´ë‹¹ ì¤‘ì•™ê°’ ì¸ë±ìŠ¤ì˜ ìš”ì†Œ SWAP
 
-		4) Áß¾Ó°ª ÀÎµ¦½ºÀÇ ¿ä¼Ò°¡ ¸Ç ¿ÞÂÊÀ¸·Î ÀÌµ¿µÇ¾úÀ¸¸ç, ÀÌ¸¦ ±âÁØ (pivot)À¸·Î ÀÌ¿ëÇÏ¿© Á¤·Ä ¼öÇà
+		4) ì¤‘ì•™ê°’ ì¸ë±ìŠ¤ì˜ ìš”ì†Œê°€ ë§¨ ì™¼ìª½ìœ¼ë¡œ ì´ë™ë˜ì—ˆìœ¼ë©°, ì´ë¥¼ ê¸°ì¤€ (pivot)ìœ¼ë¡œ ì´ìš©í•˜ì—¬ ì •ë ¬ ìˆ˜í–‰
 
 		---
 
-		ÇØ´ç Áß¾Ó°ªÀÌ ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕ ³»¿¡¼­ ¿ÏÀüÇÑ Áß¾Ó°ªÀÌ¶ó°í º¸Àå ÇÒ ¼ö ¾øÁö¸¸,
-		ÀÌ¹Ì Á¤·Ä µÈ ¿ä¼Òµé¿¡ ´ëÇØ Ã¹ ¹øÂ° È¤Àº ¸¶Áö¸· ¿ä¼Ò¸¦ ±âÁØ (pivot)À¸·Î ¼±Á¤ µÈ »óÈ²¿¡¼­ Á¤·ÄÀ» ½Ãµµ ÇÒ °æ¿ì ¹ß»ýÇÏ´Â
-		°¢ ºÐÇÒ¸¶´Ù ÇÏ³ªÀÇ ¿ä¼Ò¿Í ÇØ´ç ¿ä¼Ò¸¦ Á¦¿ÜÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕ (1 : n-1) À¸·Î ºÐ¸®µÇ´Â Worst Case ¸¦ È¸ÇÇ
+		í•´ë‹¹ ì¤‘ì•™ê°’ì´ ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•© ë‚´ì—ì„œ ì™„ì „í•œ ì¤‘ì•™ê°’ì´ë¼ê³  ë³´ìž¥ í•  ìˆ˜ ì—†ì§€ë§Œ,
+		ì´ë¯¸ ì •ë ¬ ëœ ìš”ì†Œë“¤ì— ëŒ€í•´ ì²« ë²ˆì§¸ í˜¹ì€ ë§ˆì§€ë§‰ ìš”ì†Œë¥¼ ê¸°ì¤€ (pivot)ìœ¼ë¡œ ì„ ì • ëœ ìƒí™©ì—ì„œ ì •ë ¬ì„ ì‹œë„ í•  ê²½ìš° ë°œìƒí•˜ëŠ”
+		ê° ë¶„í• ë§ˆë‹¤ í•˜ë‚˜ì˜ ìš”ì†Œì™€ í•´ë‹¹ ìš”ì†Œë¥¼ ì œì™¸í•œ ìš”ì†Œë“¤ì˜ ì§‘í•© (1 : n-1) ìœ¼ë¡œ ë¶„ë¦¬ë˜ëŠ” Worst Case ë¥¼ íšŒí”¼
 	***/
 
-	medianIndex = MEDIAN_ARRAY_ELEMENT_INDEX(targetEnumerableSet, srcLeftIndex, midIndex, srcRightIndex);
+	medianIndex = MEDIAN_ELEMENT_INDEX(targetEnumerableSet, srcLeftIndex, midIndex, srcRightIndex);
 
-	if (medianIndex != srcLeftIndex) //ÇØ´ç Áß¾Ó°ªÀÌ ¿ÞÂÊ ÀÎµ¦½º°¡ ¾Æ´Ò °æ¿ì
+	if (medianIndex != srcLeftIndex) //í•´ë‹¹ ì¤‘ì•™ê°’ì´ ì™¼ìª½ ì¸ë±ìŠ¤ê°€ ì•„ë‹ ê²½ìš°
 		SWAP(targetEnumerableSet[srcLeftIndex], targetEnumerableSet[medianIndex], tmp);
 
 	goto SORT_PROC;
 
-SORT_PROC: //Á¤·Ä Ã³¸® ·çÆ¾
+SORT_PROC: //ì •ë ¬ ì²˜ë¦¬ ë£¨í‹´
 	/***
-		< Äü Á¤·Ä - ¿À¸§Â÷¼ø >
+		< í€µ ì •ë ¬ - ì˜¤ë¦„ì°¨ìˆœ >
 
-		! SWAP ¸ÅÅ©·Î Ä¡È¯ ½Ã¿¡ SWAP ´ë»ó ÀÎµ¦½º¸¦ º¯°æÇÏÁö ¾Ê°í, ÀÌÀü¿¡ ¸ÕÀú º¯°æ ÇÒ °Í
+		! SWAP ë§¤í¬ë¡œ ì¹˜í™˜ ì‹œì— SWAP ëŒ€ìƒ ì¸ë±ìŠ¤ë¥¼ ë³€ê²½í•˜ì§€ ì•Šê³ , ì´ì „ì— ë¨¼ì € ë³€ê²½ í•  ê²ƒ
 
-		1) ÀûÀýÇÑ ¹æ¹ý¿¡ µû¶ó ±âÁØ (pivot) ¼±Á¤
-		: Áß¾Ó°ª ¼±Á¤ µî¿¡ ÀÇÇØ ÇÊ¿ä ÇÒ °æ¿ì ±âÁØ (pivot)ÀÇ À§Ä¡ SWAP ÇÏ¿© ¸Ç ¿ÞÂÊÀ¸·Î º¯°æÇÒ °Í
+		1) ì ì ˆí•œ ë°©ë²•ì— ë”°ë¼ ê¸°ì¤€ (pivot) ì„ ì •
+		: ì¤‘ì•™ê°’ ì„ ì • ë“±ì— ì˜í•´ í•„ìš” í•  ê²½ìš° ê¸°ì¤€ (pivot)ì˜ ìœ„ì¹˜ SWAP í•˜ì—¬ ë§¨ ì™¼ìª½ìœ¼ë¡œ ë³€ê²½í•  ê²ƒ
 
-			1-1) ÃÖÃÊ ±âÁØ (pivot)ÀÇ ÃÖÁ¾ Á¤·Ä µÈ À§Ä¡¸¦ ±âÁØ (pivot)À¸·Î ÇÒ´ç
+			1-1) ìµœì´ˆ ê¸°ì¤€ (pivot)ì˜ ìµœì¢… ì •ë ¬ ëœ ìœ„ì¹˜ë¥¼ ê¸°ì¤€ (pivot)ìœ¼ë¡œ í• ë‹¹
 
-		2) ±âÁØ (pivot)ÀÌ µÇ´Â ¿ä¼Ò¸¦ Á¦¿ÜÇÑ ³ª¸ÓÁö ¿ä¼Òµé¿¡ ´ëÇØ ¿ÞÂÊ ÀÎµ¦½º¿Í ¿À¸¥ÂÊ ÀÎµ¦½º°¡ ÃÖÃÊ ±³Â÷µÇ´Â ½ÃÁ¡±îÁö ÀÌÇÏ, ¹Ýº¹
+		2) ê¸°ì¤€ (pivot)ì´ ë˜ëŠ” ìš”ì†Œë¥¼ ì œì™¸í•œ ë‚˜ë¨¸ì§€ ìš”ì†Œë“¤ì— ëŒ€í•´ ì™¼ìª½ ì¸ë±ìŠ¤ì™€ ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤ê°€ ìµœì´ˆ êµì°¨ë˜ëŠ” ì‹œì ê¹Œì§€ ì´í•˜, ë°˜ë³µ
 
-		3) ÇöÀç ¿ÞÂÊ ÀÎµ¦½ºÀÇ ¿ä¼Ò¿Í ±âÁØ (pivot)ÀÌ µÇ´Â ¿ä¼Ò ºñ±³ (Á¤·Ä ¹æÇâ¿¡ µû¶ó ºñ±³ Á¶°Ç º¯µ¿)
+		3) í˜„ìž¬ ì™¼ìª½ ì¸ë±ìŠ¤ì˜ ìš”ì†Œì™€ ê¸°ì¤€ (pivot)ì´ ë˜ëŠ” ìš”ì†Œ ë¹„êµ (ì •ë ¬ ë°©í–¥ì— ë”°ë¼ ë¹„êµ ì¡°ê±´ ë³€ë™)
 
-			3-1) ÇöÀç ¿ÞÂÊ ÀÎµ¦½ºÀÇ ¿ä¼Ò°¡ ±âÁØ (pivot)º¸´Ù ÀÛÀ» °æ¿ì
-			: ÇöÀç ¿ÞÂÊ ÀÎµ¦½ºÀÇ ¿ä¼Ò´Â ±âÁØ (pivot)ÀÌ µÇ´Â ¿ä¼ÒÀÇ ¿ÞÂÊÀ¸·Î ÀÌµ¿ÇØ¾ß ÇÔ
+			3-1) í˜„ìž¬ ì™¼ìª½ ì¸ë±ìŠ¤ì˜ ìš”ì†Œê°€ ê¸°ì¤€ (pivot)ë³´ë‹¤ ìž‘ì„ ê²½ìš°
+			: í˜„ìž¬ ì™¼ìª½ ì¸ë±ìŠ¤ì˜ ìš”ì†ŒëŠ” ê¸°ì¤€ (pivot)ì´ ë˜ëŠ” ìš”ì†Œì˜ ì™¼ìª½ìœ¼ë¡œ ì´ë™í•´ì•¼ í•¨
 
-				3-1-1) ±âÁØ (pivot)ÀÇ ÃÖÁ¾ Á¤·Ä µÈ À§Ä¡ Áõ°¡
+				3-1-1) ê¸°ì¤€ (pivot)ì˜ ìµœì¢… ì •ë ¬ ëœ ìœ„ì¹˜ ì¦ê°€
 
-				3-1-2) ÇöÀç ¿ÞÂÊ ÀÎµ¦½ºÀÇ ¿ä¼Ò¿Í ±âÁØ (pivot)ÀÇ ÃÖÁ¾ Á¤·Ä µÈ À§Ä¡ÀÇ ¿ä¼Ò SWAP
-				: ÀÌ¿¡ µû¶ó, ÇöÀç ±âÁØ (pivot)ÀÇ ÃÖÁ¾ Á¤·Ä µÈ À§Ä¡ÀÇ ÀÎµ¦½ºÀÇ ¿ä¼ÒÀÇ ¿ÞÂÊÀº Ç×»ó ±âÁØ (pivot)º¸´Ù ÀÛÀº ¿ä¼Ò¸¸ Á¸Àç
+				3-1-2) í˜„ìž¬ ì™¼ìª½ ì¸ë±ìŠ¤ì˜ ìš”ì†Œì™€ ê¸°ì¤€ (pivot)ì˜ ìµœì¢… ì •ë ¬ ëœ ìœ„ì¹˜ì˜ ìš”ì†Œ SWAP
+				: ì´ì— ë”°ë¼, í˜„ìž¬ ê¸°ì¤€ (pivot)ì˜ ìµœì¢… ì •ë ¬ ëœ ìœ„ì¹˜ì˜ ì¸ë±ìŠ¤ì˜ ìš”ì†Œì˜ ì™¼ìª½ì€ í•­ìƒ ê¸°ì¤€ (pivot)ë³´ë‹¤ ìž‘ì€ ìš”ì†Œë§Œ ì¡´ìž¬
 
-			3-2) ÇöÀç ¿ÞÂÊ ÀÎµ¦½ºÀÇ ¿ä¼Ò°¡ ±âÁØ (pivot)º¸´Ù Å©°Å³ª °°À» °æ¿ì
+			3-2) í˜„ìž¬ ì™¼ìª½ ì¸ë±ìŠ¤ì˜ ìš”ì†Œê°€ ê¸°ì¤€ (pivot)ë³´ë‹¤ í¬ê±°ë‚˜ ê°™ì„ ê²½ìš°
 			: do nothing
 
-		4) ¿ÞÂÊ ÀÎµ¦½º¿Í ¿À¸¥ÂÊ ÀÎµ¦½º°¡ ÃÖÃÊ ±³Â÷µÇ´Â ½ÃÁ¡¿¡ ´ëÇØ,
-		: ÇöÀç ±âÁØ (pivot)ÀÇ ÃÖÁ¾ Á¤·Ä µÈ À§Ä¡ÀÇ ÀÎµ¦½ºÀÇ ¿ä¼ÒÀÇ ¿ÞÂÊÀº Ç×»ó ±âÁØ (pivot)º¸´Ù ÀÛÀº ¿ä¼Ò¸¸ Á¸Àç
+		4) ì™¼ìª½ ì¸ë±ìŠ¤ì™€ ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤ê°€ ìµœì´ˆ êµì°¨ë˜ëŠ” ì‹œì ì— ëŒ€í•´,
+		: í˜„ìž¬ ê¸°ì¤€ (pivot)ì˜ ìµœì¢… ì •ë ¬ ëœ ìœ„ì¹˜ì˜ ì¸ë±ìŠ¤ì˜ ìš”ì†Œì˜ ì™¼ìª½ì€ í•­ìƒ ê¸°ì¤€ (pivot)ë³´ë‹¤ ìž‘ì€ ìš”ì†Œë§Œ ì¡´ìž¬
 
-			4-1) ±âÁØ (pivot)°ú ÇöÀç ±âÁØ (pivot)ÀÇ ÃÖÁ¾ Á¤·Ä µÈ À§Ä¡ÀÇ ¿ä¼Ò SWAP
+			4-1) ê¸°ì¤€ (pivot)ê³¼ í˜„ìž¬ ê¸°ì¤€ (pivot)ì˜ ìµœì¢… ì •ë ¬ ëœ ìœ„ì¹˜ì˜ ìš”ì†Œ SWAP
 
-			4-2) ÇöÀç ±âÁØ (pivot)ÀÇ ÃÖÁ¾ Á¤·Ä µÈ À§Ä¡¸¦ ±âÁØÀ¸·Î ´Ù½Ã ºÐÇÒÇÏ±â À§ÇØ ÇöÀç ±âÁØ (pivot)ÀÇ ÃÖÁ¾ Á¤·Ä µÈ À§Ä¡ ¹ÝÈ¯
+			4-2) í˜„ìž¬ ê¸°ì¤€ (pivot)ì˜ ìµœì¢… ì •ë ¬ ëœ ìœ„ì¹˜ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ë‹¤ì‹œ ë¶„í• í•˜ê¸° ìœ„í•´ í˜„ìž¬ ê¸°ì¤€ (pivot)ì˜ ìµœì¢… ì •ë ¬ ëœ ìœ„ì¹˜ ë°˜í™˜
 	***/
 
-	pivotIndex = srcLeftIndex; //±âÁØ (pivot) ÀÎµ¦½º
-	orderedPivotIndex = pivotIndex; //±âÁØ (pivot)ÀÇ ÃÖÁ¾ Á¤·Ä µÈ À§Ä¡
+	pivotIndex = srcLeftIndex; //ê¸°ì¤€ (pivot) ì¸ë±ìŠ¤
+	orderedPivotIndex = pivotIndex; //ê¸°ì¤€ (pivot)ì˜ ìµœì¢… ì •ë ¬ ëœ ìœ„ì¹˜
 
 	for (srcLeftIndex += 1; srcLeftIndex <= srcRightIndex; srcLeftIndex++)
 	{
@@ -590,15 +590,15 @@ SORT_PROC: //Á¤·Ä Ã³¸® ·çÆ¾
 }
 
 /// <summary>
-/// Äü Á¤·Ä (Best Case : O(nlog2(n)), Worst Case : O(n^2), Average Case : O(nlog2(n)))
+/// í€µ ì •ë ¬ (Best Case : O(nlog2(n)), Worst Case : O(n^2), Average Case : O(nlog2(n)))
 /// </summary>
-/// <typeparam name="SortElementType">Á¤·Ä ¿ä¼Ò Å¸ÀÔ</typeparam>
-/// <param name="targetEnumerableSet">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕ</param>
-/// <param name="srcLeftIndex">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕÀÇ ¿ÞÂÊ ÀÎµ¦½º (ÃÖÃÊ 0)</param>
-/// <param name="srcRightIndex">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕÀÇ ¿À¸¥ÂÊ ÀÎµ¦½º (ÃÖÃÊ ¿ä¼ÒµéÀÇ °³¼ö - 1)</param>
-/// <param name="orderBy">Á¤·Ä ¹æÇâ</param>
-template<typename SortElementType>
-void QuickSort(SortElementType targetEnumerableSet[],
+/// <typeparam name="SORT_ELEMENT_TYPE">ì •ë ¬ ìš”ì†Œ íƒ€ìž…</typeparam>
+/// <param name="targetEnumerableSet">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©</param>
+/// <param name="srcLeftIndex">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ì™¼ìª½ ì¸ë±ìŠ¤ (ìµœì´ˆ 0)</param>
+/// <param name="srcRightIndex">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤ (ìµœì´ˆ ìš”ì†Œë“¤ì˜ ê°œìˆ˜ - 1)</param>
+/// <param name="orderBy">ì •ë ¬ ë°©í–¥</param>
+template<typename SORT_ELEMENT_TYPE>
+void QuickSort(SORT_ELEMENT_TYPE targetEnumerableSet[],
 	size_t srcLeftIndex, size_t srcRightIndex, ORDER_BY orderBy = ORDER_BY::ASCENDING)
 {
 #ifdef RECURSIVE_METHOD
@@ -606,29 +606,29 @@ void QuickSort(SortElementType targetEnumerableSet[],
 		return;
 
 	size_t orderedPivotIndex =
-		PartitioningProc<SortElementType>(targetEnumerableSet, srcLeftIndex, srcRightIndex, orderBy); //Á¤·Ä µÈ ±âÁØ (pivot)ÀÇ ÀÎµ¦½º
+		PartitioningProc<SORT_ELEMENT_TYPE>(targetEnumerableSet, srcLeftIndex, srcRightIndex, orderBy); //ì •ë ¬ ëœ ê¸°ì¤€ (pivot)ì˜ ì¸ë±ìŠ¤
 
-	if (orderedPivotIndex > 0) //underflow ¹æÁö
-		QuickSort<SortElementType>(targetEnumerableSet,
-			srcLeftIndex, orderedPivotIndex - 1, orderBy); //Á¤·Ä µÈ ±âÁØ (pivot)ÀÇ ¿ÞÂÊ¿¡ ´ëÇØ ´Ù½Ã ºÐÇÒ
+	if (orderedPivotIndex > 0) //underflow ë°©ì§€
+		QuickSort<SORT_ELEMENT_TYPE>(targetEnumerableSet,
+			srcLeftIndex, orderedPivotIndex - 1, orderBy); //ì •ë ¬ ëœ ê¸°ì¤€ (pivot)ì˜ ì™¼ìª½ì— ëŒ€í•´ ë‹¤ì‹œ ë¶„í• 
 
-	if (orderedPivotIndex < SIZE_MAX) //overflow ¹æÁö
-		QuickSort<SortElementType>(targetEnumerableSet,
-			orderedPivotIndex + 1, srcRightIndex, orderBy); //Á¤·Ä µÈ ±âÁØ (pivot)ÀÇ ¿À¸¥ÂÊ¿¡ ´ëÇØ ´Ù½Ã ºÐÇÒ
+	if (orderedPivotIndex < SIZE_MAX) //overflow ë°©ì§€
+		QuickSort<SORT_ELEMENT_TYPE>(targetEnumerableSet,
+			orderedPivotIndex + 1, srcRightIndex, orderBy); //ì •ë ¬ ëœ ê¸°ì¤€ (pivot)ì˜ ì˜¤ë¥¸ìª½ì— ëŒ€í•´ ë‹¤ì‹œ ë¶„í• 
 
 #elif defined ITERATIVE_METHOD
 	/***
-		ÀÌÇÏ, ±¸Çö»çÇ×Àº RECURSIVE_METHODÀÇ ½ÇÇà ¼ø¼­¿Í µ¿ÀÏÇÏÁö ¾ÊÀ½
-		RECURSIVE_METHOD¿Í µ¿ÀÏ ÇÑ ½ÇÇà ¼ø¼­´Â LCRS Æ®¸®ÀÇ < RECURSIVE_METHODÀÇ Call Stack ±¸Çö > À» ÂüÁ¶ ÇÒ °Í
+		ì´í•˜, êµ¬í˜„ì‚¬í•­ì€ RECURSIVE_METHODì˜ ì‹¤í–‰ ìˆœì„œì™€ ë™ì¼í•˜ì§€ ì•ŠìŒ
+		RECURSIVE_METHODì™€ ë™ì¼ í•œ ì‹¤í–‰ ìˆœì„œëŠ” LCRS íŠ¸ë¦¬ì˜ < RECURSIVE_METHODì˜ Call Stack êµ¬í˜„ > ì„ ì°¸ì¡° í•  ê²ƒ
 	***/
 
 	if ((srcRightIndex - srcLeftIndex) == 0)
 		return;
 
-	size_t* stack = new size_t[(srcRightIndex - srcLeftIndex) + 1]; //ÀüÃ¼ ¿ä¼Ò °³¼ö¸¸Å­ÀÇ ½ºÅÃ
-	size_t top = 0; //½ºÅÃÀÇ ÃÖ»óÀ§ ¿ä¼Ò ÀÎµ¦½º
+	size_t* stack = new size_t[(srcRightIndex - srcLeftIndex) + 1]; //ì „ì²´ ìš”ì†Œ ê°œìˆ˜ë§Œí¼ì˜ ìŠ¤íƒ
+	size_t top = 0; //ìŠ¤íƒì˜ ìµœìƒìœ„ ìš”ì†Œ ì¸ë±ìŠ¤
 	
-	//¿ÞÂÊ ÀÎµ¦½º, ¿À¸¥ÂÊ ÀÎµ¦½º ¼øÀ¸·Î push, ¿À¸¥ÂÊ ÀÎµ¦½º, ¿ÞÂÊ ÀÎµ¦½º ¼øÀ¸·Î pop
+	//ì™¼ìª½ ì¸ë±ìŠ¤, ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤ ìˆœìœ¼ë¡œ push, ì˜¤ë¥¸ìª½ ì¸ë±ìŠ¤, ì™¼ìª½ ì¸ë±ìŠ¤ ìˆœìœ¼ë¡œ pop
 	stack[top++] = srcLeftIndex;
 	stack[top++] = srcRightIndex;
 
@@ -638,17 +638,17 @@ void QuickSort(SortElementType targetEnumerableSet[],
 		srcLeftIndex = stack[--top];
 
 		size_t orderedPivotIndex =
-			PartitioningProc<SortElementType>(targetEnumerableSet, srcLeftIndex, srcRightIndex, orderBy); //Á¤·Ä µÈ ±âÁØ (pivot)ÀÇ ÀÎµ¦½º
+			PartitioningProc<SORT_ELEMENT_TYPE>(targetEnumerableSet, srcLeftIndex, srcRightIndex, orderBy); //ì •ë ¬ ëœ ê¸°ì¤€ (pivot)ì˜ ì¸ë±ìŠ¤
 
-		if (orderedPivotIndex > 0) //underflow ¹æÁö
-			if (orderedPivotIndex - 1 > srcLeftIndex) //Á¤·Ä µÈ ±âÁØ (pivot)ÀÇ ¿ÞÂÊ¿¡ ´ëÇØ ¿ä¼Ò°¡ Á¸Àç ÇÒ °æ¿ì ´Ù½Ã ºÐÇÒ
+		if (orderedPivotIndex > 0) //underflow ë°©ì§€
+			if (orderedPivotIndex - 1 > srcLeftIndex) //ì •ë ¬ ëœ ê¸°ì¤€ (pivot)ì˜ ì™¼ìª½ì— ëŒ€í•´ ìš”ì†Œê°€ ì¡´ìž¬ í•  ê²½ìš° ë‹¤ì‹œ ë¶„í• 
 			{
 				stack[top++] = srcLeftIndex;
 				stack[top++] = orderedPivotIndex - 1;
 			}
 
-		if (orderedPivotIndex < SIZE_MAX) //overflow ¹æÁö
-			if (orderedPivotIndex + 1 < srcRightIndex) //Á¤·Ä µÈ ±âÁØ (pivot)ÀÇ ¿À¸¥ÂÊ¿¡ ´ëÇØ ¿ä¼Ò°¡ Á¸Àç ÇÒ °æ¿ì ´Ù½Ã ºÐÇÒ
+		if (orderedPivotIndex < SIZE_MAX) //overflow ë°©ì§€
+			if (orderedPivotIndex + 1 < srcRightIndex) //ì •ë ¬ ëœ ê¸°ì¤€ (pivot)ì˜ ì˜¤ë¥¸ìª½ì— ëŒ€í•´ ìš”ì†Œê°€ ì¡´ìž¬ í•  ê²½ìš° ë‹¤ì‹œ ë¶„í• 
 			{
 				stack[top++] = orderedPivotIndex + 1;
 				stack[top++] = srcRightIndex;
@@ -660,34 +660,34 @@ void QuickSort(SortElementType targetEnumerableSet[],
 }
 
 /// <summary>
-/// Äü Á¤·Ä (Best Case : O(nlog2(n)), Worst Case : O(n^2), Average Case : O(nlog2(n)))
+/// í€µ ì •ë ¬ (Best Case : O(nlog2(n)), Worst Case : O(n^2), Average Case : O(nlog2(n)))
 /// </summary>
-/// <typeparam name="SortElementType">Á¤·Ä ¿ä¼Ò Å¸ÀÔ</typeparam>
-/// <param name="targetEnumerableSet">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕ</param>
-/// <param name="elementCount">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁýÇÕÀÇ ¿ä¼ÒµéÀÇ °³¼ö</param>
-/// <param name="orderBy">Á¤·Ä ¹æÇâ</param>
-template<typename SortElementType>
-void QuickSort(SortElementType targetEnumerableSet[],
+/// <typeparam name="SORT_ELEMENT_TYPE">ì •ë ¬ ìš”ì†Œ íƒ€ìž…</typeparam>
+/// <param name="targetEnumerableSet">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©</param>
+/// <param name="elementCount">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ìš”ì†Œë“¤ì˜ ê°œìˆ˜</param>
+/// <param name="orderBy">ì •ë ¬ ë°©í–¥</param>
+template<typename SORT_ELEMENT_TYPE>
+void QuickSort(SORT_ELEMENT_TYPE targetEnumerableSet[],
 	size_t elementCount, ORDER_BY orderBy = ORDER_BY::ASCENDING)
 {
 	if (elementCount <= 1)
 		return;
 
-	QuickSort<SortElementType>(targetEnumerableSet,
+	QuickSort<SORT_ELEMENT_TYPE>(targetEnumerableSet,
 		0, elementCount - 1, orderBy);
 }
 
 /// <summary>
-/// º´ÇÕ Á¤·Ä
+/// ë³‘í•© ì •ë ¬
 /// </summary>
-/// <typeparam name="SortElementType"></typeparam>
+/// <typeparam name="SORT_ELEMENT_TYPE"></typeparam>
 /// <param name="targetEnumerableSet"></param>
 /// <param name="elementCount"></param>
 /// <param name="orderBy"></param>
-template<typename SortElementType>
-void MergeSort(SortElementType targetEnumerableSet[],
+template<typename SORT_ELEMENT_TYPE>
+void MergeSort(SORT_ELEMENT_TYPE targetEnumerableSet[],
 	size_t elementCount, ORDER_BY orderBy = ORDER_BY::ASCENDING)
 {
-	//TODO : º´ÇÕ Á¤·Ä
+	//TODO : ë³‘í•© ì •ë ¬
 }
 #endif

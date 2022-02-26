@@ -24,7 +24,7 @@ int main()
 
 	try
 	{
-		LinkedListQueue* queue = NULL; //연결 리스트 큐
+		LINKED_LIST_QUEUE* queue = NULL; //연결 리스트 큐
 		LLQ_CreateQueue(&queue);
 
 		for (int i = 0; i < COUNT; i++)
@@ -43,7 +43,7 @@ int main()
 
 		while (!LLQ_IsEmpty(&queue))
 		{
-			Node* tmp = LLQ_Dequeue(&queue);
+			NODE* tmp = LLQ_Dequeue(&queue);
 
 			std::cout << "Dequeue data : " << tmp->_data;
 			if (queue->_front != NULL)

@@ -8,10 +8,10 @@
 /// <param name="srcList">대상 리스트</param>
 /// <param name="targetData">찾고자 하는 대상 데이터</param>
 /// <returns>대상 데이터가 포함 된 최초 노드</returns>
-Node* DLL_SequentialSearch_MTF(Node** srcList, const DataType& targetData)
+NODE* DLL_SequentialSearch_MTF(NODE** srcList, const DATA_TYPE& targetData)
 {
-	Node* currentNode = (*srcList); //현재 노드
-	Node* retVal = NULL; //찾은 노드
+	NODE* currentNode = (*srcList); //현재 노드
+	NODE* retVal = NULL; //찾은 노드
 
 	while (currentNode != NULL)
 	{
@@ -46,11 +46,11 @@ Node* DLL_SequentialSearch_MTF(Node** srcList, const DataType& targetData)
 /// <param name="srcList">대상 리스트</param>
 /// <param name="targetData">찾고자 하는 대상 데이터</param>
 /// <returns>대상 데이터가 포함 된 최초 노드</returns>
-Node* DLL_SequentialSearch_Transpose(Node** srcList, const DataType& targetData)
+NODE* DLL_SequentialSearch_Transpose(NODE** srcList, const DATA_TYPE& targetData)
 {
-	Node* currentNode = (*srcList); //현재 노드
-	Node* retVal = NULL; //찾은 노드
-	Node* insertTargetNode = NULL; //삽입 대상 노드
+	NODE* currentNode = (*srcList); //현재 노드
+	NODE* retVal = NULL; //찾은 노드
+	NODE* insertTargetNode = NULL; //삽입 대상 노드
 
 	while (currentNode != NULL)
 	{
@@ -84,16 +84,16 @@ Node* DLL_SequentialSearch_Transpose(Node** srcList, const DataType& targetData)
 /// <summary>
 /// 순차탐색 - 전진 이동법 (Move To Front) (Best Case : O(1), Average, Worst Case : O(n))
 /// </summary>
-/// <typeparam name="SearchElementType">검색 요소 타입</typeparam>
+/// <typeparam name="SEARCH_ELEMENT_TYPE">검색 요소 타입</typeparam>
 /// <param name="targetEnumerableSet">순차적으로 열거 가능 한 요소들의 집합</param>
 /// <param name="elementCount">순차적으로 열거 가능 한 요소들의 집합의 요소들의 개수</param>
 /// <param name="targetData">찾고자 하는 대상 데이터</param>
 /// <returns>찾고자 하는 대상 데이터와 일치하는 최초로 찾은 데이터</returns>
-template<typename SearchElementType>
-SearchElementType SequentialSearch_MTF(SearchElementType targetEnumerableSet[],
-	size_t elementCount, const SearchElementType& targetData)
+template<typename SEARCH_ELEMENT_TYPE>
+SEARCH_ELEMENT_TYPE SequentialSearch_MTF(SEARCH_ELEMENT_TYPE targetEnumerableSet[],
+	size_t elementCount, const SEARCH_ELEMENT_TYPE& targetData)
 {
-	SearchElementType tmp;
+	SEARCH_ELEMENT_TYPE tmp;
 
 	for (size_t i = 0; i < elementCount; i++)
 	{
@@ -118,16 +118,16 @@ SearchElementType SequentialSearch_MTF(SearchElementType targetEnumerableSet[],
 /// <summary>
 /// 순차탐색 - 전위법 (Transpose) (Best Case : O(1), Average, Worst Case : O(n))
 /// </summary>
-/// <typeparam name="SearchElementType">검색 요소 타입</typeparam>
+/// <typeparam name="SEARCH_ELEMENT_TYPE">검색 요소 타입</typeparam>
 /// <param name="targetEnumerableSet">순차적으로 열거 가능 한 요소들의 집합</param>
 /// <param name="elementCount">순차적으로 열거 가능 한 요소들의 집합의 요소들의 개수</param>
 /// <param name="targetData">찾고자 하는 대상 데이터</param>
 /// <returns>찾고자 하는 대상 데이터와 일치하는 최초로 찾은 데이터</returns>
-template<typename SearchElementType>
-SearchElementType SequentialSearch_Transpose(SearchElementType targetEnumerableSet[],
-	size_t elementCount, const SearchElementType& targetData)
+template<typename SEARCH_ELEMENT_TYPE>
+SEARCH_ELEMENT_TYPE SequentialSearch_Transpose(SEARCH_ELEMENT_TYPE targetEnumerableSet[],
+	size_t elementCount, const SEARCH_ELEMENT_TYPE& targetData)
 {
-	SearchElementType tmp;
+	SEARCH_ELEMENT_TYPE tmp;
 
 	for (size_t i = 0; i < elementCount; i++)
 	{
@@ -149,14 +149,14 @@ SearchElementType SequentialSearch_Transpose(SearchElementType targetEnumerableS
 /// <summary>
 /// 이진 탐색 (Best Case : O(1), Average, Worst Case : O(log2(n)))
 /// </summary>
-/// <typeparam name="SearchElementType">탐색 요소 타입</typeparam>
+/// <typeparam name="SEARCH_ELEMENT_TYPE">탐색 요소 타입</typeparam>
 /// <param name="srcOrderedEnumerableSet">이미 정렬 된 순차적으로 열거 가능 한 요소들의 집합</param>
 /// <param name="elementCount">이미 정렬 된 순차적으로 열거 가능 한 요소들의 집합의 요소들의 개수</param>
 /// <param name="targetData">찾고자 하는 대상 데이터</param>
 /// <returns>찾고자 하는 대상 데이터와 일치하는 최초로 찾은 데이터</returns>
-template<typename SearchElementType>
-SearchElementType BinarySearch(const SearchElementType srcOrderedEnumerableSet[],
-	size_t elementCount, SearchElementType targetData)
+template<typename SEARCH_ELEMENT_TYPE>
+SEARCH_ELEMENT_TYPE BinarySearch(const SEARCH_ELEMENT_TYPE srcOrderedEnumerableSet[],
+	size_t elementCount, SEARCH_ELEMENT_TYPE targetData)
 {
 	/***
 		< 이진 탐색의 정렬 방향 판별 >

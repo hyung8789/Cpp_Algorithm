@@ -9,11 +9,11 @@ int main()
 
 	try
 	{
-		Node* list = NULL; //노드 리스트
+		NODE* list = NULL; //노드 리스트
 
 		for (int i = 0; i < COUNT; i++)
 		{
-			Node* newNode = SLL_CreateNode(i); //생성
+			NODE* newNode = SLL_CreateNode(i); //생성
 			SLL_AppendNode(&list, newNode); //삽입
 		}
 

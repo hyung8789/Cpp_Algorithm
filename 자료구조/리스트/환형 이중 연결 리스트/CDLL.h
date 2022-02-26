@@ -1,31 +1,31 @@
 #ifndef _CDLL_H_
 #define _CDLL_H_
 
-typedef int DataType; //노드의 데이터 타입
-typedef int NodePositionType; //노드 위치 타입
+typedef int DATA_TYPE; //노드의 데이터 타입
+typedef int NODE_POSITION_TYPE; //노드 위치 타입
 
-typedef struct NodeType 
+typedef struct NODE_TYPE 
 {
-	DataType _data; //노드의 데이터
+	DATA_TYPE _data; //노드의 데이터
 
-	NodeType* _prev; //이전 노드
-	NodeType* _next; //다음 노드
-}Node;
+	NODE_TYPE* _prev; //이전 노드
+	NODE_TYPE* _next; //다음 노드
+}NODE;
 
-Node* CDLL_CreateNode(DataType);
-void CDLL_DeallocateNode(Node**);
-void CDLL_DeallocateNodeList(Node**);
+NODE* CDLL_CreateNode(DATA_TYPE);
+void CDLL_DeallocateNode(NODE**);
+void CDLL_DeallocateNodeList(NODE**);
 
-void CDLL_AppendNode(Node**, Node*);
-Node* CDLL_GetNodeAt(Node**, NodePositionType);
+void CDLL_AppendNode(NODE**, NODE*);
+NODE* CDLL_GetNodeAt(NODE**, NODE_POSITION_TYPE);
 
-void CDLL_RemoveNodeAt(Node**, NodePositionType, bool = true);
-void CDLL_RemoveNode(Node**, Node*, bool = true);
+void CDLL_RemoveNodeAt(NODE**, NODE_POSITION_TYPE, bool = true);
+void CDLL_RemoveNode(NODE**, NODE*, bool = true);
 
-void CDLL_InsertNewHead(Node**, Node*);
-void CDLL_InsertNodeAfter(Node*, Node*);
-void CDLL_InsertNodeBefore(Node**, Node*, Node*);
+void CDLL_InsertNewHead(NODE**, NODE*);
+void CDLL_InsertNodeAfter(NODE*, NODE*);
+void CDLL_InsertNodeBefore(NODE**, NODE*, NODE*);
 
-NodePositionType CDLL_GetTotalNodeCount(Node**);
-void CDLL_DispNodeList(Node**);
+NODE_POSITION_TYPE CDLL_GetTotalNodeCount(NODE**);
+void CDLL_DispNodeList(NODE**);
 #endif

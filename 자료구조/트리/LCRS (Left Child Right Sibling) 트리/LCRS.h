@@ -1,32 +1,32 @@
-#ifndef _LCRS_H_
+ï»¿#ifndef _LCRS_H_
 #define _LCRS_H_
 
-typedef char DataType; //³ëµåÀÇ µ¥ÀÌÅÍ Å¸ÀÔ
-typedef int TreeDepthType; //Æ®¸® ±íÀÌ Å¸ÀÔ
+typedef char DATA_TYPE; //ë…¸ë“œì˜ ë°ì´í„° íƒ€ì…
+typedef int TREE_DEPTH_TYPE; //íŠ¸ë¦¬ ê¹Šì´ íƒ€ì…
 
-typedef struct NodeType
+typedef struct NODE_TYPE
 {
-	DataType _data; //³ëµåÀÇ µ¥ÀÌÅÍ
+	DATA_TYPE _data; //ë…¸ë“œì˜ ë°ì´í„°
 
-	NodeType* _leftChild; //¿ŞÂÊ ÀÚ½Ä ³ëµå
-	NodeType* _rightSibling; //¿À¸¥ÂÊ ÇüÁ¦ ³ëµå
-}Node;
+	NODE_TYPE* _leftChild; //ì™¼ìª½ ìì‹ ë…¸ë“œ
+	NODE_TYPE* _rightSibling; //ì˜¤ë¥¸ìª½ í˜•ì œ ë…¸ë“œ
+}NODE;
 
-//#define RECURSIVE_METHOD //Àç±ÍÀû ¹æ¹ı (ÁÖ¼® Ã³¸® : ¹İº¹Àû ¹æ¹ı »ç¿ë)
+//#define RECURSIVE_METHOD //ì¬ê·€ì  ë°©ë²• (ì£¼ì„ ì²˜ë¦¬ : ë°˜ë³µì  ë°©ë²• ì‚¬ìš©)
 #ifndef RECURSIVE_METHOD 
-#define ITERATIVE_METHOD //¹İº¹Àû ¹æ¹ı
+#define ITERATIVE_METHOD //ë°˜ë³µì  ë°©ë²•
 
 #include <stack> // https://www.cplusplus.com/reference/stack/stack/
 #include <utility> // https://www.cplusplus.com/reference/utility/
 #include <tuple> // https://www.cplusplus.com/reference/tuple/
 #endif
 
-Node* LCRS_CreateNode(DataType);
-void LCRS_DeallocateNode(Node**);
-void LCRS_DeallocateTree(Node**);
+NODE* LCRS_CreateNode(DATA_TYPE);
+void LCRS_DeallocateNode(NODE**);
+void LCRS_DeallocateTree(NODE**);
 
-void LCRS_AppendNode(Node*, Node*);
+void LCRS_AppendNode(NODE*, NODE*);
 
-void LCRS_DispTreeNodesAt(Node*, TreeDepthType);
-void LCRS_DispTree(Node*, TreeDepthType = 0);
+void LCRS_DispTreeNodesAt(NODE*, TREE_DEPTH_TYPE);
+void LCRS_DispTree(NODE*, TREE_DEPTH_TYPE = 0);
 #endif

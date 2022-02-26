@@ -5,9 +5,9 @@
 /// </summary>
 /// <param name="srcData">노드의 데이터</param>
 /// <returns>생성 된 노드</returns>
-Node* DS_CreateNode(void* srcData)
+NODE* DS_CreateNode(void* srcData)
 {
-	Node* retVal = (Node*)malloc(sizeof(Node));
+	NODE* retVal = (NODE*)malloc(sizeof(NODE));
 	if (retVal == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
@@ -21,7 +21,7 @@ Node* DS_CreateNode(void* srcData)
 /// 대상 노드에 할당 된 메모리 해제
 /// </summary>
 /// <param name="srcNode">대상 노드</param>
-void DS_DeallocateNode(Node** srcNode)
+void DS_DeallocateNode(NODE** srcNode)
 {
 	if ((*srcNode) != NULL)
 	{
@@ -35,7 +35,7 @@ void DS_DeallocateNode(Node** srcNode)
 /// </summary>
 /// <param name="originSetNode">통합 될 원본 집합 노드</param>
 /// <param name="targetSetNode">통합 될 원본 집합에 통합 할 집합의 노드</param>
-void DS_UnionSet(Node** originSetNode, Node* targetSetNode)
+void DS_UnionSet(NODE** originSetNode, NODE* targetSetNode)
 {
 	if (targetSetNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -56,7 +56,7 @@ void DS_UnionSet(Node** originSetNode, Node* targetSetNode)
 /// </summary>
 /// <param name="targetSetNode">대상 집합 노드</param>
 /// <returns>대상 집합 노드가 속한 집합 (최상위 부모 노드)</returns>
-Node* DS_FindSet(Node* targetSetNode)
+NODE* DS_FindSet(NODE* targetSetNode)
 {
 	if (targetSetNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));

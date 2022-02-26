@@ -5,7 +5,7 @@
 /// </summary>
 /// <param name="srcArrayStack">대상 배열 스택</param>
 /// <param name="capacity">할당 크기</param>
-void AS_CreateStack(ArrayStack** srcArrayStack, StackIndexType capacity)
+void AS_CreateStack(ARRAY_STACK** srcArrayStack, STACK_INDEX_TYPE capacity)
 {
 	if ((*srcArrayStack) != NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Memleak"));
@@ -13,11 +13,11 @@ void AS_CreateStack(ArrayStack** srcArrayStack, StackIndexType capacity)
 	if (capacity <= 0)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	(*srcArrayStack) = (ArrayStack*)malloc(sizeof(ArrayStack));
+	(*srcArrayStack) = (ARRAY_STACK*)malloc(sizeof(ARRAY_STACK));
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-	(*srcArrayStack)->_nodeArray = (Node*)malloc(sizeof(Node) * capacity); //할당 크기만큼 생성
+	(*srcArrayStack)->_nodeArray = (NODE*)malloc(sizeof(NODE) * capacity); //할당 크기만큼 생성
 	if ((*srcArrayStack)->_nodeArray == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
@@ -29,7 +29,7 @@ void AS_CreateStack(ArrayStack** srcArrayStack, StackIndexType capacity)
 /// 대상 배열 스택에 할당 된 메모리 해제
 /// </summary>
 /// <param name="srcArrayStack">대상 배열 스택</param>
-void AS_DeallocateArrayStack(ArrayStack** srcArrayStack)
+void AS_DeallocateArrayStack(ARRAY_STACK** srcArrayStack)
 {
 	if ((*srcArrayStack) != NULL)
 	{
@@ -46,25 +46,25 @@ void AS_DeallocateArrayStack(ArrayStack** srcArrayStack)
 /// </summary>
 /// <param name="srcArrayStack">대상 배열 스택</param>
 /// <param name="srcData">삽입 할 데이터</param>
-void AS_Push(ArrayStack** srcArrayStack, DataType srcData)
+void AS_Push(ARRAY_STACK** srcArrayStack, DATA_TYPE srcData)
 {
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	if (AS_IsFull(srcArrayStack)) //가득 찼으면
 	{
-		StackIndexType reallocCapacity = (*srcArrayStack)->_capacity + ceil((*srcArrayStack)->_capacity * CAPACITY_REALLOC_RATIO); //재 할당 될 크기
-		StackIndexType reallocSizeInBytes = sizeof(Node) * reallocCapacity; //재 할당 될 바이트 단위 크기
+		STACK_INDEX_TYPE reallocCapacity = (*srcArrayStack)->_capacity + ceil((*srcArrayStack)->_capacity * CAPACITY_REALLOC_RATIO); //재 할당 될 크기
+		STACK_INDEX_TYPE reallocSizeInBytes = sizeof(NODE) * reallocCapacity; //재 할당 될 바이트 단위 크기
 
 		void* reallocAddr = realloc((*srcArrayStack)->_nodeArray, reallocSizeInBytes);
 		if (reallocAddr == NULL)
 			throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-		(*srcArrayStack)->_nodeArray = (Node*)reallocAddr;
+		(*srcArrayStack)->_nodeArray = (NODE*)reallocAddr;
 		(*srcArrayStack)->_capacity = reallocCapacity;
 	}
 
-	StackIndexType index = (*srcArrayStack)->_top++; //Push 할 인덱스
+	STACK_INDEX_TYPE index = (*srcArrayStack)->_top++; //Push 할 인덱스
 	(*srcArrayStack)->_nodeArray[index]._data = srcData;
 }
 
@@ -73,7 +73,7 @@ void AS_Push(ArrayStack** srcArrayStack, DataType srcData)
 /// </summary>
 /// <param name="srcArrayStack">대상 배열 스택</param>
 /// <returns>대상 배열 스택의 최상위 데이터</returns>
-DataType AS_Pop(ArrayStack** srcArrayStack)
+DATA_TYPE AS_Pop(ARRAY_STACK** srcArrayStack)
 {
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -84,17 +84,17 @@ DataType AS_Pop(ArrayStack** srcArrayStack)
 	if ((AS_GetTotalNodeDataCount(srcArrayStack) / (*srcArrayStack)->_capacity) <
 		CAPACITY_REDUCE_RATIO_THRESHOLD) //사용량에 대한 비율이 기존 할당 크기에 대한 감소가 발생 될 빈 공간 임계 비율 미만일 경우
 	{
-		StackIndexType reallocCapacity = (*srcArrayStack)->_capacity - ceil((*srcArrayStack)->_capacity * CAPACITY_REALLOC_RATIO); //재 할당 될 크기
-		StackIndexType reallocSizeInBytes = sizeof(Node) * reallocCapacity; //재 할당 될 바이트 단위 크기
+		STACK_INDEX_TYPE reallocCapacity = (*srcArrayStack)->_capacity - ceil((*srcArrayStack)->_capacity * CAPACITY_REALLOC_RATIO); //재 할당 될 크기
+		STACK_INDEX_TYPE reallocSizeInBytes = sizeof(NODE) * reallocCapacity; //재 할당 될 바이트 단위 크기
 		void* reallocAddr = realloc((*srcArrayStack)->_nodeArray, reallocSizeInBytes);
 		if (reallocAddr == NULL)
 			throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-		(*srcArrayStack)->_nodeArray = (Node*)reallocAddr;
+		(*srcArrayStack)->_nodeArray = (NODE*)reallocAddr;
 		(*srcArrayStack)->_capacity = reallocCapacity;
 	}
 
-	StackIndexType index = --((*srcArrayStack)->_top); //Pop 할 인덱스
+	STACK_INDEX_TYPE index = --((*srcArrayStack)->_top); //Pop 할 인덱스
 	return (*srcArrayStack)->_nodeArray[index]._data;
 }
 
@@ -103,7 +103,7 @@ DataType AS_Pop(ArrayStack** srcArrayStack)
 /// </summary>
 /// <param name="srcArrayStack">대상 배열 스택</param>
 /// <returns>대상 배열 스택의 최상위 데이터</returns>
-DataType AS_Peek(ArrayStack** srcArrayStack)
+DATA_TYPE AS_Peek(ARRAY_STACK** srcArrayStack)
 {
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -111,7 +111,7 @@ DataType AS_Peek(ArrayStack** srcArrayStack)
 	if (AS_IsEmpty(srcArrayStack)) //비어있으면
 		throw std::logic_error(std::string(__func__) + std::string(" : Empty Stack"));
 
-	StackIndexType index = ((*srcArrayStack)->_top) - 1; //Peek 할 인덱스
+	STACK_INDEX_TYPE index = ((*srcArrayStack)->_top) - 1; //Peek 할 인덱스
 	return (*srcArrayStack)->_nodeArray[index]._data;
 }
 
@@ -120,7 +120,7 @@ DataType AS_Peek(ArrayStack** srcArrayStack)
 /// </summary>
 /// <param name="srcArrayStack">대상 배열 스택</param>
 /// <returns>대상 배열 스택의 전체 노드 데이터 개수</returns>
-StackIndexType AS_GetTotalNodeDataCount(ArrayStack** srcArrayStack)
+STACK_INDEX_TYPE AS_GetTotalNodeDataCount(ARRAY_STACK** srcArrayStack)
 {
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -133,7 +133,7 @@ StackIndexType AS_GetTotalNodeDataCount(ArrayStack** srcArrayStack)
 /// </summary>
 /// <param name="srcArrayStack">대상 배열 스택</param>
 /// <returns>대상 배열 스택의 공백 여부</returns>
-bool AS_IsEmpty(ArrayStack** srcArrayStack)
+bool AS_IsEmpty(ARRAY_STACK** srcArrayStack)
 {
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -146,7 +146,7 @@ bool AS_IsEmpty(ArrayStack** srcArrayStack)
 /// </summary>
 /// <param name="srcArrayStack">대상 배열 스택</param>
 /// <returns>대상 배열 스택의 삽입 가능 여부</returns>
-bool AS_IsFull(ArrayStack** srcArrayStack)
+bool AS_IsFull(ARRAY_STACK** srcArrayStack)
 {
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));

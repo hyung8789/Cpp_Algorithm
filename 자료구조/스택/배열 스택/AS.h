@@ -1,33 +1,33 @@
-#ifndef _AS_H_
+ï»¿#ifndef _AS_H_
 #define _AS_H_
 
-#define CAPACITY_REDUCE_RATIO_THRESHOLD 0.7 //±âÁ¸ ÇÒ´ç Å©±â¿¡ ´ëÇÑ °¨¼Ò°¡ ¹ß»ı µÉ ºó °ø°£ ÀÓ°è ºñÀ² (0.0 ~ 1.0)
-#define CAPACITY_REALLOC_RATIO (1.0 - CAPACITY_REDUCE_RATIO_THRESHOLD) //±âÁ¸ ÇÒ´ç Å©±â¿¡ ´ëÇØ Áõ°¡ È¤Àº °¨¼Ò ½Ã Àç ÇÒ´ç µÉ ºñÀ²
+#define CAPACITY_REDUCE_RATIO_THRESHOLD 0.7 //ê¸°ì¡´ í• ë‹¹ í¬ê¸°ì— ëŒ€í•œ ê°ì†Œê°€ ë°œìƒ ë  ë¹ˆ ê³µê°„ ì„ê³„ ë¹„ìœ¨ (0.0 ~ 1.0)
+#define CAPACITY_REALLOC_RATIO (1.0 - CAPACITY_REDUCE_RATIO_THRESHOLD) //ê¸°ì¡´ í• ë‹¹ í¬ê¸°ì— ëŒ€í•´ ì¦ê°€ í˜¹ì€ ê°ì†Œ ì‹œ ì¬ í• ë‹¹ ë  ë¹„ìœ¨
 
-typedef int DataType; //³ëµåÀÇ µ¥ÀÌÅÍ Å¸ÀÔ
-typedef int StackIndexType; //½ºÅÃ ÀÎµ¦½º Å¸ÀÔ
+typedef int DATA_TYPE; //ë…¸ë“œì˜ ë°ì´í„° íƒ€ì…
+typedef int STACK_INDEX_TYPE; //ìŠ¤íƒ ì¸ë±ìŠ¤ íƒ€ì…
 
-typedef struct NodeType
+typedef struct NODE_TYPE
 {
-	DataType _data; //³ëµåÀÇ µ¥ÀÌÅÍ
-}Node;
+	DATA_TYPE _data; //ë…¸ë“œì˜ ë°ì´í„°
+}NODE;
 
-typedef struct ArrayStackType
+typedef struct ARRAY_STACK_TYPE
 {
-	StackIndexType _capacity; //ÇÒ´ç Å©±â
-	StackIndexType _top; //ÃÖ»óÀ§ ³ëµå ÀÎµ¦½º
+	STACK_INDEX_TYPE _capacity; //í• ë‹¹ í¬ê¸°
+	STACK_INDEX_TYPE _top; //ìµœìƒìœ„ ë…¸ë“œ ì¸ë±ìŠ¤
 
-	Node* _nodeArray; //³ëµå ¹è¿­
-}ArrayStack;
+	NODE* _nodeArray; //ë…¸ë“œ ë°°ì—´
+}ARRAY_STACK;
 
-void AS_CreateStack(ArrayStack**, StackIndexType);
-void AS_DeallocateArrayStack(ArrayStack**);
+void AS_CreateStack(ARRAY_STACK**, STACK_INDEX_TYPE);
+void AS_DeallocateArrayStack(ARRAY_STACK**);
 
-void AS_Push(ArrayStack**, DataType);
-DataType AS_Pop(ArrayStack**);
-DataType AS_Peek(ArrayStack**);
+void AS_Push(ARRAY_STACK**, DATA_TYPE);
+DATA_TYPE AS_Pop(ARRAY_STACK**);
+DATA_TYPE AS_Peek(ARRAY_STACK**);
 
-StackIndexType AS_GetTotalNodeDataCount(ArrayStack**);
-bool AS_IsEmpty(ArrayStack**);
-bool AS_IsFull(ArrayStack**);
+STACK_INDEX_TYPE AS_GetTotalNodeDataCount(ARRAY_STACK**);
+bool AS_IsEmpty(ARRAY_STACK**);
+bool AS_IsFull(ARRAY_STACK**);
 #endif

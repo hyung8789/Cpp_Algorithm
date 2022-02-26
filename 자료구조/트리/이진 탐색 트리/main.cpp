@@ -40,7 +40,7 @@ int main()
 			23, 10,100,1,16,50,0,9,12,20
 		}; //입력 데이터 (루트 노드 23)
 
-		Node* rootNode = BST_CreateNode(inputData[0]); //최상위 루트 노드
+		NODE* rootNode = BST_CreateNode(inputData[0]); //최상위 루트 노드
 
 		for (int i = 1; i < LENGTH(inputData); i++)
 		{
@@ -48,29 +48,29 @@ int main()
 		}
 
 		std::cout << "\n전위 순회 (Root -> Left -> Right) : ";
-		BST_DispOrderedTree(rootNode, TRAVERSAL_MODE::PREORDER);
+		BST_DispOrderedTree(rootNode, TRAVERSAL_METHOD::PREORDER);
 
 		std::cout << "\n중위 순회 (Left -> Root -> Right) : ";
-		BST_DispOrderedTree(rootNode, TRAVERSAL_MODE::INORDER);
+		BST_DispOrderedTree(rootNode, TRAVERSAL_METHOD::INORDER);
 		
 		std::cout << "\n후위 순회 (Left -> Right -> Root) : ";
-		BST_DispOrderedTree(rootNode, TRAVERSAL_MODE::POSTORDER);
+		BST_DispOrderedTree(rootNode, TRAVERSAL_METHOD::POSTORDER);
 
 		std::cout << "\n중간 노드 10 삭제 후 중위 순회 (Left -> Root -> Right) : ";
 		BST_RemoveNode(&rootNode, 10);
-		BST_DispOrderedTree(rootNode, TRAVERSAL_MODE::INORDER);
+		BST_DispOrderedTree(rootNode, TRAVERSAL_METHOD::INORDER);
 		
 		std::cout << "\n루트 노드 23 삭제 후 중위 순회 (Left -> Root -> Right) : ";
 		BST_RemoveNode(&rootNode, 23);
-		BST_DispOrderedTree(rootNode, TRAVERSAL_MODE::INORDER);
+		BST_DispOrderedTree(rootNode, TRAVERSAL_METHOD::INORDER);
 		
 		std::cout << "\n단말 노드 9 삭제 후 중위 순회 (Left -> Root -> Right) : ";
 		BST_RemoveNode(&rootNode, 9);
-		BST_DispOrderedTree(rootNode, TRAVERSAL_MODE::INORDER);
+		BST_DispOrderedTree(rootNode, TRAVERSAL_METHOD::INORDER);
 
 		std::cout << "\n중간 노드 1 삭제 후 중위 순회 (Left -> Root -> Right) : ";
 		BST_RemoveNode(&rootNode, 1);
-		BST_DispOrderedTree(rootNode, TRAVERSAL_MODE::INORDER);
+		BST_DispOrderedTree(rootNode, TRAVERSAL_METHOD::INORDER);
 
 		std::cout << "\n";
 		BST_DeallocateTree(&rootNode);

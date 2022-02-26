@@ -111,13 +111,13 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr)
 	if (srcInfixExpr == NULL || dstPostfixExpr == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	LinkedListStack* stack = NULL;
+	LINKED_LIST_STACK* stack = NULL;
 
 	size_t srcInfixExprLen = strlen(srcInfixExpr); //대상 중위 표현식 길이
 	size_t srcInfixExprNextReadIndex = 0; //대상 중위 표현식의 다음에 읽을 인덱스
 
 	bool isValidExpr = false; //유효한 표현식 여부
-	Token token;
+	TOKEN token;
 
 	LLS_CreateStack(&stack);
 
@@ -136,7 +136,7 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr)
 
 			while (!LLS_IsEmpty(&stack)) //현재 스택에서 '(' 가 나올 때 까지 노드의 기호를 꺼내어 순차적으로 변환 된 후위 표현식의 결과로서 출력
 			{
-				Node* poppedNode = LLS_Pop(&stack);
+				NODE* poppedNode = LLS_Pop(&stack);
 
 				if (CharToSymbolType(poppedNode->_data[0]) == SYMBOL_TYPE::LEFT_PARENTHESIS) //'(' 를 만날 경우
 				{
@@ -176,7 +176,7 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr)
 				if (GetSymbolTypePriority(peekedNodeSymbolType) >=
 					GetSymbolTypePriority(token._symbolType)) //현재 스택의 최상위 노드의 기호 타입에 대한 우선순위 >= 현재 분리 된 토큰의 기호 타입에 대한 우선순위
 				{
-					Node* poppedNode = LLS_Pop(&stack);
+					NODE* poppedNode = LLS_Pop(&stack);
 
 					if (peekedNodeSymbolType != SYMBOL_TYPE::LEFT_PARENTHESIS) //'(' 가 아닌 경우에만 우선순위가 높은 연산자에 대해 먼저 계산을 위해 후위 표현식으로 출력
 					{
@@ -201,7 +201,7 @@ void GenPostfixExpr(const char* srcInfixExpr, char* dstPostfixExpr)
 
 	while (!LLS_IsEmpty(&stack)) //스택에 남은 노드의 기호들을 순차적으로 모두 변환 된 후위 표현식의 결과로서 출력
 	{
-		Node* poppedNode = LLS_Pop(&stack);
+		NODE* poppedNode = LLS_Pop(&stack);
 
 		if (CharToSymbolType(poppedNode->_data[0]) == SYMBOL_TYPE::LEFT_PARENTHESIS) //')'와 쌍이 맞지 않는 '(' 가 남아있는 경우
 			throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (wrong InfixExpr)"));
@@ -252,12 +252,12 @@ double CalcPostfixExpr(const char* srcPostfixExpr)
 	if (srcPostfixExpr == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	LinkedListStack* stack = NULL;
+	LINKED_LIST_STACK* stack = NULL;
 
 	size_t srcPostfixExprLen = strlen(srcPostfixExpr); //대상 후위 표현식 길이
 	size_t srcPostfixExprNextReadIndex = 0; //대상 후위 표현식의 다음에 읽을 위치
 
-	Token token;
+	TOKEN token;
 
 	double retVal = 0.0; //최종 계산 결과
 
@@ -285,8 +285,8 @@ double CalcPostfixExpr(const char* srcPostfixExpr)
 			if(LLS_GetTotalNodeCount(&stack) < 2) //스택에서 노드를 2회 꺼낼 수 없을 경우
 				throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (wrong srcPostfixExpr)"));
 
-			Node* operandNode1 = LLS_Pop(&stack); //연산자 뒤에 들어 갈 피연산자
-			Node* operandNode2 = LLS_Pop(&stack); //연산자 앞에 들어 갈 피연산자
+			NODE* operandNode1 = LLS_Pop(&stack); //연산자 뒤에 들어 갈 피연산자
+			NODE* operandNode2 = LLS_Pop(&stack); //연산자 앞에 들어 갈 피연산자
 			double tmpResult = CalcOperation(atof(operandNode2->_data), token._symbolType, atof(operandNode1->_data)); //중간 계산 결과
 			char tmpResultBuffer[_CVTBUFSIZE] = { '\0', }; //중간 계산 결과 변환 위한 버퍼
 
@@ -301,7 +301,7 @@ double CalcPostfixExpr(const char* srcPostfixExpr)
 		srcPostfixExprNextReadIndex += token._readCount; //다음에 읽을 위치부터 다시 토큰 생성
 	}
 
-	Node* resultNode = LLS_Pop(&stack);
+	NODE* resultNode = LLS_Pop(&stack);
 	retVal = atof(resultNode->_data);
 	LLS_DeallocateNode(&resultNode);
 	LLS_DeallocateLinkedListStack(&stack);

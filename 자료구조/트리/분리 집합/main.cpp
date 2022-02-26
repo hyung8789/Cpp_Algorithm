@@ -27,10 +27,10 @@ int main()
 		***/
 
 		int dummy[6] = { 0,1,2,3,4,5 };
-		Node* dummyNode[6] = { NULL, };
+		NODE* dummyNode[6] = { NULL, };
 
-		Node* originSet = NULL; //원본 집합
-		Node* newSet = NULL; //원본과 통합 할 집합
+		NODE* originSet = NULL; //원본 집합
+		NODE* newSet = NULL; //원본과 통합 할 집합
 
 		std::cout << "--- 원본 집합 ---" << std::endl;
 		for (int i = 1; i <= 3; i++) //원본 집합

@@ -8,83 +8,38 @@
 	: 루트 노드의 왼쪽 서브 트리 < 루트 노드 < 루트 노드의 오른쪽 서브 트리
 
 	DEF2) 위의 정의 및 구현의 단순화를 위해 중복 된 데이터를 허용하지 않음
-
-	---
-
-	ex) 이진 탐색 트리의 삭제 연산
-
-										23 (Root)
-					10 (Remove Target)					100
-			1				16					50
-		0		9		12		20
-
-		10이 삭제 대상 노드일 경우, 10의 부모 노드인 23의 왼쪽에는 23보다 작은 노드가 와야하며,
-		하위 트리도 이진 탐색 트리의 정의를 만족해야 함
-
-		1) 삭제 대상 노드를 삭제 후 하위 트리의 노드 중 가장 작은 노드인 0을 삭제 대상 노드의 위치로 옮길 경우
-
-					0
-			1				16
-				9		12		20
-
-		=> 이진 탐색 트리의 정의를 만족하지 않음
-
-		2) 삭제 대상 노드를 삭제 후 하위 트리의 노드 중 가장 큰 노드인 20을 삭제 대상 노드의 위치로 옮길 경우
-
-					20
-			1				16
-		0		9		12
-
-		=> 이진 탐색 트리의 정의를 만족하지 않음
-
-		3) 삭제 대상 노드를 삭제 후 왼쪽 하위 트리의 노드 중 가장 큰 노드인 9을 삭제 대상 노드의 위치로 옮길 경우
-
-					9
-			1				16
-		0				12		20
-
-		=> 이진 탐색 트리의 정의를 만족
-
-		4) 삭제 대상 노드를 삭제 후 오른쪽 하위 트리의 노드 중 가장 작은 노드인 12을 삭제 대상 노드의 위치로 옮길 경우
-
-
-					12
-			1				16
-		0		9				20
-
-		=> 이진 탐색 트리의 정의를 만족
 ***/
 
-typedef int DataType; //노드의 데이터 타입
-typedef int TreeDepthType; //트리 깊이 타입
+typedef int DATA_TYPE; //노드의 데이터 타입
+typedef int TREE_DEPTH_TYPE; //트리 깊이 타입
 
-typedef struct NodeType
+typedef struct NODE_TYPE
 {
-	DataType _data; //노드의 데이터
+	DATA_TYPE _data; //노드의 데이터
 
-	NodeType* _left; //왼쪽 노드
-	NodeType* _right; //오른쪽 노드
-}Node;
+	NODE_TYPE* _left; //왼쪽 노드
+	NODE_TYPE* _right; //오른쪽 노드
+}NODE;
 
-enum class TRAVERSAL_MODE : const int
+enum class TRAVERSAL_METHOD : const int
 {
 	PREORDER = 0, //전위 순회 (Root -> Left -> Right)
 	INORDER, //중위 순회 (Left -> Root -> Right)
 	POSTORDER //후위 순회 (Left -> Right -> Root)
 };
 
-Node* BST_CreateNode(DataType);
-void BST_DeallocateNode(Node**);
-void BST_DeallocateTree(Node**);
+NODE* BST_CreateNode(DATA_TYPE);
+void BST_DeallocateNode(NODE**);
+void BST_DeallocateTree(NODE**);
 
-void BST_DispOrderedTree(Node*, TRAVERSAL_MODE);
+void BST_DispOrderedTree(NODE*, TRAVERSAL_METHOD);
 
-void BST_InsertNode(Node**, Node*);
-void BST_RemoveNode(Node**, const DataType&, bool = true);
+void BST_InsertNode(NODE**, NODE*);
+void BST_RemoveNode(NODE**, const DATA_TYPE&, bool = true);
 
-Node* BST_SearchNode(Node*, const DataType&);
-std::tuple<Node*, Node*, Node**> BST_SearchNodeWithParentNode(Node*, const DataType&, Node* = NULL);
+NODE* BST_SearchNode(NODE*, const DATA_TYPE&);
+std::tuple<NODE*, NODE*, NODE**> BST_SearchNodeWithParentNode(NODE*, const DATA_TYPE&, NODE* = NULL);
 
-Node* BST_SearchMinNode(Node*);
-std::tuple<Node*, Node*, Node**> BST_SearchMinNodeWithParentNode(Node*, Node* = NULL);
+NODE* BST_SearchMinNode(NODE*);
+std::tuple<NODE*, NODE*, NODE**> BST_SearchMinNodeWithParentNode(NODE*, NODE* = NULL);
 #endif

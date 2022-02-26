@@ -1,33 +1,33 @@
-#ifndef _LLS_H_
+ï»¿#ifndef _LLS_H_
 #define _LLS_H_
 
-typedef int StackIndexType; //½ºÅÃ ÀÎµ¦½º Å¸ÀÔ
+typedef int STACK_INDEX_TYPE; //ìŠ¤íƒ ì¸ë±ìŠ¤ íƒ€ì…
 
-typedef struct NodeType
+typedef struct NODE_TYPE
 {
-	char* _data; //³ëµåÀÇ µ¥ÀÌÅÍ
+	char* _data; //ë…¸ë“œì˜ ë°ì´í„°
 
-	NodeType* _next; //´ÙÀ½ ³ëµå
-}Node;
+	NODE_TYPE* _next; //ë‹¤ìŒ ë…¸ë“œ
+}NODE;
 
-typedef struct LinkedListStackType
+typedef struct LINKED_LIST_STACK_TYPE
 {
-	Node* _top; //ÃÖ»óÀ§ ³ëµå (tail)
-	Node* _head; //Çìµå ³ëµå
+	NODE* _top; //ìµœìƒìœ„ ë…¸ë“œ (tail)
+	NODE* _head; //í—¤ë“œ ë…¸ë“œ
 
-	StackIndexType _totalNodeCount; //ÀüÃ¼ ³ëµå ¼ö
-}LinkedListStack;
+	STACK_INDEX_TYPE _totalNodeCount; //ì „ì²´ ë…¸ë“œ ìˆ˜
+}LINKED_LIST_STACK;
 
-void LLS_CreateStack(LinkedListStack**);
-void LLS_DeallocateLinkedListStack(LinkedListStack**);
+void LLS_CreateStack(LINKED_LIST_STACK**);
+void LLS_DeallocateLinkedListStack(LINKED_LIST_STACK**);
 
-Node* LLS_CreateNode(const char*);
-void LLS_DeallocateNode(Node**);
+NODE* LLS_CreateNode(const char*);
+void LLS_DeallocateNode(NODE**);
 
-void LLS_Push(LinkedListStack**, Node*);
-Node* LLS_Pop(LinkedListStack**);
-Node* LLS_Peek(LinkedListStack**);
+void LLS_Push(LINKED_LIST_STACK**, NODE*);
+NODE* LLS_Pop(LINKED_LIST_STACK**);
+NODE* LLS_Peek(LINKED_LIST_STACK**);
 
-StackIndexType LLS_GetTotalNodeCount(LinkedListStack**);
-bool LLS_IsEmpty(LinkedListStack**);
+STACK_INDEX_TYPE LLS_GetTotalNodeCount(LINKED_LIST_STACK**);
+bool LLS_IsEmpty(LINKED_LIST_STACK**);
 #endif

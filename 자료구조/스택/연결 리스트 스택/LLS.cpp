@@ -4,12 +4,12 @@
 /// 대상 연결 리스트 스택 생성
 /// </summary>
 /// <param name="srcLinkedListStack">대상 연결 리스트 스택</param>
-void LLS_CreateStack(LinkedListStack** srcLinkedListStack)
+void LLS_CreateStack(LINKED_LIST_STACK** srcLinkedListStack)
 {
 	if ((*srcLinkedListStack) != NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Memleak"));
 
-	(*srcLinkedListStack) = (LinkedListStack*)malloc(sizeof(LinkedListStack));
+	(*srcLinkedListStack) = (LINKED_LIST_STACK*)malloc(sizeof(LINKED_LIST_STACK));
 	if ((*srcLinkedListStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
@@ -21,13 +21,13 @@ void LLS_CreateStack(LinkedListStack** srcLinkedListStack)
 /// 대상 연결 리스트에 할당 된 메모리 해제
 /// </summary>
 /// <param name="srcLinkedListStack">대상 연결 리스트</param>
-void LLS_DeallocateLinkedListStack(LinkedListStack** srcLinkedListStack)
+void LLS_DeallocateLinkedListStack(LINKED_LIST_STACK** srcLinkedListStack)
 {
 	if ((*srcLinkedListStack) != NULL)
 	{
 		while (!LLS_IsEmpty(srcLinkedListStack)) //대상 연결 리스트에 할당 된 전체 노드에 대해
 		{
-			Node* tmp = LLS_Pop(srcLinkedListStack);
+			NODE* tmp = LLS_Pop(srcLinkedListStack);
 			LLS_DeallocateNode(&tmp);
 		}
 
@@ -41,12 +41,12 @@ void LLS_DeallocateLinkedListStack(LinkedListStack** srcLinkedListStack)
 /// </summary>
 /// <param name="srcData">노드의 데이터</param>
 /// <returns>생성 된 노드</returns>
-Node* LLS_CreateNode(const char* srcData)
+NODE* LLS_CreateNode(const char* srcData)
 {
 	if (srcData == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	Node* retVal = (Node*)malloc(sizeof(Node));
+	NODE* retVal = (NODE*)malloc(sizeof(NODE));
 	if (retVal == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
@@ -66,7 +66,7 @@ Node* LLS_CreateNode(const char* srcData)
 /// 대상 노드에 할당 된 메모리 해제
 /// </summary>
 /// <param name="srcNode">대상 노드</param>
-void LLS_DeallocateNode(Node** srcNode)
+void LLS_DeallocateNode(NODE** srcNode)
 {
 	if ((*srcNode) != NULL)
 	{
@@ -86,7 +86,7 @@ void LLS_DeallocateNode(Node** srcNode)
 /// </summary>
 /// <param name="srcLinkedListStack">대상 연결 리스트 스택</param>
 /// <param name="srcNewNode">삽입 할 노드</param>
-void LLS_Push(LinkedListStack** srcLinkedListStack, Node* srcNewNode)
+void LLS_Push(LINKED_LIST_STACK** srcLinkedListStack, NODE* srcNewNode)
 {
 	if ((*srcLinkedListStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -112,9 +112,9 @@ void LLS_Push(LinkedListStack** srcLinkedListStack, Node* srcNewNode)
 /// </summary>
 /// <param name="srcLinkedListStack">대상 연결 리스트 스택</param>
 /// <returns>대상 연결 리스트 스택의 최상위 데이터</returns>
-Node* LLS_Pop(LinkedListStack** srcLinkedListStack)
+NODE* LLS_Pop(LINKED_LIST_STACK** srcLinkedListStack)
 {
-	Node* retVal = NULL;
+	NODE* retVal = NULL;
 
 	if ((*srcLinkedListStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -131,7 +131,7 @@ Node* LLS_Pop(LinkedListStack** srcLinkedListStack)
 	}
 	else //단일 연결 리스트이므로, 순차적으로 최상위 노드의 이전을 탐색
 	{
-		Node* current = (*srcLinkedListStack)->_head;
+		NODE* current = (*srcLinkedListStack)->_head;
 
 		while (current != NULL && current->_next != retVal)
 		{
@@ -153,9 +153,9 @@ Node* LLS_Pop(LinkedListStack** srcLinkedListStack)
 /// </summary>
 /// <param name="srcLinkedListStack">대상 연결 리스트 스택</param>
 /// <returns>대상 연결 리스트 스택의 최상위 데이터</returns>
-Node* LLS_Peek(LinkedListStack** srcLinkedListStack)
+NODE* LLS_Peek(LINKED_LIST_STACK** srcLinkedListStack)
 {
-	Node* retVal = NULL;
+	NODE* retVal = NULL;
 
 	if ((*srcLinkedListStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -173,7 +173,7 @@ Node* LLS_Peek(LinkedListStack** srcLinkedListStack)
 /// </summary>
 /// <param name="srcLinkedListStack">대상 연결 리스트 스택의 전체 노드 개수</param>
 /// <returns></returns>
-StackIndexType LLS_GetTotalNodeCount(LinkedListStack** srcLinkedListStack)
+STACK_INDEX_TYPE LLS_GetTotalNodeCount(LINKED_LIST_STACK** srcLinkedListStack)
 {
 	if ((*srcLinkedListStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -186,7 +186,7 @@ StackIndexType LLS_GetTotalNodeCount(LinkedListStack** srcLinkedListStack)
 /// </summary>
 /// <param name="srcLinkedListStack">대상 연결 리스트 스택</param>
 /// <returns>대상 연결 리스트 스택의 공백 여부</returns>
-bool LLS_IsEmpty(LinkedListStack** srcLinkedListStack)
+bool LLS_IsEmpty(LINKED_LIST_STACK** srcLinkedListStack)
 {
 	if ((*srcLinkedListStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));

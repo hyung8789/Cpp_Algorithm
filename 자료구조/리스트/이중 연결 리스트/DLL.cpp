@@ -5,9 +5,9 @@
 /// </summary>
 /// <param name="srcData">노드의 데이터</param>
 /// <returns>생성 된 노드</returns>
-Node* DLL_CreateNode(DataType srcData)
+NODE* DLL_CreateNode(DATA_TYPE srcData)
 {
-	Node* retVal = (Node*)malloc(sizeof(Node));
+	NODE* retVal = (NODE*)malloc(sizeof(NODE));
 	if (retVal == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
@@ -21,7 +21,7 @@ Node* DLL_CreateNode(DataType srcData)
 /// 대상 노드에 할당 된 메모리 해제
 /// </summary>
 /// <param name="srcNode">대상 노드</param>
-void DLL_DeallocateNode(Node** srcNode)
+void DLL_DeallocateNode(NODE** srcNode)
 {
 	if ((*srcNode) != NULL)
 	{
@@ -34,11 +34,11 @@ void DLL_DeallocateNode(Node** srcNode)
 /// 대상 리스트에 할당 된 메모리 해제
 /// </summary>
 /// <param name="srcList">대상 리스트</param>
-void DLL_DeallocateNodeList(Node** srcList)
+void DLL_DeallocateNodeList(NODE** srcList)
 {
 	while ((*srcList) != NULL)
 	{
-		Node* tmp = (*srcList); //삭제 할 노드
+		NODE* tmp = (*srcList); //삭제 할 노드
 
 		(*srcList) = (*srcList)->_next; //헤드 노드를 다음 노드로 이동 후 삭제
 		DLL_DeallocateNode(&tmp);
@@ -52,7 +52,7 @@ void DLL_DeallocateNodeList(Node** srcList)
 /// </summary>
 /// <param name="srcList">대상 리스트</param>
 /// <param name="srcNewNode">리스트의 끝에 삽입하고자 하는 새 노드</param>
-void DLL_AppendNode(Node** srcList, Node* srcNewNode)
+void DLL_AppendNode(NODE** srcList, NODE* srcNewNode)
 {
 	if (srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -63,7 +63,7 @@ void DLL_AppendNode(Node** srcList, Node* srcNewNode)
 	}
 	else //끝에 새 노드 삽입
 	{
-		Node* tail = (*srcList); //꼬리 노드
+		NODE* tail = (*srcList); //꼬리 노드
 
 		while (tail->_next != NULL) //끝으로 이동
 		{
@@ -80,12 +80,12 @@ void DLL_AppendNode(Node** srcList, Node* srcNewNode)
 /// <param name="srcList">대상 리스트</param>
 /// <param name="position">헤드 노드 기준 상대적 특정 위치</param>
 /// <returns>헤드 노드 기준 상대적 특정 위치의 노드</returns>
-Node* DLL_GetNodeAt(Node** srcList, NodePositionType position)
+NODE* DLL_GetNodeAt(NODE** srcList, NODE_POSITION_TYPE position)
 {
 	if (position < 0)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	Node* retVal = (*srcList); //현재 노드
+	NODE* retVal = (*srcList); //현재 노드
 
 	while (retVal != NULL && (--position) >= 0) //반환 대상 노드 위치까지 이동
 	{
@@ -104,12 +104,12 @@ Node* DLL_GetNodeAt(Node** srcList, NodePositionType position)
 /// <param name="srcList">대상 리스트</param>
 /// <param name="position">헤드 노드 기준 삭제 할 상대적 특정 위치</param>
 /// <param name="deallocateAfterRemove">삭제 대상 노드에 대한 메모리 해제 수행 여부</param>
-void DLL_RemoveNodeAt(Node** srcList, NodePositionType position, bool deallocateAfterRemove)
+void DLL_RemoveNodeAt(NODE** srcList, NODE_POSITION_TYPE position, bool deallocateAfterRemove)
 {
 	if (position < 0)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	Node* current = (*srcList); //현재 노드
+	NODE* current = (*srcList); //현재 노드
 
 	while (current != NULL && (--position) >= 0) //삭제 대상 노드 위치까지 이동
 	{
@@ -128,7 +128,7 @@ void DLL_RemoveNodeAt(Node** srcList, NodePositionType position, bool deallocate
 /// <param name="srcList">대상 리스트</param>
 /// <param name="srcTargetNode">삭제 대상 노드</param>
 /// <param name="deallocateAfterRemove">삭제 대상 노드에 대한 메모리 해제 수행 여부</param>
-void DLL_RemoveNode(Node** srcList, Node* srcTargetNode, bool deallocateAfterRemove)
+void DLL_RemoveNode(NODE** srcList, NODE* srcTargetNode, bool deallocateAfterRemove)
 {
 	/***
 		1) TPE : 삭제 대상 노드의 이전 노드 존재 여부 (T : 존재, F : 미 존재)
@@ -182,7 +182,7 @@ void DLL_RemoveNode(Node** srcList, Node* srcTargetNode, bool deallocateAfterRem
 /// </summary>
 /// <param name="srcList">대상 리스트</param>
 /// <param name="srcNewNode">삽입하고자 하는 새 노드</param>
-void DLL_InsertNewHead(Node** srcList, Node* srcNewNode)
+void DLL_InsertNewHead(NODE** srcList, NODE* srcNewNode)
 {
 	if (srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -202,7 +202,7 @@ void DLL_InsertNewHead(Node** srcList, Node* srcNewNode)
 /// </summary>
 /// <param name="srcTargetNode">대상 노드</param>
 /// <param name="srcNewNode">삽입하고자 하는 새 노드</param>
-void DLL_InsertNodeAfter(Node* srcTargetNode, Node* srcNewNode)
+void DLL_InsertNodeAfter(NODE* srcTargetNode, NODE* srcNewNode)
 {
 	/***
 		환형 이중 연결 리스트와 비교하여 헤드와 꼬리가 서로 연결되지 않으므로,
@@ -230,7 +230,7 @@ void DLL_InsertNodeAfter(Node* srcTargetNode, Node* srcNewNode)
 /// <param name="srcList">대상 리스트</param>
 /// <param name="srcTargetNode">대상 노드</param>
 /// <param name="srcNewNode">삽입하고자 하는 새 노드</param>
-void DLL_InsertNodeBefore(Node** srcList, Node* srcTargetNode, Node* srcNewNode)
+void DLL_InsertNodeBefore(NODE** srcList, NODE* srcTargetNode, NODE* srcNewNode)
 {
 	/***
 		환형 이중 연결 리스트와 비교하여 헤드와 꼬리가 서로 연결되지 않으므로,
@@ -275,10 +275,10 @@ void DLL_InsertNodeBefore(Node** srcList, Node* srcTargetNode, Node* srcNewNode)
 /// </summary>
 /// <param name="srcList">대상 리스트</param>
 /// <returns>대상 리스트의 전체 노드의 수</returns>
-NodePositionType DLL_GetTotalNodeCount(Node** srcList)
+NODE_POSITION_TYPE DLL_GetTotalNodeCount(NODE** srcList)
 {
-	NodePositionType totalNodeCount = 0; //전체 노드의 수
-	Node* current = (*srcList); //현재 노드
+	NODE_POSITION_TYPE totalNodeCount = 0; //전체 노드의 수
+	NODE* current = (*srcList); //현재 노드
 
 	while (current != NULL)
 	{
@@ -293,10 +293,10 @@ NodePositionType DLL_GetTotalNodeCount(Node** srcList)
 /// 대상 리스트의 전체 노드에 대한 데이터 출력
 /// </summary>
 /// <param name="srcList">대상 리스트</param>
-void DLL_DispNodeList(Node** srcList)
+void DLL_DispNodeList(NODE** srcList)
 {
-	NodePositionType currentPosition = 0; //현재 노드의 위치
-	Node* current = (*srcList); //현재 노드
+	NODE_POSITION_TYPE currentPosition = 0; //현재 노드의 위치
+	NODE* current = (*srcList); //현재 노드
 
 	while (current != NULL)
 	{

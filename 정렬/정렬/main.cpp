@@ -14,12 +14,12 @@ int main()
 	{
 		const int totalSortFuncCount = (const int)SORT_UNIQUE_MAPPED_INDEX::TOTAL_SORT_FUNC_COUNT;
 
-		MySortElementType* originData = new MySortElementType[ELEMENT_COUNT];
-		MySortElementType* copiedData = new MySortElementType[ELEMENT_COUNT * totalSortFuncCount];
+		MY_SORT_ELEMENT_TYPE* originData = new MY_SORT_ELEMENT_TYPE[ELEMENT_COUNT];
+		MY_SORT_ELEMENT_TYPE* copiedData = new MY_SORT_ELEMENT_TYPE[ELEMENT_COUNT * totalSortFuncCount];
 		
 		for (size_t i = 0; i < TEST_PASSES; i++)
 		{
-			GenRandPatternEnumerableSet<MySortElementType>(originData, ELEMENT_COUNT); 
+			GenRandPatternEnumerableSet<MY_SORT_ELEMENT_TYPE>(originData, ELEMENT_COUNT); 
 			
 			/***
 				< 이미 정렬 되어 있는 상황 (Best Case) : 0 1 2 에 대한 오름차순 정렬의 비교 횟수 테스트 >
@@ -31,7 +31,7 @@ int main()
 				5) 비교 과정 시 LOGGING_LEVEL == 2에 따른 중간에 비교 발생 내용을 출력 위해 수행 시간에 오차가 발생하므로, 수행 시간은 무시 할 것
 			***/
 			
-			//GenSequentialPatternEnumerableSet<MySortElementType>(originData, ELEMENT_COUNT, ORDER_BY::ASCENDING);
+			//GenSequentialPatternEnumerableSet<MY_SORT_ELEMENT_TYPE>(originData, ELEMENT_COUNT, ORDER_BY::ASCENDING);
 
 			/***
 				< 정렬하고자 하는 방법과 반대로 정렬 되어 있는 상황 (Worst Case) : 2 1 0 에 대한 오름차순 정렬의 비교 횟수 테스트 >
@@ -43,12 +43,12 @@ int main()
 				5) 비교 과정 시 LOGGING_LEVEL == 2에 따른 중간에 비교 발생 내용을 출력 위해 수행 시간에 오차가 발생하므로, 수행 시간은 무시 할 것
 			***/
 
-			//GenSequentialPatternEnumerableSet<MySortElementType>(originData, ELEMENT_COUNT, ORDER_BY::DESCENDING);
+			//GenSequentialPatternEnumerableSet<MY_SORT_ELEMENT_TYPE>(originData, ELEMENT_COUNT, ORDER_BY::DESCENDING);
 			
 			for (int i = 0; i < totalSortFuncCount; i++) //각 sort에서 사용하기 위해 원본 데이터 복사
 			{
-				memcpy_s(&copiedData[i * ELEMENT_COUNT], sizeof(MySortElementType) * ELEMENT_COUNT,
-					originData, sizeof(MySortElementType) * ELEMENT_COUNT);
+				memcpy_s(&copiedData[i * ELEMENT_COUNT], sizeof(MY_SORT_ELEMENT_TYPE) * ELEMENT_COUNT,
+					originData, sizeof(MY_SORT_ELEMENT_TYPE) * ELEMENT_COUNT);
 			}
 
 			std::promise<TRACE_RESULT> promiseArray[totalSortFuncCount]; //thread에 의해 결과가 저장 될 것이라는 약속
@@ -61,7 +61,7 @@ int main()
 
 				SORT_UNIQUE_MAPPED_INDEX sortUniqueMappedIndex = (SORT_UNIQUE_MAPPED_INDEX)i;
 
-				threadArray[i] = std::thread(RunSinglePassSortTrace<MySortElementType>,
+				threadArray[i] = std::thread(RunSinglePassSortTrace<MY_SORT_ELEMENT_TYPE>,
 					SORT_MAPPER::GetInstance().SortUniqueMappedIndexToSortFuncNameStr(sortUniqueMappedIndex),
 					SORT_MAPPER::GetInstance().GetSortMetaData(sortUniqueMappedIndex)._sortFuncAddr,
 					&copiedData[i * ELEMENT_COUNT], ELEMENT_COUNT,

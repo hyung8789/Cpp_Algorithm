@@ -4,12 +4,12 @@
 /// 대상 큐에 큐 생성
 /// </summary>
 /// <param name="srcLinkedListQueue">대상 큐</param>
-void LLQ_CreateQueue(LinkedListQueue** srcLinkedListQueue)
+void LLQ_CreateQueue(LINKED_LIST_QUEUE** srcLinkedListQueue)
 {
 	if ((*srcLinkedListQueue) != NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Memleak"));
 
-	(*srcLinkedListQueue) = (LinkedListQueue*)malloc(sizeof(LinkedListQueue));
+	(*srcLinkedListQueue) = (LINKED_LIST_QUEUE*)malloc(sizeof(LINKED_LIST_QUEUE));
 	if ((*srcLinkedListQueue) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
@@ -21,13 +21,13 @@ void LLQ_CreateQueue(LinkedListQueue** srcLinkedListQueue)
 /// 대상 큐에 할당 된 메모리 해제
 /// </summary>
 /// <param name="srcLinkedListQueue">대상 큐</param>
-void LLQ_DeallocateQueue(LinkedListQueue** srcLinkedListQueue)
+void LLQ_DeallocateQueue(LINKED_LIST_QUEUE** srcLinkedListQueue)
 {
 	if ((*srcLinkedListQueue) != NULL)
 	{
 		while (!LLQ_IsEmpty(srcLinkedListQueue)) //대상 큐에 할당 된 전체 노드에 대해
 		{
-			Node* tmp = LLQ_Dequeue(srcLinkedListQueue);
+			NODE* tmp = LLQ_Dequeue(srcLinkedListQueue);
 			LLQ_DeallocateNode(&tmp);
 		}
 
@@ -41,9 +41,9 @@ void LLQ_DeallocateQueue(LinkedListQueue** srcLinkedListQueue)
 /// </summary>
 /// <param name="srcData">노드의 데이터</param>
 /// <returns>생성 된 노드</returns>
-Node* LLQ_CreateNode(DataType srcData)
+NODE* LLQ_CreateNode(DATA_TYPE srcData)
 {
-	Node* retVal = (Node*)malloc(sizeof(Node));
+	NODE* retVal = (NODE*)malloc(sizeof(NODE));
 	if (retVal == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
@@ -57,7 +57,7 @@ Node* LLQ_CreateNode(DataType srcData)
 /// 대상 노드에 할당 된 메모리 해제
 /// </summary>
 /// <param name="srcNode">대상 노드</param>
-void LLQ_DeallocateNode(Node** srcNode)
+void LLQ_DeallocateNode(NODE** srcNode)
 {
 	if ((*srcNode) != NULL)
 	{
@@ -71,7 +71,7 @@ void LLQ_DeallocateNode(Node** srcNode)
 /// </summary>
 /// <param name="srcLinkedListQueue">대상 큐</param>
 /// <param name="srcNewNode">삽입 할 노드</param>
-void LLQ_Enqueue(LinkedListQueue** srcLinkedListQueue, Node* srcNewNode)
+void LLQ_Enqueue(LINKED_LIST_QUEUE** srcLinkedListQueue, NODE* srcNewNode)
 {
 	if ((*srcLinkedListQueue) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -97,7 +97,7 @@ void LLQ_Enqueue(LinkedListQueue** srcLinkedListQueue, Node* srcNewNode)
 /// </summary>
 /// <param name="srcLinkedListQueue">대상 큐</param>
 /// <returns>대상 큐의 순차적인 노드</returns>
-Node* LLQ_Dequeue(LinkedListQueue** srcLinkedListQueue)
+NODE* LLQ_Dequeue(LINKED_LIST_QUEUE** srcLinkedListQueue)
 {
 	if ((*srcLinkedListQueue) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -105,7 +105,7 @@ Node* LLQ_Dequeue(LinkedListQueue** srcLinkedListQueue)
 	if (LLQ_IsEmpty(srcLinkedListQueue)) //공백 상태일 경우
 		throw std::logic_error(std::string(__func__) + std::string(" : Queue is Empty"));
 
-	Node* retVal = (*srcLinkedListQueue)->_front;
+	NODE* retVal = (*srcLinkedListQueue)->_front;
 	(*srcLinkedListQueue)->_front = (*srcLinkedListQueue)->_front->_next;
 	(*srcLinkedListQueue)->_totalNodeCount--;
 
@@ -120,7 +120,7 @@ Node* LLQ_Dequeue(LinkedListQueue** srcLinkedListQueue)
 /// </summary>
 /// <param name="srcCircularQueue">대상 큐</param>
 /// <returns>대상 큐의 전체 노드 개수</returns>
-QueueIndexType LLQ_GetTotalNodeCount(LinkedListQueue** srcLinkedListQueue)
+QUEUE_INDEX_TYPE LLQ_GetTotalNodeCount(LINKED_LIST_QUEUE** srcLinkedListQueue)
 {
 	if ((*srcLinkedListQueue) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -133,7 +133,7 @@ QueueIndexType LLQ_GetTotalNodeCount(LinkedListQueue** srcLinkedListQueue)
 /// </summary>
 /// <param name="srcLinkedListQueue">대상 큐</param>
 /// <returns>대상 큐의 공백 여부</returns>
-bool LLQ_IsEmpty(LinkedListQueue** srcLinkedListQueue)
+bool LLQ_IsEmpty(LINKED_LIST_QUEUE** srcLinkedListQueue)
 {
 	if ((*srcLinkedListQueue) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));

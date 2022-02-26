@@ -1,24 +1,24 @@
-#include "Core.h"
+ï»¿#include "Core.h"
 
 /// <summary>
-/// ´ë»ó ÇÇ¿¬»êÀÚ 1 ¹× ´ë»ó ÇÇ¿¬»êÀÚ 2¿¡ ´ëÇØ ¿¬»êÀÚ ¹®Áö¿¡ µû¸¥ °è»ê °á°ú ¹İÈ¯
+/// ëŒ€ìƒ í”¼ì—°ì‚°ì 1 ë° ëŒ€ìƒ í”¼ì—°ì‚°ì 2ì— ëŒ€í•´ ì—°ì‚°ì ë¬¸ì§€ì— ë”°ë¥¸ ê³„ì‚° ê²°ê³¼ ë°˜í™˜
 /// </summary>
-/// <param name="a">´ë»ó ÇÇ¿¬»êÀÚ 1</param>
-/// <param name="srcChar">¿¬»êÀÚ ¹®ÀÚ</param>
-/// <param name="b">´ë»ó ÇÇ¿¬»êÀÚ 2</param>
-/// <returns>´ë»ó ÇÇ¿¬»êÀÚ 1 ¹× ´ë»ó ÇÇ¿¬»êÀÚ 2¿¡ ´ëÇØ ¿¬»êÀÚ ¹®ÀÚ¿¡ µû¸¥ °è»ê °á°ú</returns>
+/// <param name="a">ëŒ€ìƒ í”¼ì—°ì‚°ì 1</param>
+/// <param name="srcChar">ì—°ì‚°ì ë¬¸ì</param>
+/// <param name="b">ëŒ€ìƒ í”¼ì—°ì‚°ì 2</param>
+/// <returns>ëŒ€ìƒ í”¼ì—°ì‚°ì 1 ë° ëŒ€ìƒ í”¼ì—°ì‚°ì 2ì— ëŒ€í•´ ì—°ì‚°ì ë¬¸ìì— ë”°ë¥¸ ê³„ì‚° ê²°ê³¼</returns>
 double CalcOperation(double a, char srcChar, double b)
 {
 	return CalcOperation(a, CharToSymbolType(srcChar), b);
 }
 
 /// <summary>
-/// ´ë»ó ÇÇ¿¬»êÀÚ 1 ¹× ´ë»ó ÇÇ¿¬»êÀÚ 2¿¡ ´ëÇØ ¿¬»êÀÚ ±âÈ£ Å¸ÀÔ¿¡ µû¸¥ °è»ê °á°ú ¹İÈ¯
+/// ëŒ€ìƒ í”¼ì—°ì‚°ì 1 ë° ëŒ€ìƒ í”¼ì—°ì‚°ì 2ì— ëŒ€í•´ ì—°ì‚°ì ê¸°í˜¸ íƒ€ì…ì— ë”°ë¥¸ ê³„ì‚° ê²°ê³¼ ë°˜í™˜
 /// </summary>
-/// <param name="a">´ë»ó ÇÇ¿¬»êÀÚ 1</param>
-/// <param name="op">¿¬»êÀÚ ±âÈ£ Å¸ÀÔ</param>
-/// <param name="b">´ë»ó ÇÇ¿¬»êÀÚ 2</param>
-/// <returns>´ë»ó ÇÇ¿¬»êÀÚ 1 ¹× ´ë»ó ÇÇ¿¬»êÀÚ 2¿¡ ´ëÇØ ¿¬»êÀÚ ±âÈ£ Å¸ÀÔ¿¡ µû¸¥ °è»ê °á°ú</returns>
+/// <param name="a">ëŒ€ìƒ í”¼ì—°ì‚°ì 1</param>
+/// <param name="op">ì—°ì‚°ì ê¸°í˜¸ íƒ€ì…</param>
+/// <param name="b">ëŒ€ìƒ í”¼ì—°ì‚°ì 2</param>
+/// <returns>ëŒ€ìƒ í”¼ì—°ì‚°ì 1 ë° ëŒ€ìƒ í”¼ì—°ì‚°ì 2ì— ëŒ€í•´ ì—°ì‚°ì ê¸°í˜¸ íƒ€ì…ì— ë”°ë¥¸ ê³„ì‚° ê²°ê³¼</returns>
 double CalcOperation(double a, SYMBOL_TYPE op, double b)
 {
 	double retVal = 0.0;
@@ -59,26 +59,26 @@ double CalcOperation(double a, SYMBOL_TYPE op, double b)
 }
 
 /// <summary>
-/// »õ·Î¿î ³ëµå »ı¼º ¹× »ı¼º µÈ ³ëµå ¹İÈ¯
+/// ìƒˆë¡œìš´ ë…¸ë“œ ìƒì„± ë° ìƒì„± ëœ ë…¸ë“œ ë°˜í™˜
 /// </summary>
-/// <param name="srcData">³ëµåÀÇ µ¥ÀÌÅÍ</param>
-/// <returns>»ı¼º µÈ ³ëµå</returns>
-Node* EXPRT_CreateNode(DataType srcData)
+/// <param name="srcData">ë…¸ë“œì˜ ë°ì´í„°</param>
+/// <returns>ìƒì„± ëœ ë…¸ë“œ</returns>
+NODE* EXPRT_CreateNode(DATA_TYPE srcData)
 {
-	Node* retVal = (Node*)malloc(sizeof(Node));
+	NODE* retVal = (NODE*)malloc(sizeof(NODE));
 	if (retVal == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-	if (typeid(srcData) == typeid(char*)) //¹®ÀÚ¿­ °ø°£ ÇÒ´ç ¹× ¹®ÀÚ¿­ º¹»ç
+	if (typeid(srcData) == typeid(char*)) //ë¬¸ìì—´ ê³µê°„ í• ë‹¹ ë° ë¬¸ìì—´ ë³µì‚¬
 	{
-		retVal->_data = (char*)malloc(strlen(srcData) + 1); //'\0' Æ÷ÇÔ Å©±â
+		retVal->_data = (char*)malloc(strlen(srcData) + 1); //'\0' í¬í•¨ í¬ê¸°
 		if (retVal->_data == NULL)
 			throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
 		if (strcpy_s(retVal->_data, strlen(srcData) + 1, srcData) != 0)
 			throw std::runtime_error(std::string(__func__) + std::string(" : src, dst is null or wrong size"));
 	}
-	else //°ª ÇÒ´ç
+	else //ê°’ í• ë‹¹
 	{
 		retVal->_data = srcData;
 	}
@@ -89,10 +89,10 @@ Node* EXPRT_CreateNode(DataType srcData)
 }
 
 /// <summary>
-/// ´ë»ó ³ëµå¿¡ ÇÒ´ç µÈ ¸Ş¸ğ¸® ÇØÁ¦
+/// ëŒ€ìƒ ë…¸ë“œì— í• ë‹¹ ëœ ë©”ëª¨ë¦¬ í•´ì œ
 /// </summary>
-/// <param name="srcNode">´ë»ó ³ëµå</param>
-void EXPRT_DeallocateNode(Node** srcNode)
+/// <param name="srcNode">ëŒ€ìƒ ë…¸ë“œ</param>
+void EXPRT_DeallocateNode(NODE** srcNode)
 {
 	if ((*srcNode) != NULL)
 	{
@@ -108,12 +108,12 @@ void EXPRT_DeallocateNode(Node** srcNode)
 }
 
 /// <summary>
-/// ´ë»ó Æ®¸®¿¡ ÇÒ´ç µÈ ¸ğµç ³ëµåÀÇ ¸Ş¸ğ¸® ÇØÁ¦
+/// ëŒ€ìƒ íŠ¸ë¦¬ì— í• ë‹¹ ëœ ëª¨ë“  ë…¸ë“œì˜ ë©”ëª¨ë¦¬ í•´ì œ
 /// </summary>
-/// <param name="srcRootNode">´ë»ó Æ®¸®ÀÇ ÃÖ»óÀ§ ·çÆ® ³ëµå</param>
-void EXPRT_DeallocateTree(Node** srcRootNode)
+/// <param name="srcRootNode">ëŒ€ìƒ íŠ¸ë¦¬ì˜ ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œ</param>
+void EXPRT_DeallocateTree(NODE** srcRootNode)
 {
-	if ((*srcRootNode) != NULL) //ÈÄÀ§ ¼øÈ¸·Î ¿ŞÂÊ ³¡ ³ëµåºÎÅÍ ÇØÁ¦ 
+	if ((*srcRootNode) != NULL) //í›„ìœ„ ìˆœíšŒë¡œ ì™¼ìª½ ë ë…¸ë“œë¶€í„° í•´ì œ 
 	{
 		if ((*srcRootNode)->_left != NULL)
 			EXPRT_DeallocateTree(&((*srcRootNode)->_left));
@@ -127,11 +127,11 @@ void EXPRT_DeallocateTree(Node** srcRootNode)
 }
 
 /// <summary>
-/// ´ë»ó ÈÄÀ§ Ç¥Çö½ÄÀ¸·ÎºÎÅÍ Æ®¸® ±¸Ãà
+/// ëŒ€ìƒ í›„ìœ„ í‘œí˜„ì‹ìœ¼ë¡œë¶€í„° íŠ¸ë¦¬ êµ¬ì¶•
 /// </summary>
-/// <param name="srcRootNode">´ë»ó Æ®¸®ÀÇ ÃÖ»óÀ§ ·çÆ® ³ëµå</param>
-/// <param name="srcPostfixExpr">´ë»ó ÈÄÀ§ Ç¥Çö½Ä</param>
-void EXPRT_BulidTreeFromPostfixExpr(Node** srcRootNode, char srcPostfixExpr[])
+/// <param name="srcRootNode">ëŒ€ìƒ íŠ¸ë¦¬ì˜ ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œ</param>
+/// <param name="srcPostfixExpr">ëŒ€ìƒ í›„ìœ„ í‘œí˜„ì‹</param>
+void EXPRT_BulidTreeFromPostfixExpr(NODE** srcRootNode, char srcPostfixExpr[])
 {
 	if ((*srcRootNode) != NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Memleak"));
@@ -140,49 +140,49 @@ void EXPRT_BulidTreeFromPostfixExpr(Node** srcRootNode, char srcPostfixExpr[])
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
 	/***
-		< ÈÄÀ§ Ç¥Çö½ÄÀ¸·ÎºÎÅÍ ¼ö½Ä Æ®¸® ±¸Ãà >
+		< í›„ìœ„ í‘œí˜„ì‹ìœ¼ë¡œë¶€í„° ìˆ˜ì‹ íŠ¸ë¦¬ êµ¬ì¶• >
 
-		! ÈÄÀ§ Ç¥Çö½Ä : ÁßÀ§ Ç¥Çö½ÄÀ¸·ÎºÎÅÍ '(', ')' ¹× ¿¬»êÀÚ ¿ì¼±¼øÀ§¿¡ µû¶ó º¯È¯
-		! '.'À» Æ÷ÇÔÇÏ´Â ½Ç¼öÀÇ °æ¿ì '.'°ú ÇÇ¿¬»êÀÚ¸¦ Æ÷ÇÔÇÑ ½Ç¼ö¸¦ ÇÏ³ªÀÇ ÇÇ¿¬»êÀÚ ÅäÅ«À¸·Î Ã³¸®ÇÏ¿´À¸¹Ç·Î, 2-2¿¡¼­ Ã³¸®
-		! ÇÇ¿¬»êÀÚ´Â ÀÙ ³ëµå, ¿¬»êÀÚ´Â ÃÊ±â ·çÆ® ³ëµå È¤Àº °¡Áö ³ëµå
-		! ¿Ã¹Ù¸¥ ÈÄÀ§ Ç¥Çö½ÄÀº Ç×»ó ¿À¸¥ÂÊ ³¡¿¡ ¿¬»êÀÚ°¡ Á¸ÀçÇÏ¸ç, ÇØ´ç ¿¬»êÀÚ´Â ¼ö½Ä Æ®¸®ÀÇ ·çÆ® ³ëµå
-		! ±¸Ãà µÈ ¼ö½Ä Æ®¸®¸¦ ÈÄÀ§ ¼øÈ¸¸¦ ÅëÇØ °è»êÀ» ¼öÇà ½Ã, ¿ŞÂÊºÎÅÍ °è»êµÇ¹Ç·Î,
-		ÈÄÀ§ Ç¥Çö½ÄÀÇ ¿À¸¥ÂÊ¿¡¼­ ¿ŞÂÊ (¿ª¹æÇâ)À¸·Î ¼øÂ÷ÀûÀÎ ÅäÅ« ºĞ¸® ¹× ¼ö½Ä Æ®¸® ±¸Ãà °úÁ¤ °£ ¿À¸¥ÂÊ ÀÚ½Ä ³ëµå¿Í ¿ŞÂÊ ÀÚ½Ä ³ëµå ¼øÀ¸·Î ÇÒ´ç
-		! ÈÄÀ§ Ç¥Çö½Ä¿¡ ' ' (ÇÇ¿¬»êÀÚ °£ ±¸ºĞÀ» À§ÇÑ °ø¹é)ÀÌ Á¸Àç ÇÒ °æ¿ì, ÀÌ´Â Æ®¸® ±¸Ãà¿¡ ÀÌ¿ëÇÏÁö ¾ÊÀ¸¹Ç·Î,
-		ÅäÅ«ÀÇ ±âÈ£ Å¸ÀÔÀÌ ' ' (ÇÇ¿¬»êÀÚ °£ ±¸ºĞÀ» À§ÇÑ °ø¹é)°¡ ¾Æ´Ò ¶§±îÁö Àç »ı¼º
+		! í›„ìœ„ í‘œí˜„ì‹ : ì¤‘ìœ„ í‘œí˜„ì‹ìœ¼ë¡œë¶€í„° '(', ')' ë° ì—°ì‚°ì ìš°ì„ ìˆœìœ„ì— ë”°ë¼ ë³€í™˜
+		! '.'ì„ í¬í•¨í•˜ëŠ” ì‹¤ìˆ˜ì˜ ê²½ìš° '.'ê³¼ í”¼ì—°ì‚°ìë¥¼ í¬í•¨í•œ ì‹¤ìˆ˜ë¥¼ í•˜ë‚˜ì˜ í”¼ì—°ì‚°ì í† í°ìœ¼ë¡œ ì²˜ë¦¬í•˜ì˜€ìœ¼ë¯€ë¡œ, 2-2ì—ì„œ ì²˜ë¦¬
+		! í”¼ì—°ì‚°ìëŠ” ì ë…¸ë“œ, ì—°ì‚°ìëŠ” ì´ˆê¸° ë£¨íŠ¸ ë…¸ë“œ í˜¹ì€ ê°€ì§€ ë…¸ë“œ
+		! ì˜¬ë°”ë¥¸ í›„ìœ„ í‘œí˜„ì‹ì€ í•­ìƒ ì˜¤ë¥¸ìª½ ëì— ì—°ì‚°ìê°€ ì¡´ì¬í•˜ë©°, í•´ë‹¹ ì—°ì‚°ìëŠ” ìˆ˜ì‹ íŠ¸ë¦¬ì˜ ë£¨íŠ¸ ë…¸ë“œ
+		! êµ¬ì¶• ëœ ìˆ˜ì‹ íŠ¸ë¦¬ë¥¼ í›„ìœ„ ìˆœíšŒë¥¼ í†µí•´ ê³„ì‚°ì„ ìˆ˜í–‰ ì‹œ, ì™¼ìª½ë¶€í„° ê³„ì‚°ë˜ë¯€ë¡œ,
+		í›„ìœ„ í‘œí˜„ì‹ì˜ ì˜¤ë¥¸ìª½ì—ì„œ ì™¼ìª½ (ì—­ë°©í–¥)ìœ¼ë¡œ ìˆœì°¨ì ì¸ í† í° ë¶„ë¦¬ ë° ìˆ˜ì‹ íŠ¸ë¦¬ êµ¬ì¶• ê³¼ì • ê°„ ì˜¤ë¥¸ìª½ ìì‹ ë…¸ë“œì™€ ì™¼ìª½ ìì‹ ë…¸ë“œ ìˆœìœ¼ë¡œ í• ë‹¹
+		! í›„ìœ„ í‘œí˜„ì‹ì— ' ' (í”¼ì—°ì‚°ì ê°„ êµ¬ë¶„ì„ ìœ„í•œ ê³µë°±)ì´ ì¡´ì¬ í•  ê²½ìš°, ì´ëŠ” íŠ¸ë¦¬ êµ¬ì¶•ì— ì´ìš©í•˜ì§€ ì•Šìœ¼ë¯€ë¡œ,
+		í† í°ì˜ ê¸°í˜¸ íƒ€ì…ì´ ' ' (í”¼ì—°ì‚°ì ê°„ êµ¬ë¶„ì„ ìœ„í•œ ê³µë°±)ê°€ ì•„ë‹ ë•Œê¹Œì§€ ì¬ ìƒì„±
 
-		1) ÈÄÀ§ Ç¥Çö½ÄÀÇ ¿À¸¥ÂÊ¿¡¼­ ¿ŞÂÊ (¿ª¹æÇâ)À¸·Î ¼øÂ÷ÀûÀÎ ÅäÅ« ºĞ¸® (ÇÇ¿¬»êÀÚ °£ ±¸ºĞÀ» À§ÇÑ °ø¹é, ÇÇ¿¬»êÀÚ, ¿¬»êÀÚ)
+		1) í›„ìœ„ í‘œí˜„ì‹ì˜ ì˜¤ë¥¸ìª½ì—ì„œ ì™¼ìª½ (ì—­ë°©í–¥)ìœ¼ë¡œ ìˆœì°¨ì ì¸ í† í° ë¶„ë¦¬ (í”¼ì—°ì‚°ì ê°„ êµ¬ë¶„ì„ ìœ„í•œ ê³µë°±, í”¼ì—°ì‚°ì, ì—°ì‚°ì)
 
-		2) ºĞ¸® µÈ ÅäÅ«ÀÇ ±âÈ£ Å¸ÀÔ¿¡ µû¶ó,
+		2) ë¶„ë¦¬ ëœ í† í°ì˜ ê¸°í˜¸ íƒ€ì…ì— ë”°ë¼,
 
-			2-1) ÇÇ¿¬»êÀÚÀÎ °æ¿ì
-			: ÇØ´ç ÅäÅ«Àº ÀÙ ³ëµå°¡ µÇ¸ç, ÇöÀç ³ëµå¿¡ ÇØ´ç ÅäÅ«À¸·Î »ı¼º
+			2-1) í”¼ì—°ì‚°ìì¸ ê²½ìš°
+			: í•´ë‹¹ í† í°ì€ ì ë…¸ë“œê°€ ë˜ë©°, í˜„ì¬ ë…¸ë“œì— í•´ë‹¹ í† í°ìœ¼ë¡œ ìƒì„±
 
-			2-2) ¿¬»êÀÚÀÎ °æ¿ì
-			: ÇØ´ç ÅäÅ«Àº ÃÊ±â ·çÆ® ³ëµå È¤Àº °¡Áö ³ëµå°¡ µÇ¸ç, ÇöÀç ³ëµå¿¡ ÇØ´ç ÅäÅ«À¸·Î »ı¼ºÇÏ°í,
-			ÇöÀç ³ëµåÀÇ ¿À¸¥ÂÊ ÇÏÀ§ Æ®¸®, ¿ŞÂÊ ÇÏÀ§ Æ®¸®¿¡ ´ëÇØ Àç±ÍÀûÀ¸·Î ÀÌµ¿ (1·Î ÀÌµ¿ÇÏ¿© ÅäÅ« Àç »ı¼º)
+			2-2) ì—°ì‚°ìì¸ ê²½ìš°
+			: í•´ë‹¹ í† í°ì€ ì´ˆê¸° ë£¨íŠ¸ ë…¸ë“œ í˜¹ì€ ê°€ì§€ ë…¸ë“œê°€ ë˜ë©°, í˜„ì¬ ë…¸ë“œì— í•´ë‹¹ í† í°ìœ¼ë¡œ ìƒì„±í•˜ê³ ,
+			í˜„ì¬ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ í•˜ìœ„ íŠ¸ë¦¬, ì™¼ìª½ í•˜ìœ„ íŠ¸ë¦¬ì— ëŒ€í•´ ì¬ê·€ì ìœ¼ë¡œ ì´ë™ (1ë¡œ ì´ë™í•˜ì—¬ í† í° ì¬ ìƒì„±)
 
 			ex)
-			- ÇöÀç ³ëµåÀÇ ´ÙÀ½ µÎ ÅäÅ«ÀÌ °¢°¢ ÇÇ¿¬»êÀÚÀÏ °æ¿ì, ÇØ´ç ÅäÅ«Àº ÇöÀç ³ëµåÀÇ °¢°¢ ¿À¸¥ÂÊ ÀÚ½Ä ³ëµå¿Í ¿ŞÂÊ ÀÚ½Ä ³ëµå
-			- ÇöÀç ³ëµåÀÇ ´ÙÀ½ ´ÜÀÏ ÅäÅ«ÀÌ ´Ù½Ã ¿¬»êÀÚÀÎ °æ¿ì, ÇØ´ç ÅäÅ«Àº °¡Áö ³ëµå
+			- í˜„ì¬ ë…¸ë“œì˜ ë‹¤ìŒ ë‘ í† í°ì´ ê°ê° í”¼ì—°ì‚°ìì¼ ê²½ìš°, í•´ë‹¹ í† í°ì€ í˜„ì¬ ë…¸ë“œì˜ ê°ê° ì˜¤ë¥¸ìª½ ìì‹ ë…¸ë“œì™€ ì™¼ìª½ ìì‹ ë…¸ë“œ
+			- í˜„ì¬ ë…¸ë“œì˜ ë‹¤ìŒ ë‹¨ì¼ í† í°ì´ ë‹¤ì‹œ ì—°ì‚°ìì¸ ê²½ìš°, í•´ë‹¹ í† í°ì€ ê°€ì§€ ë…¸ë“œ
 
 		---
 
-		ÁßÀ§ Ç¥Çö½Ä : 1.0 * 2.0 + (7.0 - 8.0)
-		ÈÄÀ§ Ç¥Çö½Ä : 1.0 2.0 * 7.0 8.0 -+
+		ì¤‘ìœ„ í‘œí˜„ì‹ : 1.0 * 2.0 + (7.0 - 8.0)
+		í›„ìœ„ í‘œí˜„ì‹ : 1.0 2.0 * 7.0 8.0 -+
 
 					+
 			*				-
 		1.0		2.0		7.0		8.0
 	***/
 
-	Token token;
+	TOKEN token;
 
 	do
 	{
 		GenNextToken(srcPostfixExpr, &token, EXPR_READ_DIRECTION::RIGHT_TO_LEFT);
-		memset(&srcPostfixExpr[strlen(srcPostfixExpr) - token._readCount], '\0', token._readCount); //´ë»ó ÈÄÀ§ Ç¥Çö½ÄÀÇ ÅäÅ«¿¡¼­ ÀĞÀº ¹®ÀÚ °³¼ö¸¸Å­ Á¦°Å
-	} while (token._symbolType == SYMBOL_TYPE::SPACE); //ÅäÅ«ÀÇ ±âÈ£ Å¸ÀÔÀÌ ' ' (ÇÇ¿¬»êÀÚ °£ ±¸ºĞÀ» À§ÇÑ °ø¹é)°¡ ¾Æ´Ò ¶§±îÁö Àç »ı¼º
+		memset(&srcPostfixExpr[strlen(srcPostfixExpr) - token._readCount], '\0', token._readCount); //ëŒ€ìƒ í›„ìœ„ í‘œí˜„ì‹ì˜ í† í°ì—ì„œ ì½ì€ ë¬¸ì ê°œìˆ˜ë§Œí¼ ì œê±°
+	} while (token._symbolType == SYMBOL_TYPE::SPACE); //í† í°ì˜ ê¸°í˜¸ íƒ€ì…ì´ ' ' (í”¼ì—°ì‚°ì ê°„ êµ¬ë¶„ì„ ìœ„í•œ ê³µë°±)ê°€ ì•„ë‹ ë•Œê¹Œì§€ ì¬ ìƒì„±
 
 	switch (token._symbolType)
 	{
@@ -198,41 +198,41 @@ void EXPRT_BulidTreeFromPostfixExpr(Node** srcRootNode, char srcPostfixExpr[])
 	case SYMBOL_TYPE::MINUS:
 	case SYMBOL_TYPE::MULTIPLY:
 	case SYMBOL_TYPE::DIVIDE:
-		(*srcRootNode) = EXPRT_CreateNode(token._str); //¿¬»êÀÚÀÎ °æ¿ì ÇØ´ç ÅäÅ«Àº ÃÊ±â ·çÆ® ³ëµå È¤Àº °¡Áö ³ëµå
+		(*srcRootNode) = EXPRT_CreateNode(token._str); //ì—°ì‚°ìì¸ ê²½ìš° í•´ë‹¹ í† í°ì€ ì´ˆê¸° ë£¨íŠ¸ ë…¸ë“œ í˜¹ì€ ê°€ì§€ ë…¸ë“œ
 
-		EXPRT_BulidTreeFromPostfixExpr(&((*srcRootNode)->_right), srcPostfixExpr); //ÇöÀç ³ëµåÀÇ ¿À¸¥ÂÊ ÇÏÀ§ Æ®¸® »ı¼º
-		EXPRT_BulidTreeFromPostfixExpr(&((*srcRootNode)->_left), srcPostfixExpr); //ÇöÀç ³ëµåÀÇ ¿ŞÂÊ ÇÏÀ§ Æ®¸® »ı¼º
+		EXPRT_BulidTreeFromPostfixExpr(&((*srcRootNode)->_right), srcPostfixExpr); //í˜„ì¬ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ í•˜ìœ„ íŠ¸ë¦¬ ìƒì„±
+		EXPRT_BulidTreeFromPostfixExpr(&((*srcRootNode)->_left), srcPostfixExpr); //í˜„ì¬ ë…¸ë“œì˜ ì™¼ìª½ í•˜ìœ„ íŠ¸ë¦¬ ìƒì„±
 		break;
 
-	default: //ÇÇ¿¬»êÀÚÀÎ °æ¿ì
-		(*srcRootNode) = EXPRT_CreateNode(token._str); //ÇÇ¿¬»êÀÚÀÎ °æ¿ì ÇØ´ç ÅäÅ«Àº ÀÙ ³ëµå
+	default: //í”¼ì—°ì‚°ìì¸ ê²½ìš°
+		(*srcRootNode) = EXPRT_CreateNode(token._str); //í”¼ì—°ì‚°ìì¸ ê²½ìš° í•´ë‹¹ í† í°ì€ ì ë…¸ë“œ
 		break;
 	}
 }
 
 /// <summary>
-/// ´ë»ó Æ®¸®¿¡ ´ëÇÑ ¿¬»ê °á°ú ¹İÈ¯
+/// ëŒ€ìƒ íŠ¸ë¦¬ì— ëŒ€í•œ ì—°ì‚° ê²°ê³¼ ë°˜í™˜
 /// </summary>
-/// <param name="srcRootNode">´ë»ó Æ®¸®ÀÇ ÃÖ»óÀ§ ·çÆ® ³ëµå</param>
-double EXPRT_EvaluateTree(Node* srcRootNode)
+/// <param name="srcRootNode">ëŒ€ìƒ íŠ¸ë¦¬ì˜ ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œ</param>
+double EXPRT_EvaluateTree(NODE* srcRootNode)
 {
 	/***
-		< ±¸Ãà µÈ ¼ö½Ä Æ®¸®·ÎºÎÅÍ ¿¬»ê ¼öÇà >
+		< êµ¬ì¶• ëœ ìˆ˜ì‹ íŠ¸ë¦¬ë¡œë¶€í„° ì—°ì‚° ìˆ˜í–‰ >
 
-		1) ·çÆ® ³ëµå¿¡¼­ ½ÃÀÛ, ÇöÀç ³ëµåÀÇ ±âÈ£ Å¸ÀÔ¿¡ µû¶ó,
+		1) ë£¨íŠ¸ ë…¸ë“œì—ì„œ ì‹œì‘, í˜„ì¬ ë…¸ë“œì˜ ê¸°í˜¸ íƒ€ì…ì— ë”°ë¼,
 
-			1-1) ¿¬»êÀÚÀÎ °æ¿ì
-			: ÇöÀç ³ëµåÀÇ ¿ŞÂÊ ÇÏÀ§ Æ®¸® ¹× ¿À¸¥ÂÊ ÇÏÀ§ Æ®¸®·Î Àç±ÍÀûÀ¸·Î ÀÌµ¿
-			°¢ ÇÏÀ§ Æ®¸®ÀÇ ¿¬»ê °á°ú¸¦ º´ÇÕÇÏ¿© ·çÆ® ³ëµå (¿¬»êÀÚ)¿¡¼­ ÃÖÁ¾ °è»ê °á°ú ¹İÈ¯ (ÈÄÀ§ ¼øÈ¸)
-			´Ü, ÇöÀç ³ëµå°¡ ¿¬»êÀÚÀÎ °æ¿ì, ¿ŞÂÊ ÇÏÀ§ Æ®¸® È¤Àº ¿À¸¥ÂÊ ÇÏÀ§ Æ®¸®°¡ ÇÏ³ª¶óµµ Á¸ÀçÇÏÁö ¾ÊÀ» °æ¿ì Àß¸ø µÈ ¼ö½Ä Æ®¸® ¿¹¿Ü ¹ß»ı
+			1-1) ì—°ì‚°ìì¸ ê²½ìš°
+			: í˜„ì¬ ë…¸ë“œì˜ ì™¼ìª½ í•˜ìœ„ íŠ¸ë¦¬ ë° ì˜¤ë¥¸ìª½ í•˜ìœ„ íŠ¸ë¦¬ë¡œ ì¬ê·€ì ìœ¼ë¡œ ì´ë™
+			ê° í•˜ìœ„ íŠ¸ë¦¬ì˜ ì—°ì‚° ê²°ê³¼ë¥¼ ë³‘í•©í•˜ì—¬ ë£¨íŠ¸ ë…¸ë“œ (ì—°ì‚°ì)ì—ì„œ ìµœì¢… ê³„ì‚° ê²°ê³¼ ë°˜í™˜ (í›„ìœ„ ìˆœíšŒ)
+			ë‹¨, í˜„ì¬ ë…¸ë“œê°€ ì—°ì‚°ìì¸ ê²½ìš°, ì™¼ìª½ í•˜ìœ„ íŠ¸ë¦¬ í˜¹ì€ ì˜¤ë¥¸ìª½ í•˜ìœ„ íŠ¸ë¦¬ê°€ í•˜ë‚˜ë¼ë„ ì¡´ì¬í•˜ì§€ ì•Šì„ ê²½ìš° ì˜ëª» ëœ ìˆ˜ì‹ íŠ¸ë¦¬ ì˜ˆì™¸ ë°œìƒ
 
-			1-2) ÇÇ¿¬»êÀÚÀÎ °æ¿ì
-			: ÇöÀç ³ëµåÀÇ »óÀ§ ³ëµå·Î ÇöÀç ³ëµåÀÇ °ª Àü´Ş
+			1-2) í”¼ì—°ì‚°ìì¸ ê²½ìš°
+			: í˜„ì¬ ë…¸ë“œì˜ ìƒìœ„ ë…¸ë“œë¡œ í˜„ì¬ ë…¸ë“œì˜ ê°’ ì „ë‹¬
 	***/
 
 	double retVal = 0.0;
-	double leftTreeOpResult = 0.0; //ÇöÀç ³ëµåÀÇ ¿ŞÂÊ ÇÏÀ§ Æ®¸®ÀÇ ¿¬»ê °á°ú
-	double rightTreeOpResult = 0.0; //ÇöÀç ³ëµåÀÇ ¿À¸¥ÂÊ ÇÏÀ§ Æ®¸®ÀÇ ¿¬»ê °á°ú
+	double leftTreeOpResult = 0.0; //í˜„ì¬ ë…¸ë“œì˜ ì™¼ìª½ í•˜ìœ„ íŠ¸ë¦¬ì˜ ì—°ì‚° ê²°ê³¼
+	double rightTreeOpResult = 0.0; //í˜„ì¬ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ í•˜ìœ„ íŠ¸ë¦¬ì˜ ì—°ì‚° ê²°ê³¼
 
 	switch (StrToSymbolType(srcRootNode->_data))
 	{
@@ -243,15 +243,15 @@ double EXPRT_EvaluateTree(Node* srcRootNode)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Invalid Expression Tree"));
 
 	case SYMBOL_TYPE::OPERAND:
-		retVal = StrToDouble(srcRootNode->_data); //ÇÇ¿¬»êÀÚÀÎ °æ¿ì, ÇöÀç ³ëµåÀÇ »óÀ§ ³ëµå·Î ÇöÀç ³ëµåÀÇ °ª Àü´Ş
+		retVal = StrToDouble(srcRootNode->_data); //í”¼ì—°ì‚°ìì¸ ê²½ìš°, í˜„ì¬ ë…¸ë“œì˜ ìƒìœ„ ë…¸ë“œë¡œ í˜„ì¬ ë…¸ë“œì˜ ê°’ ì „ë‹¬
 		break;
 
-	default: //¿¬»êÀÚÀÎ °æ¿ì
+	default: //ì—°ì‚°ìì¸ ê²½ìš°
 		if (srcRootNode->_left == NULL || srcRootNode->_right == NULL)
 			throw std::runtime_error(std::string(__func__) + std::string(" : Invalid Expression Tree"));
 
-		leftTreeOpResult = EXPRT_EvaluateTree(srcRootNode->_left); //ÇöÀç ³ëµåÀÇ ¿ŞÂÊ ÇÏÀ§ Æ®¸®·Î ÀÌµ¿
-		rightTreeOpResult = EXPRT_EvaluateTree(srcRootNode->_right); //ÇöÀç ³ëµåÀÇ ¿À¸¥ÂÊ ÇÏÀ§ Æ®¸®·Î ÀÌµ¿
+		leftTreeOpResult = EXPRT_EvaluateTree(srcRootNode->_left); //í˜„ì¬ ë…¸ë“œì˜ ì™¼ìª½ í•˜ìœ„ íŠ¸ë¦¬ë¡œ ì´ë™
+		rightTreeOpResult = EXPRT_EvaluateTree(srcRootNode->_right); //í˜„ì¬ ë…¸ë“œì˜ ì˜¤ë¥¸ìª½ í•˜ìœ„ íŠ¸ë¦¬ë¡œ ì´ë™
 
 		retVal = CalcOperation(leftTreeOpResult, StrToSymbolType(srcRootNode->_data), rightTreeOpResult);
 		break;
@@ -261,44 +261,44 @@ double EXPRT_EvaluateTree(Node* srcRootNode)
 }
 
 /// <summary>
-/// ¼øÈ¸ ¸ğµå¿¡ µû¸¥ ´ë»ó Æ®¸® Ãâ·Â
+/// ìˆœíšŒ ë°©ë²•ì— ë”°ë¥¸ ëŒ€ìƒ íŠ¸ë¦¬ ì¶œë ¥
 /// </summary>
-/// <param name="srcRootNode">´ë»ó Æ®¸®ÀÇ ÃÖ»óÀ§ ·çÆ® ³ëµå</param>
-/// <param name="traversalMode">¼øÈ¸ ¸ğµå</param>
-/// <param name="os">Ãâ·Â ½ºÆ®¸²</param>
-void EXPRT_DispOrderedTree(Node* srcRootNode, TRAVERSAL_MODE traversalMode, std::ostream& os)
+/// <param name="srcRootNode">ëŒ€ìƒ íŠ¸ë¦¬ì˜ ìµœìƒìœ„ ë£¨íŠ¸ ë…¸ë“œ</param>
+/// <param name="traversalMethod">ìˆœíšŒ ë°©ë²•</param>
+/// <param name="os">ì¶œë ¥ ìŠ¤íŠ¸ë¦¼</param>
+void EXPRT_DispOrderedTree(NODE* srcRootNode, TRAVERSAL_METHOD traversalMethod, std::ostream& os)
 {
 	if (srcRootNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	switch (traversalMode)
+	switch (traversalMethod)
 	{
-	case TRAVERSAL_MODE::PREORDER:
+	case TRAVERSAL_METHOD::PREORDER:
 		os << srcRootNode->_data << " ";
 
 		if (srcRootNode->_left != NULL)
-			EXPRT_DispOrderedTree(srcRootNode->_left, traversalMode, os);
+			EXPRT_DispOrderedTree(srcRootNode->_left, traversalMethod, os);
 
 		if (srcRootNode->_right != NULL)
-			EXPRT_DispOrderedTree(srcRootNode->_right, traversalMode, os);
+			EXPRT_DispOrderedTree(srcRootNode->_right, traversalMethod, os);
 		break;
 
-	case TRAVERSAL_MODE::INORDER:
+	case TRAVERSAL_METHOD::INORDER:
 		if (srcRootNode->_left != NULL)
-			EXPRT_DispOrderedTree(srcRootNode->_left, traversalMode, os);
+			EXPRT_DispOrderedTree(srcRootNode->_left, traversalMethod, os);
 
 		os << " '" << srcRootNode->_data << "' ";
 
 		if (srcRootNode->_right != NULL)
-			EXPRT_DispOrderedTree(srcRootNode->_right, traversalMode, os);
+			EXPRT_DispOrderedTree(srcRootNode->_right, traversalMethod, os);
 		break;
 
-	case TRAVERSAL_MODE::POSTORDER:
+	case TRAVERSAL_METHOD::POSTORDER:
 		if (srcRootNode->_left != NULL)
-			EXPRT_DispOrderedTree(srcRootNode->_left, traversalMode, os);
+			EXPRT_DispOrderedTree(srcRootNode->_left, traversalMethod, os);
 
 		if (srcRootNode->_right != NULL)
-			EXPRT_DispOrderedTree(srcRootNode->_right, traversalMode, os);
+			EXPRT_DispOrderedTree(srcRootNode->_right, traversalMethod, os);
 
 		os << srcRootNode->_data << " ";
 		break;

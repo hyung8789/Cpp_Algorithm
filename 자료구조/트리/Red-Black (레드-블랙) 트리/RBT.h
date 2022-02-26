@@ -9,6 +9,7 @@
 	(검은색 더미 단말 노드 자신은 부모와 연결되어있지 않으며, 단말 노드에서 검은색 더미 단말 노드로만 연결을 허용)
 
 	DEF2) 빨간 노드의 한 단계 하위 자식 노드는 항상 검은색
+	: 연속해서 빨간 노드가 두 개 존재할 수 없음
 
 	DEF3) 검은 노드의 한 단계 하위 자식 노드는 빨간색 혹은 검은색
 
@@ -20,8 +21,8 @@
 	DEF6) 위의 정의 및 구현의 단순화를 위해 중복 된 데이터를 허용하지 않음
 ***/
 
-typedef int DataType; //노드의 데이터 타입
-typedef int TreeDepthType; //트리 깊이 타입
+typedef int DATA_TYPE; //노드의 데이터 타입
+typedef int TREE_DEPTH_TYPE; //트리 깊이 타입
 
 enum class COLOR : const unsigned
 {
@@ -29,17 +30,17 @@ enum class COLOR : const unsigned
 	BLACK = (0x000000)
 };
 
-typedef struct NodeType
+typedef struct NODE_TYPE
 {
-	DataType _data; //노드의 데이터
+	DATA_TYPE _data; //노드의 데이터
 	COLOR _color; //노드 색
 
-	NodeType* _parent; //부모 노드
-	NodeType* _left; //왼쪽 노드
-	NodeType* _right; //오른쪽 노드
-}Node;
+	NODE_TYPE* _parent; //부모 노드
+	NODE_TYPE* _left; //왼쪽 노드
+	NODE_TYPE* _right; //오른쪽 노드
+}NODE;
 
-enum class TRAVERSAL_MODE : const int
+enum class TRAVERSAL_METHOD : const int
 {
 	PREORDER = 0, //전위 순회 (Root -> Left -> Right)
 	INORDER, //중위 순회 (Left -> Root -> Right)
@@ -52,13 +53,20 @@ enum class ROTATE_DIRECTION : const int
 	LEFT //좌회전 (부모 노드의 오른쪽 자식과 부모의 위치 교환)
 };
 
-static Node* dummyBlackTerminalNode = NULL; //검은색 더미 단말 노드
+#define DUMMY_BLACK_TERMINAL_NODE_DATA INT_MIN //노드의 데이터 타입에 따른 검은색 더미 단말 노드의 데이터
+static NODE* dummyBlackTerminalNode = NULL; //검은색 더미 단말 노드
 
-Node* RBT_CreateNode(DataType);
+NODE* RBT_CreateNode(DATA_TYPE);
+void RBT_DeallocateNode(NODE**);
+void RBT_DeallocateTree(NODE**);
 
-void RBT_InsertNode(Node**, Node*);
-void RBT_InsertNodeHelper(Node**, Node*);
-void RBT_PostProcAfterInsert(Node**, Node*);
+void RBT_DispOrderedTree(NODE*, TRAVERSAL_METHOD);
 
-void RBT_RotateTree(Node**, Node* , ROTATE_DIRECTION);
+void RBT_InsertNode(NODE**, NODE*);
+void RBT_RemoveNode(NODE**, const DATA_TYPE&, bool = true);
+NODE* RBT_SearchNode(NODE*, const DATA_TYPE&);
+NODE* RBT_SearchMinNode(NODE*, bool);
+
+void RBT_InsertNodeHelper(NODE**, NODE*);
+void RBT_RotateTree(NODE**, NODE* , ROTATE_DIRECTION);
 #endif

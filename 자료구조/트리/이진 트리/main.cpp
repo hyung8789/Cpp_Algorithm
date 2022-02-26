@@ -15,8 +15,8 @@ int main()
 			D	E		F	G
 		***/
 
-		Node* rootNode = BT_CreateNode('A'); //최상위 루트 노드
-		Node* dummyNode[NODE_COUNT] = { NULL, }; //이진 트리에 연결 할 노드
+		NODE* rootNode = BT_CreateNode('A'); //최상위 루트 노드
+		NODE* dummyNode[NODE_COUNT] = { NULL, }; //이진 트리에 연결 할 노드
 		for (int i = 0; i < NODE_COUNT; i++) //최상위 루트 노트에 자식 노드 연결
 		{
 			dummyNode[i] = BT_CreateNode((char)(66 + i)); //B부터 할당
@@ -33,11 +33,11 @@ int main()
 
 
 		std::cout << "\n전위 순회 (Root -> Left -> Right) : ";
-		BT_DispOrderedTree(rootNode, TRAVERSAL_MODE::PREORDER);
+		BT_DispOrderedTree(rootNode, TRAVERSAL_METHOD::PREORDER);
 		std::cout << "\n중위 순회 (Left -> Root -> Right) : ";
-		BT_DispOrderedTree(rootNode, TRAVERSAL_MODE::INORDER);
+		BT_DispOrderedTree(rootNode, TRAVERSAL_METHOD::INORDER);
 		std::cout << "\n후위 순회 (Left -> Right -> Root) : ";
-		BT_DispOrderedTree(rootNode, TRAVERSAL_MODE::POSTORDER);
+		BT_DispOrderedTree(rootNode, TRAVERSAL_METHOD::POSTORDER);
 		std::cout << "\n";
 	}
 	catch (const std::exception& ex)

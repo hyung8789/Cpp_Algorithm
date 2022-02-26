@@ -1,33 +1,33 @@
-#ifndef _LLQ_H_
+ï»¿#ifndef _LLQ_H_
 #define _LLQ_H_
 
-typedef int DataType; //³ëµåÀÇ µ¥ÀÌÅÍ Å¸ÀÔ
-typedef int QueueIndexType; //Å¥ ÀÎµ¦½º Å¸ÀÔ
+typedef int DATA_TYPE; //ë…¸ë“œì˜ ë°ì´í„° íƒ€ì…
+typedef int QUEUE_INDEX_TYPE; //í ì¸ë±ìŠ¤ íƒ€ì…
 
-typedef struct NodeType
+typedef struct NODE_TYPE
 {
-	DataType _data; //³ëµåÀÇ µ¥ÀÌÅÍ
+	DATA_TYPE _data; //ë…¸ë“œì˜ ë°ì´í„°
 
-	NodeType* _next; //´ÙÀ½ ³ëµå
-}Node;
+	NODE_TYPE* _next; //ë‹¤ìŒ ë…¸ë“œ
+}NODE;
 
-typedef struct LinkedListQueueType
+typedef struct LINKED_LIST_QUEUE_TYPE
 {
-	Node* _front; //Àü´Ü ³ëµå
-	Node* _rear; //ÈÄ´Ü ³ëµå
+	NODE* _front; //ì „ë‹¨ ë…¸ë“œ
+	NODE* _rear; //í›„ë‹¨ ë…¸ë“œ
 
-	QueueIndexType _totalNodeCount; //ÀüÃ¼ ³ëµå ¼ö
-}LinkedListQueue;
+	QUEUE_INDEX_TYPE _totalNodeCount; //ì „ì²´ ë…¸ë“œ ìˆ˜
+}LINKED_LIST_QUEUE;
 
-void LLQ_CreateQueue(LinkedListQueue**);
-void LLQ_DeallocateQueue(LinkedListQueue**);
+void LLQ_CreateQueue(LINKED_LIST_QUEUE**);
+void LLQ_DeallocateQueue(LINKED_LIST_QUEUE**);
 
-Node* LLQ_CreateNode(DataType);
-void LLQ_DeallocateNode(Node**);
+NODE* LLQ_CreateNode(DATA_TYPE);
+void LLQ_DeallocateNode(NODE**);
 
-void LLQ_Enqueue(LinkedListQueue**, Node*);
-Node* LLQ_Dequeue(LinkedListQueue**);
+void LLQ_Enqueue(LINKED_LIST_QUEUE**, NODE*);
+NODE* LLQ_Dequeue(LINKED_LIST_QUEUE**);
 
-QueueIndexType LLQ_GetTotalNodeCount(LinkedListQueue**);
-bool LLQ_IsEmpty(LinkedListQueue**);
+QUEUE_INDEX_TYPE LLQ_GetTotalNodeCount(LINKED_LIST_QUEUE**);
+bool LLQ_IsEmpty(LINKED_LIST_QUEUE**);
 #endif

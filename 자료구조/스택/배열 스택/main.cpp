@@ -9,7 +9,7 @@ int main()
 
 	try
 	{
-		ArrayStack* stack = NULL; //배열 스택
+		ARRAY_STACK* stack = NULL; //배열 스택
 		AS_CreateStack(&stack, STACK_SIZE); //STACK_SIZE만큼 삽입 가능 한 크기 할당
 
 		for (int i = 0; i < STACK_SIZE; i++)
@@ -17,7 +17,7 @@ int main()
 			AS_Push(&stack, i);
 		}
 
-		StackIndexType count = AS_GetTotalNodeDataCount(&stack);
+		STACK_INDEX_TYPE count = AS_GetTotalNodeDataCount(&stack);
 		for (int i = 0; i < count; i++)
 		{
 			std::cout << "-------------------------------------------\n";

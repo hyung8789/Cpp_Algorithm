@@ -9,10 +9,10 @@ int main()
 
 	try
 	{
-		Node* rootNode = NULL; //최상위 루트 노드
+		NODE* rootNode = NULL; //최상위 루트 노드
 		rootNode = LCRS_CreateNode('A');
 
-		Node* rootChildNode[NODE_COUNT] = { NULL, }; //최상위 루트 노드의 자식 노드
+		NODE* rootChildNode[NODE_COUNT] = { NULL, }; //최상위 루트 노드의 자식 노드
 		for (int i = 0; i < NODE_COUNT; i++) //최상위 루트 노트에 자식 노드 연결
 		{
 			rootChildNode[i] = LCRS_CreateNode((char)(66 + i)); //B부터 할당
@@ -29,7 +29,7 @@ int main()
 
 		LCRS_DispTree(rootNode);
 
-		TreeDepthType TARGET_DEPTH = 2; //탐색 할 깊이
+		TREE_DEPTH_TYPE TARGET_DEPTH = 2; //탐색 할 깊이
 		std::cout << "--- 깊이 " << TARGET_DEPTH << "에 있는 전체 노드 목록 출력 --- \n";
 		LCRS_DispTreeNodesAt(rootNode, TARGET_DEPTH);
 

@@ -151,7 +151,7 @@ namespace 수식_트리_계산기_UnitTest
 			size_t inputLen = strlen(input);
 			size_t currentReadCount = 0; //입력값에 대해 현재까지 읽은 개수
 
-			Token token;
+			TOKEN token;
 
 			while (currentReadCount < inputLen)
 			{
@@ -182,7 +182,7 @@ namespace 수식_트리_계산기_UnitTest
 			size_t inputLen = strlen(input);
 			size_t currentReadCount = 0; //입력값에 대해 현재까지 읽은 개수
 
-			Token token;
+			TOKEN token;
 
 			while (currentReadCount < inputLen)
 			{
@@ -233,7 +233,7 @@ namespace 수식_트리_계산기_UnitTest
 
 			try
 			{
-				Node* rootNode = NULL;
+				NODE* rootNode = NULL;
 				char buffer[MAX_STR_LEN] = { '\0' };
 				double result = 0.0;
 				std::stringstream ss;
@@ -251,17 +251,17 @@ namespace 수식_트리_계산기_UnitTest
 
 					if (LOGGING_DEBUG_RESULT)
 					{
-						EXPRT_DispOrderedTree(rootNode, TRAVERSAL_MODE::PREORDER, ss);
+						EXPRT_DispOrderedTree(rootNode, TRAVERSAL_METHOD::PREORDER, ss);
 						Logger::WriteMessage((std::string("PREORDER : ") + std::string(ss.str())).c_str());
 						ss.str(std::string());
 						ss.clear();
 
-						EXPRT_DispOrderedTree(rootNode, TRAVERSAL_MODE::INORDER, ss);
+						EXPRT_DispOrderedTree(rootNode, TRAVERSAL_METHOD::INORDER, ss);
 						Logger::WriteMessage((std::string("INORDER : ") + std::string(ss.str())).c_str());
 						ss.str(std::string());
 						ss.clear();
 
-						EXPRT_DispOrderedTree(rootNode, TRAVERSAL_MODE::POSTORDER, ss);
+						EXPRT_DispOrderedTree(rootNode, TRAVERSAL_METHOD::POSTORDER, ss);
 						Logger::WriteMessage((std::string("POSTORDER : ") + std::string(ss.str())).c_str());
 						ss.str(std::string());
 						ss.clear();
@@ -295,7 +295,7 @@ namespace 수식_트리_계산기_UnitTest
 
 			try
 			{
-				Node* rootNode = NULL;
+				NODE* rootNode = NULL;
 				char buffer[MAX_STR_LEN] = { '\0' };
 				double result = 0.0;
 

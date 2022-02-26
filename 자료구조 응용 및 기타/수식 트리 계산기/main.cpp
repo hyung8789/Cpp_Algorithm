@@ -6,7 +6,7 @@ int main()
 	_CrtMemCheckpoint(&oldState); //할당 전 상태
 
 	char postfixExpr[MAX_STR_LEN]; //후위 표현식
-	Node* rootNode = NULL;
+	NODE* rootNode = NULL;
 
 	try
 	{
@@ -18,11 +18,11 @@ int main()
 		EXPRT_BulidTreeFromPostfixExpr(&rootNode, postfixExpr);
 
 		std::cout << "\n전위 순회 : ";
-		EXPRT_DispOrderedTree(rootNode, TRAVERSAL_MODE::PREORDER);
+		EXPRT_DispOrderedTree(rootNode, TRAVERSAL_METHOD::PREORDER);
 		std::cout << "\n중위 순회 : ";
-		EXPRT_DispOrderedTree(rootNode, TRAVERSAL_MODE::INORDER);
+		EXPRT_DispOrderedTree(rootNode, TRAVERSAL_METHOD::INORDER);
 		std::cout << "\n후위 순회 : ";
-		EXPRT_DispOrderedTree(rootNode, TRAVERSAL_MODE::POSTORDER);
+		EXPRT_DispOrderedTree(rootNode, TRAVERSAL_METHOD::POSTORDER);
 
 		printf("\n계산 결과 : %f\n", EXPRT_EvaluateTree(rootNode));
 		EXPRT_DeallocateTree(&rootNode);

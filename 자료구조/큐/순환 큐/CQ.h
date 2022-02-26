@@ -1,29 +1,29 @@
-#ifndef _CQ_H_
+ï»¿#ifndef _CQ_H_
 #define _CQ_H_
 
-typedef int DataType; //³ëµåÀÇ µ¥ÀÌÅÍ Å¸ÀÔ
-typedef int QueueIndexType; //Å¥ ÀÎµ¦½º Å¸ÀÔ
+typedef int DATA_TYPE; //ë…¸ë“œì˜ ë°ì´í„° íƒ€ì…
+typedef int QUEUE_INDEX_TYPE; //í ì¸ë±ìŠ¤ íƒ€ì…
 
-typedef struct NodeType
+typedef struct NODE_TYPE
 {
-	DataType _data; //³ëµåÀÇ µ¥ÀÌÅÍ
-}Node;
+	DATA_TYPE _data; //ë…¸ë“œì˜ ë°ì´í„°
+}NODE;
 
-typedef struct CircularQueueType
+typedef struct CIRCULAR_QUEUE_TYPE
 {
-	QueueIndexType _capacity; //ÇÒ´ç Å©±â
-	QueueIndexType _front, _rear; //Àü´Ü, ÈÄ´Ü ÀÎµ¦½º
+	QUEUE_INDEX_TYPE _capacity; //í• ë‹¹ í¬ê¸°
+	QUEUE_INDEX_TYPE _front, _rear; //ì „ë‹¨, í›„ë‹¨ ì¸ë±ìŠ¤
 
-	Node* _nodeArray; //³ëµå ¹è¿­
-}CircularQueue;
+	NODE* _nodeArray; //ë…¸ë“œ ë°°ì—´
+}CIRCULAR_QUEUE;
 
-void CQ_CreateQueue(CircularQueue**, QueueIndexType);
-void CQ_DeallocateQueue(CircularQueue**);
+void CQ_CreateQueue(CIRCULAR_QUEUE**, QUEUE_INDEX_TYPE);
+void CQ_DeallocateQueue(CIRCULAR_QUEUE**);
 
-void CQ_Enqueue(CircularQueue**, DataType);
-DataType CQ_Dequeue(CircularQueue**);
+void CQ_Enqueue(CIRCULAR_QUEUE**, DATA_TYPE);
+DATA_TYPE CQ_Dequeue(CIRCULAR_QUEUE**);
 
-QueueIndexType CQ_GetTotalNodeDataCount(CircularQueue**);
-bool CQ_IsEmpty(CircularQueue**);
-bool CQ_IsFull(CircularQueue**);
+QUEUE_INDEX_TYPE CQ_GetTotalNodeDataCount(CIRCULAR_QUEUE**);
+bool CQ_IsEmpty(CIRCULAR_QUEUE**);
+bool CQ_IsFull(CIRCULAR_QUEUE**);
 #endif

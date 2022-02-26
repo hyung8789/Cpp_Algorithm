@@ -1,10 +1,10 @@
-#ifndef _SORT_MAPPER_H_
+ï»¿#ifndef _SORT_MAPPER_H_
 #define _SORT_MAPPER_H_
 
-template<typename SortElementType>
-using SortFuncAddrType = void(*)(SortElementType[], size_t, ORDER_BY); // https://en.cppreference.com/w/cpp/language/type_alias
+template<typename SORT_ELEMENT_TYPE>
+using SORT_FUNC_ADDR_TYPE = void(*)(SORT_ELEMENT_TYPE[], size_t, ORDER_BY); // https://en.cppreference.com/w/cpp/language/type_alias
 
-typedef int MySortElementType; //ÀÓÀÇÀÇ Á¤·Ä ¿ä¼Ò Å¸ÀÔ (Á¤·Ä ¿ä¼Ò Å¸ÀÔ ±¸Ã¼È­)
+typedef int MY_SORT_ELEMENT_TYPE; //ì„ì˜ì˜ ì •ë ¬ ìš”ì†Œ íƒ€ì… (ì •ë ¬ ìš”ì†Œ íƒ€ì… êµ¬ì²´í™”)
 
 enum class SORT_UNIQUE_MAPPED_INDEX : const int
 {
@@ -15,19 +15,19 @@ enum class SORT_UNIQUE_MAPPED_INDEX : const int
 	//	MERGE_SORT,
 //COCKTAIL_SORT,
 //CYCLE_SORT,
-	TOTAL_SORT_FUNC_COUNT //ÀüÃ¼ Á¤·Ä ÇÔ¼ö °³¼ö
-}; //Á¤·ÄÀÇ °íÀ¯ »ç»ó ÀÎµ¦½º
+	TOTAL_SORT_FUNC_COUNT //ì „ì²´ ì •ë ¬ í•¨ìˆ˜ ê°œìˆ˜
+}; //ì •ë ¬ì˜ ê³ ìœ  ì‚¬ìƒ ì¸ë±ìŠ¤
 
 struct SORT_METADATA
 {
 	SORT_METADATA();
-	SORT_METADATA(SortFuncAddrType<MySortElementType>, const char*, const char* = NULL);
+	SORT_METADATA(SORT_FUNC_ADDR_TYPE<MY_SORT_ELEMENT_TYPE>, const char*, const char* = NULL);
 
-	SortFuncAddrType<MySortElementType> _sortFuncAddr; //Á¤·Ä ÇÔ¼ö ÁÖ¼Ò
-	const char* _sortFuncName; //Á¤·Ä ÇÔ¼ö ÀÌ¸§
-	const char* _optionalAlternativeSortFuncName; //´ëÃ¼ Á¤·Ä ÇÔ¼ö ÀÌ¸§ (Optional)
+	SORT_FUNC_ADDR_TYPE<MY_SORT_ELEMENT_TYPE> _sortFuncAddr; //ì •ë ¬ í•¨ìˆ˜ ì£¼ì†Œ
+	const char* _sortFuncName; //ì •ë ¬ í•¨ìˆ˜ ì´ë¦„
+	const char* _optionalAlternativeSortFuncName; //ëŒ€ì²´ ì •ë ¬ í•¨ìˆ˜ ì´ë¦„ (Optional)
 	TRACE_RESULT _traceResult;
-}; //Á¤·Ä¿¡ ´ëÇÑ ¸ŞÅ¸µ¥ÀÌÅÍ
+}; //ì •ë ¬ì— ëŒ€í•œ ë©”íƒ€ë°ì´í„°
 
 class SORT_MAPPER
 {

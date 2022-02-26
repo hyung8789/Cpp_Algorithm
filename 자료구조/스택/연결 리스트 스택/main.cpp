@@ -7,16 +7,16 @@ int main()
 	
 	try
 	{
-		LinkedListStack* stack = NULL; //단일 연결 리스트 스택
+		LINKED_LIST_STACK* stack = NULL; //단일 연결 리스트 스택
 		LLS_CreateStack(&stack);
 		LLS_Push(&stack, LLS_CreateNode("abc"));
 		LLS_Push(&stack, LLS_CreateNode("123"));
 		LLS_Push(&stack, LLS_CreateNode("test"));
 
-		StackIndexType count = LLS_GetTotalNodeCount(&stack);
+		STACK_INDEX_TYPE count = LLS_GetTotalNodeCount(&stack);
 		for (int i = 0; i < count; i++)
 		{
-			Node* poppedNode = NULL;
+			NODE* poppedNode = NULL;
 
 			std::cout << "-------------------------------------------\n";
 			std::cout << "--- Before Pop ---\n";

@@ -5,9 +5,9 @@
 /// </summary>
 /// <param name="srcData">노드의 데이터</param>
 /// <returns>생성 된 노드</returns>
-Node* SLL_CreateNode(DataType srcData)
+NODE* SLL_CreateNode(DATA_TYPE srcData)
 {
-	Node* retVal = (Node*)malloc(sizeof(Node));
+	NODE* retVal = (NODE*)malloc(sizeof(NODE));
 	if (retVal == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
@@ -21,7 +21,7 @@ Node* SLL_CreateNode(DataType srcData)
 /// 대상 노드에 할당 된 메모리 해제
 /// </summary>
 /// <param name="srcNode">대상 노드</param>
-void SLL_DeallocateNode(Node** srcNode)
+void SLL_DeallocateNode(NODE** srcNode)
 {
 	if ((*srcNode) != NULL)
 	{
@@ -34,11 +34,11 @@ void SLL_DeallocateNode(Node** srcNode)
 /// 대상 리스트에 할당 된 메모리 해제
 /// </summary>
 /// <param name="srcList">대상 리스트</param>
-void SLL_DeallocateNodeList(Node** srcList)
+void SLL_DeallocateNodeList(NODE** srcList)
 {
 	while ((*srcList) != NULL)
 	{
-		Node* tmp = (*srcList); //삭제 할 노드
+		NODE* tmp = (*srcList); //삭제 할 노드
 
 		(*srcList) = (*srcList)->_next; //헤드 노드를 다음 노드로 이동 후 삭제
 		SLL_DeallocateNode(&tmp);
@@ -52,7 +52,7 @@ void SLL_DeallocateNodeList(Node** srcList)
 /// </summary>
 /// <param name="srcList">대상 리스트</param>
 /// <param name="srcNewNode">리스트의 끝에 삽입하고자 하는 새 노드</param>
-void SLL_AppendNode(Node** srcList, Node* srcNewNode)
+void SLL_AppendNode(NODE** srcList, NODE* srcNewNode)
 {
 	if (srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -63,7 +63,7 @@ void SLL_AppendNode(Node** srcList, Node* srcNewNode)
 	}
 	else //끝에 새 노드 삽입
 	{
-		Node* tail = (*srcList); //꼬리 노드
+		NODE* tail = (*srcList); //꼬리 노드
 
 		while (tail->_next != NULL) //끝으로 이동
 		{
@@ -80,12 +80,12 @@ void SLL_AppendNode(Node** srcList, Node* srcNewNode)
 /// <param name="srcList">대상 리스트</param>
 /// <param name="position">헤드 노드 기준 상대적 특정 위치</param>
 /// <returns>헤드 노드 기준 상대적 특정 위치의 노드</returns>
-Node* SLL_GetNodeAt(Node** srcList, NodePositionType position)
+NODE* SLL_GetNodeAt(NODE** srcList, NODE_POSITION_TYPE position)
 {
 	if (position < 0)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	Node* retVal = (*srcList); //현재 노드
+	NODE* retVal = (*srcList); //현재 노드
 
 	while (retVal != NULL && (--position) >= 0) //반환 대상 노드 위치까지 이동
 	{
@@ -104,7 +104,7 @@ Node* SLL_GetNodeAt(Node** srcList, NodePositionType position)
 /// <param name="srcList">대상 리스트</param>
 /// <param name="position">헤드 노드 기준 삭제 할 상대적 특정 위치</param>
 /// <param name="deallocateAfterRemove">삭제 대상 노드에 대한 메모리 해제 수행 여부</param>
-void SLL_RemoveNodeAt(Node** srcList, NodePositionType position, bool deallocateAfterRemove)
+void SLL_RemoveNodeAt(NODE** srcList, NODE_POSITION_TYPE position, bool deallocateAfterRemove)
 {
 	/***
 		단일 연결 리스트에서 삭제 대상 노드에서 이전 노드로 즉시 접근이 불가능하므로,
@@ -119,7 +119,7 @@ void SLL_RemoveNodeAt(Node** srcList, NodePositionType position, bool deallocate
 
 	if (position == 0) //헤드 노드가 삭제 대상일 경우
 	{
-		Node* tmp = (*srcList); //삭제 대상 노드
+		NODE* tmp = (*srcList); //삭제 대상 노드
 		(*srcList) = (*srcList)->_next; //헤드 노드의 다음 노드로 헤드 노드 변경
 		tmp->_next = NULL;
 
@@ -130,7 +130,7 @@ void SLL_RemoveNodeAt(Node** srcList, NodePositionType position, bool deallocate
 	}
 	else //현재 노드의 다음 노드가 삭제 대상 노드일 때까지 탐색
 	{
-		Node* current = (*srcList); //현재 노드
+		NODE* current = (*srcList); //현재 노드
 
 		while (current != NULL && (--position) >= 1) //삭제 대상 노드의 이전 노드 위치까지 이동
 		{
@@ -140,7 +140,7 @@ void SLL_RemoveNodeAt(Node** srcList, NodePositionType position, bool deallocate
 		if (current == NULL)
 			throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
-		Node* tmp = current->_next; //삭제 대상 노드
+		NODE* tmp = current->_next; //삭제 대상 노드
 
 		current->_next = tmp->_next; //현재 노드의 다음을 삭제 대상 노드의 다음 노드로 연결
 		tmp->_next = NULL;
@@ -158,7 +158,7 @@ void SLL_RemoveNodeAt(Node** srcList, NodePositionType position, bool deallocate
 /// <param name="srcList">대상 리스트</param>
 /// <param name="srcTargetNode">삭제 대상 노드</param>
 /// <param name="deallocateAfterRemove">삭제 대상 노드에 대한 메모리 해제 수행 여부</param>
-void SLL_RemoveNode(Node** srcList, Node* srcTargetNode, bool deallocateAfterRemove)
+void SLL_RemoveNode(NODE** srcList, NODE* srcTargetNode, bool deallocateAfterRemove)
 {
 	if (srcTargetNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -175,7 +175,7 @@ void SLL_RemoveNode(Node** srcList, Node* srcTargetNode, bool deallocateAfterRem
 	}
 	else //현재 노드의 다음 노드가 삭제 대상 노드일때까지 탐색
 	{
-		Node* current = (*srcList); //현재 노드
+		NODE* current = (*srcList); //현재 노드
 
 		while (current != NULL && current->_next != srcTargetNode) //삭제 대상 노드의 이전 노드 위치까지 이동
 		{
@@ -200,7 +200,7 @@ void SLL_RemoveNode(Node** srcList, Node* srcTargetNode, bool deallocateAfterRem
 /// </summary>
 /// <param name="srcList">대상 리스트</param>
 /// <param name="srcNewNode">삽입하고자 하는 새 노드</param>
-void SLL_InsertNewHead(Node** srcList, Node* srcNewNode)
+void SLL_InsertNewHead(NODE** srcList, NODE* srcNewNode)
 {
 	if (srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -220,7 +220,7 @@ void SLL_InsertNewHead(Node** srcList, Node* srcNewNode)
 /// </summary>
 /// <param name="srcTargetNode">대상 노드</param>
 /// <param name="srcNewNode">삽입하고자 하는 새 노드</param>
-void SLL_InsertNodeAfter(Node* srcTargetNode, Node* srcNewNode)
+void SLL_InsertNodeAfter(NODE* srcTargetNode, NODE* srcNewNode)
 {
 	if (srcTargetNode == NULL || srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -235,7 +235,7 @@ void SLL_InsertNodeAfter(Node* srcTargetNode, Node* srcNewNode)
 /// <param name="srcList">대상 리스트</param>
 /// <param name="srcTargetNode">대상 노드</param>
 /// <param name="srcNewNode">삽입하고자 하는 새 노드</param>
-void SLL_InsertNodeBefore(Node** srcList, Node* srcTargetNode, Node* srcNewNode)
+void SLL_InsertNodeBefore(NODE** srcList, NODE* srcTargetNode, NODE* srcNewNode)
 {
 	/***
 		1) TH : 대상 노드의 헤드 노드 여부 (T : 헤드 노드, F : 중간 노드 혹은 꼬리 노드)
@@ -260,7 +260,7 @@ void SLL_InsertNodeBefore(Node** srcList, Node* srcTargetNode, Node* srcNewNode)
 	}
 	else //F
 	{
-		Node* current = (*srcList); //현재 노드
+		NODE* current = (*srcList); //현재 노드
 
 		while (current != NULL && current->_next != srcTargetNode) //현재 노드의 다음 노드가 삽입 대상 노드일때까지 탐색
 		{
@@ -280,10 +280,10 @@ void SLL_InsertNodeBefore(Node** srcList, Node* srcTargetNode, Node* srcNewNode)
 /// </summary>
 /// <param name="srcList">대상 리스트</param>
 /// <returns>대상 리스트의 전체 노드의 수</returns>
-NodePositionType SLL_GetTotalNodeCount(Node** srcList)
+NODE_POSITION_TYPE SLL_GetTotalNodeCount(NODE** srcList)
 {
-	NodePositionType totalNodeCount = 0; //전체 노드의 수
-	Node* current = (*srcList); //현재 노드
+	NODE_POSITION_TYPE totalNodeCount = 0; //전체 노드의 수
+	NODE* current = (*srcList); //현재 노드
 
 	while (current != NULL)
 	{
@@ -298,10 +298,10 @@ NodePositionType SLL_GetTotalNodeCount(Node** srcList)
 /// 대상 리스트의 전체 노드에 대한 데이터 출력
 /// </summary>
 /// <param name="srcList">대상 리스트</param>
-void SLL_DispNodeList(Node** srcList)
+void SLL_DispNodeList(NODE** srcList)
 {
-	NodePositionType currentPosition = 0; //현재 노드의 위치
-	Node* current = (*srcList); //현재 노드
+	NODE_POSITION_TYPE currentPosition = 0; //현재 노드의 위치
+	NODE* current = (*srcList); //현재 노드
 
 	while (current != NULL)
 	{

@@ -1,44 +1,44 @@
-#ifndef _EXPRT_H_
+ï»¿#ifndef _EXPRT_H_
 #define _EXPRT_H_
 
 /***
-	! ÀÌÇÏ, ÈÄÀ§ Ç¥Çö½ÄÀ¸·ÎºÎÅÍ ¼ö½Ä Æ®¸®¸¦ ±¸ÃàÇÏ´Â °úÁ¤ÀÇ ±â´É ´ÜÀ§ ºÐ·ù¿¡ µû¶ó,
+	! ì´í•˜, í›„ìœ„ í‘œí˜„ì‹ìœ¼ë¡œë¶€í„° ìˆ˜ì‹ íŠ¸ë¦¬ë¥¼ êµ¬ì¶•í•˜ëŠ” ê³¼ì •ì˜ ê¸°ëŠ¥ ë‹¨ìœ„ ë¶„ë¥˜ì— ë”°ë¼,
 
-		F1) ÈÄÀ§ Ç¥Çö½Ä¿¡ ´ëÇÑ ¼øÂ÷ÀûÀÎ ÅäÅ« »ý¼º
-		F2) »ý¼º µÈ ÅäÅ«À¸·ÎºÎÅÍ ¼øÂ÷ÀûÀÎ ¼ö½Ä Æ®¸® ±¸Ãà
-		F3) ±¸Ãà µÈ ¼ö½Ä Æ®¸®·ÎºÎÅÍ °è»ê ¼öÇà
+		F1) í›„ìœ„ í‘œí˜„ì‹ì— ëŒ€í•œ ìˆœì°¨ì ì¸ í† í° ìƒì„±
+		F2) ìƒì„± ëœ í† í°ìœ¼ë¡œë¶€í„° ìˆœì°¨ì ì¸ ìˆ˜ì‹ íŠ¸ë¦¬ êµ¬ì¶•
+		F3) êµ¬ì¶• ëœ ìˆ˜ì‹ íŠ¸ë¦¬ë¡œë¶€í„° ê³„ì‚° ìˆ˜í–‰
 
-	=> ±¸Ãà µÈ ¼ö½Ä Æ®¸®·ÎºÎÅÍ °è»êÀÌ ¼öÇàµÇ´Â ±â´ÉÀº ¼ö½Ä Æ®¸®¿¡ ÀÇÁ¸ÀûÀÌ¹Ç·Î,
-	¼ö½Ä Æ®¸® ±¸Ãà°ú °è»êÀÌ ¼öÇàµÇ´Â ¸ðµâ°ú ÈÄÀ§ Ç¥Çö½ÄÀ¸·ÎºÎÅÍ ¼øÂ÷ÀûÀÎ ÅäÅ«ÀÌ »ý¼ºµÇ´Â ¸ðµâÀ» º°µµ·Î ºÐ¸® ÇÒ °Í
+	=> êµ¬ì¶• ëœ ìˆ˜ì‹ íŠ¸ë¦¬ë¡œë¶€í„° ê³„ì‚°ì´ ìˆ˜í–‰ë˜ëŠ” ê¸°ëŠ¥ì€ ìˆ˜ì‹ íŠ¸ë¦¬ì— ì˜ì¡´ì ì´ë¯€ë¡œ,
+	ìˆ˜ì‹ íŠ¸ë¦¬ êµ¬ì¶•ê³¼ ê³„ì‚°ì´ ìˆ˜í–‰ë˜ëŠ” ëª¨ë“ˆê³¼ í›„ìœ„ í‘œí˜„ì‹ìœ¼ë¡œë¶€í„° ìˆœì°¨ì ì¸ í† í°ì´ ìƒì„±ë˜ëŠ” ëª¨ë“ˆì„ ë³„ë„ë¡œ ë¶„ë¦¬ í•  ê²ƒ
 ***/
 
-typedef char* DataType; //³ëµåÀÇ µ¥ÀÌÅÍ Å¸ÀÔ
-typedef int TreeDepthType; //Æ®¸® ±íÀÌ Å¸ÀÔ
+typedef char* DATA_TYPE; //ë…¸ë“œì˜ ë°ì´í„° íƒ€ìž…
+typedef int TREE_DEPTH_TYPE; //íŠ¸ë¦¬ ê¹Šì´ íƒ€ìž…
 
-typedef struct NodeType
+typedef struct NODE_TYPE
 {
-	DataType _data; //³ëµåÀÇ µ¥ÀÌÅÍ
+	DATA_TYPE _data; //ë…¸ë“œì˜ ë°ì´í„°
 
-	NodeType* _left; //¿ÞÂÊ ³ëµå
-	NodeType* _right; //¿À¸¥ÂÊ ³ëµå
-}Node;
+	NODE_TYPE* _left; //ì™¼ìª½ ë…¸ë“œ
+	NODE_TYPE* _right; //ì˜¤ë¥¸ìª½ ë…¸ë“œ
+}NODE;
 
-enum class TRAVERSAL_MODE : const int
+enum class TRAVERSAL_METHOD : const int
 {
-	PREORDER = 0, //ÀüÀ§ ¼øÈ¸ (Root -> Left -> Right)
-	INORDER, //ÁßÀ§ ¼øÈ¸ (Left -> Root -> Right)
-	POSTORDER //ÈÄÀ§ ¼øÈ¸ (Left -> Right -> Root)
+	PREORDER = 0, //ì „ìœ„ ìˆœíšŒ (Root -> Left -> Right)
+	INORDER, //ì¤‘ìœ„ ìˆœíšŒ (Left -> Root -> Right)
+	POSTORDER //í›„ìœ„ ìˆœíšŒ (Left -> Right -> Root)
 };
 
 double CalcOperation(double, char, double);
 double CalcOperation(double, SYMBOL_TYPE, double);
 
-Node* EXPRT_CreateNode(DataType);
-void EXPRT_DeallocateNode(Node**);
-void EXPRT_DeallocateTree(Node**);
+NODE* EXPRT_CreateNode(DATA_TYPE);
+void EXPRT_DeallocateNode(NODE**);
+void EXPRT_DeallocateTree(NODE**);
 
-void EXPRT_BulidTreeFromPostfixExpr(Node**, char[]);
-double EXPRT_EvaluateTree(Node*);
+void EXPRT_BulidTreeFromPostfixExpr(NODE**, char[]);
+double EXPRT_EvaluateTree(NODE*);
 
-void EXPRT_DispOrderedTree(Node*, TRAVERSAL_MODE, std::ostream& = std::cout);
+void EXPRT_DispOrderedTree(NODE*, TRAVERSAL_METHOD, std::ostream& = std::cout);
 #endif

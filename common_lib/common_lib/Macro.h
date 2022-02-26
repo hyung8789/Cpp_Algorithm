@@ -14,23 +14,23 @@
 #define MIN(x, y) (COMPARE(x, y) == 1 ? y : x) //x > y : y, x <= y : x
 #define MEDIAN(x, y, z) MAX(MIN(x, y), MIN(MAX(x, y), z)) //ex) x < y && x > z : x
 
-#define MAX_ARRAY_ELEMENT(array, idx1, idx2) \
+#define MAX_ELEMENT(array, idx1, idx2) \
 (COMPARE(array[idx1], array[idx2]) == 1 ? array[idx1] : array[idx2]) //array[idx1] > array[idx2] : array[idx1], array[idx1] <= array[idx2] : array[idx2]
-#define MIN_ARRAY_ELEMENT(array, idx1, idx2) \
+#define MIN_ELEMENT(array, idx1, idx2) \
 (COMPARE(array[idx1], array[idx2]) == 1 ? array[idx2] : array[idx1]) //array[idx1] > array[idx2] : array[idx2], array[idx1] <= array[idx2] : array[idx1]
-#define MEDIAN_ARRAY_ELEMENT(array, idx1, idx2, idx3) \
-MAX_ARRAY_ELEMENT(array, \
-MIN_ARRAY_ELEMENT(array, idx1, idx2), \
-MIN_ARRAY_ELEMENT(array, \
-MAX_ARRAY_ELEMENT(array, idx1, idx2), idx3)) //ex) x < y && x > z : x
+#define MEDIAN_ELEMENT(array, idx1, idx2, idx3) \
+MAX_ELEMENT(array, \
+MIN_ELEMENT(array, idx1, idx2), \
+MIN_ELEMENT(array, \
+MAX_ELEMENT(array, idx1, idx2), idx3)) //ex) x < y && x > z : x
 
-#define MAX_ARRAY_ELEMENT_INDEX(array, idx1, idx2) \
+#define MAX_ELEMENT_INDEX(array, idx1, idx2) \
 (COMPARE(array[idx1], array[idx2]) == 1 ? idx1 : idx2) //array[idx1] > array[idx2] : idx1, array[idx1] <= array[idx2] : idx2
-#define MIN_ARRAY_ELEMENT_INDEX(array, idx1, idx2) \
+#define MIN_ELEMENT_INDEX(array, idx1, idx2) \
 (COMPARE(array[idx1], array[idx2]) == 1 ? idx2 : idx1) //array[idx1] > array[idx2] : idx2, array[idx1] <= array[idx2] : idx1
-#define MEDIAN_ARRAY_ELEMENT_INDEX(array, idx1, idx2, idx3) \
-MAX_ARRAY_ELEMENT_INDEX(array, \
-MIN_ARRAY_ELEMENT_INDEX(array, idx1, idx2), \
-MIN_ARRAY_ELEMENT_INDEX(array, \
-MAX_ARRAY_ELEMENT_INDEX(array, idx1, idx2), idx3)) //ex) x < y && x > z : x
+#define MEDIAN_ELEMENT_INDEX(array, idx1, idx2, idx3) \
+MAX_ELEMENT_INDEX(array, \
+MIN_ELEMENT_INDEX(array, idx1, idx2), \
+MIN_ELEMENT_INDEX(array, \
+MAX_ELEMENT_INDEX(array, idx1, idx2), idx3)) //ex) x < y && x > z : x
 #endif

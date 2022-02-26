@@ -1,4 +1,4 @@
-#ifndef _TRACE_HPP_
+ï»¿#ifndef _TRACE_HPP_
 #define _TRACE_HPP_
 
 extern const int LOGGING_LEVEL;
@@ -7,14 +7,14 @@ extern const bool VALIDATE_AFTER_SORT;
 static std::mutex mutex;
 
 /// <summary>
-/// ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕÀÇ ¼øÂ÷ÀûÀÎ ¿ä¼Ò Ãâ·Â
+/// ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ìˆœì°¨ì ì¸ ìš”ì†Œ ì¶œë ¥
 /// </summary>
-/// <typeparam name="SortElementType">Á¤·Ä ¿ä¼Ò Å¸ÀÔ</typeparam>
-/// <param name="targetEnumerableSet">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕ</param>
-/// <param name="elementCount">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕÀÇ ¿ä¼ÒµéÀÇ °³¼ö</param>
-/// <param name="os">Ãâ·Â ½ºÆ®¸²</param>
-template<typename SortElementType>
-void DispEnumerableSet(SortElementType targetEnumerableSet[], size_t elementCount, std::ostream& os = std::cout)
+/// <typeparam name="SORT_ELEMENT_TYPE">ì •ë ¬ ìš”ì†Œ íƒ€ì…</typeparam>
+/// <param name="targetEnumerableSet">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©</param>
+/// <param name="elementCount">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ìš”ì†Œë“¤ì˜ ê°œìˆ˜</param>
+/// <param name="os">ì¶œë ¥ ìŠ¤íŠ¸ë¦¼</param>
+template<typename SORT_ELEMENT_TYPE>
+void DispEnumerableSet(SORT_ELEMENT_TYPE targetEnumerableSet[], size_t elementCount, std::ostream& os = std::cout)
 {
 	os << ">> ";
 	for (size_t i = 0; i < elementCount; i++)
@@ -23,17 +23,17 @@ void DispEnumerableSet(SortElementType targetEnumerableSet[], size_t elementCoun
 }
 
 /// <summary>
-/// ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕÀÇ ÀÓÀÇ ÆĞÅÏÀÇ ¿ä¼Ò »ı¼º ¹× ÇÒ´ç
+/// ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ì„ì˜ íŒ¨í„´ì˜ ìš”ì†Œ ìƒì„± ë° í• ë‹¹
 /// </summary>
-/// <typeparam name="SortElementType">Á¤·Ä ¿ä¼Ò Å¸ÀÔ</typeparam>
-/// <param name="targetEnumerableSet">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕ</param>
-/// <param name="elementCount">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕÀÇ ¿ä¼ÒµéÀÇ °³¼ö</param>
-template<typename SortElementType>
-void GenRandPatternEnumerableSet(SortElementType targetEnumerableSet[], size_t elementCount)
+/// <typeparam name="SORT_ELEMENT_TYPE">ì •ë ¬ ìš”ì†Œ íƒ€ì…</typeparam>
+/// <param name="targetEnumerableSet">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©</param>
+/// <param name="elementCount">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ìš”ì†Œë“¤ì˜ ê°œìˆ˜</param>
+template<typename SORT_ELEMENT_TYPE>
+void GenRandPatternEnumerableSet(SORT_ELEMENT_TYPE targetEnumerableSet[], size_t elementCount)
 {
-	static std::random_device rand_device; //ºñ°áÁ¤Àû »ı¼º±â
-	static std::mt19937 gen(rand_device()); //¸Ş¸£¼¾ Æ®À§½ºÅÍ¿¡ ½Ãµå ÇÒ´ç
-	static std::uniform_int_distribution<SortElementType> dist(0, elementCount); //±ÕÀÏ ÀÌ»ê ºĞÆ÷
+	static std::random_device rand_device; //ë¹„ê²°ì •ì  ìƒì„±ê¸°
+	static std::mt19937 gen(rand_device()); //ë©”ë¥´ì„¼ íŠ¸ìœ„ìŠ¤í„°ì— ì‹œë“œ í• ë‹¹
+	static std::uniform_int_distribution<SORT_ELEMENT_TYPE> dist(0, elementCount); //ê· ì¼ ì´ì‚° ë¶„í¬
 
 	for (size_t i = 0; i < elementCount; i++)
 	{
@@ -42,14 +42,14 @@ void GenRandPatternEnumerableSet(SortElementType targetEnumerableSet[], size_t e
 }
 
 /// <summary>
-/// ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕÀÇ Á¤·Ä ¹æÇâ¿¡ µû¸¥ ¼øÂ÷Àû ÆĞÅÏÀ» °¡Áø ¿ä¼Ò »ı¼º ¹× ÇÒ´ç
+/// ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ì •ë ¬ ë°©í–¥ì— ë”°ë¥¸ ìˆœì°¨ì  íŒ¨í„´ì„ ê°€ì§„ ìš”ì†Œ ìƒì„± ë° í• ë‹¹
 /// </summary>
-/// <typeparam name="SortElementType">Á¤·Ä ¿ä¼Ò Å¸ÀÔ</typeparam>
-/// <param name="targetEnumerableSet">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕ</param>
-/// <param name="elementCount">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕÀÇ ¿ä¼ÒµéÀÇ °³¼ö</param>
-/// <param name="orderBy">Á¤·Ä ¹æÇâ</param>
-template<typename SortElementType>
-void GenSequentialPatternEnumerableSet(SortElementType targetEnumerableSet[], size_t elementCount, ORDER_BY orderBy)
+/// <typeparam name="SORT_ELEMENT_TYPE">ì •ë ¬ ìš”ì†Œ íƒ€ì…</typeparam>
+/// <param name="targetEnumerableSet">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©</param>
+/// <param name="elementCount">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ìš”ì†Œë“¤ì˜ ê°œìˆ˜</param>
+/// <param name="orderBy">ì •ë ¬ ë°©í–¥</param>
+template<typename SORT_ELEMENT_TYPE>
+void GenSequentialPatternEnumerableSet(SORT_ELEMENT_TYPE targetEnumerableSet[], size_t elementCount, ORDER_BY orderBy)
 {
 	for (size_t i = 0; i < elementCount; i++)
 	{
@@ -67,16 +67,16 @@ void GenSequentialPatternEnumerableSet(SortElementType targetEnumerableSet[], si
 }
 
 /// <summary>
-/// Á¤·Ä µÈ ¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕ¿¡ ´ëÇØ Á¤·Ä ¹æÇâ¿¡ µû¸¥ À¯È¿¼º °Ë»ç ¼öÇà
+/// ì •ë ¬ ëœ ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì— ëŒ€í•´ ì •ë ¬ ë°©í–¥ì— ë”°ë¥¸ ìœ íš¨ì„± ê²€ì‚¬ ìˆ˜í–‰
 /// </summary>
-/// <typeparam name="SortElementType">Á¤·Ä ¿ä¼Ò Å¸ÀÔ</typeparam>
-/// <param name="targetEnumerableSet">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕ</param>
-/// <param name="elementCount">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕÀÇ ¿ä¼ÒµéÀÇ °³¼ö</param>
-/// <param name="orderBy">Á¤·Ä ¹æÇâ</param>
-template<typename SortElementType>
-void ValidateSortedEnumerableSet(SortElementType targetEnumerableSet[], size_t elementCount, ORDER_BY orderBy)
+/// <typeparam name="SORT_ELEMENT_TYPE">ì •ë ¬ ìš”ì†Œ íƒ€ì…</typeparam>
+/// <param name="targetEnumerableSet">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©</param>
+/// <param name="elementCount">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ìš”ì†Œë“¤ì˜ ê°œìˆ˜</param>
+/// <param name="orderBy">ì •ë ¬ ë°©í–¥</param>
+template<typename SORT_ELEMENT_TYPE>
+void ValidateSortedEnumerableSet(SORT_ELEMENT_TYPE targetEnumerableSet[], size_t elementCount, ORDER_BY orderBy)
 {
-	for (size_t i = 0; i < elementCount - 1; i++) //¸¶Áö¸· ¿ä¼Ò °£Á¢ Á¢±Ù
+	for (size_t i = 0; i < elementCount - 1; i++) //ë§ˆì§€ë§‰ ìš”ì†Œ ê°„ì ‘ ì ‘ê·¼
 	{
 		switch (orderBy)
 		{
@@ -94,43 +94,43 @@ void ValidateSortedEnumerableSet(SortElementType targetEnumerableSet[], size_t e
 }
 
 /// <summary>
-/// ´ÜÀÏ PassÀÇ Á¤·Ä ÇÔ¼ö¿¡ µû¸¥ Á¤·Ä ¼öÇà ¹× ¼º´É ºñ±³ À§ÇÑ °á°ú Ãâ·Â
+/// ë‹¨ì¼ Passì˜ ì •ë ¬ í•¨ìˆ˜ì— ë”°ë¥¸ ì •ë ¬ ìˆ˜í–‰ ë° ì„±ëŠ¥ ë¹„êµ ìœ„í•œ ê²°ê³¼ ì¶œë ¥
 /// </summary>
-/// <typeparam name="SortElementType">Á¤·Ä ¿ä¼Ò Å¸ÀÔ</typeparam>
-/// <param name="sortFuncNameStr">Á¤·Ä ÇÔ¼ö ÀÌ¸§ ¹®ÀÚ¿­</param>
-/// <param name="sortFunc">Á¤·Ä ÇÔ¼ö</param>
-/// <param name="targetEnumerableSet">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕ</param>
-/// <param name="elementCount">¼øÂ÷ÀûÀ¸·Î ¿­°Å °¡´É ÇÑ ¿ä¼ÒµéÀÇ ÁıÇÕÀÇ ¿ä¼ÒµéÀÇ °³¼ö</param>
-/// <param name="traceResult">´ÜÀÏ PassÀÇ Trace °á°ú</param>
-template<typename SortElementType>
+/// <typeparam name="SORT_ELEMENT_TYPE">ì •ë ¬ ìš”ì†Œ íƒ€ì…</typeparam>
+/// <param name="sortFuncNameStr">ì •ë ¬ í•¨ìˆ˜ ì´ë¦„ ë¬¸ìì—´</param>
+/// <param name="sortFunc">ì •ë ¬ í•¨ìˆ˜</param>
+/// <param name="targetEnumerableSet">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©</param>
+/// <param name="elementCount">ìˆœì°¨ì ìœ¼ë¡œ ì—´ê±° ê°€ëŠ¥ í•œ ìš”ì†Œë“¤ì˜ ì§‘í•©ì˜ ìš”ì†Œë“¤ì˜ ê°œìˆ˜</param>
+/// <param name="traceResult">ë‹¨ì¼ Passì˜ Trace ê²°ê³¼</param>
+template<typename SORT_ELEMENT_TYPE>
 void RunSinglePassSortTrace(const char* sortFuncNameStr,
-	void(*sortFunc)(SortElementType[], size_t, ORDER_BY),
-	SortElementType targetEnumerableSet[], size_t elementCount,
+	void(*sortFunc)(SORT_ELEMENT_TYPE[], size_t, ORDER_BY),
+	SORT_ELEMENT_TYPE targetEnumerableSet[], size_t elementCount,
 	std::promise<TRACE_RESULT>& traceResult)
 {
-	std::chrono::system_clock::time_point startTime; //½ÃÀÛ ½Ã°£
-	std::chrono::system_clock::time_point endTime; //Á¾·á ½Ã°£
-	std::chrono::nanoseconds descDuration = std::chrono::nanoseconds::zero(); //³»¸²Â÷¼ø Á¤·Ä ¼Ò¿ä ½Ã°£
-	std::chrono::nanoseconds ascDuration = std::chrono::nanoseconds::zero(); //¿À¸§Â÷¼ø Á¤·Ä ¼Ò¿ä ½Ã°£
+	std::chrono::system_clock::time_point startTime; //ì‹œì‘ ì‹œê°„
+	std::chrono::system_clock::time_point endTime; //ì¢…ë£Œ ì‹œê°„
+	std::chrono::nanoseconds descDuration = std::chrono::nanoseconds::zero(); //ë‚´ë¦¼ì°¨ìˆœ ì •ë ¬ ì†Œìš” ì‹œê°„
+	std::chrono::nanoseconds ascDuration = std::chrono::nanoseconds::zero(); //ì˜¤ë¦„ì°¨ìˆœ ì •ë ¬ ì†Œìš” ì‹œê°„
 
 	if (LOGGING_LEVEL == 2)
 	{
 		mutex.lock();
 
-		std::cout << sortFuncNameStr << " : Á¤·Ä Àü ÃÊ±â »óÅÂ\n";
-		DispEnumerableSet<SortElementType>(targetEnumerableSet, elementCount);
+		std::cout << sortFuncNameStr << " : ì •ë ¬ ì „ ì´ˆê¸° ìƒíƒœ\n";
+		DispEnumerableSet<SORT_ELEMENT_TYPE>(targetEnumerableSet, elementCount);
 		std::cout << std::endl;
 
 		mutex.unlock();
 	}
 
 	startTime = std::chrono::system_clock::now();
-	sortFunc(targetEnumerableSet, elementCount, ORDER_BY::ASCENDING); //¿À¸§Â÷¼ø Á¤·Ä
+	sortFunc(targetEnumerableSet, elementCount, ORDER_BY::ASCENDING); //ì˜¤ë¦„ì°¨ìˆœ ì •ë ¬
 	endTime = std::chrono::system_clock::now();
 	ascDuration = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime);
 
 	if (VALIDATE_AFTER_SORT)
-		ValidateSortedEnumerableSet<SortElementType>(targetEnumerableSet, elementCount, ORDER_BY::ASCENDING);
+		ValidateSortedEnumerableSet<SORT_ELEMENT_TYPE>(targetEnumerableSet, elementCount, ORDER_BY::ASCENDING);
 
 	if (LOGGING_LEVEL >= 1)
 	{
@@ -138,22 +138,22 @@ void RunSinglePassSortTrace(const char* sortFuncNameStr,
 
 		if (LOGGING_LEVEL == 2)
 		{
-			std::cout << sortFuncNameStr << " (¿À¸§Â÷¼ø Á¤·Ä ÈÄ)\n";
-			DispEnumerableSet<SortElementType>(targetEnumerableSet, elementCount);
+			std::cout << sortFuncNameStr << " (ì˜¤ë¦„ì°¨ìˆœ ì •ë ¬ í›„)\n";
+			DispEnumerableSet<SORT_ELEMENT_TYPE>(targetEnumerableSet, elementCount);
 			std::cout << std::endl;
 		}
 
-		std::cout << sortFuncNameStr << " (¿À¸§Â÷¼ø Á¤·Ä) : " << ascDuration.count() << "ns ¼Ò¿ä\n" << std::endl;
+		std::cout << sortFuncNameStr << " (ì˜¤ë¦„ì°¨ìˆœ ì •ë ¬) : " << ascDuration.count() << "ns ì†Œìš”\n" << std::endl;
 		mutex.unlock();
 	}
 
 	startTime = std::chrono::system_clock::now();
-	sortFunc(targetEnumerableSet, elementCount, ORDER_BY::DESCENDING); //³»¸²Â÷¼ø Á¤·Ä
+	sortFunc(targetEnumerableSet, elementCount, ORDER_BY::DESCENDING); //ë‚´ë¦¼ì°¨ìˆœ ì •ë ¬
 	endTime = std::chrono::system_clock::now();
 	descDuration = std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime);
 
 	if (VALIDATE_AFTER_SORT)
-		ValidateSortedEnumerableSet<SortElementType>(targetEnumerableSet, elementCount, ORDER_BY::DESCENDING);
+		ValidateSortedEnumerableSet<SORT_ELEMENT_TYPE>(targetEnumerableSet, elementCount, ORDER_BY::DESCENDING);
 
 	if (LOGGING_LEVEL >= 1)
 	{
@@ -161,12 +161,12 @@ void RunSinglePassSortTrace(const char* sortFuncNameStr,
 
 		if (LOGGING_LEVEL == 2)
 		{
-			std::cout << sortFuncNameStr << " (¿À¸§Â÷¼ø Á¤·Ä µÈ µ¥ÀÌÅÍ¿¡ ´ëÇÑ ³»¸²Â÷¼ø Á¤·Ä ÈÄ)\n";
-			DispEnumerableSet<SortElementType>(targetEnumerableSet, elementCount);
+			std::cout << sortFuncNameStr << " (ì˜¤ë¦„ì°¨ìˆœ ì •ë ¬ ëœ ë°ì´í„°ì— ëŒ€í•œ ë‚´ë¦¼ì°¨ìˆœ ì •ë ¬ í›„)\n";
+			DispEnumerableSet<SORT_ELEMENT_TYPE>(targetEnumerableSet, elementCount);
 			std::cout << std::endl;
 		}
 
-		std::cout << sortFuncNameStr << " (¿À¸§Â÷¼ø Á¤·Ä µÈ µ¥ÀÌÅÍ¿¡ ´ëÇÑ ³»¸²Â÷¼ø Á¤·Ä) : " << descDuration.count() << "ns ¼Ò¿ä\n" << std::endl;
+		std::cout << sortFuncNameStr << " (ì˜¤ë¦„ì°¨ìˆœ ì •ë ¬ ëœ ë°ì´í„°ì— ëŒ€í•œ ë‚´ë¦¼ì°¨ìˆœ ì •ë ¬) : " << descDuration.count() << "ns ì†Œìš”\n" << std::endl;
 		mutex.unlock();
 	}
 

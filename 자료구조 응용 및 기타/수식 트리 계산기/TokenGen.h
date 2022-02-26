@@ -1,4 +1,4 @@
-#ifndef _TOKENGEN_H_
+ï»¿#ifndef _TOKENGEN_H_
 #define _TOKENGEN_H_
 
 #define MAX_STR_LEN 256
@@ -11,45 +11,45 @@ enum class SYMBOL_TYPE : const char
 	MINUS = '-',
 	MULTIPLY = '*',
 	DIVIDE = '/',
-	OPERAND, //ÇÇ¿¬»êÀÚ
-	SPACE = ' ', //ÇÇ¿¬»êÀÚ °£ ±¸ºÐÀ» À§ÇÑ °ø¹é
-	DOT = '.', //½Ç¼ö Ç¥ÇöÀ» À§ÇÑ Á¡
-}; //±âÈ£ Å¸ÀÔ
+	OPERAND, //í”¼ì—°ì‚°ìž
+	SPACE = ' ', //í”¼ì—°ì‚°ìž ê°„ êµ¬ë¶„ì„ ìœ„í•œ ê³µë°±
+	DOT = '.', //ì‹¤ìˆ˜ í‘œí˜„ì„ ìœ„í•œ ì 
+}; //ê¸°í˜¸ íƒ€ìž…
 
 enum class EXPR_READ_DIRECTION : const int
 {
 	/***
-		< ´ë»ó Ç¥Çö½Ä ÀÐ´Â ¹æÇâ¿¡ µû¸¥ ÅäÅ« Ã³¸® >
+		< ëŒ€ìƒ í‘œí˜„ì‹ ì½ëŠ” ë°©í–¥ì— ë”°ë¥¸ í† í° ì²˜ë¦¬ >
 
-		1) ¿ÞÂÊ¿¡¼­ ¿À¸¥ÂÊ (Á¤¹æÇâ)
-		: ±âÁ¸°ú °°Àº ¹æ¹ý
+		1) ì™¼ìª½ì—ì„œ ì˜¤ë¥¸ìª½ (ì •ë°©í–¥)
+		: ê¸°ì¡´ê³¼ ê°™ì€ ë°©ë²•
 
-		2) ¿À¸¥ÂÊ¿¡¼­ ¿ÞÂÊ (¿ª¹æÇâ)
-		: ÇÑ ÀÚ¸®¸¦ ÃÊ°úÇÏ´Â Á¤¼ö È¤Àº '.'À» Æ÷ÇÔÇÏ´Â ½Ç¼öÀÏ °æ¿ì ±âÁ¸°ú °°Àº ¹æ¹ýÀ¸·Î Ã³¸® ÇÒ ¼ö ¾øÀ¸¸ç, ´ÙÀ½ ¹æ¹ýÀÌ Á¸Àç
+		2) ì˜¤ë¥¸ìª½ì—ì„œ ì™¼ìª½ (ì—­ë°©í–¥)
+		: í•œ ìžë¦¬ë¥¼ ì´ˆê³¼í•˜ëŠ” ì •ìˆ˜ í˜¹ì€ '.'ì„ í¬í•¨í•˜ëŠ” ì‹¤ìˆ˜ì¼ ê²½ìš° ê¸°ì¡´ê³¼ ê°™ì€ ë°©ë²•ìœ¼ë¡œ ì²˜ë¦¬ í•  ìˆ˜ ì—†ìœ¼ë©°, ë‹¤ìŒ ë°©ë²•ì´ ì¡´ìž¬
 
-			M1) ÇöÀç±îÁö ÀÐ¾îµéÀÎ ÇÇ¿¬»êÀÚ ¹®ÀÚ¿­¿¡ ´ëÇØ Ã³¸®¸¦ À§ÇØ ÀÐ±â°¡ ÁßÁöµÇ´Â ½ÃÁ¡¿¡, ¹öÆÛ¿¡ ¿ª¼øÀ¸·Î ¹èÄ¡ µÈ ÀÐ¾îµéÀÎ ÇÇ¿¬»êÀÚ ¹®ÀÚ¿­À» Á¤¹æÇâÀ¸·Î ÀçÁ¤·Ä
-				M1-1) Á¦ÀÚ¸® º¯È¯ÀÌ ¾Æ´Ñ º°µµÀÇ °á°ú Ãâ·Â ¹öÆÛ »ç¿ë
-				M1-2) Á¦ÀÚ¸® º¯È¯ (¹®ÀÚ¿­ ¹Ý ±æÀÌÀÇ ·çÇÁ °£ ¾ç Ãø Swap)
+			M1) í˜„ìž¬ê¹Œì§€ ì½ì–´ë“¤ì¸ í”¼ì—°ì‚°ìž ë¬¸ìžì—´ì— ëŒ€í•´ ì²˜ë¦¬ë¥¼ ìœ„í•´ ì½ê¸°ê°€ ì¤‘ì§€ë˜ëŠ” ì‹œì ì—, ë²„í¼ì— ì—­ìˆœìœ¼ë¡œ ë°°ì¹˜ ëœ ì½ì–´ë“¤ì¸ í”¼ì—°ì‚°ìž ë¬¸ìžì—´ì„ ì •ë°©í–¥ìœ¼ë¡œ ìž¬ì •ë ¬
+				M1-1) ì œìžë¦¬ ë³€í™˜ì´ ì•„ë‹Œ ë³„ë„ì˜ ê²°ê³¼ ì¶œë ¥ ë²„í¼ ì‚¬ìš©
+				M1-2) ì œìžë¦¬ ë³€í™˜ (ë¬¸ìžì—´ ë°˜ ê¸¸ì´ì˜ ë£¨í”„ ê°„ ì–‘ ì¸¡ Swap)
 
-			M2) ÇÇ¿¬»êÀÚ ¹®ÀÚ¿­À» ÀÐ¾îµéÀÌ±â ½ÃÀÛÇÑ ½ÃÁ¡¿¡ ÇØ´ç ÇÇ¿¬»êÀÚÀÇ ±æÀÌ¸¦ ¹Ì¸® ¿¹ÃøÇÏ¿©, Á¤·ÄÀ» ¼öÇàÇÏÁö ¾Ê°í ÇÇ¿¬»êÀÚ ¹®ÀÚ¿­À» ¿ª¹æÇâÀ¸·Î ¹öÆÛ¿¡ ÀÐ¾îµéÀÌ±â
-				ÇÇ¿¬»êÀÚÀÇ ±æÀÌ¸¦ ¿¹ÃøÇÏ´Â °úÁ¤ (ÇÇ¿¬»êÀÚÀÇ ±æÀÌ°¡ ¿¹ÃøÀÌ ³¡³ªÁö ¾Ê´Â ½ÃÁ¡¿¡´Â ÇöÀç ÀÐ¾îµéÀÎ ÇÇ¿¬»êÀÚ¸¦ ¹öÆÛ¿¡ ¹èÄ¡ ºÒ°¡)
-				+ ÇÇ¿¬»êÀÚÀÇ ±æÀÌ¸¦ ¿¹ÃøÇÏ´Â °úÁ¤¿¡¼­ ÀÐÀº ¹®ÀÚ¸¦ ´ÙÀ½¿¡ ´Ù½Ã ÀÐ´Â ºñÈ¿À²ÀûÀÎ ¹®Á¦
+			M2) í”¼ì—°ì‚°ìž ë¬¸ìžì—´ì„ ì½ì–´ë“¤ì´ê¸° ì‹œìž‘í•œ ì‹œì ì— í•´ë‹¹ í”¼ì—°ì‚°ìžì˜ ê¸¸ì´ë¥¼ ë¯¸ë¦¬ ì˜ˆì¸¡í•˜ì—¬, ì •ë ¬ì„ ìˆ˜í–‰í•˜ì§€ ì•Šê³  í”¼ì—°ì‚°ìž ë¬¸ìžì—´ì„ ì—­ë°©í–¥ìœ¼ë¡œ ë²„í¼ì— ì½ì–´ë“¤ì´ê¸°
+				í”¼ì—°ì‚°ìžì˜ ê¸¸ì´ë¥¼ ì˜ˆì¸¡í•˜ëŠ” ê³¼ì • (í”¼ì—°ì‚°ìžì˜ ê¸¸ì´ê°€ ì˜ˆì¸¡ì´ ëë‚˜ì§€ ì•ŠëŠ” ì‹œì ì—ëŠ” í˜„ìž¬ ì½ì–´ë“¤ì¸ í”¼ì—°ì‚°ìžë¥¼ ë²„í¼ì— ë°°ì¹˜ ë¶ˆê°€)
+				+ í”¼ì—°ì‚°ìžì˜ ê¸¸ì´ë¥¼ ì˜ˆì¸¡í•˜ëŠ” ê³¼ì •ì—ì„œ ì½ì€ ë¬¸ìžë¥¼ ë‹¤ìŒì— ë‹¤ì‹œ ì½ëŠ” ë¹„íš¨ìœ¨ì ì¸ ë¬¸ì œ
 	***/
 
-	LEFT_TO_RIGHT = 0, //¿ÞÂÊ¿¡¼­ ¿À¸¥ÂÊ (Á¤¹æÇâ)
-	RIGHT_TO_LEFT //¿À¸¥ÂÊ¿¡¼­ ¿ÞÂÊ (¿ª¹æÇâ)
-}; //Ç¥Çö½Ä ÀÐ´Â ¹æÇâ
+	LEFT_TO_RIGHT = 0, //ì™¼ìª½ì—ì„œ ì˜¤ë¥¸ìª½ (ì •ë°©í–¥)
+	RIGHT_TO_LEFT //ì˜¤ë¥¸ìª½ì—ì„œ ì™¼ìª½ (ì—­ë°©í–¥)
+}; //í‘œí˜„ì‹ ì½ëŠ” ë°©í–¥
 
 typedef struct
 {
-	char _str[MAX_STR_LEN]; //ÀÐÀº ¹®ÀÚ¿­
-	SYMBOL_TYPE _symbolType; //±âÈ£ Å¸ÀÔ
-	size_t _readCount; //ÀÐÀº ¹®ÀÚ °³¼ö
-}Token;
+	char _str[MAX_STR_LEN]; //ì½ì€ ë¬¸ìžì—´
+	SYMBOL_TYPE _symbolType; //ê¸°í˜¸ íƒ€ìž…
+	size_t _readCount; //ì½ì€ ë¬¸ìž ê°œìˆ˜
+}TOKEN;
 
 SYMBOL_TYPE CharToSymbolType(char);
 SYMBOL_TYPE StrToSymbolType(const char*);
 
 int GetSymbolTypePriority(SYMBOL_TYPE);
-void GenNextToken(const char*, Token*, EXPR_READ_DIRECTION);
+void GenNextToken(const char*, TOKEN*, EXPR_READ_DIRECTION);
 #endif

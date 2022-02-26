@@ -1,30 +1,30 @@
-#ifndef _SLL_H_
+Ôªø#ifndef _SLL_H_
 #define _SLL_H_
 
-typedef int DataType; //≥ÎµÂ¿« µ•¿Ã≈Õ ≈∏¿‘
-typedef int NodePositionType; //≥ÎµÂ ¿ßƒ° ≈∏¿‘
+typedef int DATA_TYPE; //ÎÖ∏ÎìúÏùò Îç∞Ïù¥ÌÑ∞ ÌÉÄÏûÖ
+typedef int NODE_POSITION_TYPE; //ÎÖ∏Îìú ÏúÑÏπò ÌÉÄÏûÖ
 
-typedef struct NodeType 
+typedef struct NODE_TYPE 
 {
-	DataType _data; //≥ÎµÂ¿« µ•¿Ã≈Õ
+	DATA_TYPE _data; //ÎÖ∏ÎìúÏùò Îç∞Ïù¥ÌÑ∞
 
-	NodeType* _next; //¥Ÿ¿Ω ≥ÎµÂ
-}Node;
+	NODE_TYPE* _next; //Îã§Ïùå ÎÖ∏Îìú
+}NODE;
 
-Node* SLL_CreateNode(DataType);
-void SLL_DeallocateNode(Node**);
-void SLL_DeallocateNodeList(Node**);
+NODE* SLL_CreateNode(DATA_TYPE);
+void SLL_DeallocateNode(NODE**);
+void SLL_DeallocateNodeList(NODE**);
 
-void SLL_AppendNode(Node**, Node*);
-Node* SLL_GetNodeAt(Node**, NodePositionType);
+void SLL_AppendNode(NODE**, NODE*);
+NODE* SLL_GetNodeAt(NODE**, NODE_POSITION_TYPE);
 
-void SLL_RemoveNodeAt(Node**, NodePositionType, bool = true);
-void SLL_RemoveNode(Node**, Node*, bool = true);
+void SLL_RemoveNodeAt(NODE**, NODE_POSITION_TYPE, bool = true);
+void SLL_RemoveNode(NODE**, NODE*, bool = true);
 
-void SLL_InsertNewHead(Node**, Node*);
-void SLL_InsertNodeAfter(Node*, Node*);
-void SLL_InsertNodeBefore(Node**, Node*, Node*);
+void SLL_InsertNewHead(NODE**, NODE*);
+void SLL_InsertNodeAfter(NODE*, NODE*);
+void SLL_InsertNodeBefore(NODE**, NODE*, NODE*);
 
-NodePositionType SLL_GetTotalNodeCount(Node**);
-void SLL_DispNodeList(Node**);
+NODE_POSITION_TYPE SLL_GetTotalNodeCount(NODE**);
+void SLL_DispNodeList(NODE**);
 #endif

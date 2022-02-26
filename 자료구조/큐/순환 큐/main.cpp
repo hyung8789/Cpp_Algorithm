@@ -9,7 +9,7 @@ int main()
 
 	try
 	{
-		CircularQueue* queue = NULL; //순환 큐
+		CIRCULAR_QUEUE* queue = NULL; //순환 큐
 		CQ_CreateQueue(&queue, SIZE);
 
 		for (int i = 0; i < SIZE; i++)

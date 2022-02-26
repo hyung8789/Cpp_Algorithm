@@ -45,11 +45,11 @@ typedef struct
 	char _str[MAX_STR_LEN]; //읽은 문자열
 	SYMBOL_TYPE _symbolType; //기호 타입
 	size_t _readCount; //읽은 문자 개수
-}Token;
+}TOKEN;
 
 SYMBOL_TYPE CharToSymbolType(char);
 SYMBOL_TYPE StrToSymbolType(const char*);
 
 int GetSymbolTypePriority(SYMBOL_TYPE);
-void GenNextToken(const char*, Token*, EXPR_READ_DIRECTION);
+void GenNextToken(const char*, TOKEN*, EXPR_READ_DIRECTION);
 #endif

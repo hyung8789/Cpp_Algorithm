@@ -17,7 +17,7 @@ SORT_METADATA::SORT_METADATA()
 /// <param name="sortFuncAddr">정렬 함수 주소</param>
 /// <param name="sortFuncName">정렬 함수 이름</param>
 /// <param name="optionalAlternativeSortFuncName">대체 정렬 함수 이름 (Optional)</param>
-SORT_METADATA::SORT_METADATA(SortFuncAddrType<MySortElementType> sortFuncAddr, const char* sortFuncName, const char* optionalAlternativeSortFuncName)
+SORT_METADATA::SORT_METADATA(SORT_FUNC_ADDR_TYPE<MY_SORT_ELEMENT_TYPE> sortFuncAddr, const char* sortFuncName, const char* optionalAlternativeSortFuncName)
 {
 	if (sortFuncAddr == NULL || sortFuncName == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -38,7 +38,7 @@ SORT_MAPPER* SORT_MAPPER::_instance = NULL; //SORT_MAPPER 고유 인스턴스 �
 /// <summary>
 /// 자신의 고유 인스턴스 참조 반환
 /// </summary>
-/// <typeparam name="SortElementType">정렬 요소 타입</typeparam>
+/// <typeparam name="SORT_ELEMENT_TYPE">정렬 요소 타입</typeparam>
 /// <returns>자신의 고유 인스턴스 참조</returns>
 SORT_MAPPER& SORT_MAPPER::GetInstance()
 {
@@ -54,9 +54,10 @@ SORT_MAPPER& SORT_MAPPER::GetInstance()
 void SORT_MAPPER::Dispose()
 {
 	if (_instance != NULL)
+	{
 		delete _instance;
-
-	_instance = NULL;
+		_instance = NULL;
+	}
 }
 
 /// <summary>
@@ -115,17 +116,17 @@ TRACE_RESULT& SORT_MAPPER::GetRefTraceResult(SORT_UNIQUE_MAPPED_INDEX index)
 SORT_MAPPER::SORT_MAPPER()
 {
 	this->_sortMetaDataTable[(const int)SORT_UNIQUE_MAPPED_INDEX::BUBBLE_SORT]
-		= SORT_METADATA(&BubbleSort<MySortElementType>, "BubbleSort");
+		= SORT_METADATA(&BubbleSort<MY_SORT_ELEMENT_TYPE>, "BubbleSort");
 
 	this->_sortMetaDataTable[(const int)SORT_UNIQUE_MAPPED_INDEX::INSERTION_SORT]
-		= SORT_METADATA(&InsertionSort<MySortElementType>, "InsertionSort");
+		= SORT_METADATA(&InsertionSort<MY_SORT_ELEMENT_TYPE>, "InsertionSort");
 
 	this->_sortMetaDataTable[(const int)SORT_UNIQUE_MAPPED_INDEX::SELECTION_SORT]
-		= SORT_METADATA(&SelectionSort<MySortElementType>, "SelectionSort");
+		= SORT_METADATA(&SelectionSort<MY_SORT_ELEMENT_TYPE>, "SelectionSort");
 
 	// https://stackoverflow.com/questions/44049407/c-compilation-fails-on-calling-overloaded-function-in-stdthread
 	//오버로딩 된 템플릿 함수를 thread 생성 시 컴파일러가 추론 할 수 없으므로, 컴파일 타임에 정적 캐스트
 	this->_sortMetaDataTable[(const int)SORT_UNIQUE_MAPPED_INDEX::QUICK_SORT]
-		= SORT_METADATA((SortFuncAddrType<MySortElementType>)&QuickSort<MySortElementType>, "QuickSort", "PartitioningProc");
-		//= SORT_METADATA(static_cast<void(*)(MySortElementType[], size_t, ORDER_BY)>(&QuickSort<MySortElementType>), "QuickSort", "PartitioningProc");
+		= SORT_METADATA((SORT_FUNC_ADDR_TYPE<MY_SORT_ELEMENT_TYPE>)&QuickSort<MY_SORT_ELEMENT_TYPE>, "QuickSort", "PartitioningProc");
+		//= SORT_METADATA(static_cast<void(*)(MY_SORT_ELEMENT_TYPE[], size_t, ORDER_BY)>(&QuickSort<MY_SORT_ELEMENT_TYPE>), "QuickSort", "PartitioningProc");
 }

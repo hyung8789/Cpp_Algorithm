@@ -5,9 +5,9 @@
 /// </summary>
 /// <param name="srcData">노드의 데이터</param>
 /// <returns>생성 된 노드</returns>
-Node* BST_CreateNode(DataType srcData)
+NODE* BST_CreateNode(DATA_TYPE srcData)
 {
-	Node* retVal = (Node*)malloc(sizeof(Node));
+	NODE* retVal = (NODE*)malloc(sizeof(NODE));
 	if (retVal == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
@@ -21,7 +21,7 @@ Node* BST_CreateNode(DataType srcData)
 /// 대상 노드에 할당 된 메모리 해제
 /// </summary>
 /// <param name="srcNode">대상 노드</param>
-void BST_DeallocateNode(Node** srcNode)
+void BST_DeallocateNode(NODE** srcNode)
 {
 	if ((*srcNode) != NULL)
 	{
@@ -34,7 +34,7 @@ void BST_DeallocateNode(Node** srcNode)
 /// 대상 트리에 할당 된 모든 노드의 메모리 해제
 /// </summary>
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
-void BST_DeallocateTree(Node** srcRootNode)
+void BST_DeallocateTree(NODE** srcRootNode)
 {
 	if ((*srcRootNode) != NULL) //후위 순회로 왼쪽 끝 노드부터 해제 
 	{
@@ -50,43 +50,43 @@ void BST_DeallocateTree(Node** srcRootNode)
 }
 
 /// <summary>
-/// 순회 모드에 따른 대상 트리 출력
+/// 순회 방법에 따른 대상 트리 출력
 /// </summary>
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
-/// <param name="traversalMode">순회 모드</param>
-void BST_DispOrderedTree(Node* srcRootNode, TRAVERSAL_MODE traversalMode)
+/// <param name="traversalMethod">순회 방법</param>
+void BST_DispOrderedTree(NODE* srcRootNode, TRAVERSAL_METHOD traversalMethod)
 {
 	if (srcRootNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	switch (traversalMode)
+	switch (traversalMethod)
 	{
-	case TRAVERSAL_MODE::PREORDER:
+	case TRAVERSAL_METHOD::PREORDER:
 		std::cout << srcRootNode->_data << " ";
 
 		if (srcRootNode->_left != NULL)
-			BST_DispOrderedTree(srcRootNode->_left, traversalMode);
+			BST_DispOrderedTree(srcRootNode->_left, traversalMethod);
 
 		if (srcRootNode->_right != NULL)
-			BST_DispOrderedTree(srcRootNode->_right, traversalMode);
+			BST_DispOrderedTree(srcRootNode->_right, traversalMethod);
 		break;
 
-	case TRAVERSAL_MODE::INORDER:
+	case TRAVERSAL_METHOD::INORDER:
 		if (srcRootNode->_left != NULL)
-			BST_DispOrderedTree(srcRootNode->_left, traversalMode);
+			BST_DispOrderedTree(srcRootNode->_left, traversalMethod);
 
 		std::cout << srcRootNode->_data << " ";
 
 		if (srcRootNode->_right != NULL)
-			BST_DispOrderedTree(srcRootNode->_right, traversalMode);
+			BST_DispOrderedTree(srcRootNode->_right, traversalMethod);
 		break;
 
-	case TRAVERSAL_MODE::POSTORDER:
+	case TRAVERSAL_METHOD::POSTORDER:
 		if (srcRootNode->_left != NULL)
-			BST_DispOrderedTree(srcRootNode->_left, traversalMode);
+			BST_DispOrderedTree(srcRootNode->_left, traversalMethod);
 
 		if (srcRootNode->_right != NULL)
-			BST_DispOrderedTree(srcRootNode->_right, traversalMode);
+			BST_DispOrderedTree(srcRootNode->_right, traversalMethod);
 
 		std::cout << srcRootNode->_data << " ";
 		break;
@@ -98,7 +98,7 @@ void BST_DispOrderedTree(Node* srcRootNode, TRAVERSAL_MODE traversalMode)
 /// </summary>
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 /// <param name="srcNewNode">새 노드</param>
-void BST_InsertNode(Node** srcRootNode, Node* srcNewNode)
+void BST_InsertNode(NODE** srcRootNode, NODE* srcNewNode)
 {
 	if (srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -126,7 +126,7 @@ void BST_InsertNode(Node** srcRootNode, Node* srcNewNode)
 /// <param name="targetData">삭제하고자 하는 대상 데이터</param>
 /// <param name="deallocateAfterRemove">삭제 대상 노드에 대한 메모리 해제 수행 여부</param>
 /// <summary>
-void BST_RemoveNode(Node** srcRootNode, const DataType& targetData, bool deallocateAfterRemove)
+void BST_RemoveNode(NODE** srcRootNode, const DATA_TYPE& targetData, bool deallocateAfterRemove)
 {
 	/***
 		< 삭제하고자 하는 대상 데이터가 포함 된 노드 (삭제 대상 노드)의 자식 노드 유무에 따른 처리 >
@@ -172,16 +172,60 @@ void BST_RemoveNode(Node** srcRootNode, const DataType& targetData, bool dealloc
 			3-4) 이동 대상 노드의 왼쪽 및 오른쪽 자식 노드를 삭제 대상 노드의 왼쪽 및 오른쪽 자식 노드로 연결
 
 		4) 삭제 대상 노드 삭제
+
+		---
+		ex) 이진 탐색 트리의 삭제 연산
+
+										23 (Root)
+					10 (Remove Target)					100
+			1				16					50
+		0		9		12		20
+
+		10이 삭제 대상 노드일 경우, 10의 부모 노드인 23의 왼쪽에는 23보다 작은 노드가 와야하며,
+		하위 트리도 이진 탐색 트리의 정의를 만족해야 함
+
+		1) 삭제 대상 노드를 삭제 후 하위 트리의 노드 중 가장 작은 노드인 0을 삭제 대상 노드의 위치로 옮길 경우
+
+					0
+			1				16
+				9		12		20
+
+		=> 이진 탐색 트리의 정의를 만족하지 않음
+
+		2) 삭제 대상 노드를 삭제 후 하위 트리의 노드 중 가장 큰 노드인 20을 삭제 대상 노드의 위치로 옮길 경우
+
+					20
+			1				16
+		0		9		12
+
+		=> 이진 탐색 트리의 정의를 만족하지 않음
+
+		3) 삭제 대상 노드를 삭제 후 왼쪽 하위 트리의 노드 중 가장 큰 노드인 9을 삭제 대상 노드의 위치로 옮길 경우
+
+					9
+			1				16
+		0				12		20
+
+		=> 이진 탐색 트리의 정의를 만족
+
+		4) 삭제 대상 노드를 삭제 후 오른쪽 하위 트리의 노드 중 가장 작은 노드인 12을 삭제 대상 노드의 위치로 옮길 경우
+
+
+					12
+			1				16
+		0		9				20
+
+		=> 이진 탐색 트리의 정의를 만족
 	***/
 
 	if ((*srcRootNode) == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	auto tmpRemoveTargetTuple = BST_SearchNodeWithParentNode((*srcRootNode), targetData); //삭제 대상 튜플
-	Node* removeTargetNode; //삭제 대상 노드
-	Node* removeTargetParentNode; //삭제 대상 노드의 부모 노드
-	Node** removeTargetParentToChildConnection; //삭제 대상 노드의 부모 노드에서 삭제 대상 노드로의 연결
-	std::tie(removeTargetNode, removeTargetParentNode, removeTargetParentToChildConnection) = tmpRemoveTargetTuple;
+	NODE* removeTargetNode; //삭제 대상 노드
+	NODE* removeTargetParentNode; //삭제 대상 노드의 부모 노드
+	NODE** removeTargetParentToChildConnection; //삭제 대상 노드의 부모 노드에서 삭제 대상 노드로의 연결
+	std::tie(removeTargetNode, removeTargetParentNode, removeTargetParentToChildConnection) = 
+		BST_SearchNodeWithParentNode((*srcRootNode), targetData);
 
 	if (removeTargetNode->_left == NULL && removeTargetNode->_right == NULL) //삭제 대상 노드가 자식 노드를 갖고 있지 않을 경우
 	{
@@ -208,11 +252,11 @@ void BST_RemoveNode(Node** srcRootNode, const DataType& targetData, bool dealloc
 	}
 	else //삭제 대상 노드가 왼쪽, 오른쪽 자식 노드를 모두 갖고 있을 경우
 	{
-		auto tmpMoveTargetTuple = BST_SearchMinNodeWithParentNode(removeTargetNode->_right); //이동 대상 튜플
-		Node* moveTargetNode; //이동 대상 노드 (삭제 대상 노드의 오른쪽 하위 트리의 노드 중 가장 작은 노드)
-		Node* moveTargetParentNode; //이동 대상 노드의 부모 노드
-		Node** moveTargetParentToChildConnection; //이동 대상 노드의 부모 노드에서 이동 대상 노드로의 연결
-		std::tie(moveTargetNode, moveTargetParentNode, moveTargetParentToChildConnection) = tmpMoveTargetTuple;
+		NODE* moveTargetNode; //이동 대상 노드 (삭제 대상 노드의 오른쪽 하위 트리의 노드 중 가장 작은 노드)
+		NODE* moveTargetParentNode; //이동 대상 노드의 부모 노드
+		NODE** moveTargetParentToChildConnection; //이동 대상 노드의 부모 노드에서 이동 대상 노드로의 연결
+		std::tie(moveTargetNode, moveTargetParentNode, moveTargetParentToChildConnection) = 
+			BST_SearchMinNodeWithParentNode(removeTargetNode->_right);
 
 		if (removeTargetNode == (*srcRootNode)) //삭제 대상 노드가 루트 노드일 경우
 		{
@@ -251,7 +295,7 @@ void BST_RemoveNode(Node** srcRootNode, const DataType& targetData, bool dealloc
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 /// <param name="targetData">찾고자 하는 대상 데이터</param>
 /// <returns>찾고자 하는 대상 데이터가 포함 된 노드</returns>
-Node* BST_SearchNode(Node* srcRootNode, const DataType& targetData)
+NODE* BST_SearchNode(NODE* srcRootNode, const DATA_TYPE& targetData)
 {
 	if (srcRootNode == NULL)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
@@ -274,14 +318,14 @@ Node* BST_SearchNode(Node* srcRootNode, const DataType& targetData)
 /// <para>tuple arg 0 : 대상 데이터가 포함 된 노드</para>
 /// <para>tuple arg 1 : 해당 노드의 상위 부모 노드 (존재하지 않을 경우 NULL)</para>
 /// <para>tuple arg 2 : 해당 노드의 상위 부모 노드에서 대상 데이터가 포함 된 노드로의 연결 (존재하지 않을 경우 NULL)</para></returns>
-std::tuple<Node*, Node*, Node**> BST_SearchNodeWithParentNode(Node* srcRootNode, const DataType& targetData, Node* targetParentNode)
+std::tuple<NODE*, NODE*, NODE**> BST_SearchNodeWithParentNode(NODE* srcRootNode, const DATA_TYPE& targetData, NODE* targetParentNode)
 {
 	if (srcRootNode == NULL)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
 	if (srcRootNode->_data == targetData) //현재 노드가 찾고자 하는 대상 데이터와 일치할 경우
 	{
-		Node** targetParentToChildConnection =
+		NODE** targetParentToChildConnection =
 			(targetParentNode == NULL) ? NULL :
 			(targetParentNode->_left == srcRootNode) ? &(targetParentNode->_left) : &(targetParentNode->_right); //상위 부모 노드에서 자식 노드로의 연결
 
@@ -299,7 +343,7 @@ std::tuple<Node*, Node*, Node**> BST_SearchNodeWithParentNode(Node* srcRootNode,
 /// </summary>
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 /// <returns>최소값인 데이터가 포함 된 노드</returns>
-Node* BST_SearchMinNode(Node* srcRootNode)
+NODE* BST_SearchMinNode(NODE* srcRootNode)
 {
 	if (srcRootNode == NULL)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
@@ -319,7 +363,7 @@ Node* BST_SearchMinNode(Node* srcRootNode)
 /// <para>tuple arg 0 : 최소값인 데이터가 포함 된 노드</para>
 /// <para>tuple arg 1 : 해당 노드의 상위 부모 노드 (존재하지 않을 경우 NULL)</para>
 /// <para>tuple arg 2 : 해당 노드의 상위 부모 노드에서 대상 데이터가 포함 된 노드로의 연결 (존재하지 않을 경우 NULL)</para></returns>
-std::tuple<Node*, Node*, Node**> BST_SearchMinNodeWithParentNode(Node* srcRootNode, Node* targetParentNode)
+std::tuple<NODE*, NODE*, NODE**> BST_SearchMinNodeWithParentNode(NODE* srcRootNode, NODE* targetParentNode)
 {
 	if (srcRootNode == NULL)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
@@ -330,7 +374,7 @@ std::tuple<Node*, Node*, Node**> BST_SearchMinNodeWithParentNode(Node* srcRootNo
 	}
 	else //현재 노드의 왼쪽 하위 트리가 존재하지 않을 경우
 	{
-		Node** targetParentToChildConnection =
+		NODE** targetParentToChildConnection =
 			(targetParentNode == NULL) ? NULL :
 			(targetParentNode->_left == srcRootNode) ? &(targetParentNode->_left) : &(targetParentNode->_right); //상위 부모 노드에서 자식 노드로의 연결
 

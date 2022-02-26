@@ -116,7 +116,7 @@ int GetSymbolTypePriority(SYMBOL_TYPE srcSymbol)
 /// <param name="srcExpr">대상 표현식 (전체 문자열 혹은 Slice 된 문자열)</param>
 /// <param name="dstToken">대상 표현식으로부터 생성되어 출력 될 토큰</param>
 /// <param name="exprReadDirection">대상 표현식 읽는 방향</param>
-void GenNextToken(const char* srcExpr, Token* dstToken, EXPR_READ_DIRECTION exprReadDirection)
+void GenNextToken(const char* srcExpr, TOKEN* dstToken, EXPR_READ_DIRECTION exprReadDirection)
 {
 	if (srcExpr == NULL || dstToken == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
