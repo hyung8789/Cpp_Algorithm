@@ -363,7 +363,7 @@ size_t PartitioningProc(SORT_ELEMENT_TYPE targetEnumerableSet[],
 
 	SORT_ELEMENT_TYPE tmp;
 
-	if (srcLeftIndex + 1 == srcRightIndex) //현재 요소가 2개인 경우
+	if ((srcLeftIndex + 1) == srcRightIndex) //현재 요소가 2개인 경우
 	{
 		/***
 			< 퀵 정렬 (2개의 요소에 대한 대체 정렬 처리) - 오름차순 >

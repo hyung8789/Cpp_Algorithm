@@ -14,6 +14,7 @@
 	DEF3) 검은 노드의 한 단계 하위 자식 노드는 빨간색 혹은 검은색
 
 	DEF4) 루트 노드에서 검은색 더미 단말 노드 간의 각 연결 과정에 존재하는 검은 노드의 수는 모두 동일
+	: 루트 노드 및 검은색 더미 단말 노드 포함
 
 	DEF5) 루트 노드 혹은 서브 트리 내의 루트 노드는 항상 중앙값을 가짐
 	: 루트 노드의 왼쪽 서브 트리 < 루트 노드 < 루트 노드의 오른쪽 서브 트리
@@ -65,7 +66,8 @@ void RBT_DispOrderedTree(NODE*, TRAVERSAL_METHOD);
 void RBT_InsertNode(NODE**, NODE*);
 void RBT_RemoveNode(NODE**, const DATA_TYPE&, bool = true);
 NODE* RBT_SearchNode(NODE*, const DATA_TYPE&);
-NODE* RBT_SearchMinNode(NODE*, bool);
+NODE* RBT_SearchMaxNode(NODE*);
+NODE* RBT_SearchMinNode(NODE*);
 
 void RBT_InsertNodeHelper(NODE**, NODE*);
 void RBT_RotateTree(NODE**, NODE* , ROTATE_DIRECTION);

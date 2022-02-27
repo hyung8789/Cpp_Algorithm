@@ -238,14 +238,14 @@ void BST_RemoveNode(NODE** srcRootNode, const DATA_TYPE& targetData, bool deallo
 		if (removeTargetNode == (*srcRootNode)) //삭제 대상 노드가 루트 노드일 경우
 		{
 			//삭제 대상 노드가 가지고 있던 자식 노드를 최상위 루트 노드로 변경
-			(removeTargetNode->_left) != NULL ?
+			(removeTargetNode->_left != NULL) ?
 				(*srcRootNode) = removeTargetNode->_left :
 				(*srcRootNode) = removeTargetNode->_right;
 		}
 		else //삭제 대상 노드가 루트 노드가 아닐 경우
 		{
 			//삭제 대상 노드가 가지고 있던 자식 노드를 삭제 대상 노드가 연결 되었던 상위 부모 노드로 연결
-			(removeTargetNode->_left) != NULL ?
+			(removeTargetNode->_left != NULL) ?
 				(*removeTargetParentToChildConnection) = removeTargetNode->_left :
 				(*removeTargetParentToChildConnection) = removeTargetNode->_right;
 		}
@@ -313,12 +313,12 @@ NODE* BST_SearchNode(NODE* srcRootNode, const DATA_TYPE& targetData)
 /// </summary>
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 /// <param name="targetData">찾고자 하는 대상 데이터</param>
-/// <param name="targetParentNode">찾고자 하는 대상 데이터가 포함 된 노드의 상위 부모 노드</param>
+/// <param name="optionalTargetParentNode">찾고자 하는 대상 데이터가 포함 된 노드의 상위 부모 노드</param>
 /// <returns>대상 데이터가 포함 된 노드와 해당 노드의 상위 부모 노드가 포함 된 튜플
 /// <para>tuple arg 0 : 대상 데이터가 포함 된 노드</para>
 /// <para>tuple arg 1 : 해당 노드의 상위 부모 노드 (존재하지 않을 경우 NULL)</para>
 /// <para>tuple arg 2 : 해당 노드의 상위 부모 노드에서 대상 데이터가 포함 된 노드로의 연결 (존재하지 않을 경우 NULL)</para></returns>
-std::tuple<NODE*, NODE*, NODE**> BST_SearchNodeWithParentNode(NODE* srcRootNode, const DATA_TYPE& targetData, NODE* targetParentNode)
+std::tuple<NODE*, NODE*, NODE**> BST_SearchNodeWithParentNode(NODE* srcRootNode, const DATA_TYPE& targetData, NODE* optionalTargetParentNode)
 {
 	if (srcRootNode == NULL)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
@@ -326,10 +326,11 @@ std::tuple<NODE*, NODE*, NODE**> BST_SearchNodeWithParentNode(NODE* srcRootNode,
 	if (srcRootNode->_data == targetData) //현재 노드가 찾고자 하는 대상 데이터와 일치할 경우
 	{
 		NODE** targetParentToChildConnection =
-			(targetParentNode == NULL) ? NULL :
-			(targetParentNode->_left == srcRootNode) ? &(targetParentNode->_left) : &(targetParentNode->_right); //상위 부모 노드에서 자식 노드로의 연결
+			(optionalTargetParentNode == NULL) ? NULL :
+			(optionalTargetParentNode->_left == srcRootNode) ? 
+			&(optionalTargetParentNode->_left) : &(optionalTargetParentNode->_right); //상위 부모 노드에서 자식 노드로의 연결
 
-		return std::make_tuple(srcRootNode, targetParentNode, targetParentToChildConnection);
+		return std::make_tuple(srcRootNode, optionalTargetParentNode, targetParentToChildConnection);
 	}
 
 	if (srcRootNode->_data > targetData) //현재 노드 > 찾고자 하는 대상 데이터인 경우
@@ -358,12 +359,12 @@ NODE* BST_SearchMinNode(NODE* srcRootNode)
 /// 대상 트리의 최소값인 데이터가 포함 된 노드와 해당 노드의 상위 부모 노드 및 자식 노드로의 연결이 포함 된 튜플 반환
 /// </summary>
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
-/// <param name="targetParentNode">대상 트리의 최소값인 데이터가 포함 된 노드의 상위 부모 노드</param>
+/// <param name="optionalTargetParentNode">대상 트리의 최소값인 데이터가 포함 된 노드의 상위 부모 노드</param>
 /// <returns>최소값인 데이터가 포함 된 노드와 해당 노드의 상위 부모 노드가 포함 된 튜플
 /// <para>tuple arg 0 : 최소값인 데이터가 포함 된 노드</para>
 /// <para>tuple arg 1 : 해당 노드의 상위 부모 노드 (존재하지 않을 경우 NULL)</para>
 /// <para>tuple arg 2 : 해당 노드의 상위 부모 노드에서 대상 데이터가 포함 된 노드로의 연결 (존재하지 않을 경우 NULL)</para></returns>
-std::tuple<NODE*, NODE*, NODE**> BST_SearchMinNodeWithParentNode(NODE* srcRootNode, NODE* targetParentNode)
+std::tuple<NODE*, NODE*, NODE**> BST_SearchMinNodeWithParentNode(NODE* srcRootNode, NODE* optionalTargetParentNode)
 {
 	if (srcRootNode == NULL)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
@@ -375,9 +376,10 @@ std::tuple<NODE*, NODE*, NODE**> BST_SearchMinNodeWithParentNode(NODE* srcRootNo
 	else //현재 노드의 왼쪽 하위 트리가 존재하지 않을 경우
 	{
 		NODE** targetParentToChildConnection =
-			(targetParentNode == NULL) ? NULL :
-			(targetParentNode->_left == srcRootNode) ? &(targetParentNode->_left) : &(targetParentNode->_right); //상위 부모 노드에서 자식 노드로의 연결
+			(optionalTargetParentNode == NULL) ? NULL :
+			(optionalTargetParentNode->_left == srcRootNode) ? 
+			&(optionalTargetParentNode->_left) : &(optionalTargetParentNode->_right); //상위 부모 노드에서 자식 노드로의 연결
 
-		return std::make_tuple(srcRootNode, targetParentNode, targetParentToChildConnection);
+		return std::make_tuple(srcRootNode, optionalTargetParentNode, targetParentToChildConnection);
 	}
 }
