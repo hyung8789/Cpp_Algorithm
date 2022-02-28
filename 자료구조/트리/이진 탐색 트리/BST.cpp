@@ -129,7 +129,7 @@ void BST_InsertNode(NODE** srcRootNode, NODE* srcNewNode)
 void BST_RemoveNode(NODE** srcRootNode, const DATA_TYPE& targetData, bool deallocateAfterRemove)
 {
 	/***
-		< 삭제하고자 하는 대상 데이터가 포함 된 노드 (삭제 대상 노드)의 자식 노드 유무에 따른 처리 >
+		< 삭제하고자 하는 대상 데이터가 포함 된 노드 (이하, 삭제 대상 노드)의 자식 노드 유무에 따른 처리 >
 
 		! 루트 노드에 대한 삭제가 발생 할 경우, 별도의 처리 요구
 
@@ -174,6 +174,7 @@ void BST_RemoveNode(NODE** srcRootNode, const DATA_TYPE& targetData, bool deallo
 		4) 삭제 대상 노드 삭제
 
 		---
+		
 		ex) 이진 탐색 트리의 삭제 연산
 
 										23 (Root)

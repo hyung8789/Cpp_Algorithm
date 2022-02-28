@@ -1,40 +1,40 @@
-#include "Common_LIB_Core.h"
+ï»¿#include "Common_LIB_Core.h"
 
 /// <summary>
-/// ´ë»ó ¹®ÀÚ¿­ Á¦ÀÚ¸® ÁÂ¿ì¹ÝÀü
+/// ëŒ€ìƒ ë¬¸ìžì—´ ì œìžë¦¬ ì¢Œìš°ë°˜ì „
 /// </summary>
-/// <param name="targetStr">´ë»ó ¹®ÀÚ¿­</param>
-void ReverseInplaceStr(char targetStr[])
+/// <param name="srcTargetStr">ëŒ€ìƒ ë¬¸ìžì—´</param>
+void ReverseInplaceStr(char srcTargetStr[])
 {
-	if (targetStr == NULL)
+	if (srcTargetStr == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	size_t targetStrLen = strlen(targetStr); //´ë»ó ¹®ÀÚ¿­ÀÇ ±æÀÌ ('\0' Á¦¿Ü ÇÑ ±æÀÌ)
+	size_t targetStrLen = strlen(srcTargetStr); //ëŒ€ìƒ ë¬¸ìžì—´ì˜ ê¸¸ì´ ('\0' ì œì™¸ í•œ ê¸¸ì´)
 
 	for (size_t i = 0; i < (targetStrLen / 2); i++)
 	{
-		char tmp = targetStr[i];
-		targetStr[i] = targetStr[targetStrLen - i - 1];
-		targetStr[targetStrLen - i - 1] = tmp;
+		char tmp = srcTargetStr[i];
+		srcTargetStr[i] = srcTargetStr[targetStrLen - i - 1];
+		srcTargetStr[targetStrLen - i - 1] = tmp;
 	}
 }
 
 /// <summary>
-/// ºÎµ¿ ¼Ò¼öÁ¡À¸·Î ÀÌ·ç¾îÁø ´ë»ó ¹®ÀÚ¿­À» ºÎµ¿ ¼Ò¼öÁ¡À¸·Î º¯È¯
+/// ë¶€ë™ ì†Œìˆ˜ì ìœ¼ë¡œ ì´ë£¨ì–´ì§„ ëŒ€ìƒ ë¬¸ìžì—´ì„ ë¶€ë™ ì†Œìˆ˜ì ìœ¼ë¡œ ë³€í™˜
 /// </summary>
-/// <param name="srcStrOfDouble">ºÎµ¿ ¼Ò¼öÁ¡À¸·Î ÀÌ·ç¾îÁø ´ë»ó ¹®ÀÚ¿­</param>
-/// <returns>ºÎµ¿ ¼Ò¼öÁ¡À¸·Î ÀÌ·ç¾îÁø ´ë»ó ¹®ÀÚ¿­·ÎºÎÅÍ º¯È¯ µÈ ºÎµ¿ ¼Ò¼öÁ¡</returns>
+/// <param name="srcStrOfDouble">ë¶€ë™ ì†Œìˆ˜ì ìœ¼ë¡œ ì´ë£¨ì–´ì§„ ëŒ€ìƒ ë¬¸ìžì—´</param>
+/// <returns>ë¶€ë™ ì†Œìˆ˜ì ìœ¼ë¡œ ì´ë£¨ì–´ì§„ ëŒ€ìƒ ë¬¸ìžì—´ë¡œë¶€í„° ë³€í™˜ ëœ ë¶€ë™ ì†Œìˆ˜ì </returns>
 double StrToDouble(const char* srcStrOfDouble)
 {
 	double retVal = 0.0;
-	char* endAddr; //´ë»ó ¹®ÀÚ¿­·ÎºÎÅÍ ¼º°øÀûÀ¸·Î º¯È¯ ÈÄ ±× ´ÙÀ½ ¹®ÀÚÀÇ ÁÖ¼Ò
+	char* endAddr; //ëŒ€ìƒ ë¬¸ìžì—´ë¡œë¶€í„° ì„±ê³µì ìœ¼ë¡œ ë³€í™˜ í›„ ê·¸ ë‹¤ìŒ ë¬¸ìžì˜ ì£¼ì†Œ
 
 	retVal = strtod(srcStrOfDouble, &endAddr);
 
 	/***
-		1) º¯È¯ ¿Ï·á ÈÄ ¹®ÀÚ¿­ÀÌ ³¡³ªÁö ¾ÊÀ» °æ¿ì, ´ë»ó ¹®ÀÚ¿­ÀÇ µÚ¿¡ Àß¸ø µÈ µ¥ÀÌÅÍ Á¸Àç
-		2) ´ë»ó ¹®ÀÚ¿­ÀÌ ¼ýÀÚ·Î ½ÃÀÛÇÏÁö ¾ÊÀ» °æ¿ì, º¯È¯ ºÒ°¡
-		3) strtod´Â º¯È¯À» ½ÇÆÐÇÏ¿©µµ Ç×»ó 0À» ¹ÝÈ¯
+		1) ë³€í™˜ ì™„ë£Œ í›„ ë¬¸ìžì—´ì´ ëë‚˜ì§€ ì•Šì„ ê²½ìš°, ëŒ€ìƒ ë¬¸ìžì—´ì˜ ë’¤ì— ìž˜ëª» ëœ ë°ì´í„° ì¡´ìž¬
+		2) ëŒ€ìƒ ë¬¸ìžì—´ì´ ìˆ«ìžë¡œ ì‹œìž‘í•˜ì§€ ì•Šì„ ê²½ìš°, ë³€í™˜ ë¶ˆê°€
+		3) strtodëŠ” ë³€í™˜ì„ ì‹¤íŒ¨í•˜ì—¬ë„ í•­ìƒ 0ì„ ë°˜í™˜
 	***/
 
 	if ((*endAddr) != '\0' || endAddr == srcStrOfDouble)
@@ -45,20 +45,20 @@ double StrToDouble(const char* srcStrOfDouble)
 }
 
 /// <summary>
-/// ´ë»ó ¹®ÀÚ¸¦ 10Áø ¾Æ½ºÅ° ÄÚµå·Î º¯È¯
+/// ëŒ€ìƒ ë¬¸ìžë¥¼ 10ì§„ ì•„ìŠ¤í‚¤ ì½”ë“œë¡œ ë³€í™˜
 /// </summary>
-/// <param name="srcChar">´ë»ó ¹®ÀÚ</param>
-/// <returns>º¯È¯ µÈ 10Áø ¾Æ½ºÅ° ÄÚµå</returns>
+/// <param name="srcChar">ëŒ€ìƒ ë¬¸ìž</param>
+/// <returns>ë³€í™˜ ëœ 10ì§„ ì•„ìŠ¤í‚¤ ì½”ë“œ</returns>
 int CharToDecAscii(char srcChar)
 {
 	return (int)srcChar;
 }
 
 /// <summary>
-/// ´ë»ó 0~9 ¹üÀ§ÀÇ ´ÜÀÏ ¼ýÀÚ¸¦ 10Áø ¾Æ½ºÅ° ÄÚµå·Î º¯È¯
+/// ëŒ€ìƒ 0~9 ë²”ìœ„ì˜ ë‹¨ì¼ ìˆ«ìžë¥¼ 10ì§„ ì•„ìŠ¤í‚¤ ì½”ë“œë¡œ ë³€í™˜
 /// </summary>
-/// <param name="srcSingleNum">´ë»ó 0~9 ¹üÀ§ÀÇ ´ÜÀÏ ¼ýÀÚ</param>
-/// <returns>º¯È¯ µÈ 10Áø ¾Æ½ºÅ° ÄÚµå</returns>
+/// <param name="srcSingleNum">ëŒ€ìƒ 0~9 ë²”ìœ„ì˜ ë‹¨ì¼ ìˆ«ìž</param>
+/// <returns>ë³€í™˜ ëœ 10ì§„ ì•„ìŠ¤í‚¤ ì½”ë“œ</returns>
 int SingleNumToDecAscii(int srcSingleNum)
 {
 	if (srcSingleNum < 0 || srcSingleNum > 9)

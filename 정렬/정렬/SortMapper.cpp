@@ -24,12 +24,7 @@ SORT_METADATA::SORT_METADATA(SORT_FUNC_ADDR_TYPE<MY_SORT_ELEMENT_TYPE> sortFuncA
 
 	this->_sortFuncAddr = sortFuncAddr;
 	this->_sortFuncName = sortFuncName;
-
-	if (optionalAlternativeSortFuncName != NULL)
-		this->_optionalAlternativeSortFuncName = optionalAlternativeSortFuncName;
-	else
-		this->_optionalAlternativeSortFuncName = NULL;
-
+	this->_optionalAlternativeSortFuncName = optionalAlternativeSortFuncName;
 	this->_traceResult = TRACE_RESULT();
 }
 

@@ -66,28 +66,28 @@ void RBT_DispOrderedTree(NODE* srcRootNode, TRAVERSAL_METHOD traversalMethod)
 	case TRAVERSAL_METHOD::PREORDER:
 		std::cout << srcRootNode->_data << " ";
 
-		if (srcRootNode->_left != NULL)
+		if (srcRootNode->_left != dummyBlackTerminalNode)
 			RBT_DispOrderedTree(srcRootNode->_left, traversalMethod);
 
-		if (srcRootNode->_right != NULL)
+		if (srcRootNode->_right != dummyBlackTerminalNode)
 			RBT_DispOrderedTree(srcRootNode->_right, traversalMethod);
 		break;
 
 	case TRAVERSAL_METHOD::INORDER:
-		if (srcRootNode->_left != NULL)
+		if (srcRootNode->_left != dummyBlackTerminalNode)
 			RBT_DispOrderedTree(srcRootNode->_left, traversalMethod);
 
 		std::cout << srcRootNode->_data << " ";
 
-		if (srcRootNode->_right != NULL)
+		if (srcRootNode->_right != dummyBlackTerminalNode)
 			RBT_DispOrderedTree(srcRootNode->_right, traversalMethod);
 		break;
 
 	case TRAVERSAL_METHOD::POSTORDER:
-		if (srcRootNode->_left != NULL)
+		if (srcRootNode->_left != dummyBlackTerminalNode)
 			RBT_DispOrderedTree(srcRootNode->_left, traversalMethod);
 
-		if (srcRootNode->_right != NULL)
+		if (srcRootNode->_right != dummyBlackTerminalNode)
 			RBT_DispOrderedTree(srcRootNode->_right, traversalMethod);
 
 		std::cout << srcRootNode->_data << " ";
@@ -120,7 +120,7 @@ void RBT_InsertNode(NODE** srcRootNode, NODE* srcNewNode)
 		별도의 검은색 더미 노드를 단말 노드로 이용하며, 이에 따라 어떠한 노드의 왼쪽 자식 노드 혹은 오른쪽 자식 노드는 항상 NULL이 아님
 
 		! 항상 삽입되는 새 노드는 빨간색
-		
+
 		1) 새 노드 삽입 시 위반될 수 있는 정의와 수정 사항은,
 
 			DEF1) 루트 노드는 항상 검은색
@@ -139,41 +139,53 @@ DETERMINING_PROC: //다음 작업 판별 처리 루틴
 	/***
 		< Determining Proc >
 
-		1) 새 노드가 루트 노드이거나, 새 노드의 부모 노드가 검은색인 경우
+		1) 새 노드가 루트 노드일 경우
 		: do nothing
 
-		2) 새 노드의 부모 노드가 새 노드의 부모의 부모의 왼쪽 자식 혹은 오른쪽 자식 여부에 따라, 
-		새 노드의 부모의 형제 노드 (삼촌) 판별
+		2) 삽입 된 새 노드와 새 노드의 부모 노드 간에 DEF2)를 위반하는지 판별
 
-		3) DEF2)의 위반 사항을 해결하기 위해, 새 노드의 부모의 형제 노드 (삼촌)의 색에 따라,
+			2-1) 새 노드의 부모 노드의 색 == 검은색
+			: do nothing
 
-			3-1) 새 노드의 부모의 형제 노드 (삼촌)가 검은색일 경우
-			: goto Restructuring Proc
+			2-2) 새 노드의 부모 노드의 색 == 빨간색
+			: 삽입 된 새 노드와 새 노드의 부모 노드 간 DEF2) 위반
 
-			3-2) 새 노드의 부모의 형제 노드 (삼촌)가 빨간색일 경우
-			: goto Recoloring Proc
+				2-1-1) 새 노드의 부모 노드가 새 노드의 부모의 부모의 왼쪽 자식 혹은 오른쪽 자식 여부에 따라,
+				새 노드의 부모의 형제 노드 (삼촌) 판별
 
-		ex) 
-		DEF2)를 만족하기 위해, 삽입되는 새 노드의 부모가 빨간색이면 삽입되는 새 노드를 단순히 검은색으로 변경만 할 경우, 
+				2-1-2) DEF2)의 위반 사항을 해결하기 위해, 새 노드의 부모의 형제 노드 (삼촌)의 색에 따라,
+
+					2-1-2-1) 새 노드의 부모의 형제 노드 (삼촌)의 색 == 검은색
+					: goto Restructuring Proc
+
+					2-1-2-2) 새 노드의 부모의 형제 노드 (삼촌)의 색 == 빨간색
+					: goto Recoloring Proc
+
+		ex)
+		DEF2)를 만족하기 위해, 삽입되는 새 노드의 부모가 빨간색이면 삽입되는 새 노드를 단순히 검은색으로 변경만 할 경우,
 		DEF4)를 위반 할 수 있음 (즉, 이진 탐색 트리가 한 쪽 방향으로 기형적으로 성장하는 것처럼 균형이 꺠질 수 있음)
 	***/
 
-	if (srcNewNode == (*srcRootNode) || srcNewNode->_parent->_color == COLOR::BLACK) //새 노드가 루트 노드이거나, 새 노드의 부모 노드가 검은색인 경우
+	if (srcNewNode == (*srcRootNode)) //새 노드가 루트 노드일 경우
 		return;
 
-	uncleNode = (srcNewNode->_parent->_parent->_left == srcNewNode->_parent) ?
-		srcNewNode->_parent->_parent->_right : srcNewNode->_parent->_parent->_left;
-
-	if (uncleNode == NULL)
-		throw std::runtime_error(std::string(__func__) + std::string(" : Invalid Red-Black Tree"));
-
-	switch (uncleNode->_color) //새 노드의 부모의 형제 노드 (삼촌)의 색에 따라,
+	switch (srcNewNode->_parent->_color)
 	{
 	case COLOR::BLACK:
-		goto RESTRUCTURING_PROC;
+		return;
 
 	case COLOR::RED:
-		goto RECOLORING_PROC;
+		uncleNode = (srcNewNode->_parent->_parent->_left == srcNewNode->_parent) ?
+			srcNewNode->_parent->_parent->_right : srcNewNode->_parent->_parent->_left;
+
+		switch (uncleNode->_color) //새 노드의 부모의 형제 노드 (삼촌)의 색에 따라,
+		{
+		case COLOR::BLACK:
+			goto RESTRUCTURING_PROC;
+
+		case COLOR::RED:
+			goto RECOLORING_PROC;
+		}
 	}
 
 RESTRUCTURING_PROC: //트리 재구성 처리 루틴
@@ -182,29 +194,30 @@ RESTRUCTURING_PROC: //트리 재구성 처리 루틴
 
 		! 새 노드의 부모의 형제 노드 (삼촌)가 검은색인 상황에서 트리 재구성 (회전 발생)
 
-		! DEF2)에 따라, 트리 재구성이 발생되기 시작 한 시점의 새 노드의 부모의 부모 노드는 항상 검은색
-		(새 노드와 새 노드의 부모 노드 간의 연속 된 빨간 노드 발생애 대한 처리 중이므로)
+		! DEF2)에 따라, 트리 재구성이 발생되기 시작 한 시점에
+		새 노드와 새 노드의 부모 노드 간의 연속 된 빨간 노드 발생애 대한 처리 중이므로
+		새 노드의 부모의 부모 노드는 항상 검은색
 
 		1) NPD : 새 노드의 부모 노드에 대한 새 노드의 부모의 부모로부터의 자식 방향 (L : 왼쪽 자식, R : 오른쪽 자식)
 		2) ND : 새 노드에 대한 새 노드의 부모로부터의 자식 방향 (L : 왼쪽 자식, R : 오른쪽 자식)
 		3) P : 이에 따른 수행 작업
 
-		NPD	|	ND	|	P
-		L		L		1) 새 노드의 부모의 부모 노드를 기준으로 오른쪽 회전
-						: 새 노드 < 새 노드의 부모 노드 < 새 노드의 부모의 부모 노드
+		NPD | ND | P
+		L	 L		1) 새 노드의 부모의 부모 노드를 기준으로 오른쪽 회전
+					: 새 노드 < 새 노드의 부모 노드 < 새 노드의 부모의 부모 노드
 
-		L		R		1) 새 노드의 부모 노드를 기준으로 왼쪽 회전
-						: 새 노드의 부모의 부모 노드 < 새 노드 < 새 노드의 부모 노드
+		L	 R		1) 새 노드의 부모 노드를 기준으로 왼쪽 회전
+					: 새 노드의 부모의 부모 노드 < 새 노드 < 새 노드의 부모 노드
 
-						2) 새 노드의 부모의 부모 노드 (회전 발생 전)를 기준으로 오른쪽 회전
+					2) 새 노드의 부모의 부모 노드 (회전 발생 전)를 기준으로 오른쪽 회전
 
-		R		L		1) 새 노드의 부모 노드를 기준으로 오른쪽 회전
-						: 새 노드의 부모 노드 < 새 노드 < 새 노드의 부모의 부모 노드
+		R	 L		1) 새 노드의 부모 노드를 기준으로 오른쪽 회전
+					: 새 노드의 부모 노드 < 새 노드 < 새 노드의 부모의 부모 노드
 
-						2) 새 노드의 부모의 부모 노드 (회전 발생 전)를 기준으로 왼쪽 회전
+					2) 새 노드의 부모의 부모 노드 (회전 발생 전)를 기준으로 왼쪽 회전
 
-		R		R		1) 새 노드의 부모의 부모 노드를 기준으로 왼쪽 회전
-						: 새 노드의 부모의 부모 노드 < 새 노드의 부모 노드 < 새 노드
+		R	 R		1) 새 노드의 부모의 부모 노드를 기준으로 왼쪽 회전
+					: 새 노드의 부모의 부모 노드 < 새 노드의 부모 노드 < 새 노드
 
 		( 공통 처리 )
 
@@ -258,6 +271,9 @@ RESTRUCTURING_PROC: //트리 재구성 처리 루틴
 
 	grandParentNode = srcNewNode->_parent->_parent; //회전 발생 전 새 노드의 부모의 부모 노드 (할아버지)
 
+	if (grandParentNode == NULL)
+		throw std::runtime_error(std::string(__func__) + std::string(" : Invalid Red-Black Tree"));
+
 	if (srcNewNode->_parent->_parent->_left == srcNewNode->_parent &&
 		srcNewNode->_parent->_left == srcNewNode) //LL
 	{
@@ -277,7 +293,7 @@ RESTRUCTURING_PROC: //트리 재구성 처리 루틴
 	}
 	else //RR
 	{
-		RBT_RotateTree(srcRootNode, srcNewNode->_parent, ROTATE_DIRECTION::LEFT);
+		RBT_RotateTree(srcRootNode, srcNewNode->_parent->_parent, ROTATE_DIRECTION::LEFT);
 	}
 
 	//새 노드의 부모 노드와 새 노드의 부모의 부모 노드 (회전 발생 전) 간의 색상 SWAP
@@ -293,33 +309,40 @@ RECOLORING_PROC: //색 변경 처리 루틴
 		! 새 노드의 부모의 형제 노드 (삼촌)가 빨간색인 상황에서 색 변경
 
 		1) 새 노드의 부모와 새 노드의 부모의 형제 노드 (삼촌)를 검은색으로 변경
+		: 이 시점에, 새 노드의 부모의 부모 노드를 기준으로 양 측 경로 간 전체 검은 노드의 수는 변동없으므로,
+		DEF4)를 위반하지 않음
 
 		2) 새 노드의 부모의 부모 노드의 루트 노드 여부에 따라,
 
 			2-1) 새 노드의 부모의 부모 노드 == 루트 노드
-			: do nothing (새 노드의 부모의 부모 노드는 검은색)
+			: do nothing (새 노드의 부모의 부모 노드는 검은색이며, DEF2)의 위반 사항이 모두 해결되었으므로, 처리 중지)
 
 			2-2) 새 노드의 부모의 부모 노드 != 루트 노드
 
 				2-2-1) 새 노드의 부모의 부모 노드를 빨간색으로 변경
+				: 새 노드의 부모의 부모 노드와 새 노드의 부모의 부모의 부모 노드 간에 DEF2)의 위반 사항 발생 가능
 
 				2-2-2) 새 노드의 부모의 부모 노드를 삽입이 발생하는 새 노드로 간주
 				: goto Determining Proc (새 노드의 부모의 부모 노드와 새 노드의 부모의 부모의 부모 노드 간에 DEF2)의 위반 사항이 존재하는지 다시 판별)
 	***/
 
-	srcNewNode->_parent->_color = uncleNode->_color = COLOR::BLACK; //새 노드의 부모와 새 노드의 부모의 형제 노드(삼촌)를 검은색으로 변경
+	srcNewNode->_parent->_color = uncleNode->_color = COLOR::BLACK; //새 노드의 부모와 새 노드의 부모의 형제 노드 (삼촌)를 검은색으로 변경
 
 	if (srcNewNode->_parent->_parent == (*srcRootNode)) //새 노드의 부모의 부모 노드가 루트 노드인 경우
-		return;
+	{
+		return; //DEF2)의 위반 사항이 모두 해결되었으므로, 처리 중지
+	}
+	else //새 노드의 부모의 부모 노드가 루트 노드가 아닌 경우
+	{
+		//새 노드의 부모의 부모 노드를 빨간색으로 변경
+		srcNewNode->_parent->_parent->_color = COLOR::RED;
 
-	//새 노드의 부모의 부모 노드가 루트 노드가 아닌 경우, 새 노드의 부모의 부모 노드를 빨간색으로 변경
-	srcNewNode->_parent->_parent->_color = COLOR::RED;
+		//새 노드의 부모의 부모 노드를 삽입이 발생하는 새 노드로 간주
+		srcNewNode = srcNewNode->_parent->_parent;
 
-	//새 노드의 부모의 부모 노드를 삽입이 발생하는 새 노드로 간주
-	srcNewNode = srcNewNode->_parent->_parent;
-
-	//새 노드의 부모의 부모 노드와 새 노드의 부모의 부모의 부모 노드 간에 DEF2)의 위반 사항이 존재하는지 판별
-	goto DETERMINING_PROC;
+		//새 노드의 부모의 부모 노드와 새 노드의 부모의 부모의 부모 노드 간에 DEF2)의 위반 사항이 존재하는지 판별
+		goto DETERMINING_PROC;
+	}
 }
 
 /// <summary>
@@ -328,13 +351,13 @@ RECOLORING_PROC: //색 변경 처리 루틴
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 /// <param name="targetData">삭제하고자 하는 대상 데이터</param>
 /// <param name="deallocateAfterRemove">삭제 대상 노드에 대한 메모리 해제 수행 여부</param>
-/// <summary>
 void RBT_RemoveNode(NODE** srcRootNode, const DATA_TYPE& targetData, bool deallocateAfterRemove)
 {
 	/***
-		< 삭제하고자 하는 대상 데이터가 포함 된 노드 (이하, 삭제 대상 노드) 삭제를 위한 삭제 대상 노드의 자리를 대체 할 노드 (이하, 이동 대상 노드) 선택 >
+		< 삭제하고자 하는 대상 데이터가 포함 된 노드 (이하, 삭제 대상 노드) 삭제를 위한 
+		삭제 대상 노드의 자리를 대체 할 노드 (이하, 이동 대상 노드) 선택 >
 
-		! 검은색 더미 단말 노드는 이동 대상 노드로 선택되지 않음
+		! 검은색 더미 단말 노드는 항상 이동 대상 노드로 선택되지 않음
 
 		1) 삭제 대상 노드의 왼쪽 혹은 오른쪽 자식의 검은색 더미 단말 노드 여부에 따라,
 
@@ -348,88 +371,82 @@ void RBT_RemoveNode(NODE** srcRootNode, const DATA_TYPE& targetData, bool deallo
 			: 삭제 대상 노드의 왼쪽 하위 트리에서 최대값을 이동 대상 노드로 선택 (임의)
 
 			1-4) 삭제 대상 노드의 왼쪽 자식 노드 == 검은색 더미 단말 노드 && 삭제 대상 노드의 오른쪽 자식 노드 == 검은색 더미 단말 노드
-			: do nothing (삭제 대상 노드가 단말 노드일 경우 발생)
+			: do nothing (삭제 대상 노드가 단말 노드일 경우 발생, 삭제 대상 노드의 부모 노드의 자식 노드로의 연결만 수정 할 것)
 
 		---
 
-		< 삭제 대상 노드 및 인접 노드의 색에 따른 수행 작업 판별 >
+		< 삭제 대상 노드 및 인접 노드의 색에 따른 처리 >
 		
 		! 루트 노드에 대한 삭제가 발생 할 경우, 별도의 처리 요구
 
-		1) RPC : 삭제 대상 노드 부모 노드의 색 (RED, BLACK)
-		2) RC : 삭제 대상 노드의 색 (RED, BLACK)
-		3) MC : 이동 대상 노드의 색 (RED, BLACK)
+		1) RPC : 삭제 대상 노드의 부모 노드의 색 (R : Red, B : Black)
+		2) RC : 삭제 대상 노드의 색 (R : Red, B : Black)
+		3) MC : 이동 대상 노드의 색 (R : Red, B : Black)
 		4) P : 이에 따른 수행 작업
 
-		RPC	|	RC	|	MC	|	P
-		RED		RED		-		throw exception : RC 및 RPC 간 DEF2) 위반
+		RPC | RC | MC | P
+		R	 R	 -			throw exception - 삭제 대상 노드의 부모 노드와 삭제 대상 노드 간 DEF2) 위반
 
-		RED		BLACK	RED		1) 삭제 대상 노드를 삭제 및 이동 대상 노드를 이동 후 DEF2) 위반
+		-	 B	 R			1) 삭제 대상 노드를 삭제 및 이동 대상 노드를 이동
+						
+								1-1) 삭제 대상 노드의 부모 노드의 색 == 빨간색 
+								: 삭제 대상 노드의 부모 노드와 이동 대상 노드 간 DEF2) 위반,
+								검은 노드의 수가 감소하였으므로 DEF4) 위반
+						
+								1-2) 삭제 대상 노드의 부모 노드의 색 == 검은색
+								: 검은 노드의 수가 감소하였으므로 DEF4) 위반
 
-								2) 이동 대상 노드를 검은색으로 변경
-								: 삭제 대상 노드가 검은색이었으므로, 이동 대상 노드가 검은색으로 변경되어도 DEF4) 를 위반하지 않음
+							2) 이동 대상 노드를 검은색으로 변경
+							: DEF2) 및 DEF4) 위반사항 수정
 		
-		RED		BLACK	BLACK	1) 삭제 대상 노드를 삭제 및 이동 대상 노드를 이동 후 DEF4) 위반
+		B	 R	 R			1) 이동 대상 노드의 부모 == 삭제 대상 노드
+							: throw exception - 삭제 대상 노드와 이동 대상 노드 간 DEF2) 위반
 
-								2) 이동 대상 노드를 임시로 이중 검은색 노드로 가정
-								: DEF4) 위반에서 DEF1) 위반으로 변경
+							2) 이동 대상 노드의 부모 != 삭제 대상 노드
+							: 삭제 대상 노드를 삭제 및 이동 대상 노드를 이동
 
-								3) 이중 검은색 노드의 DEF1) 위반에 대한 처리를 위해 별도의 처리 루틴으로 이동
+		-	 -	 B			1) 삭제 대상 노드를 삭제 및 이동 대상 노드를 이동
+		(BBB or BRB or RBB)	: 검은 노드의 수가 감소하였으므로 DEF4) 위반
 
-		BLACK	RED		RED		throw exception : RC 및 MC 간 DEF2) 위반
-
-		BLACK	RED		BLACK	1) 삭제 대상 노드를 삭제 및 이동 대상 노드를 이동 후 DEF4) 위반
-								: 삭제 대상 노드가 검은색 더미 단말 노드를 제외 한 두 개의 자식 노드를 갖고 있을 경우 발생
-								(검은색 더미 단말 노드는 이동 대상 노드로 선택되지 않음)
-
-
-		BLACK	BLACK	RED
-		BLACK	BLACK	BLACK
+							2) 이동 대상 노드를 이중 검은색 노드로 가정
+							: DEF4) 위반에서 DEF1) 위반으로 변경되었으며,
+							이중 검은색 노드의 DEF1) 위반에 대한 처리를 위해 별도의 처리 루틴으로 이동
 
 		---
 
-		< 이중 검은색 노드에 대해 DEF1) 위반 처리를 위한 수행 작업 판별 >
+		< 이중 검은색 노드의 DEF1) 위반 처리 >
 
+		! 이 시점에, 이중 검은색 노드의 부모 노드는 검은색 혹은 빨간색
+
+		1) SC : 이중 검은색 노드의 반대쪽 노드 (이하, 이중 검은색 노드의 형제 노드)의 색 (R : Red, B : Black)
+		2) SLC : 이중 검은색 노드의 형제 노드의 왼쪽 자식 노드의 색 (R : Red, B : Black)
+		3) SRC : 이중 검은색 노드의 형제 노드의 오른쪽 자식 노드의 색 (R : Red, B : Black)
+		4) P : 이에 따른 수행 작업
+
+		SC | SLC | SRC | P
+		R	-	 -		1) 이중 검은색 노드의 부모 노드의 색 == 빨간색
+						: throw exception - 이중 검은색 노드의 형제 노드와 이중 검은색 노드의 부모 노드 간 DEF2) 위반
+
+						2) 이중 검은색 노드의 부모 노드의 색 == 검은색
+
+							2-1) 이중 검은색 노드의 부모 노드를 빨간색으로 변경
+
+							2-2) 이중 검은색 노드의 형제 노드를 검은색으로 변경
+
+							2-3) 이중 검은색 노드에 대한 이중 검은색 노드의 부모로부터의 자식 방향에 따라,
+							
+								2-3-1) 이중 검은색 노드의 부모 노드의 왼쪽 자식 == 이중 검은색 노드
+								: 이중 검은색 노드 < 이중 검은색 노드의 부모 노드 < 이중 검은색 노드의 형제 노드
+
+								2-3-2) 이중 검은색 노드의 부모 노드의 오른쪽 자식 == 이중 검은색 노드
+								: 이중 검은색 노드의 형제 노드 < 이중 검은색 노드의 부모 노드 < 이중 검은색 노드
+						
 	
-		이중 검은색 노드의 반대쪽 노드 (이하, 이중 검은색 노드의 형제 노드)의 색
-		이중 검은색 노드의 형제 노드의 왼쪽 자식 노드의 색
-		이중 검은색 노드의 형제 노드의 오른쪽 자식 노드의 색
 
-
-		TODO : 
-		이하, 수정, 삭제
-		
+					
 
 		---
-		2) 삭제 대상 노드의 색에 따라,
-			
-			2-1) 삭제 대상 노드의 색 == 빨간색
-			: 위반될 수 있는 정의와 수정 사항은,
-				
-				DEF4) 루트 노드에서 검은색 더미 단말 노드 간의 각 연결 과정에 존재하는 검은 노드의 수는 모두 동일
-				: 이동 대상 노드가 검은 노드이면서 삭제 대상 노드를 삭제 및 이동 대상 노드를 이동 후 발생하며, 
-				트리의 높이 균형이 깨졌음을 의미, 이동 대상 노드의 부모 노드로부터 이동 대상 노드로의 방향에 따른 트리 회전 수행
-
-				2-1-1) 이동 대상 노드의 부모 노드의 왼쪽 자식 == 이동 대상 노드
-				: DEF4)의 위반사항을 수정하기 위해 이동 대상 노드 (moveTarget)의 부모 노드를 기준으로 오른쪽으로 트리 회전
-				(이동 대상 노드의 왼쪽 자식 노드 < 이동 대상 노드 (moveTarget) < 이동 대상 노드의 부모 노드)
-
-				2-1-2) 이동 대상 노드의 부모 노드의 오른쪽 자식 == 이동 대상 노드
-
-
-			2-2) 삭제 대상 노드의 색 == 검은색
-
-			DEF4) 루트 노드에서 검은색 더미 단말 노드 간의 각 연결 과정에 존재하는 검은 노드의 수는 모두 동일
-			: 위반될 수 있는 정의와 수정 사항은,
-
 		
-		삭제 대상 노드의 부모 노드 및 이동 대상 노드가 모두 빨간색일 경우
-		: DEF2)를 위반하므로, 이동 대상 노드를 검은색으로 변경
-
-		삭제 대상 노드의 부모 노드가 빨간색이고, 이동 대상 노드가 검은색일 경우
-		: DEF4)를 위반, 임시로 이동 대상 노드를 이중 검은 노드로 간주
-
-
 
 		---
 		
@@ -498,7 +515,6 @@ void RBT_RemoveNode(NODE** srcRootNode, const DATA_TYPE& targetData, bool deallo
 	{
 		//do nothing (삭제 대상 노드가 단말 노드일 경우 발생)
 	}
-
 
 
 END_PROC:
@@ -590,7 +606,7 @@ void RBT_InsertNodeHelper(NODE** srcRootNode, NODE* srcNewNode)
 			else
 			{
 				//현재 노드의 왼쪽 자식이 검은색 단말 노드일 때까지 탐색 수행
-				RBT_InsertNode(&((*srcRootNode)->_left), srcNewNode);
+				RBT_InsertNodeHelper(&((*srcRootNode)->_left), srcNewNode);
 			}
 		}
 		else //현재 노드의 데이터 < 삽입하고자 하는 노드의 데이터인 경우
@@ -605,7 +621,7 @@ void RBT_InsertNodeHelper(NODE** srcRootNode, NODE* srcNewNode)
 			else
 			{
 				//현재 노드의 오른쪽 자식이 검은색 단말 노드일 때까지 탐색 수행
-				RBT_InsertNode(&((*srcRootNode)->_right), srcNewNode);
+				RBT_InsertNodeHelper(&((*srcRootNode)->_right), srcNewNode);
 			}
 		}
 	}
@@ -643,34 +659,33 @@ void RBT_RotateTree(NODE** srcRootNode, NODE* srcTargetParentNode, ROTATE_DIRECT
 				: 대상 부모 노드의 왼쪽 자식 노드의 오른쪽 자식 노드의 부모를 대상 부모 노드로 연결
 				(대상 부모 노드의 왼쪽 자식 노드 < 대상 부모 노드의 왼쪽 자식 노드의 오른쪽 자식 노드 < 대상 부모 노드)
 
-		2) 대상 부모 노드와 루트 노드 일치 여부에 따라,
+		2) 대상 부모 노드의 왼쪽 자식 노드의 부모를 대상 부모 노드의 부모로 연결
 
-			2-1) 대상 부모 노드 == 루트 노드
+		3) 대상 부모 노드와 루트 노드 일치 여부에 따라,
+
+			3-1) 대상 부모 노드 == 루트 노드
 			: 루트 노드를 대상 부모 노드의 왼쪽 자식 노드로 변경
 
-			2-2) 대상 부모 노드 != 루트 노드
+			3-2) 대상 부모 노드 != 루트 노드
+			: 대상 부모 노드의 부모의 자식 (왼쪽 혹은 오른쪽)을 대상 부모 노드의 왼쪽 자식 노드로 연결
 
-				2-2-1) 대상 부모 노드의 왼쪽 자식 노드의 부모를 대상 부모 노드의 부모로 연결
+		4) 대상 부모 노드의 왼쪽 자식 노드의 오른쪽을 대상 부모 노드로 연결
 
-				2-2-2) 대상 부모 노드의 부모의 자식 (왼쪽 혹은 오른쪽)을 대상 부모 노드의 왼쪽 자식 노드로 연결
+		5) 대상 부모 노드의 부모를 대상 부모 노드의 왼쪽 자식 노드로 연결
 
-		3) 대상 부모 노드의 왼쪽 자식 노드의 오른쪽을 대상 부모 노드로 연결
-
-		4) 대상 부모 노드의 부모를 대상 부모 노드의 왼쪽 자식 노드로 연결
-
-		5) 대상 부모 노드의 왼쪽을 대상 부모 노드의 왼쪽 자식의 오른쪽으로 연결
+		6) 대상 부모 노드의 왼쪽을 대상 부모 노드의 왼쪽 자식의 오른쪽으로 연결
 
 		---
 
 		ex)
-					8 (회전 대상 부모 노드)
+					8 (대상 부모 노드)
 			5				9
 		3		6
 
 		<= 5를 기준으로 좌회전 후,
 		=> 8을 기준으로 우회전 후,
 
-					5 (회전 대상 부모 노드)
+					5 (대상 부모 노드)
 			3				8
 						6		9
 	***/
@@ -711,15 +726,15 @@ void RBT_RotateTree(NODE** srcRootNode, NODE* srcTargetParentNode, ROTATE_DIRECT
 	if (moveTargetChildNode != dummyBlackTerminalNode)
 		moveTargetChildNode->_parent = srcTargetParentNode;
 
+	//우회전 : 대상 부모 노드의 왼쪽 노드에서 부모를 대상 부모 노드의 부모 노드로 연결
+	moveTargetNode->_parent = srcTargetParentNode->_parent;
+	
 	if (srcTargetParentNode == (*srcRootNode)) //대상 부모 노드가 루트 노드일 경우
 	{
 		(*srcRootNode) = moveTargetNode;
 	}
 	else //대상 부모 노드가 루트 노드가 아닐 경우
 	{
-		//우회전 : 대상 부모 노드의 왼쪽 노드에서 부모를 대상 부모 노드의 부모 노드로 연결
-		moveTargetNode->_parent = srcTargetParentNode->_parent;
-
 		//우회전 : 대상 부모 노드의 부모에서 대상 부모 노드로의 연결을 대상 부모 노드의 왼쪽 자식 노드로 연결
 		(srcTargetParentNode->_parent->_left == srcTargetParentNode) ?
 			srcTargetParentNode->_parent->_left = moveTargetNode : srcTargetParentNode->_parent->_right = moveTargetNode;
