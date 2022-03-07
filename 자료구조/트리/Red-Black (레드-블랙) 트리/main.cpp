@@ -22,12 +22,6 @@ int main()
 		{
 			std::cout << "Current Insert : " << inputData[i] << std::endl;
 			RBT_InsertNode(&rootNode, RBT_CreateNode(inputData[i]));
-
-			if (dummyBlackTerminalNode->_parent != NULL) //검은색 더미 단말 노드에서 부모로의 연결은 허용하지 않음 
-				throw std::logic_error(std::string(__func__) + std::string(" : Not allowed parent connection from dummy"));
-
-			if (rootNode->_color == COLOR::RED)
-				throw std::logic_error(std::string(__func__) + std::string(" : DEF1) violation"));
 		}
 
 		RBT_DispOrderedTree(rootNode, TRAVERSAL_METHOD::INORDER); //valid : 2 3 6 7 8 10 11 13 18 22 26 

@@ -71,4 +71,6 @@ NODE* RBT_SearchMinNode(NODE*);
 
 void RBT_InsertNodeHelper(NODE**, NODE*);
 void RBT_RotateTree(NODE**, NODE* , ROTATE_DIRECTION);
+
+void RBT_ValidateTree(NODE*);
 #endif
