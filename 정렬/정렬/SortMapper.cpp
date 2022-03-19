@@ -33,7 +33,6 @@ SORT_MAPPER* SORT_MAPPER::_instance = NULL; //SORT_MAPPER 고유 인스턴스 �
 /// <summary>
 /// 자신의 고유 인스턴스 참조 반환
 /// </summary>
-/// <typeparam name="SORT_ELEMENT_TYPE">정렬 요소 타입</typeparam>
 /// <returns>자신의 고유 인스턴스 참조</returns>
 SORT_MAPPER& SORT_MAPPER::GetInstance()
 {

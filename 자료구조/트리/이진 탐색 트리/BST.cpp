@@ -193,8 +193,6 @@ void BST_RemoveNode(NODE** srcRootNode, const DATA_TYPE& targetData, bool deallo
 
 		=> 이진 탐색 트리의 정의를 만족하지 않음
 
-		============================================================
-
 		2) 삭제 대상 노드를 삭제 후 하위 트리의 노드 중 가장 큰 노드인 20을 삭제 대상 노드의 위치로 옮길 경우
 
 					20
@@ -203,8 +201,6 @@ void BST_RemoveNode(NODE** srcRootNode, const DATA_TYPE& targetData, bool deallo
 
 		=> 이진 탐색 트리의 정의를 만족하지 않음
 
-		============================================================
-
 		3) 삭제 대상 노드를 삭제 후 왼쪽 하위 트리의 노드 중 가장 큰 노드인 9을 삭제 대상 노드의 위치로 옮길 경우
 
 					9
@@ -212,8 +208,6 @@ void BST_RemoveNode(NODE** srcRootNode, const DATA_TYPE& targetData, bool deallo
 		0				12		20
 
 		=> 이진 탐색 트리의 정의를 만족
-
-		============================================================
 
 		4) 삭제 대상 노드를 삭제 후 오른쪽 하위 트리의 노드 중 가장 작은 노드인 12을 삭제 대상 노드의 위치로 옮길 경우
 

@@ -243,7 +243,7 @@ double EXPRT_EvaluateTree(NODE* srcRootNode)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Invalid Expression Tree"));
 
 	case SYMBOL_TYPE::OPERAND:
-		retVal = StrToDouble(srcRootNode->_data); //피연산자인 경우, 현재 노드의 상위 노드로 현재 노드의 값 전달
+		retVal = utils::StrToDouble(srcRootNode->_data); //피연산자인 경우, 현재 노드의 상위 노드로 현재 노드의 값 전달
 		break;
 
 	default: //연산자인 경우

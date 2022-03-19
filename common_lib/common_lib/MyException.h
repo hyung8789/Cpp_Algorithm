@@ -1,12 +1,14 @@
-#ifndef _MY_EXCEPTION_H_
+ï»¿#ifndef _MY_EXCEPTION_H_
 #define _MY_EXCEPTION_H_
 
+#include <iostream>
+#include <string>
 #include <exception>
 
-namespace myexception //»ç¿ëÀÚ Á¤ÀÇ ¿¡¿Ü
+namespace myexception //ì‚¬ìš©ìž ì •ì˜ ì—ì™¸
 {
 	/// <summary>
-	/// »ç¿ëÀÚ·ÎºÎÅÍ ÀÔ·Â°ª¿¡ ´ëÇÑ ¿Ã¹Ù¸¥ °á°ú°ªÀ» Ã£Áö ¸øÇÑ ¿¹¿Ü
+	/// ì‚¬ìš©ìžë¡œë¶€í„° ìž…ë ¥ê°’ì— ëŒ€í•œ ì˜¬ë°”ë¥¸ ê²°ê³¼ê°’ì„ ì°¾ì§€ ëª»í•œ ì˜ˆì™¸
 	/// </summary>
 	class NOT_FOUND_EXCEPTION : public std::runtime_error
 	{
@@ -16,7 +18,7 @@ namespace myexception //»ç¿ëÀÚ Á¤ÀÇ ¿¡¿Ü
 	};
 
 	/// <summary>
-	/// Çã¿ëµÇÁö ¾ÊÀº Áßº¹ µ¥ÀÌÅÍ ¿¹¿Ü
+	/// í—ˆìš©ë˜ì§€ ì•Šì€ ì¤‘ë³µ ë°ì´í„° ì˜ˆì™¸
 	/// </summary>
 	class NOT_ALLOWED_DUPLICATE_DATA_EXCEPTION : public std::runtime_error
 	{
@@ -26,7 +28,7 @@ namespace myexception //»ç¿ëÀÚ Á¤ÀÇ ¿¡¿Ü
 	};
 
 	/// <summary>
-	/// ¸Þ¸ð¸® ¼Õ»ó, ¸Þ¸ð¸® Ä§¹ü, ¸Þ¸ð¸® º¯Á¶, Àß¸ø µÈ ¿¬»ê¿¡ ÀÇÇÑ ¿¹»óÄ¡ ¸øÇÑ µ¥ÀÌÅÍ ¿¹¿Ü
+	/// ë©”ëª¨ë¦¬ ì†ìƒ, ë©”ëª¨ë¦¬ ì¹¨ë²”, ë©”ëª¨ë¦¬ ë³€ì¡°, ìž˜ëª» ëœ ì—°ì‚°ì— ì˜í•œ ì˜ˆìƒì¹˜ ëª»í•œ ë°ì´í„° ì˜ˆì™¸
 	/// </summary>
 	class MEM_CORRUPTION_EXCEPTION : public std::runtime_error 
 	{

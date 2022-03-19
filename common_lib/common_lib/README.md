@@ -1,16 +1,18 @@
-# Common Library
+ï»¿# Common Library
 
 ## < Directory Structure Information >
-    ./Common_LIB_Core.h : ÄÚ¾î Çì´õ ÆÄÀÏ
-    ./Macro.h : ÀüÃ³¸® ¸ÅÅ©·Î Á¤ÀÇºÎ
-    ./MyException.h : »ç¿ëÀÚ Á¤ÀÇ ¿¹¿Ü (myexception ³×ÀÓ½ºÆäÀÌ½º·Î Á¢±Ù)
-    ./Utils.h : ±âÅ¸ À¯Æ¿ ÇÔ¼ö ¼±¾ðºÎ
-    ./Utils.cpp : ±âÅ¸ À¯Æ¿ ÇÔ¼ö Á¤ÀÇºÎ
+    ./Common_LIB_Core.h : ì½”ì–´ í—¤ë” íŒŒì¼
+    ./Macro.h : ì „ì²˜ë¦¬ ë§¤í¬ë¡œ ì •ì˜ë¶€
+    ./MyException.h : ì‚¬ìš©ìž ì •ì˜ ì˜ˆì™¸ (myexception ë„¤ìž„ìŠ¤íŽ˜ì´ìŠ¤ë¡œ ì ‘ê·¼)
+    ./Utils.h : ê¸°íƒ€ ìœ í‹¸ í•¨ìˆ˜ ì„ ì–¸ë¶€ (utils ë„¤ìž„ìŠ¤íŽ˜ì´ìŠ¤ë¡œ ì ‘ê·¼)
+    ./Utils.cpp : ê¸°íƒ€ ìœ í‹¸ í•¨ìˆ˜ ì •ì˜ë¶€
+    ./ConsoleScreenManager.h : WinAPI ì½˜ì†” ì°½ ê´€ë¦¬ìž ì„ ì–¸ë¶€
+    ./ConsoleScreenManager.cpp : WinAPI ì½˜ì†” ì°½ ê´€ë¦¬ìž ì •ì˜ë¶€
 
 ---
 
-## < »ç¿ë¹ý >
+## < ì‚¬ìš©ë²• >
 
-    1) ÇöÀç ÇÁ·ÎÁ§Æ® (common_lib)ÀÇ ¼Ó¼º¿¡¼­ Á¤Àû ¶óÀÌºê·¯¸® (lib)·Î ºôµå ÇÒ °Í
-    2) »ç¿ëÇÏ°íÀÚ ÇÏ´Â ÇÁ·ÎÁ§Æ®¿¡ ÇöÀç ÇÁ·ÎÁ§Æ® (common_lib)¸¦ ÂüÁ¶·Î Ãß°¡ ÇÒ °Í 
-	3) »ç¿ëÇÏ°íÀÚ ÇÏ´Â ÇÁ·ÎÁ§Æ®¿¡ ÇöÀç ÇÁ·ÎÁ§Æ® (common_lib) ÄÚ¾î Çì´õ ÆÄÀÏ (Common_LIB_Core.h)¸¦ Æ÷ÇÔ½ÃÅ³ °Í
+    1) í˜„ìž¬ í”„ë¡œì íŠ¸ (common_lib)ì˜ ì†ì„±ì—ì„œ ì •ì  ë¼ì´ë¸ŒëŸ¬ë¦¬ (lib)ë¡œ ë¹Œë“œ í•  ê²ƒ
+    2) ì‚¬ìš©í•˜ê³ ìž í•˜ëŠ” í”„ë¡œì íŠ¸ì— í˜„ìž¬ í”„ë¡œì íŠ¸ (common_lib)ë¥¼ ì°¸ì¡°ë¡œ ì¶”ê°€ í•  ê²ƒ 
+	3) ì‚¬ìš©í•˜ê³ ìž í•˜ëŠ” í”„ë¡œì íŠ¸ì— í˜„ìž¬ í”„ë¡œì íŠ¸ (common_lib) ì½”ì–´ í—¤ë” íŒŒì¼ (Common_LIB_Core.h)ë¥¼ í¬í•¨ì‹œí‚¬ ê²ƒ

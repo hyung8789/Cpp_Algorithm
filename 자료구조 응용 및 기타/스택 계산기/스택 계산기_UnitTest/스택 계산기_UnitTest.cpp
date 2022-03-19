@@ -58,8 +58,8 @@ namespace 스택_계산기_UnitTest
 		/// </summary>
 		TEST_METHOD(CharToDecAscii_TestMethod)
 		{
-			Assert::AreEqual((int)'a', CharToDecAscii('a'));
-			Assert::AreEqual((int)'z', CharToDecAscii('z'));
+			Assert::AreEqual((int)'a', utils::CharToDecAscii('a'));
+			Assert::AreEqual((int)'z', utils::CharToDecAscii('z'));
 		}
 		/// <summary>
 		/// 대상 0~9 범위의 단일 숫자를 10진 아스키 코드로 변환 테스트 메소드
@@ -74,7 +74,7 @@ namespace 스택_계산기_UnitTest
 				case 10:
 					try //경계값 검사
 					{
-						SingleNumToDecAscii(i);
+						utils::SingleNumToDecAscii(i);
 						Assert::Fail();
 					}
 					catch (const std::invalid_argument& ex) //success
@@ -85,7 +85,7 @@ namespace 스택_계산기_UnitTest
 					break;
 
 				default:
-					Assert::AreEqual('0' + i, SingleNumToDecAscii(i));
+					Assert::AreEqual('0' + i, utils::SingleNumToDecAscii(i));
 					break;
 				}
 			}

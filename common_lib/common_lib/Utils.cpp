@@ -1,10 +1,10 @@
-﻿#include "Common_LIB_Core.h"
+﻿#include "Utils.h"
 
 /// <summary>
 /// 대상 문자열 제자리 좌우반전
 /// </summary>
 /// <param name="srcTargetStr">대상 문자열</param>
-void ReverseInplaceStr(char srcTargetStr[])
+void utils::ReverseInplaceStr(char srcTargetStr[])
 {
 	if (srcTargetStr == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -24,7 +24,7 @@ void ReverseInplaceStr(char srcTargetStr[])
 /// </summary>
 /// <param name="srcStrOfDouble">부동 소수점으로 이루어진 대상 문자열</param>
 /// <returns>부동 소수점으로 이루어진 대상 문자열로부터 변환 된 부동 소수점</returns>
-double StrToDouble(const char* srcStrOfDouble)
+double utils::StrToDouble(const char* srcStrOfDouble)
 {
 	double retVal = 0.0;
 	char* endAddr; //대상 문자열로부터 성공적으로 변환 후 그 다음 문자의 주소
@@ -49,7 +49,7 @@ double StrToDouble(const char* srcStrOfDouble)
 /// </summary>
 /// <param name="srcChar">대상 문자</param>
 /// <returns>변환 된 10진 아스키 코드</returns>
-int CharToDecAscii(char srcChar)
+int utils::CharToDecAscii(char srcChar)
 {
 	return (int)srcChar;
 }
@@ -59,10 +59,67 @@ int CharToDecAscii(char srcChar)
 /// </summary>
 /// <param name="srcSingleNum">대상 0~9 범위의 단일 숫자</param>
 /// <returns>변환 된 10진 아스키 코드</returns>
-int SingleNumToDecAscii(int srcSingleNum)
+int utils::SingleNumToDecAscii(int srcSingleNum)
 {
 	if (srcSingleNum < 0 || srcSingleNum > 9)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
 	return '0' + srcSingleNum;
+}
+
+/// <summary>
+/// 2차원 요소 인덱스를 1차원 요소 인덱스로 변환
+/// </summary>
+/// <param name="srcRowElementCount">행에 대한 전체 요소 개수</param>
+/// <param name="srcColElementCount">열에 대한 전체 요소 개수</param>
+/// <param name="targetRowIndex">대상 2차원 행에 대한 인덱스</param>
+/// <param name="targetColIndex">대상 2차원 열에 대한 인덱스</param>
+/// <param name="elementOrder">연속적인 요소에 대한 접근 방법</param>
+/// <returns>변환 된 1차원 요소 인덱스</returns>
+size_t utils::TwoDimensionIndexToOneDimensionIndex(size_t srcRowElementCount, size_t srcColElementCount,
+	size_t targetRowIndex, size_t targetColIndex, ELEMENT_ORDER elementOrder)
+{
+	// https://www.geeksforgeeks.org/emulating-a-2-d-array-using-1-d-array/
+	// https://en.wikipedia.org/wiki/Row-_and_column-major_order
+
+	/***
+		< Row-Major Order >
+
+		1 [0]	2 [1]	3 [2]	4 [3]	5 [4]	6 [5]
+
+		<= 실제 저장 된 요소
+		=> 2차원 요소로 취급하여 접근 (1-D Index : targetColIndex + (targetRowIndex * srcColElementCount))
+
+		1 [0, 0]	2 [0, 1]	3 [0, 2]
+		4 [1, 0]	5 [1, 1]	6 [1, 2]
+
+		---
+
+		< Col-Major Order >
+
+		1 [0]	4 [1]	2 [2]	5 [3]	3 [4]	6 [5]
+
+		<= 실제 저장 된 요소
+		=> 2차원 요소로 취급하여 접근 (1-D Index : targetRowIndex + (targetColIndex * srcRowElementCount))
+
+		1 [0, 0]	2 [0, 1]	3 [0, 2]
+		4 [1, 0]	5 [1, 1]	6 [1, 2]
+	***/
+
+	if (targetRowIndex >= srcRowElementCount || targetColIndex >= srcColElementCount)
+		throw std::out_of_range(std::string(__func__) + std::string(" : out of range (") + 
+		std::string(std::to_string(targetRowIndex) + ", " + std::to_string(srcRowElementCount) + ", " +
+			std::to_string(targetColIndex) + ", " +  std::to_string(srcColElementCount) + ")"));
+
+	switch (elementOrder)
+	{
+	case ELEMENT_ORDER::ROW_MAJOR:
+		return targetColIndex + (targetRowIndex * srcColElementCount);
+
+	case ELEMENT_ORDER::COL_MAJOR:
+		return targetRowIndex + (targetColIndex * srcRowElementCount);
+
+	default:
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
+	}
 }

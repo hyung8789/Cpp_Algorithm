@@ -12,7 +12,7 @@ int main()
 
 		int inputData[] =
 		{
-			// https://www.geeksforgeeks.org/red-black-rootNode-set-3-delete-2/?ref=lbp
+			// https://www.geeksforgeeks.org/red-black-tree-set-3-delete-2/?ref=lbp
 			7, 3, 18, 10, 22, 8, 11, 26, 2, 6, 13
 		}; //입력 데이터
 
@@ -20,14 +20,30 @@ int main()
 
 		for (int i = 0; i < LENGTH(inputData); i++)
 		{
-			std::cout << "Current Insert : " << inputData[i] << std::endl;
+			//std::cout << "Current Insert : " << inputData[i] << std::endl;
 			RBT_InsertNode(&rootNode, RBT_CreateNode(inputData[i]));
+		}
+
+		RBT_DispOrderedTree(rootNode, TRAVERSAL_METHOD::INORDER);
+		std::cout << "\n";
+
+		for (int i = 0; i < LENGTH(inputData); i++)
+		{
+			std::cout << "Current Remove : " << inputData[i] << std::endl;
+
+			RBT_RemoveNode(&rootNode, inputData[i]);
+			RBT_DispOrderedTree(rootNode, TRAVERSAL_METHOD::INORDER);
+			std::cout << "\n";
 		}
 
 		RBT_DispOrderedTree(rootNode, TRAVERSAL_METHOD::INORDER); //valid : 2 3 6 7 8 10 11 13 18 22 26 
 
 		RBT_DeallocateTree(&rootNode);
 		RBT_DeallocateNode(&dummyBlackTerminalNode);
+
+#ifdef COLOR_VISUALIZATION
+		CONSOLE_SCREEN_MANAGER::GetInstance().Dispose();
+#endif
 	}
 	catch (const std::exception& ex)
 	{

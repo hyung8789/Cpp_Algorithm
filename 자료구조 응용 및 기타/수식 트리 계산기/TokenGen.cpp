@@ -1,15 +1,15 @@
-#include "Core.h"
+ï»¿#include "Core.h"
 
 /// <summary>
-/// ´ë»ó ¹®ÀÚ¸¦ ±âÈ£ Å¸ÀÔÀ¸·Î º¯È¯
+/// ëŒ€ìƒ ë¬¸ìžë¥¼ ê¸°í˜¸ íƒ€ìž…ìœ¼ë¡œ ë³€í™˜
 /// </summary>
-/// <param name="srcChar">´ë»ó ¹®ÀÚ</param>
-/// <returns>´ë»ó ¹®ÀÚÀÇ ±âÈ£ Å¸ÀÔ</returns>
+/// <param name="srcChar">ëŒ€ìƒ ë¬¸ìž</param>
+/// <returns>ëŒ€ìƒ ë¬¸ìžì˜ ê¸°í˜¸ íƒ€ìž…</returns>
 SYMBOL_TYPE CharToSymbolType(char srcChar)
 {
-	int srcCharDecAscii = CharToDecAscii(srcChar); //´ë»ó ¹®ÀÚÀÇ 10Áø ¾Æ½ºÅ° ÄÚµå
+	int srcCharDecAscii = utils::CharToDecAscii(srcChar); //ëŒ€ìƒ ë¬¸ìžì˜ 10ì§„ ì•„ìŠ¤í‚¤ ì½”ë“œ
 
-	switch (srcChar) //´ë»ó ¹®ÀÚ¿¡ µû¶ó
+	switch (srcChar) //ëŒ€ìƒ ë¬¸ìžì— ë”°ë¼
 	{
 	case (const char)SYMBOL_TYPE::LEFT_PARENTHESIS:
 	case (const char)SYMBOL_TYPE::RIGHT_PARENTHESIS:
@@ -21,9 +21,9 @@ SYMBOL_TYPE CharToSymbolType(char srcChar)
 	case (const char)SYMBOL_TYPE::DOT:
 		break;
 
-	default: //ÇÇ¿¬»êÀÚ È¤Àº Àß¸ø µÈ ÀÔ·Â
-		if (!(srcCharDecAscii >= SingleNumToDecAscii(0) &&
-			srcCharDecAscii <= SingleNumToDecAscii(9))) //0 (dec ascii : 48) ~ 9 (dec ascii : 57) °¡ ¾Æ´Ò °æ¿ì
+	default: //í”¼ì—°ì‚°ìž í˜¹ì€ ìž˜ëª» ëœ ìž…ë ¥
+		if (!(srcCharDecAscii >= utils::SingleNumToDecAscii(0) &&
+			srcCharDecAscii <= utils::SingleNumToDecAscii(9))) //0 (dec ascii : 48) ~ 9 (dec ascii : 57) ê°€ ì•„ë‹ ê²½ìš°
 			throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
 		return SYMBOL_TYPE::OPERAND;
@@ -33,44 +33,44 @@ SYMBOL_TYPE CharToSymbolType(char srcChar)
 }
 
 /// <summary>
-/// ´ë»ó ¹®ÀÚ¿­À» ±âÈ£ Å¸ÀÔÀ¸·Î º¯È¯
+/// ëŒ€ìƒ ë¬¸ìžì—´ì„ ê¸°í˜¸ íƒ€ìž…ìœ¼ë¡œ ë³€í™˜
 /// </summary>
-/// <param name="srcStr">´ë»ó ¹®ÀÚ¿­</param>
-/// <returns>´ë»ó ¹®ÀÚ¿­ÀÇ ±âÈ£ Å¸ÀÔ</returns>
+/// <param name="srcStr">ëŒ€ìƒ ë¬¸ìžì—´</param>
+/// <returns>ëŒ€ìƒ ë¬¸ìžì—´ì˜ ê¸°í˜¸ íƒ€ìž…</returns>
 SYMBOL_TYPE StrToSymbolType(const char* srcStr)
 {
 	if (srcStr == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	size_t srcStrLen = strlen(srcStr); //´ë»ó ¹®ÀÚ¿­ÀÇ ±æÀÌ ('\0' Á¦¿Ü ÇÑ ±æÀÌ)
+	size_t srcStrLen = strlen(srcStr); //ëŒ€ìƒ ë¬¸ìžì—´ì˜ ê¸¸ì´ ('\0' ì œì™¸ í•œ ê¸¸ì´)
 	if (srcStrLen == 0)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (0 size str)"));
-	if (srcStrLen == 1) //´ÜÀÏ ¹®ÀÚÀÎ °æ¿ì
-		return CharToSymbolType((const char)srcStr[0]); //´ÜÀÏ ¹®ÀÚ¿¡ ´ëÇÑ ±âÈ£ Å¸ÀÔ º¯È¯ °á°ú ¹ÝÈ¯
+	if (srcStrLen == 1) //ë‹¨ì¼ ë¬¸ìžì¸ ê²½ìš°
+		return CharToSymbolType((const char)srcStr[0]); //ë‹¨ì¼ ë¬¸ìžì— ëŒ€í•œ ê¸°í˜¸ íƒ€ìž… ë³€í™˜ ê²°ê³¼ ë°˜í™˜
 
 	/***
-		< ´ÜÀÏ ¹®ÀÚ°¡ ¾Æ´Ñ ÇÇ¿¬»êÀÚ (ÇÑ ÀÚ¸®¸¦ ÃÊ°úÇÏ´Â Á¤¼ö È¤Àº '.'À» Æ÷ÇÔÇÏ´Â ½Ç¼ö) ÆÇº° >
+		< ë‹¨ì¼ ë¬¸ìžê°€ ì•„ë‹Œ í”¼ì—°ì‚°ìž (í•œ ìžë¦¬ë¥¼ ì´ˆê³¼í•˜ëŠ” ì •ìˆ˜ í˜¹ì€ '.'ì„ í¬í•¨í•˜ëŠ” ì‹¤ìˆ˜) íŒë³„ >
 
-		1) GenNextToken ÀÇ '.'À» Æ÷ÇÔÇÏ´Â ½Ç¼öÀÇ Á¶°ÇÀ» µû¸§
+		1) GenNextToken ì˜ '.'ì„ í¬í•¨í•˜ëŠ” ì‹¤ìˆ˜ì˜ ì¡°ê±´ì„ ë”°ë¦„
 	***/
 
-	bool isDotAlreadyExists = false; //½Ç¼ö Ç¥ÇöÀ» À§ÇÑ '.' ÀÇ ÃÖÃÊ ÇÑ ¹ø Á¸Àç ¿©ºÎ
+	bool isDotAlreadyExists = false; //ì‹¤ìˆ˜ í‘œí˜„ì„ ìœ„í•œ '.' ì˜ ìµœì´ˆ í•œ ë²ˆ ì¡´ìž¬ ì—¬ë¶€
 
 	for (size_t i = 0; i < srcStrLen; i++)
 	{
-		switch (CharToDecAscii((const char)srcStr[i])) //´ë»ó ¹®ÀÚ¿­ÀÇ °¢ ÀÚ¸®ÀÇ ´ÜÀÏ ¹®ÀÚ¿¡ ´ëÇÑ 10Áø ¾Æ½ºÅ° ÄÚµå¿¡ µû¶ó
+		switch (utils::CharToDecAscii((const char)srcStr[i])) //ëŒ€ìƒ ë¬¸ìžì—´ì˜ ê° ìžë¦¬ì˜ ë‹¨ì¼ ë¬¸ìžì— ëŒ€í•œ 10ì§„ ì•„ìŠ¤í‚¤ ì½”ë“œì— ë”°ë¼
 		{
 		case (const int)SYMBOL_TYPE::DOT:
 			if (isDotAlreadyExists ||
-				!(i >= 1 && (i + 1) < srcStrLen)) //ÀÌ¹Ì '.'°¡ Á¸ÀçÇÏ°Å³ª, ÇöÀç ¹®ÀÚÀÇ ÀÌÀü, ´ÙÀ½ ¹®ÀÚ°¡ Á¸ÀçÇÏÁö ¾ÊÀ» °æ¿ì
+				!(i >= 1 && (i + 1) < srcStrLen)) //ì´ë¯¸ '.'ê°€ ì¡´ìž¬í•˜ê±°ë‚˜, í˜„ìž¬ ë¬¸ìžì˜ ì´ì „, ë‹¤ìŒ ë¬¸ìžê°€ ì¡´ìž¬í•˜ì§€ ì•Šì„ ê²½ìš°
 				throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args ('.' already exists or invalid floating point)"));
 
 			isDotAlreadyExists = true;
 			break;
 
 		default:
-			if (!(CharToDecAscii((const char)srcStr[i]) >= SingleNumToDecAscii(0) &&
-				CharToDecAscii((const char)srcStr[i]) <= SingleNumToDecAscii(9))) //0 (dec ascii : 48) ~ 9 (dec ascii : 57) °¡ ¾Æ´Ò °æ¿ì
+			if (!(utils::CharToDecAscii((const char)srcStr[i]) >= utils::SingleNumToDecAscii(0) &&
+				utils::CharToDecAscii((const char)srcStr[i]) <= utils::SingleNumToDecAscii(9))) //0 (dec ascii : 48) ~ 9 (dec ascii : 57) ê°€ ì•„ë‹ ê²½ìš°
 				throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 			break;
 		}
@@ -80,13 +80,13 @@ SYMBOL_TYPE StrToSymbolType(const char* srcStr)
 }
 
 /// <summary>
-/// ´ë»ó ±âÈ£ Å¸ÀÔ¿¡ ´ëÇÑ ¿¬»êÀÚ ¿ì¼±¼øÀ§ ¹ÝÈ¯
+/// ëŒ€ìƒ ê¸°í˜¸ íƒ€ìž…ì— ëŒ€í•œ ì—°ì‚°ìž ìš°ì„ ìˆœìœ„ ë°˜í™˜
 /// </summary>
-/// <param name="srcSymbol">´ë»ó ±âÈ£ Å¸ÀÔ</param>
-/// <returns>¿ì¼±¼øÀ§ (Å¬ ¼ö·Ï ³ôÀº ¿¬»ê ¿ì¼±¼øÀ§)</returns>
+/// <param name="srcSymbol">ëŒ€ìƒ ê¸°í˜¸ íƒ€ìž…</param>
+/// <returns>ìš°ì„ ìˆœìœ„ (í´ ìˆ˜ë¡ ë†’ì€ ì—°ì‚° ìš°ì„ ìˆœìœ„)</returns>
 int GetSymbolTypePriority(SYMBOL_TYPE srcSymbol)
 {
-	int priority = -1; //¿ì¼±¼øÀ§ (Å¬ ¼ö·Ï ³ôÀº ¿¬»ê ¿ì¼±¼øÀ§)
+	int priority = -1; //ìš°ì„ ìˆœìœ„ (í´ ìˆ˜ë¡ ë†’ì€ ì—°ì‚° ìš°ì„ ìˆœìœ„)
 
 	switch (srcSymbol)
 	{
@@ -103,7 +103,7 @@ int GetSymbolTypePriority(SYMBOL_TYPE srcSymbol)
 		priority = 1;
 		break;
 
-	default: //')', ÇÇ¿¬»êÀÚ, ÇÇ¿¬»êÀÚ °£ ±¸ºÐÀ» À§ÇÑ °ø¹é, ½Ç¼ö Ç¥ÇöÀ» À§ÇÑ Á¡Àº ¿ì¼±¼øÀ§¸¦ °ü¸®ÇÏÁö ¾ÊÀ½
+	default: //')', í”¼ì—°ì‚°ìž, í”¼ì—°ì‚°ìž ê°„ êµ¬ë¶„ì„ ìœ„í•œ ê³µë°±, ì‹¤ìˆ˜ í‘œí˜„ì„ ìœ„í•œ ì ì€ ìš°ì„ ìˆœìœ„ë¥¼ ê´€ë¦¬í•˜ì§€ ì•ŠìŒ
 		throw std::logic_error(std::string(__func__) + std::string(" : unmanaged priority"));
 	}
 
@@ -111,98 +111,98 @@ int GetSymbolTypePriority(SYMBOL_TYPE srcSymbol)
 }
 
 /// <summary>
-/// ´ë»ó Ç¥Çö½ÄÀ¸·ÎºÎÅÍ ÅäÅ« »ý¼º
+/// ëŒ€ìƒ í‘œí˜„ì‹ìœ¼ë¡œë¶€í„° í† í° ìƒì„±
 /// </summary>
-/// <param name="srcExpr">´ë»ó Ç¥Çö½Ä (ÀüÃ¼ ¹®ÀÚ¿­ È¤Àº Slice µÈ ¹®ÀÚ¿­)</param>
-/// <param name="dstToken">´ë»ó Ç¥Çö½ÄÀ¸·ÎºÎÅÍ »ý¼ºµÇ¾î Ãâ·Â µÉ ÅäÅ«</param>
-/// <param name="exprReadDirection">´ë»ó Ç¥Çö½Ä ÀÐ´Â ¹æÇâ</param>
+/// <param name="srcExpr">ëŒ€ìƒ í‘œí˜„ì‹ (ì „ì²´ ë¬¸ìžì—´ í˜¹ì€ Slice ëœ ë¬¸ìžì—´)</param>
+/// <param name="dstToken">ëŒ€ìƒ í‘œí˜„ì‹ìœ¼ë¡œë¶€í„° ìƒì„±ë˜ì–´ ì¶œë ¥ ë  í† í°</param>
+/// <param name="exprReadDirection">ëŒ€ìƒ í‘œí˜„ì‹ ì½ëŠ” ë°©í–¥</param>
 void GenNextToken(const char* srcExpr, TOKEN* dstToken, EXPR_READ_DIRECTION exprReadDirection)
 {
 	if (srcExpr == NULL || dstToken == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	if (strlen(srcExpr) > sizeof(dstToken->_str) - 1) //´ë»ó Ç¥Çö½ÄÀÌ Ãâ·Â ¹öÆÛÀÇ '\0' Á¦¿Ü ÇÑ Å©±â¸¦ ÃÊ°ú ÇÒ °æ¿ì
+	if (strlen(srcExpr) > sizeof(dstToken->_str) - 1) //ëŒ€ìƒ í‘œí˜„ì‹ì´ ì¶œë ¥ ë²„í¼ì˜ '\0' ì œì™¸ í•œ í¬ê¸°ë¥¼ ì´ˆê³¼ í•  ê²½ìš°
 		throw std::out_of_range(std::string(__func__) + std::string(" : out of range"));
 
 	memset(dstToken->_str, '\0', sizeof(dstToken->_str));
 	dstToken->_readCount = 0;
 
 	/***
-		< '.'À» Æ÷ÇÔÇÏ´Â ½Ç¼öÀÇ Á¶°Ç >
+		< '.'ì„ í¬í•¨í•˜ëŠ” ì‹¤ìˆ˜ì˜ ì¡°ê±´ >
 
-		1) '.'Àº '.'À» Æ÷ÇÔÇÏ´Â ½Ç¼ö¿¡¼­ ¸Ç Ã³À½¿¡ ´Üµ¶À¸·Î Á¸Àç ÇÒ ¼ö ¾øÀ¸¸ç,
-		¾î¶°ÇÑ ÇÇ¿¬»êÀÚ°¡ ÃÖ¼Ò ÇÑ ¹øÀº Á¸Àç ÇÑ ´ÙÀ½¿¡¸¸ Á¸Àç
+		1) '.'ì€ '.'ì„ í¬í•¨í•˜ëŠ” ì‹¤ìˆ˜ì—ì„œ ë§¨ ì²˜ìŒì— ë‹¨ë…ìœ¼ë¡œ ì¡´ìž¬ í•  ìˆ˜ ì—†ìœ¼ë©°,
+		ì–´ë– í•œ í”¼ì—°ì‚°ìžê°€ ìµœì†Œ í•œ ë²ˆì€ ì¡´ìž¬ í•œ ë‹¤ìŒì—ë§Œ ì¡´ìž¬
 
-		2) '.'Àº '.'À» Æ÷ÇÔÇÏ´Â ½Ç¼ö¿¡¼­ ¹Ýµå½Ã ÇÑ ¹ø¸¸ Á¸Àç
+		2) '.'ì€ '.'ì„ í¬í•¨í•˜ëŠ” ì‹¤ìˆ˜ì—ì„œ ë°˜ë“œì‹œ í•œ ë²ˆë§Œ ì¡´ìž¬
 
-		3) '.'À» Æ÷ÇÔÇÏ´Â ½Ç¼ö¿¡¼­ '.'ÀÌ Á¸ÀçÇÑ µÚ, ÇÇ¿¬»êÀÚ°¡ ÃÖ¼Ò ÇÑ ¹øÀº ¹Ýµå½Ã Á¸ÀçÇÏ¿©¾ß ÇÏ°í,
-		ÃÖ¼Ò ÇÑ ¹ø ÀÌ»óÀÇ ÇÇ¿¬»êÀÚ°¡ Á¸Àç ÈÄ ´õ ÀÌ»ó ÇÇ¿¬»êÀÚ°¡ Á¸ÀçÇÏÁö ¾ÊÀ» °æ¿ì,
-		ÀÌ ÀüÃ¼¸¦ ÇÏ³ªÀÇ ½Ç¼ö·Î °£ÁÖÇÏ¿© '.' ¹× ÇÇ¿¬»êÀÚ¸¦ Æ÷ÇÔ ÇÑ ÇÏ³ªÀÇ ÇÇ¿¬»êÀÚ ÅäÅ«À¸·Î Ã³¸®
+		3) '.'ì„ í¬í•¨í•˜ëŠ” ì‹¤ìˆ˜ì—ì„œ '.'ì´ ì¡´ìž¬í•œ ë’¤, í”¼ì—°ì‚°ìžê°€ ìµœì†Œ í•œ ë²ˆì€ ë°˜ë“œì‹œ ì¡´ìž¬í•˜ì—¬ì•¼ í•˜ê³ ,
+		ìµœì†Œ í•œ ë²ˆ ì´ìƒì˜ í”¼ì—°ì‚°ìžê°€ ì¡´ìž¬ í›„ ë” ì´ìƒ í”¼ì—°ì‚°ìžê°€ ì¡´ìž¬í•˜ì§€ ì•Šì„ ê²½ìš°,
+		ì´ ì „ì²´ë¥¼ í•˜ë‚˜ì˜ ì‹¤ìˆ˜ë¡œ ê°„ì£¼í•˜ì—¬ '.' ë° í”¼ì—°ì‚°ìžë¥¼ í¬í•¨ í•œ í•˜ë‚˜ì˜ í”¼ì—°ì‚°ìž í† í°ìœ¼ë¡œ ì²˜ë¦¬
 
 		---
 
-		< ´ë»ó Ç¥Çö½ÄÀ¸·ÎºÎÅÍ ÅäÅ« »ý¼º >
+		< ëŒ€ìƒ í‘œí˜„ì‹ìœ¼ë¡œë¶€í„° í† í° ìƒì„± >
 
-		! '.'À» Æ÷ÇÔÇÏ´Â ½Ç¼öÀÇ °æ¿ì '.'°ú ÇÇ¿¬»êÀÚ¸¦ Æ÷ÇÔÇÑ ½Ç¼ö¸¦ ÇÏ³ªÀÇ ÇÇ¿¬»êÀÚ ÅäÅ«À¸·Î Ã³¸®
+		! '.'ì„ í¬í•¨í•˜ëŠ” ì‹¤ìˆ˜ì˜ ê²½ìš° '.'ê³¼ í”¼ì—°ì‚°ìžë¥¼ í¬í•¨í•œ ì‹¤ìˆ˜ë¥¼ í•˜ë‚˜ì˜ í”¼ì—°ì‚°ìž í† í°ìœ¼ë¡œ ì²˜ë¦¬
 
-		1) ´ë»ó Ç¥Çö½Ä¿¡ ´ëÇØ ´Ù ÀÐ°Å³ª, ÇöÀç±îÁö ÀÐÀº ¹®ÀÚ¿¡ ´ëÇØ Ã³¸®¸¦ À§ÇÏ¿© ÀÐ±â ÁßÁö°¡ ¹ß»ýÇÏ´Â ½ÃÁ¡±îÁö ¹Ýº¹
+		1) ëŒ€ìƒ í‘œí˜„ì‹ì— ëŒ€í•´ ë‹¤ ì½ê±°ë‚˜, í˜„ìž¬ê¹Œì§€ ì½ì€ ë¬¸ìžì— ëŒ€í•´ ì²˜ë¦¬ë¥¼ ìœ„í•˜ì—¬ ì½ê¸° ì¤‘ì§€ê°€ ë°œìƒí•˜ëŠ” ì‹œì ê¹Œì§€ ë°˜ë³µ
 
-		2) ÇöÀç ÀÐÀº ¹®ÀÚÀÇ ±âÈ£ Å¸ÀÔ¿¡ µû¶ó,
+		2) í˜„ìž¬ ì½ì€ ë¬¸ìžì˜ ê¸°í˜¸ íƒ€ìž…ì— ë”°ë¼,
 
-			2-1) ÇöÀç ÀÐÀº ¹®ÀÚÀÇ ±âÈ£ Å¸ÀÔÀÌ ÇÇ¿¬»êÀÚÀÎ °æ¿ì
+			2-1) í˜„ìž¬ ì½ì€ ë¬¸ìžì˜ ê¸°í˜¸ íƒ€ìž…ì´ í”¼ì—°ì‚°ìžì¸ ê²½ìš°
 
-				2-1-1) ÇöÀç ¹®ÀÚÀÇ ´ÙÀ½ ¹®ÀÚ°¡ Á¸ÀçÇÏ¸ç, ÇöÀç ¹®ÀÚÀÇ ´ÙÀ½ ¹®ÀÚÀÇ ±âÈ£ Å¸ÀÔÀÌ ÇÇ¿¬»êÀÚ, ½Ç¼ö Ç¥ÇöÀ» À§ÇÑ '.'ÀÎ °æ¿ì
-				: °è¼Ó ÀÐ±â
+				2-1-1) í˜„ìž¬ ë¬¸ìžì˜ ë‹¤ìŒ ë¬¸ìžê°€ ì¡´ìž¬í•˜ë©°, í˜„ìž¬ ë¬¸ìžì˜ ë‹¤ìŒ ë¬¸ìžì˜ ê¸°í˜¸ íƒ€ìž…ì´ í”¼ì—°ì‚°ìž, ì‹¤ìˆ˜ í‘œí˜„ì„ ìœ„í•œ '.'ì¸ ê²½ìš°
+				: ê³„ì† ì½ê¸°
 
-				2-1-2) ÇöÀç ¹®ÀÚÀÇ ´ÙÀ½ ¹®ÀÚ°¡ Á¸ÀçÇÏ¸ç, ÇöÀç ¹®ÀÚÀÇ ´ÙÀ½ ¹®ÀÚÀÇ ±âÈ£ Å¸ÀÔÀÌ ÇÇ¿¬»êÀÚ, ½Ç¼ö Ç¥ÇöÀ» À§ÇÑ '.'ÀÌ ¾Æ´Ò °æ¿ì
-				: ÇöÀç±îÁö ÀÐÀº ¹®ÀÚ¿¡ ´ëÇØ Ã³¸®¸¦ À§ÇÏ¿© ÀÐ±â ÁßÁö (¿À¸¥ÂÊ¿¡¼­ ¿ÞÂÊÀ¸·Î ÀÐ¾úÀ» °æ¿ì, ÇöÀç±îÁö ÀÐÀº ¹®ÀÚ ÁÂ¿ì¹ÝÀü)
+				2-1-2) í˜„ìž¬ ë¬¸ìžì˜ ë‹¤ìŒ ë¬¸ìžê°€ ì¡´ìž¬í•˜ë©°, í˜„ìž¬ ë¬¸ìžì˜ ë‹¤ìŒ ë¬¸ìžì˜ ê¸°í˜¸ íƒ€ìž…ì´ í”¼ì—°ì‚°ìž, ì‹¤ìˆ˜ í‘œí˜„ì„ ìœ„í•œ '.'ì´ ì•„ë‹ ê²½ìš°
+				: í˜„ìž¬ê¹Œì§€ ì½ì€ ë¬¸ìžì— ëŒ€í•´ ì²˜ë¦¬ë¥¼ ìœ„í•˜ì—¬ ì½ê¸° ì¤‘ì§€ (ì˜¤ë¥¸ìª½ì—ì„œ ì™¼ìª½ìœ¼ë¡œ ì½ì—ˆì„ ê²½ìš°, í˜„ìž¬ê¹Œì§€ ì½ì€ ë¬¸ìž ì¢Œìš°ë°˜ì „)
 
-			2-2) ÇöÀç ÀÐÀº ¹®ÀÚÀÇ ±âÈ£ Å¸ÀÔÀÌ ½Ç¼ö Ç¥ÇöÀ» À§ÇÑ '.'ÀÎ °æ¿ì
+			2-2) í˜„ìž¬ ì½ì€ ë¬¸ìžì˜ ê¸°í˜¸ íƒ€ìž…ì´ ì‹¤ìˆ˜ í‘œí˜„ì„ ìœ„í•œ '.'ì¸ ê²½ìš°
 
-				2-2-1) ÇöÀç ¹®ÀÚÀÇ ÀÌÀü, ´ÙÀ½ ¹®ÀÚ°¡ Á¸ÀçÇÏ¸ç, ÇöÀç ¹®ÀÚÀÇ ÀÌÀü, ´ÙÀ½ ¹®ÀÚ°¡ ÇÇ¿¬»êÀÚÀÌ¸é
-				: °è¼Ó ÀÐ±â
+				2-2-1) í˜„ìž¬ ë¬¸ìžì˜ ì´ì „, ë‹¤ìŒ ë¬¸ìžê°€ ì¡´ìž¬í•˜ë©°, í˜„ìž¬ ë¬¸ìžì˜ ì´ì „, ë‹¤ìŒ ë¬¸ìžê°€ í”¼ì—°ì‚°ìžì´ë©´
+				: ê³„ì† ì½ê¸°
 
-				2-2-2) ÀÌ¹Ì '.'°¡ Á¸ÀçÇÏ°Å³ª, ÇöÀç ¹®ÀÚÀÇ ÀÌÀü, ´ÙÀ½ ¹®ÀÚ°¡ Á¸ÀçÇÏÁö ¾Ê°Å³ª, ÇöÀç ¹®ÀÚÀÇ ÀÌÀü, ´ÙÀ½ ¹®ÀÚ°¡ ÇÇ¿¬»êÀÚ°¡ ¾Æ´Ò °æ¿ì
-				: Àß¸ø µÈ Ç¥Çö½Ä ¿¹¿Ü ¹ß»ý
+				2-2-2) ì´ë¯¸ '.'ê°€ ì¡´ìž¬í•˜ê±°ë‚˜, í˜„ìž¬ ë¬¸ìžì˜ ì´ì „, ë‹¤ìŒ ë¬¸ìžê°€ ì¡´ìž¬í•˜ì§€ ì•Šê±°ë‚˜, í˜„ìž¬ ë¬¸ìžì˜ ì´ì „, ë‹¤ìŒ ë¬¸ìžê°€ í”¼ì—°ì‚°ìžê°€ ì•„ë‹ ê²½ìš°
+				: ìž˜ëª» ëœ í‘œí˜„ì‹ ì˜ˆì™¸ ë°œìƒ
 
-			2-3) ÇöÀç ÀÐÀº ¹®ÀÚÀÇ ±âÈ£ Å¸ÀÔÀÌ ' ' (ÇÇ¿¬»êÀÚ °£ ±¸ºÐÀ» À§ÇÑ °ø¹é), '(', ')', ¿¬»êÀÚÀÎ °æ¿ì
-			: ÇöÀç ÀÐÀº ¹®ÀÚ¿¡ ´ëÇØ Ã³¸®¸¦ À§ÇÏ¿© ÀÐ±â ÁßÁö
+			2-3) í˜„ìž¬ ì½ì€ ë¬¸ìžì˜ ê¸°í˜¸ íƒ€ìž…ì´ ' ' (í”¼ì—°ì‚°ìž ê°„ êµ¬ë¶„ì„ ìœ„í•œ ê³µë°±), '(', ')', ì—°ì‚°ìžì¸ ê²½ìš°
+			: í˜„ìž¬ ì½ì€ ë¬¸ìžì— ëŒ€í•´ ì²˜ë¦¬ë¥¼ ìœ„í•˜ì—¬ ì½ê¸° ì¤‘ì§€
 	***/
 
-	size_t srcExprLen = strlen(srcExpr); //´ë»ó Ç¥Çö½ÄÀÇ ±æÀÌ ('\0' Á¦¿Ü ÇÑ ±æÀÌ)
+	size_t srcExprLen = strlen(srcExpr); //ëŒ€ìƒ í‘œí˜„ì‹ì˜ ê¸¸ì´ ('\0' ì œì™¸ í•œ ê¸¸ì´)
 	size_t srcExprNextReadIndex =
-		(exprReadDirection == EXPR_READ_DIRECTION::LEFT_TO_RIGHT) ? 0 : //ÀÐÀ» À§Ä¡ : ´ë»ó ¹®ÀÚ¿­ÀÇ ½ÃÀÛ
-		(exprReadDirection == EXPR_READ_DIRECTION::RIGHT_TO_LEFT) ? (srcExprLen - 1) : //ÀÐÀ» À§Ä¡ : ´ë»ó ¹®ÀÚ¿­ÀÇ ³¡
-		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args")); //´ë»ó Ç¥Çö½ÄÀÇ ´ÙÀ½¿¡ ÀÐÀ» ÀÎµ¦½º
-	bool isDotAlreadyExists = false; //½Ç¼ö Ç¥ÇöÀ» À§ÇÑ '.' ÀÇ ÃÖÃÊ ÇÑ ¹ø Á¸Àç ¿©ºÎ
+		(exprReadDirection == EXPR_READ_DIRECTION::LEFT_TO_RIGHT) ? 0 : //ì½ì„ ìœ„ì¹˜ : ëŒ€ìƒ ë¬¸ìžì—´ì˜ ì‹œìž‘
+		(exprReadDirection == EXPR_READ_DIRECTION::RIGHT_TO_LEFT) ? (srcExprLen - 1) : //ì½ì„ ìœ„ì¹˜ : ëŒ€ìƒ ë¬¸ìžì—´ì˜ ë
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args")); //ëŒ€ìƒ í‘œí˜„ì‹ì˜ ë‹¤ìŒì— ì½ì„ ì¸ë±ìŠ¤
+	bool isDotAlreadyExists = false; //ì‹¤ìˆ˜ í‘œí˜„ì„ ìœ„í•œ '.' ì˜ ìµœì´ˆ í•œ ë²ˆ ì¡´ìž¬ ì—¬ë¶€
 
-	while (dstToken->_readCount < srcExprLen) //´ë»ó Ç¥Çö½ÄÀ» ´Ù ÀÐÀ» ¶§ ±îÁö
+	while (dstToken->_readCount < srcExprLen) //ëŒ€ìƒ í‘œí˜„ì‹ì„ ë‹¤ ì½ì„ ë•Œ ê¹Œì§€
 	{
-		dstToken->_str[dstToken->_readCount] = srcExpr[srcExprNextReadIndex]; //ÇÑ ¹®ÀÚ¾¿ Ã³¸®
-		dstToken->_symbolType = CharToSymbolType(srcExpr[srcExprNextReadIndex]); //ÀÐÀº ¹®ÀÚ¿¡ ´ëÇÑ ±âÈ£ Å¸ÀÔ ÇÒ´ç
-		dstToken->_readCount++; //ÀÐÀº ¹®ÀÚ °³¼ö Áõ°¡
+		dstToken->_str[dstToken->_readCount] = srcExpr[srcExprNextReadIndex]; //í•œ ë¬¸ìžì”© ì²˜ë¦¬
+		dstToken->_symbolType = CharToSymbolType(srcExpr[srcExprNextReadIndex]); //ì½ì€ ë¬¸ìžì— ëŒ€í•œ ê¸°í˜¸ íƒ€ìž… í• ë‹¹
+		dstToken->_readCount++; //ì½ì€ ë¬¸ìž ê°œìˆ˜ ì¦ê°€
 
 		srcExprNextReadIndex =
 			(exprReadDirection == EXPR_READ_DIRECTION::LEFT_TO_RIGHT) ? srcExprNextReadIndex + 1 :
 			(exprReadDirection == EXPR_READ_DIRECTION::RIGHT_TO_LEFT) ? srcExprNextReadIndex - 1 :
-			throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args")); //´ë»ó Ç¥Çö½ÄÀÇ ´ÙÀ½¿¡ ÀÐÀ» À§Ä¡ ÇÒ´ç
+			throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args")); //ëŒ€ìƒ í‘œí˜„ì‹ì˜ ë‹¤ìŒì— ì½ì„ ìœ„ì¹˜ í• ë‹¹
 
 		switch (dstToken->_symbolType)
 		{
 		case SYMBOL_TYPE::OPERAND:
-			if (dstToken->_readCount < srcExprLen) //ÇöÀç ¹®ÀÚÀÇ ´ÙÀ½ ¹®ÀÚ°¡ Á¸Àç ÇÒ °æ¿ì
+			if (dstToken->_readCount < srcExprLen) //í˜„ìž¬ ë¬¸ìžì˜ ë‹¤ìŒ ë¬¸ìžê°€ ì¡´ìž¬ í•  ê²½ìš°
 			{
 				switch (CharToSymbolType(srcExpr[srcExprNextReadIndex]))
 				{
 				case SYMBOL_TYPE::OPERAND:
 				case SYMBOL_TYPE::DOT:
-					break; //ÇöÀç ¹®ÀÚÀÇ ´ÙÀ½ ¹®ÀÚÀÇ ±âÈ£ Å¸ÀÔÀÌ ÇÇ¿¬»êÀÚ, ½Ç¼ö Ç¥ÇöÀ» À§ÇÑ '.'ÀÌ¸é °è¼Ó ÀÐ±â
+					break; //í˜„ìž¬ ë¬¸ìžì˜ ë‹¤ìŒ ë¬¸ìžì˜ ê¸°í˜¸ íƒ€ìž…ì´ í”¼ì—°ì‚°ìž, ì‹¤ìˆ˜ í‘œí˜„ì„ ìœ„í•œ '.'ì´ë©´ ê³„ì† ì½ê¸°
 
-				default: //ÇöÀç ¹®ÀÚÀÇ ´ÙÀ½ ¹®ÀÚÀÇ ±âÈ£ Å¸ÀÔÀÌ '(', ')', ¿¬»êÀÚ, ÇÇ¿¬»êÀÚ °£ ±¸ºÐÀ» À§ÇÑ °ø¹éÀÎ °æ¿ì
-					if (exprReadDirection == EXPR_READ_DIRECTION::RIGHT_TO_LEFT) //¿À¸¥ÂÊ¿¡¼­ ¿ÞÂÊÀ¸·Î ÀÐ¾úÀ» °æ¿ì
-						ReverseInplaceStr(dstToken->_str); //ÇöÀç±îÁö ÀÐÀº ¹®ÀÚ¿­¿¡ ´ëÇØ ÁÂ¿ì¹ÝÀü
+				default: //í˜„ìž¬ ë¬¸ìžì˜ ë‹¤ìŒ ë¬¸ìžì˜ ê¸°í˜¸ íƒ€ìž…ì´ '(', ')', ì—°ì‚°ìž, í”¼ì—°ì‚°ìž ê°„ êµ¬ë¶„ì„ ìœ„í•œ ê³µë°±ì¸ ê²½ìš°
+					if (exprReadDirection == EXPR_READ_DIRECTION::RIGHT_TO_LEFT) //ì˜¤ë¥¸ìª½ì—ì„œ ì™¼ìª½ìœ¼ë¡œ ì½ì—ˆì„ ê²½ìš°
+						utils::ReverseInplaceStr(dstToken->_str); //í˜„ìž¬ê¹Œì§€ ì½ì€ ë¬¸ìžì—´ì— ëŒ€í•´ ì¢Œìš°ë°˜ì „
 
-					goto END_PROC; //ÇöÀç±îÁö ÀÐÀº ¹®ÀÚ¿¡ ´ëÇØ Ã³¸®¸¦ À§ÇÏ¿© ÀÐ±â ÁßÁö
+					goto END_PROC; //í˜„ìž¬ê¹Œì§€ ì½ì€ ë¬¸ìžì— ëŒ€í•´ ì²˜ë¦¬ë¥¼ ìœ„í•˜ì—¬ ì½ê¸° ì¤‘ì§€
 				}
 			}
 
@@ -210,19 +210,19 @@ void GenNextToken(const char* srcExpr, TOKEN* dstToken, EXPR_READ_DIRECTION expr
 
 		case SYMBOL_TYPE::DOT:
 			if (isDotAlreadyExists ||
-				!(dstToken->_readCount >= 2 && dstToken->_readCount < srcExprLen)) //ÀÌ¹Ì '.'°¡ Á¸ÀçÇÏ°Å³ª, ÇöÀç ¹®ÀÚÀÇ ÀÌÀü, ´ÙÀ½ ¹®ÀÚ°¡ Á¸ÀçÇÏÁö ¾ÊÀ» °æ¿ì
+				!(dstToken->_readCount >= 2 && dstToken->_readCount < srcExprLen)) //ì´ë¯¸ '.'ê°€ ì¡´ìž¬í•˜ê±°ë‚˜, í˜„ìž¬ ë¬¸ìžì˜ ì´ì „, ë‹¤ìŒ ë¬¸ìžê°€ ì¡´ìž¬í•˜ì§€ ì•Šì„ ê²½ìš°
 				throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (wrong srcExpr)"));
 
 			isDotAlreadyExists = true;
 
 			if (!(CharToSymbolType(dstToken->_str[dstToken->_readCount - 2]) == SYMBOL_TYPE::OPERAND &&
-				CharToSymbolType(srcExpr[srcExprNextReadIndex]) == SYMBOL_TYPE::OPERAND)) //ÇöÀç ¹®ÀÚÀÇ ÀÌÀü, ´ÙÀ½ ¹®ÀÚÀÇ ±âÈ£ Å¸ÀÔÀÌ ÇÇ¿¬»êÀÚ°¡ ¾Æ´Ò °æ¿ì
+				CharToSymbolType(srcExpr[srcExprNextReadIndex]) == SYMBOL_TYPE::OPERAND)) //í˜„ìž¬ ë¬¸ìžì˜ ì´ì „, ë‹¤ìŒ ë¬¸ìžì˜ ê¸°í˜¸ íƒ€ìž…ì´ í”¼ì—°ì‚°ìžê°€ ì•„ë‹ ê²½ìš°
 				throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (wrong srcExpr)"));
 
-			break; //ÇöÀç ¹®ÀÚÀÇ ÀÌÀü, ´ÙÀ½ ¹®ÀÚ°¡ Á¸ÀçÇÏ¸ç, ÇöÀç ¹®ÀÚÀÇ ÀÌÀü, ´ÙÀ½ ¹®ÀÚ°¡ ÇÇ¿¬»êÀÚÀÌ¸é °è¼Ó ÀÐ±â
+			break; //í˜„ìž¬ ë¬¸ìžì˜ ì´ì „, ë‹¤ìŒ ë¬¸ìžê°€ ì¡´ìž¬í•˜ë©°, í˜„ìž¬ ë¬¸ìžì˜ ì´ì „, ë‹¤ìŒ ë¬¸ìžê°€ í”¼ì—°ì‚°ìžì´ë©´ ê³„ì† ì½ê¸°
 
-		default: //' ' (ÇÇ¿¬»êÀÚ °£ ±¸ºÐÀ» À§ÇÑ °ø¹é), '(', ')', ¿¬»êÀÚÀÎ °æ¿ì
-			goto END_PROC; //ÇöÀç ÀÐÀº ¹®ÀÚ¿¡ ´ëÇØ Ã³¸®¸¦ À§ÇÏ¿© ÀÐ±â ÁßÁö
+		default: //' ' (í”¼ì—°ì‚°ìž ê°„ êµ¬ë¶„ì„ ìœ„í•œ ê³µë°±), '(', ')', ì—°ì‚°ìžì¸ ê²½ìš°
+			goto END_PROC; //í˜„ìž¬ ì½ì€ ë¬¸ìžì— ëŒ€í•´ ì²˜ë¦¬ë¥¼ ìœ„í•˜ì—¬ ì½ê¸° ì¤‘ì§€
 		}
 	}
 

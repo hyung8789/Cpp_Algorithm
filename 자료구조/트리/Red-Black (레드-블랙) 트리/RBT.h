@@ -25,11 +25,21 @@
 typedef int DATA_TYPE; //노드의 데이터 타입
 typedef int TREE_DEPTH_TYPE; //트리 깊이 타입
 
+#ifdef COLOR_VISUALIZATION
 enum class COLOR : const unsigned
 {
-	RED = (0xFF0000),
-	BLACK = (0x000000)
+    RED = ((const unsigned)BG_COLOR::BG_RED | (const unsigned)FG_COLOR::FG_WHITE |
+        FOREGROUND_INTENSITY),
+    BLACK = ((const unsigned)BG_COLOR::BG_WHITE | (const unsigned)FG_COLOR::FG_BLACK | 
+        FOREGROUND_INTENSITY)
 };
+#else
+enum class COLOR : const unsigned
+{
+    RED = 0,
+    BLACK
+};
+#endif
 
 typedef struct NODE_TYPE
 {
@@ -55,13 +65,13 @@ enum class ROTATE_DIRECTION : const int
 };
 
 #define DUMMY_BLACK_TERMINAL_NODE_DATA INT_MIN //노드의 데이터 타입에 따른 검은색 더미 단말 노드의 데이터
-static NODE* dummyBlackTerminalNode = NULL; //검은색 더미 단말 노드
+extern NODE* dummyBlackTerminalNode;
 
 NODE* RBT_CreateNode(DATA_TYPE);
 void RBT_DeallocateNode(NODE**);
 void RBT_DeallocateTree(NODE**);
 
-void RBT_DispOrderedTree(NODE*, TRAVERSAL_METHOD);
+void RBT_DispOrderedTree(NODE*, TRAVERSAL_METHOD, TREE_DEPTH_TYPE = 0);
 
 void RBT_InsertNode(NODE**, NODE*);
 void RBT_RemoveNode(NODE**, const DATA_TYPE&, bool = true);
@@ -70,7 +80,7 @@ NODE* RBT_SearchMaxNode(NODE*);
 NODE* RBT_SearchMinNode(NODE*);
 
 void RBT_InsertNodeHelper(NODE**, NODE*);
-void RBT_RotateTree(NODE**, NODE* , ROTATE_DIRECTION);
+void RBT_RotateTree(NODE**, NODE*, ROTATE_DIRECTION);
 
 void RBT_ValidateTree(NODE*);
 #endif

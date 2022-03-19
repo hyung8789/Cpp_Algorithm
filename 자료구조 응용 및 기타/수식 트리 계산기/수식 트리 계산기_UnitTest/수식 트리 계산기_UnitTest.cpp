@@ -39,7 +39,7 @@ namespace 수식_트리_계산기_UnitTest
 		{
 			try
 			{
-				double invalid = StrToDouble("invalid");
+				double invalid = utils::StrToDouble("invalid");
 				Logger::WriteMessage((std::string("invalid data : ") + std::to_string(invalid)).c_str());
 				Assert::Fail();
 			}
@@ -51,7 +51,7 @@ namespace 수식_트리_계산기_UnitTest
 
 			try
 			{
-				double valid = StrToDouble("1.0");
+				double valid = utils::StrToDouble("1.0");
 				Logger::WriteMessage((std::string("valid data : ") + std::to_string(valid)).c_str());
 			}
 			catch (const std::exception& ex)
@@ -72,7 +72,7 @@ namespace 수식_트리_계산기_UnitTest
 
 			try
 			{
-				ReverseInplaceStr(input);
+				utils::ReverseInplaceStr(input);
 			}
 			catch (const std::exception& ex)
 			{
