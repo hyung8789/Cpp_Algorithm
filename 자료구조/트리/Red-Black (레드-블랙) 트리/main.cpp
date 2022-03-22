@@ -22,10 +22,14 @@ int main()
 		{
 			//std::cout << "Current Insert : " << inputData[i] << std::endl;
 			RBT_InsertNode(&rootNode, RBT_CreateNode(inputData[i]));
+
+#ifdef DEBUG_MODE
+			RBT_ValidateTree(rootNode);
+#endif
 		}
 
 		RBT_DispOrderedTree(rootNode, TRAVERSAL_METHOD::INORDER);
-		std::cout << "\n";
+		std::cout << "\n\n";
 
 		for (int i = 0; i < LENGTH(inputData); i++)
 		{
@@ -34,6 +38,10 @@ int main()
 			RBT_RemoveNode(&rootNode, inputData[i]);
 			RBT_DispOrderedTree(rootNode, TRAVERSAL_METHOD::INORDER);
 			std::cout << "\n";
+
+#ifdef DEBUG_MODE
+		RBT_ValidateTree(rootNode);
+#endif
 		}
 
 		RBT_DispOrderedTree(rootNode, TRAVERSAL_METHOD::INORDER); //valid : 2 3 6 7 8 10 11 13 18 22 26 

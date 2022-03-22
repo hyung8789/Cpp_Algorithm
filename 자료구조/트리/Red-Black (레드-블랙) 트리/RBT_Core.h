@@ -11,6 +11,7 @@
 #include <stdexcept>
 
 #define COLOR_VISUALIZATION //색상 가시화
+#define DEBUG_MODE //유효성 검사
 
 //해당 프로젝트 속성에서 정적 라이브러리 (lib)로 빌드 할 것
 #include "../../../common_lib/common_lib/Common_LIB_Core.h"
@@ -19,6 +20,11 @@
 #ifndef USE_CONSOLE_SCREEN_MANAGER
 #error Must define USE_CONSOLE_SCREEN_MANAGER at Common_LIB_Core.h
 #endif
+#endif
+
+#ifdef DEBUG_MODE
+#include <stack>
+#include <tuple>
 #endif
 
 #include "RBT.h"

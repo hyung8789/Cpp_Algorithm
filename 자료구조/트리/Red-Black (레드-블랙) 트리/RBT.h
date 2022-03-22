@@ -81,6 +81,9 @@ NODE* RBT_SearchMinNode(NODE*);
 
 void RBT_InsertNodeHelper(NODE**, NODE*);
 void RBT_RotateTree(NODE**, NODE*, ROTATE_DIRECTION);
+size_t RBT_GetColorCount(NODE*, COLOR);
 
+#ifdef DEBUG_MODE
 void RBT_ValidateTree(NODE*);
+#endif
 #endif

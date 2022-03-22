@@ -76,7 +76,7 @@ void RBT_DispOrderedTree(NODE* srcRootNode, TRAVERSAL_METHOD traversalMethod, TR
 #ifdef COLOR_VISUALIZATION
 		CONSOLE_SCREEN_MANAGER::GetInstance().SetConsoleTextColor((const unsigned)(srcRootNode->_color));
 #endif
-		
+
 		std::cout << srcRootNode->_data;
 
 #ifdef COLOR_VISUALIZATION
@@ -93,7 +93,7 @@ void RBT_DispOrderedTree(NODE* srcRootNode, TRAVERSAL_METHOD traversalMethod, TR
 		std::cout <<
 			"Depth : " << rootNodeDepth <<
 			", " << ((srcRootNode->_color == COLOR::RED) ? "RED" : "BLACK") << ")\n";
-	
+
 		if (srcRootNode->_left != dummyBlackTerminalNode)
 			RBT_DispOrderedTree(srcRootNode->_left, traversalMethod, rootNodeDepth + 1);
 
@@ -159,7 +159,6 @@ void RBT_DispOrderedTree(NODE* srcRootNode, TRAVERSAL_METHOD traversalMethod, TR
 		CONSOLE_SCREEN_MANAGER::GetInstance().UnsetConsoleTextColor();
 #endif
 
-
 		if (rootNodeDepth == 0)
 			std::cout << " (Root, ";
 		else if (srcRootNode->_left == dummyBlackTerminalNode && srcRootNode->_right == dummyBlackTerminalNode)
@@ -167,7 +166,7 @@ void RBT_DispOrderedTree(NODE* srcRootNode, TRAVERSAL_METHOD traversalMethod, TR
 		else
 			std::cout << "(Branch, ";
 
-		std::cout << 
+		std::cout <<
 			"Depth : " << rootNodeDepth <<
 			", " << ((srcRootNode->_color == COLOR::RED) ? "RED" : "BLACK") << ")\n";
 		break;
@@ -470,19 +469,42 @@ void RBT_RemoveNode(NODE** srcRootNode, const DATA_TYPE& targetData, bool deallo
 		removeTargetNode->_right; //이동 대상 노드
 	NODE* moveTargetSiblingNode = NULL; //이동 대상 노드의 반대쪽 형제 노드
 
-	NODE** removeTargetParentToChildConnection = 
-		(removeTargetNode->_parent == NULL) ? NULL : 
-		(removeTargetNode->_parent->_left == removeTargetNode) ? 
-		&(removeTargetNode->_parent->_left) : &(removeTargetNode->_parent->_right); //삭제 대상 노드의 부모 노드에서 삭제 대상 노드로의 연결
-	NODE** moveTargetParentToChildConnection = NULL;
-		//(moveTargetNode->_parent == NULL) ? throw std::logic_error(std::string(__func__) + std::string(" : Invalid Red-Black Tree (moveTargetParent == NULL)")) : 
-		//(moveTargetNode->_parent->_left == moveTargetNode) ? 
-		//&(moveTargetNode->_parent->_left) : &(moveTargetNode->_parent->_right); //이동 대상 노드의 부모 노드에서 이동 대상 노드로의 연결
-
 	COLOR tmpColor;
 
+	//TODO : rootNode가 NULL 이 되는 문제
+	tmpColor = removeTargetNode->_color; //삭제 대상 노드의 색
 
-	//TODO : 수정
+	if (moveTargetNode != dummyBlackTerminalNode) //이동 대상 노드가 검은색 더미 단말 노드가 아닐 경우
+	{
+		//삭제 대상 노드의 데이터를 이동 대상 노드로 이동
+		removeTargetNode->_data = removeTargetNode->_data;
+
+		//TODO : 이에 따라, 이동 대상 노드를 삭제하여야 함
+		removeTargetNode = moveTargetNode;
+	}
+	else //이동 대상 노드가 검은색 더미 단말 노드일 경우
+	{
+		//TODO : 검은색 더미 단말 노드는 삭제가 발생하면 안됨, 검은 더미 단말 노드일 경우 삭제 대상 노드는 왼쪽 및 오른쪽 자식노드가 존재하지 않는 단말 노드 혹은 최초 루트 노드
+		
+		//이동 대상 노드와 삭제 대상 노드 사이에 중간 노드들이 존재하지 않으므로, 이동 대상 노드의 부모를 삭제 대상 노드의 부모로 연결
+		moveTargetNode->_parent = removeTargetNode->_parent; //이를 위에서도 공통적으로 수행 할 경우, 중간 노드 간의 연결 끊김
+	}
+
+	if (moveTargetNode->_parent == NULL) //이동 대상 노드가 루트 노드가 될 경우
+	{
+		(*srcRootNode) = moveTargetNode;
+	}
+	else
+	{
+		//삭제 대상 노드의 부모 노드에서 자식 노드로의 연결을 이동 대상 노드로 변경
+		if (removeTargetNode == removeTargetNode->_parent->_left)
+			removeTargetNode->_parent->_left = moveTargetNode;
+		else
+			removeTargetNode->_parent->_right = moveTargetNode;
+	}
+
+	//TODO : 이하 임시 코드 삭제
+	/*
 	NODE* removed = NULL;
 	if (removeTargetNode->_left == dummyBlackTerminalNode || removeTargetNode->_right == dummyBlackTerminalNode)
 	{
@@ -513,8 +535,9 @@ void RBT_RemoveNode(NODE** srcRootNode, const DATA_TYPE& targetData, bool deallo
 			removed->_parent->_right = moveTargetNode;
 	}
 	///
+	*/
 
-	switch (removed->_color) //삭제 대상 노드의 색에 따라
+	switch (tmpColor) //삭제 대상 노드의 색에 따라
 	{
 	case COLOR::RED:
 		goto END_PROC;
@@ -691,9 +714,8 @@ ADJ_MOVE_TARGET_PROC: //이동 대상 노드의 인접 노드의 색에 따른 �
 		(모든 경로에 대해 DEF4)를 만족하지 않는 것처럼 보이지만, 인접한 상위, 하위 트리에 추가적인 검은색 노드가 존재)
 
 		1) BBR BB
-
-			1-1) 이중 검은색 노드 (이동 대상 노드)의 부모 노드의 왼쪽 자식 == 이중 검은색 노드 (이동 대상 노드)
-			1-2) 이중 검은색 노드 (이동 대상 노드)의 부모 노드의 오른쪽 자식 == 이중 검은색 노드 (이동 대상 노드)
+		: 이중 검은색 노드 (이동 대상 노드)의 부모 노드의 왼쪽 자식 == 이중 검은색 노드 (이동 대상 노드),
+		이중 검은색 노드 (이동 대상 노드)의 부모 노드의 오른쪽 자식 == 이중 검은색 노드 (이동 대상 노드)
 
 							B
 				R (sibling)			DB (moveTarget)
@@ -721,9 +743,8 @@ ADJ_MOVE_TARGET_PROC: //이동 대상 노드의 인접 노드의 색에 따른 �
 								B		B (moveTarget)
 
 		2) -BB BB
-
-			2-1) 이중 검은색 노드 (이동 대상 노드)의 부모 노드의 왼쪽 자식 == 이중 검은색 노드 (이동 대상 노드)
-			2-2) 이중 검은색 노드 (이동 대상 노드)의 부모 노드의 오른쪽 자식 == 이중 검은색 노드 (이동 대상 노드)
+		: 이중 검은색 노드 (이동 대상 노드)의 부모 노드의 왼쪽 자식 == 이중 검은색 노드 (이동 대상 노드),
+		이중 검은색 노드 (이동 대상 노드)의 부모 노드의 오른쪽 자식 == 이중 검은색 노드 (이동 대상 노드)
 
 							B (or R)
 				B (sibling)			DB (moveTarget)
@@ -977,6 +998,8 @@ ADJ_MOVE_TARGET_PROC: //이동 대상 노드의 인접 노드의 색에 따른 �
 				goto END_PROC;
 
 			case COLOR::BLACK:
+				//TODO : 임시 코드에 대해 sibling이 dummyBlackTerminalNode인 경우 left와 right == NULL인 문제 발생
+
 				if (moveTargetSiblingNode->_left->_color == COLOR::BLACK && moveTargetSiblingNode->_right->_color == COLOR::BLACK) //-BB BB
 				{
 					switch (moveTargetNode->_parent->_color) //이동 대상 노드의 부모 노드의 색에 따라,
@@ -1009,7 +1032,7 @@ ADJ_MOVE_TARGET_PROC: //이동 대상 노드의 인접 노드의 색에 따른 �
 					goto END_PROC;
 				}
 				else if ((moveTargetSiblingNode->_left->_color == COLOR::BLACK && moveTargetSiblingNode->_right->_color == COLOR::RED) ||
-					(moveTargetSiblingNode->_left->_color == COLOR::RED && moveTargetSiblingNode->_right->_color == COLOR::RED && 
+					(moveTargetSiblingNode->_left->_color == COLOR::RED && moveTargetSiblingNode->_right->_color == COLOR::RED &&
 						moveTargetNode->_parent->_right == moveTargetNode)) //-BB BR or -BB RR (moveTargetNode->_parent->_right == moveTargetNode)
 				{
 					if (moveTargetNode->_parent->_left == moveTargetNode)
@@ -1040,14 +1063,18 @@ END_PROC:
 	(*srcRootNode)->_color = COLOR::BLACK;
 
 	if ((*srcRootNode) == dummyBlackTerminalNode)
-		(*srcRootNode) = NULL;
+	{
+		NODE* tmp = dummyBlackTerminalNode;
 
+		(*srcRootNode) = NULL;
+		dummyBlackTerminalNode = tmp;
+	}
 	dummyBlackTerminalNode->_parent = NULL;
 
 	//TODO : 수정
 	if (deallocateAfterRemove)
-		RBT_DeallocateNode(&removed);
-	//	RBT_DeallocateNode(&removeTargetNode);
+	//	RBT_DeallocateNode(&removed);
+		RBT_DeallocateNode(&removeTargetNode);
 }
 
 /// <summary>
@@ -1276,6 +1303,32 @@ void RBT_RotateTree(NODE** srcRootNode, NODE* srcTargetParentNode, ROTATE_DIRECT
 }
 
 /// <summary>
+/// 대상 트리의 특정 색을 가진 노드 개수 반환
+/// </summary>
+/// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
+/// <param name="color">노드의 색</param>
+/// <returns>특정 색을 가진 노드 개수</returns>
+size_t RBT_GetColorCount(NODE* srcRootNode, COLOR color)
+{
+	size_t retVal = 0; //특정 색을 가진 노드 개수
+
+	if (srcRootNode == NULL)
+		return 0;
+
+	if (srcRootNode->_color == color)
+		retVal++;
+
+	if (srcRootNode->_left != dummyBlackTerminalNode)
+		retVal += RBT_GetColorCount(srcRootNode->_left, color);
+
+	if (srcRootNode->_right != dummyBlackTerminalNode)
+		retVal += RBT_GetColorCount(srcRootNode->_right, color);
+
+	return retVal;
+}
+
+#ifdef DEBUG_MODE
+/// <summary>
 /// 대상 트리에 대한 유효성 검사 수행
 /// </summary>
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
@@ -1284,11 +1337,75 @@ void RBT_ValidateTree(NODE* srcRootNode)
 	if (srcRootNode == NULL)
 		return;
 
-	if (srcRootNode->_color == COLOR::RED || dummyBlackTerminalNode->_color == COLOR::RED) //DEF1) validation
+	if (srcRootNode->_color == COLOR::RED || dummyBlackTerminalNode == NULL ||
+		dummyBlackTerminalNode->_color == COLOR::RED) //DEF1) validation
 		throw std::logic_error(std::string(__func__) + std::string(" : DEF1) violation (Invalid Red-Black Tree)"));
 
 	if (dummyBlackTerminalNode->_parent != NULL) //검은색 더미 단말 노드에서 부모로의 연결은 허용하지 않음 
 		throw std::logic_error(std::string(__func__) + std::string(" : Not allowed parent connection from dummy"));
 
-	//TODO : 각 경로 간 검은 노드의 개수 검증, 빨간 노드의 자식 노드의 색 검증, 각 노드에서의 왼쪽 혹은 오른쪽에 따른 값 비교 검증
+	NODE* currentNode = srcRootNode; //현재 노드
+	char execBranchSingleFlag = (0x0); //실행 분기 단일 플래그
+
+	/***
+		< 실행 분기 단일 플래그 >
+
+		0000(2) : 현재 노드 기준 DEF2), DEF4), DEF5) 검증
+		0001(2) : 현재 노드 기준 DEF5) 검증 및 왼쪽 노드 방문
+		0010(2) : 현재 노드 기준 DEF5) 검증 및 오른쪽 노드 방문
+		0011(2) : pop 및 필요 할 경우 해당 요소에 대한 마지막 작업 수행
+	***/
+
+	std::stack<std::tuple<NODE*, char>> callStack; //Call Stack
+	callStack.push(std::make_tuple(currentNode, execBranchSingleFlag));
+
+	while (!callStack.empty())
+	{
+		std::tie(currentNode, execBranchSingleFlag) = callStack.top();
+
+		switch (execBranchSingleFlag)
+		{
+		case (0x0): //현재 노드 기준 DEF2), DEF4) 검증
+			if (currentNode->_color == COLOR::RED &&
+				(currentNode->_left->_color == COLOR::RED ||
+					currentNode->_right->_color == COLOR::RED)) //DEF2) validation
+				throw std::logic_error(std::string(__func__) + std::string(" : DEF2) violation (Invalid Red-Black Tree)"));
+
+			if (RBT_GetColorCount(srcRootNode, COLOR::BLACK) !=
+				RBT_GetColorCount(srcRootNode, COLOR::BLACK)) //DEF4) validation
+				throw std::logic_error(std::string(__func__) + std::string(" : DEF4) violation (Invalid Red-Black Tree)"));
+
+			std::get<1>(callStack.top()) = (0x1);
+
+		case (0x1): //현재 노드 기준 DEF5) 검증 및 왼쪽 노드 방문
+			if (currentNode->_left != dummyBlackTerminalNode)
+			{
+				if (currentNode->_data <= currentNode->_left->_data) //DEF5) validation
+					throw std::logic_error(std::string(__func__) + std::string(" : DEF5) violation (Invalid Red-Black Tree)"));
+
+				std::get<1>(callStack.top()) = (0x2);
+				callStack.push(std::make_tuple(currentNode->_left, (0x0)));
+				continue;
+			}
+
+		case (0x2): //현재 노드 기준 DEF5) 검증 및 오른쪽 노드 방문
+			if (currentNode->_right != dummyBlackTerminalNode)
+			{
+				if (currentNode->_data >= currentNode->_right->_data) //DEF5) validation
+					throw std::logic_error(std::string(__func__) + std::string(" : DEF5) violation (Invalid Red-Black Tree)"));
+
+				std::get<1>(callStack.top()) = (0x3);
+				callStack.push(std::make_tuple(currentNode->_right, (0x0)));
+				continue;
+			}
+
+		case (0x3): //pop 및 필요 할 경우 해당 요소에 대한 마지막 작업 수행
+			callStack.pop();
+			break;
+
+		default:
+			throw std::logic_error(std::string(__func__) + std::string(" : Invalid Flag"));
+		}
+	}
 }
+#endif
