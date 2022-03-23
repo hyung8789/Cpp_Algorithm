@@ -64,6 +64,12 @@ enum class ROTATE_DIRECTION : const int
 	LEFT //좌회전 (부모 노드의 오른쪽 자식과 부모의 위치 교환)
 };
 
+enum class PATH_DIRECTION : const int
+{
+	RIGHT = 0, //오른쪽 경로
+	LEFT //왼쪽 경로
+};
+
 #define DUMMY_BLACK_TERMINAL_NODE_DATA INT_MIN //노드의 데이터 타입에 따른 검은색 더미 단말 노드의 데이터
 extern NODE* dummyBlackTerminalNode;
 
@@ -81,7 +87,7 @@ NODE* RBT_SearchMinNode(NODE*);
 
 void RBT_InsertNodeHelper(NODE**, NODE*);
 void RBT_RotateTree(NODE**, NODE*, ROTATE_DIRECTION);
-size_t RBT_GetColorCount(NODE*, COLOR);
+size_t RBT_GetColorCount(NODE*, COLOR, PATH_DIRECTION);
 
 #ifdef DEBUG_MODE
 void RBT_ValidateTree(NODE*);

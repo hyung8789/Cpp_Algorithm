@@ -410,43 +410,12 @@ RECOLORING_PROC: //색 변경 처리 루틴
 void RBT_RemoveNode(NODE** srcRootNode, const DATA_TYPE& targetData, bool deallocateAfterRemove)
 {
 	/***
-		< 삭제하고자 하는 대상 데이터가 포함 된 노드 (이하, 삭제 대상 노드) 및
-		삭제 대상 노드의 자리를 대체 할 노드 (이하, 이동 대상 노드)의 색에 따른 처리 >
+		< 표준 BST 삭제 처리 루틴 >
 
 		! 루트 노드에 대한 삭제가 발생 할 경우, 별도의 처리 요구
 
-		! 연산 과정 단순화를 위해 검은색 더미 단말 노드의 부모로의 연결 및 색 변경을 연산 과정에만 임시로 허용
-
-		1) RC : 삭제 대상 노드의 색 (R : Red, B : Black)
-		2) MC : 이동 대상 노드의 색 (R : Red, B : Black)
-		3) P : 이에 따른 수행 작업
-
-		RC	|	MC	|	P
-		R		-		1) 이동 대상 노드의 검은색 더미 단말 노드 여부에 따라,
-
-							1-1) 이동 대상 노드 == 검은색 더미 단말 노드
-							: 삭제 대상 노드 삭제
-
-							1-2) 이동 대상 노드 != 검은색 더미 단말 노드
-							: 이동 대상 노드를 삭제 대상 노드의 자리로 이동 및 삭제 대상 노드 삭제
-							(삭제 대상 노드가 빨간색이었으므로,
-							이동 대상 노드가 검은색이고 이동 대상 노드가 상위 트리로 위치가 이동되어도,
-							트리의 각 경로에 대한 검은 노드의 수는 변동없으므로, DEF4)를 위반하지 않음)
-
-		B		-		1) 이동 대상 노드의 검은색 더미 단말 노드 여부에 따라,
-
-							1-1) 이동 대상 노드 == 검은색 더미 단말 노드
-							: 삭제 대상 노드 삭제
-
-							1-2) 이동 대상 노드 != 검은색 더미 단말 노드
-							: 이동 대상 노드를 삭제 대상 노드의 자리로 이동 및 삭제 대상 노드 삭제
-
-						2) 이동 대상 노드의 인접 노드의 색에 따른 처리로 이동
-
-		( 공통 처리 )
-
-		1) 이동 대상 노드 및 이동 대상 노드의 색을 판별하기 위해,
-		삭제 대상 노드의 왼쪽 혹은 오른쪽 자식의 검은색 더미 단말 노드 여부에 따라,
+///이하 삭제, 수정
+		1) 이동 대상 노드를 판별하기 위해, 삭제 대상 노드의 왼쪽 혹은 오른쪽 자식의 검은색 더미 단말 노드 여부에 따라,
 
 			1-1) 삭제 대상 노드의 왼쪽 자식 노드 == 검은색 더미 단말 노드 && 삭제 대상 노드의 오른쪽 자식 노드 != 검은색 더미 단말 노드
 			: 삭제 대상 노드의 오른쪽 하위 트리에서 최솟값을 이동 대상 노드로 선택
@@ -457,93 +426,183 @@ void RBT_RemoveNode(NODE** srcRootNode, const DATA_TYPE& targetData, bool deallo
 
 			1-3) 삭제 대상 노드의 왼쪽 자식 노드 == 검은색 더미 단말 노드 && 삭제 대상 노드의 오른쪽 자식 노드 == 검은색 더미 단말 노드
 			: 검은색 더미 단말 노드를 이동 대상 노드로 선택
+
+		1) 삭제 대상 노드가 검은색 더미 단말 노드가 아닌 자식 노드를 갖고 있지 않을 경우
+
+			1-1) 삭제 대상 노드가 루트 노드일 경우
+			: do nothing
+
+			1-2) 삭제 대상 노드가 루트 노드가 아닐 경우
+			: 삭제 대상 노드의 부모 노드로부터 연결 해제
+
+		2) 삭제 대상 노드가 검은색 더미 단말 노드가 아닌 왼쪽, 오른쪽 자식 노드 중 하나를 갖고 있을 경우
+
+			2-1) 삭제 대상 노드가 루트 노드일 경우
+			: 삭제 대상 노드가 가지고 있던 검은색 더미 단말 노드가 아닌 자식 노드를 최상위 루트 노드로 변경
+
+			2-2) 삭제 대상 노드가 루트 노드가 아닐 경우
+			: 삭제 대상 노드가 가지고 있던 검은색 더미 단말 노드가 아닌 자식 노드를 삭제 대상 노드가 연결 되었던 상위 부모 노드로 연결
+
+		3) 삭제 대상 노드가 검은색 더미 단말 노드가 아닌 왼쪽, 오른쪽 자식 노드를 모두 갖고 있을 경우
+
+			3-1) 삭제 대상 노드가 루트 노드일 경우
+			: 이동 대상 노드를 최상위 루트 노드로 변경
+
+			3-2) 삭제 대상 노드가 루트 노드가 아닐 경우
+			; 이동 대상 노드를 삭제 대상 노드가 연결 되었던 상위 부모 노드로 연결
+
+			3-3) 이동 대상 노드의 남아있는 왼쪽 혹은 오른쪽 하위 트리 존재 여부에 따라,
+			: 이동 대상 노드 판별 과정에서, 삭제 대상 노드의 왼쪽 경로의 최소값 혹은 삭제 대상 노드의 오른쪽 경로의 최대값에 따라 존재 여부 변동
+
+				3-3-1) 이동 대상 노드의 왼쪽 혹은 오른쪽 하위 트리가 존재 할 경우
+				: 이동 대상 노드의 왼쪽 혹은 오른쪽 하위 트리의 루트 노드를 이동 대상 노드가 이동이 발생하기 전 연결되었던 상위 부모 노드로 연결
+
+				3-3-2) 이동 대상 노드의 왼쪽 혹은 오른쪽 하위 트리가 존재하지 않을 경우
+				: 이동 대상 노드가 이동이 발생하기 전 연결 되었던 상위 부모 노드로부터의 연결 해제
+
+			3-4) 이동 대상 노드의 왼쪽 및 오른쪽 자식 노드를 삭제 대상 노드의 왼쪽 및 오른쪽 자식 노드로 연결
+//////////////
+
+		---
+
+		< 삭제하고자 하는 대상 데이터가 포함 된 노드 (이하, 삭제 대상 노드) 및
+		삭제 대상 노드의 자리를 대체 할 노드 (이하, 이동 대상 노드)의 색에 따른 처리 >
+
+		1) RC : 삭제 대상 노드의 색 (R : Red, B : Black)
+		2) MC : 이동 대상 노드의 색 (R : Red, B : Black)
+		3) P : 이에 따른 수행 작업
+
+		RC	|	MC	|	P
+		R		-		do nothing
+						: 삭제 대상 노드가 빨간색이었으므로, 이동 대상 노드가 검은색이고 이동 대상 노드가 상위 트리로 위치가 이동되어도,
+						트리의 각 경로에 대한 검은 노드의 수는 변동없으므로, DEF4)를 위반하지 않음
+
+		B		-		이동 대상 노드의 인접 노드의 색에 따른 처리로 이동
 	***/
 
 	if ((*srcRootNode) == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
 	NODE* removeTargetNode = RBT_SearchNode((*srcRootNode), targetData); //삭제 대상 노드
-	NODE* moveTargetNode =
-		(removeTargetNode->_left != dummyBlackTerminalNode) ? RBT_SearchMinNode(removeTargetNode->_left) :
-		(removeTargetNode->_right != dummyBlackTerminalNode) ? RBT_SearchMaxNode(removeTargetNode->_right) :
-		removeTargetNode->_right; //이동 대상 노드
+	NODE* moveTargetNode = NULL; //이동 대상 노드
 	NODE* moveTargetSiblingNode = NULL; //이동 대상 노드의 반대쪽 형제 노드
+	NODE* oldMoveTargetParentNode = NULL; //이동 대상 노드의 이전 부모 노드
 
 	COLOR tmpColor;
 
-	//TODO : rootNode가 NULL 이 되는 문제
-	tmpColor = removeTargetNode->_color; //삭제 대상 노드의 색
+	if (removeTargetNode->_left == dummyBlackTerminalNode && removeTargetNode->_right == dummyBlackTerminalNode) //삭제 대상 노드가 검은색 더미 단말 노드가 아닌 자식 노드를 갖고 있지 않을 경우
+	{
+		if (removeTargetNode != (*srcRootNode)) //삭제 대상 노드가 루트 노드가 아닐 경우
+			(removeTargetNode->_parent->_left == removeTargetNode) ?
+			removeTargetNode->_parent->_left = NULL : removeTargetNode->_parent->_right = NULL; //삭제 대상 노드의 부모 노드로부터 연결 해제
 
-	if (moveTargetNode != dummyBlackTerminalNode) //이동 대상 노드가 검은색 더미 단말 노드가 아닐 경우
-	{
-		//삭제 대상 노드의 데이터를 이동 대상 노드로 이동
-		removeTargetNode->_data = removeTargetNode->_data;
-
-		//TODO : 이에 따라, 이동 대상 노드를 삭제하여야 함
-		removeTargetNode = moveTargetNode;
-	}
-	else //이동 대상 노드가 검은색 더미 단말 노드일 경우
-	{
-		//TODO : 검은색 더미 단말 노드는 삭제가 발생하면 안됨, 검은 더미 단말 노드일 경우 삭제 대상 노드는 왼쪽 및 오른쪽 자식노드가 존재하지 않는 단말 노드 혹은 최초 루트 노드
-		
-		//이동 대상 노드와 삭제 대상 노드 사이에 중간 노드들이 존재하지 않으므로, 이동 대상 노드의 부모를 삭제 대상 노드의 부모로 연결
-		moveTargetNode->_parent = removeTargetNode->_parent; //이를 위에서도 공통적으로 수행 할 경우, 중간 노드 간의 연결 끊김
-	}
-
-	if (moveTargetNode->_parent == NULL) //이동 대상 노드가 루트 노드가 될 경우
-	{
-		(*srcRootNode) = moveTargetNode;
-	}
-	else
-	{
-		//삭제 대상 노드의 부모 노드에서 자식 노드로의 연결을 이동 대상 노드로 변경
-		if (removeTargetNode == removeTargetNode->_parent->_left)
-			removeTargetNode->_parent->_left = moveTargetNode;
-		else
-			removeTargetNode->_parent->_right = moveTargetNode;
-	}
-
-	//TODO : 이하 임시 코드 삭제
-	/*
-	NODE* removed = NULL;
-	if (removeTargetNode->_left == dummyBlackTerminalNode || removeTargetNode->_right == dummyBlackTerminalNode)
-	{
-		removed = removeTargetNode;
-	}
-	else
-	{
-		removed = RBT_SearchMinNode(removeTargetNode->_right);
-		removeTargetNode->_data = removed->_data;
-	}
-	if (removed->_left != dummyBlackTerminalNode)
-	{
-		moveTargetNode = removed->_left;
-	}
-	else
-	{
-		moveTargetNode = removed->_right;
-	}
-
-	moveTargetNode->_parent = removed->_parent;
-	if (removed->_parent == NULL)
-		(*srcRootNode) = moveTargetNode;
-	else
-	{
-		if (removed == removed->_parent->_left)
-			removed->_parent->_left = moveTargetNode;
-		else
-			removed->_parent->_right = moveTargetNode;
-	}
-	///
-	*/
-
-	switch (tmpColor) //삭제 대상 노드의 색에 따라
-	{
-	case COLOR::RED:
 		goto END_PROC;
+	}
+	else if ((removeTargetNode->_left != dummyBlackTerminalNode && removeTargetNode->_right == dummyBlackTerminalNode) ||
+		(removeTargetNode->_left == dummyBlackTerminalNode && removeTargetNode->_right != dummyBlackTerminalNode)) //삭제 대상 노드가 검은색 더미 단말 노드가 아닌 왼쪽, 오른쪽 자식 노드 중 하나를 갖고 있을 경우
+	{
+		if (removeTargetNode == (*srcRootNode)) //삭제 대상 노드가 루트 노드일 경우
+		{
+			//삭제 대상 노드가 가지고 있던 검은색 더미 단말 노드가 아닌 자식 노드를 최상위 루트 노드로 변경
 
-	case COLOR::BLACK:
-		goto ADJ_MOVE_TARGET_PROC;
+			(removeTargetNode->_left != dummyBlackTerminalNode && removeTargetNode->_right == dummyBlackTerminalNode) ?
+				(*srcRootNode) = removeTargetNode->_left : (*srcRootNode) = removeTargetNode->_right;
+
+			(*srcRootNode)->_parent = NULL;
+		}
+		else //삭제 대상 노드가 루트 노드가 아닐 경우
+		{
+			//삭제 대상 노드가 가지고 있던 검은색 더미 단말 노드가 아닌 자식 노드를 삭제 대상 노드가 연결 되었던 상위 부모 노드로 연결
+
+			if (removeTargetNode->_parent->_left == removeTargetNode)
+			{
+				if (removeTargetNode->_left != dummyBlackTerminalNode && removeTargetNode->_right == dummyBlackTerminalNode)
+				{
+					removeTargetNode->_parent->_left = removeTargetNode->_left;
+					removeTargetNode->_left->_parent = removeTargetNode->_parent;
+				}
+				else //removeTargetNode->_left == dummyBlackTerminalNode && removeTargetNode->_right != dummyBlackTerminalNode
+				{
+					removeTargetNode->_parent->_left = removeTargetNode->_right;
+					removeTargetNode->_right->_parent = removeTargetNode->_parent;	
+				}
+			}
+			else //removeTargetNode->_parent->_right == removeTargetNode
+			{
+				if (removeTargetNode->_left != dummyBlackTerminalNode && removeTargetNode->_right == dummyBlackTerminalNode)
+				{
+					removeTargetNode->_parent->_right = removeTargetNode->_left;
+					removeTargetNode->_left->_parent = removeTargetNode->_parent;
+				}
+				else //removeTargetNode->_left == dummyBlackTerminalNode && removeTargetNode->_right != dummyBlackTerminalNode
+				{
+					removeTargetNode->_parent->_right = removeTargetNode->_right;
+					removeTargetNode->_right->_parent = removeTargetNode->_parent;
+				}
+			}
+		}
+
+		goto END_PROC;
+	}
+	else //삭제 대상 노드가 검은색 더미 단말 노드가 아닌 왼쪽, 오른쪽 자식 노드를 모두 갖고 있을 경우
+	{
+		moveTargetNode = RBT_SearchMinNode(removeTargetNode->_right);
+		oldMoveTargetParentNode = moveTargetNode->_parent;
+
+		if (removeTargetNode == (*srcRootNode)) //삭제 대상 노드가 루트 노드일 경우
+		{
+			//이동 대상 노드를 최상위 루트 노드로 변경
+			(*srcRootNode) = moveTargetNode;
+		}
+		else //삭제 대상 노드가 루트 노드가 아닐 경우
+		{
+			//이동 대상 노드를 삭제 대상 노드가 연결 되었던 상위 부모 노드로 연결
+			(removeTargetNode->_parent->_left == removeTargetNode) ?
+				removeTargetNode->_parent->_left = moveTargetNode : removeTargetNode->_parent->_right = moveTargetNode;
+		}
+
+		moveTargetNode->_parent = removeTargetNode->_parent;
+
+		//이동 대상 노드의 왼쪽 혹은 오른쪽 하위 트리의 루트 노드를 이동 대상 노드가 이동이 발생하기 전 연결되었던 상위 부모 노드로 연결
+		if (moveTargetNode->_left != dummyBlackTerminalNode && moveTargetNode->_right == dummyBlackTerminalNode)
+		{
+			(oldMoveTargetParentNode->_left == moveTargetNode) ? 
+				oldMoveTargetParentNode->_left = moveTargetNode->_left : oldMoveTargetParentNode->_right = moveTargetNode->_left;
+			
+			moveTargetNode->_left->_parent = oldMoveTargetParentNode;
+		}
+		else if (moveTargetNode->_left == dummyBlackTerminalNode && moveTargetNode->_right != dummyBlackTerminalNode)
+		{
+			(oldMoveTargetParentNode->_left == moveTargetNode) ?
+				oldMoveTargetParentNode->_left = moveTargetNode->_right : oldMoveTargetParentNode->_right = moveTargetNode->_right;
+
+			moveTargetNode->_right->_parent = oldMoveTargetParentNode;
+		}
+		else //이동 대상 노드의 왼쪽 혹은 오른쪽 하위 트리가 존재하지 않을 경우
+		{
+			//이동 대상 노드가 이동이 발생하기 전 연결 되었던 상위 부모 노드로부터의 연결 해제
+			(oldMoveTargetParentNode->_left == moveTargetNode) ?
+				oldMoveTargetParentNode->_left = dummyBlackTerminalNode : oldMoveTargetParentNode->_right = dummyBlackTerminalNode;
+		}
+
+		//이동 대상 노드의 왼쪽 및 오른쪽 자식 노드를 삭제 대상 노드의 왼쪽 및 오른쪽 자식 노드로 연결
+		moveTargetNode->_left = removeTargetNode->_left;
+		moveTargetNode->_right = removeTargetNode->_right;
+
+		if(removeTargetNode->_left != dummyBlackTerminalNode)
+			removeTargetNode->_left->_parent = moveTargetNode;
+
+		if(removeTargetNode->_right != dummyBlackTerminalNode)
+			removeTargetNode->_right->_parent = moveTargetNode;
+
+		switch (removeTargetNode->_color) //삭제 대상 노드의 색에 따라
+		{
+		case COLOR::RED:
+			goto END_PROC;
+
+		case COLOR::BLACK:
+			goto ADJ_MOVE_TARGET_PROC;
+		}
 	}
 
 ADJ_MOVE_TARGET_PROC: //이동 대상 노드의 인접 노드의 색에 따른 처리 루틴
@@ -998,8 +1057,6 @@ ADJ_MOVE_TARGET_PROC: //이동 대상 노드의 인접 노드의 색에 따른 �
 				goto END_PROC;
 
 			case COLOR::BLACK:
-				//TODO : 임시 코드에 대해 sibling이 dummyBlackTerminalNode인 경우 left와 right == NULL인 문제 발생
-
 				if (moveTargetSiblingNode->_left->_color == COLOR::BLACK && moveTargetSiblingNode->_right->_color == COLOR::BLACK) //-BB BB
 				{
 					switch (moveTargetNode->_parent->_color) //이동 대상 노드의 부모 노드의 색에 따라,
@@ -1064,16 +1121,13 @@ END_PROC:
 
 	if ((*srcRootNode) == dummyBlackTerminalNode)
 	{
-		NODE* tmp = dummyBlackTerminalNode;
+		NODE* tmpAddr = dummyBlackTerminalNode;
 
 		(*srcRootNode) = NULL;
-		dummyBlackTerminalNode = tmp;
+		dummyBlackTerminalNode = tmpAddr;
 	}
-	dummyBlackTerminalNode->_parent = NULL;
 
-	//TODO : 수정
 	if (deallocateAfterRemove)
-	//	RBT_DeallocateNode(&removed);
 		RBT_DeallocateNode(&removeTargetNode);
 }
 
@@ -1103,13 +1157,11 @@ NODE* RBT_SearchNode(NODE* srcRootNode, const DATA_TYPE& targetData)
 /// <returns>최소값인 데이터가 포함 된 노드</returns>
 NODE* RBT_SearchMaxNode(NODE* srcRootNode)
 {
-	if (srcRootNode == NULL)
+	if (srcRootNode == NULL || srcRootNode == dummyBlackTerminalNode)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
 	if (srcRootNode->_right != NULL && srcRootNode->_right != dummyBlackTerminalNode) //현재 노드의 오른쪽 하위 트리가 존재하며, 검은색 더미 단말 노드가 아닐 경우
 		return RBT_SearchMaxNode(srcRootNode->_right);
-	else //현재 노드의 오른쪽 하위 트리가 존재하지 않거나, 검은색 더미 단말 노드일 경우
-		return srcRootNode;
 }
 
 /// <summary>
@@ -1119,13 +1171,11 @@ NODE* RBT_SearchMaxNode(NODE* srcRootNode)
 /// <returns>최소값인 데이터가 포함 된 노드</returns>
 NODE* RBT_SearchMinNode(NODE* srcRootNode)
 {
-	if (srcRootNode == NULL)
+	if (srcRootNode == NULL || srcRootNode == dummyBlackTerminalNode)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
 	if (srcRootNode->_left != NULL && srcRootNode->_left != dummyBlackTerminalNode) //현재 노드의 왼쪽 하위 트리가 존재하며, 검은색 더미 단말 노드가 아닐 경우
 		return RBT_SearchMinNode(srcRootNode->_left);
-	else //현재 노드의 왼쪽 하위 트리가 존재하지 않거나, 검은색 더미 단말 노드일 경우
-		return srcRootNode;
 }
 
 /// <summary>
@@ -1303,12 +1353,13 @@ void RBT_RotateTree(NODE** srcRootNode, NODE* srcTargetParentNode, ROTATE_DIRECT
 }
 
 /// <summary>
-/// 대상 트리의 특정 색을 가진 노드 개수 반환
+/// 대상 트리의 특정 경로 방향에 대해 특정 색을 가진 노드 개수 반환
 /// </summary>
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 /// <param name="color">노드의 색</param>
+/// <param name="pathDirection">경로 방향</param>
 /// <returns>특정 색을 가진 노드 개수</returns>
-size_t RBT_GetColorCount(NODE* srcRootNode, COLOR color)
+size_t RBT_GetColorCount(NODE* srcRootNode, COLOR color, PATH_DIRECTION pathDirection)
 {
 	size_t retVal = 0; //특정 색을 가진 노드 개수
 
@@ -1318,11 +1369,18 @@ size_t RBT_GetColorCount(NODE* srcRootNode, COLOR color)
 	if (srcRootNode->_color == color)
 		retVal++;
 
-	if (srcRootNode->_left != dummyBlackTerminalNode)
-		retVal += RBT_GetColorCount(srcRootNode->_left, color);
+	switch (pathDirection)
+	{
+	case PATH_DIRECTION::RIGHT:
+		if (srcRootNode->_right != dummyBlackTerminalNode)
+			retVal += RBT_GetColorCount(srcRootNode->_right, color, pathDirection);
+		break;
 
-	if (srcRootNode->_right != dummyBlackTerminalNode)
-		retVal += RBT_GetColorCount(srcRootNode->_right, color);
+	case PATH_DIRECTION::LEFT:
+		if (srcRootNode->_left != dummyBlackTerminalNode)
+			retVal += RBT_GetColorCount(srcRootNode->_left, color, pathDirection);
+		break;
+	}
 
 	return retVal;
 }
@@ -1371,8 +1429,8 @@ void RBT_ValidateTree(NODE* srcRootNode)
 					currentNode->_right->_color == COLOR::RED)) //DEF2) validation
 				throw std::logic_error(std::string(__func__) + std::string(" : DEF2) violation (Invalid Red-Black Tree)"));
 
-			if (RBT_GetColorCount(srcRootNode, COLOR::BLACK) !=
-				RBT_GetColorCount(srcRootNode, COLOR::BLACK)) //DEF4) validation
+			if (RBT_GetColorCount(srcRootNode, COLOR::BLACK, PATH_DIRECTION::LEFT) !=
+				RBT_GetColorCount(srcRootNode, COLOR::BLACK, PATH_DIRECTION::RIGHT)) //DEF4) validation
 				throw std::logic_error(std::string(__func__) + std::string(" : DEF4) violation (Invalid Red-Black Tree)"));
 
 			std::get<1>(callStack.top()) = (0x1);
@@ -1381,8 +1439,10 @@ void RBT_ValidateTree(NODE* srcRootNode)
 			if (currentNode->_left != dummyBlackTerminalNode)
 			{
 				if (currentNode->_data <= currentNode->_left->_data) //DEF5) validation
+				{
+					std::cout << currentNode->_data << ", " << currentNode->_left->_data << "\n";
 					throw std::logic_error(std::string(__func__) + std::string(" : DEF5) violation (Invalid Red-Black Tree)"));
-
+				}
 				std::get<1>(callStack.top()) = (0x2);
 				callStack.push(std::make_tuple(currentNode->_left, (0x0)));
 				continue;
@@ -1392,8 +1452,10 @@ void RBT_ValidateTree(NODE* srcRootNode)
 			if (currentNode->_right != dummyBlackTerminalNode)
 			{
 				if (currentNode->_data >= currentNode->_right->_data) //DEF5) validation
+				{
+					std::cout << currentNode->_data << ", " << currentNode->_right->_data << "\n";
 					throw std::logic_error(std::string(__func__) + std::string(" : DEF5) violation (Invalid Red-Black Tree)"));
-
+				}
 				std::get<1>(callStack.top()) = (0x3);
 				callStack.push(std::make_tuple(currentNode->_right, (0x0)));
 				continue;
