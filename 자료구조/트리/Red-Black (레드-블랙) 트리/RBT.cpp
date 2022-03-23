@@ -1162,6 +1162,8 @@ NODE* RBT_SearchMaxNode(NODE* srcRootNode)
 
 	if (srcRootNode->_right != NULL && srcRootNode->_right != dummyBlackTerminalNode) //현재 노드의 오른쪽 하위 트리가 존재하며, 검은색 더미 단말 노드가 아닐 경우
 		return RBT_SearchMaxNode(srcRootNode->_right);
+	else //현재 노드의 오른쪽 하위 트리가 존재하지 않거나, 검은색 더미 단말 노드일 경우
+		return srcRootNode;
 }
 
 /// <summary>
@@ -1176,6 +1178,8 @@ NODE* RBT_SearchMinNode(NODE* srcRootNode)
 
 	if (srcRootNode->_left != NULL && srcRootNode->_left != dummyBlackTerminalNode) //현재 노드의 왼쪽 하위 트리가 존재하며, 검은색 더미 단말 노드가 아닐 경우
 		return RBT_SearchMinNode(srcRootNode->_left);
+	else //현재 노드의 왼쪽 하위 트리가 존재하지 않거나, 검은색 더미 단말 노드일 경우
+		return srcRootNode;
 }
 
 /// <summary>
@@ -1372,12 +1376,12 @@ size_t RBT_GetColorCount(NODE* srcRootNode, COLOR color, PATH_DIRECTION pathDire
 	switch (pathDirection)
 	{
 	case PATH_DIRECTION::RIGHT:
-		if (srcRootNode->_right != dummyBlackTerminalNode)
+		if (srcRootNode->_right != NULL)
 			retVal += RBT_GetColorCount(srcRootNode->_right, color, pathDirection);
 		break;
 
 	case PATH_DIRECTION::LEFT:
-		if (srcRootNode->_left != dummyBlackTerminalNode)
+		if (srcRootNode->_left != NULL)
 			retVal += RBT_GetColorCount(srcRootNode->_left, color, pathDirection);
 		break;
 	}
