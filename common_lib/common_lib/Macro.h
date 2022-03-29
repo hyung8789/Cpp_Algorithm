@@ -1,8 +1,12 @@
 ﻿#ifndef _MACRO_H_
 #define _MACRO_H_
 
-//#define TRUE (0x1)
-//#define FALSE (0x0)
+#include <iostream>
+
+// https://docs.microsoft.com/en-us/cpp/preprocessor/stringizing-operator-hash?view=msvc-170
+#define _DUMP(name, value, os) (os) << (name) << " : " << (value) << std::endl; //출력 스트림 (os)에 "name : value" 출력
+#define DUMP(name, value) _DUMP(#name, (value), std::cout)
+#define VAR_DUMP(var) DUMP(#var, (var))
 
 #define FP_DIFF_THRESHOLD 0.0001 //부동 소수점 차이 임계값 (epsilon)
 
