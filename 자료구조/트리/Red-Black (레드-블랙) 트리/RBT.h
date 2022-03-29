@@ -30,8 +30,8 @@ enum class COLOR : const unsigned
 {
     RED = ((const unsigned)BG_COLOR::BG_RED | (const unsigned)FG_COLOR::FG_WHITE |
         FOREGROUND_INTENSITY),
-    BLACK = ((const unsigned)BG_COLOR::BG_WHITE | (const unsigned)FG_COLOR::FG_BLACK | 
-        FOREGROUND_INTENSITY)
+    BLACK = ((const unsigned)BG_COLOR::BG_GRAY | (const unsigned)FG_COLOR::FG_WHITE |
+		FOREGROUND_INTENSITY)
 };
 #else
 enum class COLOR : const unsigned
@@ -67,7 +67,8 @@ enum class ROTATE_DIRECTION : const int
 enum class PATH_DIRECTION : const int
 {
 	RIGHT = 0, //오른쪽 경로
-	LEFT //왼쪽 경로
+	LEFT, //왼쪽 경로
+	BOTH //양쪽 경로 (오른쪽 및 왼쪽)
 };
 
 #define DUMMY_BLACK_TERMINAL_NODE_DATA INT_MIN //노드의 데이터 타입에 따른 검은색 더미 단말 노드의 데이터

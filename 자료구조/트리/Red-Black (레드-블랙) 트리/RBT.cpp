@@ -69,9 +69,9 @@ void RBT_DispOrderedTree(NODE* srcRootNode, TRAVERSAL_METHOD traversalMethod, TR
 	case TRAVERSAL_METHOD::PREORDER:
 		for (TREE_DEPTH_TYPE i = 0; i < rootNodeDepth; i++)
 		{
-			std::cout << "\t|";
+			std::cout << "\t";
 		}
-		std::cout << "- ";
+		std::cout << "|- ";
 
 #ifdef COLOR_VISUALIZATION
 		CONSOLE_SCREEN_MANAGER::GetInstance().SetConsoleTextColor((const unsigned)(srcRootNode->_color));
@@ -82,6 +82,8 @@ void RBT_DispOrderedTree(NODE* srcRootNode, TRAVERSAL_METHOD traversalMethod, TR
 #ifdef COLOR_VISUALIZATION
 		CONSOLE_SCREEN_MANAGER::GetInstance().UnsetConsoleTextColor();
 #endif
+		if (srcRootNode->_parent != NULL)
+			std::cout << " (Parent : " << srcRootNode->_parent->_data << ")";
 
 		if (rootNodeDepth == 0)
 			std::cout << " (Root, ";
@@ -107,9 +109,9 @@ void RBT_DispOrderedTree(NODE* srcRootNode, TRAVERSAL_METHOD traversalMethod, TR
 
 		for (TREE_DEPTH_TYPE i = 0; i < rootNodeDepth; i++)
 		{
-			std::cout << "\t|";
+			std::cout << "\t";
 		}
-		std::cout << "- ";
+		std::cout << "|- ";
 
 #ifdef COLOR_VISUALIZATION
 		CONSOLE_SCREEN_MANAGER::GetInstance().SetConsoleTextColor((const unsigned)(srcRootNode->_color));
@@ -120,6 +122,8 @@ void RBT_DispOrderedTree(NODE* srcRootNode, TRAVERSAL_METHOD traversalMethod, TR
 #ifdef COLOR_VISUALIZATION
 		CONSOLE_SCREEN_MANAGER::GetInstance().UnsetConsoleTextColor();
 #endif
+		if (srcRootNode->_parent != NULL)
+			std::cout << " (Parent : " << srcRootNode->_parent->_data << ")";
 
 		if (rootNodeDepth == 0)
 			std::cout << " (Root, ";
@@ -145,9 +149,9 @@ void RBT_DispOrderedTree(NODE* srcRootNode, TRAVERSAL_METHOD traversalMethod, TR
 
 		for (TREE_DEPTH_TYPE i = 0; i < rootNodeDepth; i++)
 		{
-			std::cout << "\t|";
+			std::cout << "\t";
 		}
-		std::cout << "- ";
+		std::cout << "|- ";
 
 #ifdef COLOR_VISUALIZATION
 		CONSOLE_SCREEN_MANAGER::GetInstance().SetConsoleTextColor((const unsigned)(srcRootNode->_color));
@@ -158,6 +162,8 @@ void RBT_DispOrderedTree(NODE* srcRootNode, TRAVERSAL_METHOD traversalMethod, TR
 #ifdef COLOR_VISUALIZATION
 		CONSOLE_SCREEN_MANAGER::GetInstance().UnsetConsoleTextColor();
 #endif
+		if (srcRootNode->_parent != NULL)
+			std::cout << " (Parent : " << srcRootNode->_parent->_data << ")";
 
 		if (rootNodeDepth == 0)
 			std::cout << " (Root, ";
@@ -410,74 +416,58 @@ RECOLORING_PROC: //색 변경 처리 루틴
 void RBT_RemoveNode(NODE** srcRootNode, const DATA_TYPE& targetData, bool deallocateAfterRemove)
 {
 	/***
-		< 표준 BST 삭제 처리 루틴 >
-
-		! 루트 노드에 대한 삭제가 발생 할 경우, 별도의 처리 요구
-
-///이하 삭제, 수정
-		1) 이동 대상 노드를 판별하기 위해, 삭제 대상 노드의 왼쪽 혹은 오른쪽 자식의 검은색 더미 단말 노드 여부에 따라,
-
-			1-1) 삭제 대상 노드의 왼쪽 자식 노드 == 검은색 더미 단말 노드 && 삭제 대상 노드의 오른쪽 자식 노드 != 검은색 더미 단말 노드
-			: 삭제 대상 노드의 오른쪽 하위 트리에서 최솟값을 이동 대상 노드로 선택
-
-			1-2) 삭제 대상 노드의 왼쪽 자식 노드 != 검은색 더미 단말 노드 && 삭제 대상 노드의 오른쪽 자식 노드 == 검은색 더미 단말 노드 or
-			삭제 대상 노드의 왼쪽 자식 노드 != 검은색 더미 단말 노드 && 삭제 대상 노드의 오른쪽 자식 노드 != 검은색 더미 단말 노드
-			: 삭제 대상 노드의 왼쪽 하위 트리에서 최대값을 이동 대상 노드로 선택
-
-			1-3) 삭제 대상 노드의 왼쪽 자식 노드 == 검은색 더미 단말 노드 && 삭제 대상 노드의 오른쪽 자식 노드 == 검은색 더미 단말 노드
-			: 검은색 더미 단말 노드를 이동 대상 노드로 선택
-
-		1) 삭제 대상 노드가 검은색 더미 단말 노드가 아닌 자식 노드를 갖고 있지 않을 경우
-
-			1-1) 삭제 대상 노드가 루트 노드일 경우
-			: do nothing
-
-			1-2) 삭제 대상 노드가 루트 노드가 아닐 경우
-			: 삭제 대상 노드의 부모 노드로부터 연결 해제
-
-		2) 삭제 대상 노드가 검은색 더미 단말 노드가 아닌 왼쪽, 오른쪽 자식 노드 중 하나를 갖고 있을 경우
-
-			2-1) 삭제 대상 노드가 루트 노드일 경우
-			: 삭제 대상 노드가 가지고 있던 검은색 더미 단말 노드가 아닌 자식 노드를 최상위 루트 노드로 변경
-
-			2-2) 삭제 대상 노드가 루트 노드가 아닐 경우
-			: 삭제 대상 노드가 가지고 있던 검은색 더미 단말 노드가 아닌 자식 노드를 삭제 대상 노드가 연결 되었던 상위 부모 노드로 연결
-
-		3) 삭제 대상 노드가 검은색 더미 단말 노드가 아닌 왼쪽, 오른쪽 자식 노드를 모두 갖고 있을 경우
-
-			3-1) 삭제 대상 노드가 루트 노드일 경우
-			: 이동 대상 노드를 최상위 루트 노드로 변경
-
-			3-2) 삭제 대상 노드가 루트 노드가 아닐 경우
-			; 이동 대상 노드를 삭제 대상 노드가 연결 되었던 상위 부모 노드로 연결
-
-			3-3) 이동 대상 노드의 남아있는 왼쪽 혹은 오른쪽 하위 트리 존재 여부에 따라,
-			: 이동 대상 노드 판별 과정에서, 삭제 대상 노드의 왼쪽 경로의 최소값 혹은 삭제 대상 노드의 오른쪽 경로의 최대값에 따라 존재 여부 변동
-
-				3-3-1) 이동 대상 노드의 왼쪽 혹은 오른쪽 하위 트리가 존재 할 경우
-				: 이동 대상 노드의 왼쪽 혹은 오른쪽 하위 트리의 루트 노드를 이동 대상 노드가 이동이 발생하기 전 연결되었던 상위 부모 노드로 연결
-
-				3-3-2) 이동 대상 노드의 왼쪽 혹은 오른쪽 하위 트리가 존재하지 않을 경우
-				: 이동 대상 노드가 이동이 발생하기 전 연결 되었던 상위 부모 노드로부터의 연결 해제
-
-			3-4) 이동 대상 노드의 왼쪽 및 오른쪽 자식 노드를 삭제 대상 노드의 왼쪽 및 오른쪽 자식 노드로 연결
-//////////////
-
-		---
-
 		< 삭제하고자 하는 대상 데이터가 포함 된 노드 (이하, 삭제 대상 노드) 및
-		삭제 대상 노드의 자리를 대체 할 노드 (이하, 이동 대상 노드)의 색에 따른 처리 >
+		삭제 대상 노드의 자리를 대체 할 노드 (이하, 이동 대상 노드) 선택 >
+		
+		! 연산 과정의 단순화를 위해 이동 대상 노드가 검은색 더미 단말 노드일 경우에도, 임시로 부모로의 연결과 자식 간의 연결 허용
 
-		1) RC : 삭제 대상 노드의 색 (R : Red, B : Black)
-		2) MC : 이동 대상 노드의 색 (R : Red, B : Black)
-		3) P : 이에 따른 수행 작업
+		1) 삭제 대상 노드의 자식 노드 보유 상태에 따라,
 
-		RC	|	MC	|	P
-		R		-		do nothing
-						: 삭제 대상 노드가 빨간색이었으므로, 이동 대상 노드가 검은색이고 이동 대상 노드가 상위 트리로 위치가 이동되어도,
-						트리의 각 경로에 대한 검은 노드의 수는 변동없으므로, DEF4)를 위반하지 않음
+			1-1) 삭제 대상 노드가 검은색 더미 단말 노드가 아닌 하나의 자식 노드만 갖고 있거나 자식 노드를 갖고 있지 않을 경우
+			: 표준 BST의 삭제 처리 루틴에서 삭제 대상 노드가 하나의 자식만 갖고 있거나 자식 노드를 갖고 있지 않는 경우와 동일
 
-		B		-		이동 대상 노드의 인접 노드의 색에 따른 처리로 이동
+				1-1-1) 이동 대상 노드를 삭제 대상 노드가 가지고 있던 한 단계 하위 자식 노드로 선택
+				: 이 시점에, 삭제 대상 노드는 최대 하나의 자식 노드만 갖고 있으므로, 
+				이동 대상 노드의 자식 노드가 검은색 더미 단말 노드가 아닌 검은색 노드일 경우,
+				삭제 대상 노드 기준 왼쪽 및 오른쪽 경로에 대해 DEF4)를 위반하므로,
+				이동 대상 노드의 자식 노드는 항상 검은색 더미 단말 노드
+
+			1-2) 삭제 대상 노드가 검은색 더미 단말 노드가 아닌 왼쪽, 오른쪽 자식 노드를 모두 갖고 있을 경우
+			: 표준 BST의 삭제 처리 루틴에서 삭제 대상 노드가 왼쪽, 오른쪽 자식 노드를 모두 갖고 있을 경우와 동일
+
+				1-2-1) 삭제 대상 노드의 오른쪽 하위 트리에서 최소 값을 이동 대상 노드로 선택
+
+				1-2-2) 삭제 대상 노드의 데이터 및 색을 이동 대상 노드의 데이터 및 색으로 변경
+				
+				1-2-3) 이동 대상 노드를 삭제 대상 노드로 선택
+
+				1-2-4) 이동 대상 노드의 오른쪽 자식 노드를 이동 대상 노드로 선택
+				: 이 시점에, 기존 이동 대상 노드는 해당 하위 트리에서 가장 작은 노드이므로, 
+				기존 이동 대상 노드의 왼쪽 자식 노드는 존재하지 않음
+
+		2) 이동 대상 노드의 부모를 삭제 대상 노드의 부모로 연결
+		: 이 시점에, 이동 대상 노드는 삭제 대상 노드의 한 단계 하위 자식 노드
+
+		3) 이동 대상 노드의 왼쪽 및 오른쪽을 삭제 대상 노드의 왼쪽 및 오른쪽으로 연결
+
+		4) 삭제 대상 노드의 루트 노드 여부에 따라,
+
+			4-1) 삭제 대상 노드 == 루트 노드
+			: 이동 대상 노드를 루트 노드로 변경
+
+			4-2) 삭제 대상 노드 != 루트 노드
+			: 삭제 대상 노드의 부모에서 자식으로의 연결을 이동 대상 노드로 연결
+
+		5) 현재 삭제 대상 노드의 색에 따라,
+
+			5-1) 삭제 대상 노드의 색 == 빨간색
+			
+				5-1-1) do nothing 
+				: 삭제 대상 노드가 빨간색이었으므로, 이동 대상 노드가 검은색이고 이동 대상 노드가 상위 트리로 위치가 이동되어도,
+				트리의 각 경로에 대한 검은 노드의 수는 변동없으므로, DEF4)를 위반하지 않음
+
+			5-2) 삭제 대상 노드의 색 == 검은색
+			: DEF4) 위반에 대해 후속 처리를 위해 이동 대상 노드의 인접 노드의 색에 따른 처리로 이동
 	***/
 
 	if ((*srcRootNode) == NULL)
@@ -486,123 +476,72 @@ void RBT_RemoveNode(NODE** srcRootNode, const DATA_TYPE& targetData, bool deallo
 	NODE* removeTargetNode = RBT_SearchNode((*srcRootNode), targetData); //삭제 대상 노드
 	NODE* moveTargetNode = NULL; //이동 대상 노드
 	NODE* moveTargetSiblingNode = NULL; //이동 대상 노드의 반대쪽 형제 노드
-	NODE* oldMoveTargetParentNode = NULL; //이동 대상 노드의 이전 부모 노드
 
 	COLOR tmpColor;
 
-	if (removeTargetNode->_left == dummyBlackTerminalNode && removeTargetNode->_right == dummyBlackTerminalNode) //삭제 대상 노드가 검은색 더미 단말 노드가 아닌 자식 노드를 갖고 있지 않을 경우
+	if (removeTargetNode->_left == dummyBlackTerminalNode || 
+		removeTargetNode->_right == dummyBlackTerminalNode) //삭제 대상 노드가 검은색 더미 단말 노드가 아닌 하나의 자식 노드만 갖고 있거나 자식 노드를 갖고 있지 않을 경우
 	{
-		if (removeTargetNode != (*srcRootNode)) //삭제 대상 노드가 루트 노드가 아닐 경우
-			(removeTargetNode->_parent->_left == removeTargetNode) ?
-			removeTargetNode->_parent->_left = NULL : removeTargetNode->_parent->_right = NULL; //삭제 대상 노드의 부모 노드로부터 연결 해제
-
-		goto END_PROC;
-	}
-	else if ((removeTargetNode->_left != dummyBlackTerminalNode && removeTargetNode->_right == dummyBlackTerminalNode) ||
-		(removeTargetNode->_left == dummyBlackTerminalNode && removeTargetNode->_right != dummyBlackTerminalNode)) //삭제 대상 노드가 검은색 더미 단말 노드가 아닌 왼쪽, 오른쪽 자식 노드 중 하나를 갖고 있을 경우
-	{
-		if (removeTargetNode == (*srcRootNode)) //삭제 대상 노드가 루트 노드일 경우
-		{
-			//삭제 대상 노드가 가지고 있던 검은색 더미 단말 노드가 아닌 자식 노드를 최상위 루트 노드로 변경
-
-			(removeTargetNode->_left != dummyBlackTerminalNode && removeTargetNode->_right == dummyBlackTerminalNode) ?
-				(*srcRootNode) = removeTargetNode->_left : (*srcRootNode) = removeTargetNode->_right;
-
-			(*srcRootNode)->_parent = NULL;
-		}
-		else //삭제 대상 노드가 루트 노드가 아닐 경우
-		{
-			//삭제 대상 노드가 가지고 있던 검은색 더미 단말 노드가 아닌 자식 노드를 삭제 대상 노드가 연결 되었던 상위 부모 노드로 연결
-
-			if (removeTargetNode->_parent->_left == removeTargetNode)
-			{
-				if (removeTargetNode->_left != dummyBlackTerminalNode && removeTargetNode->_right == dummyBlackTerminalNode)
-				{
-					removeTargetNode->_parent->_left = removeTargetNode->_left;
-					removeTargetNode->_left->_parent = removeTargetNode->_parent;
-				}
-				else //removeTargetNode->_left == dummyBlackTerminalNode && removeTargetNode->_right != dummyBlackTerminalNode
-				{
-					removeTargetNode->_parent->_left = removeTargetNode->_right;
-					removeTargetNode->_right->_parent = removeTargetNode->_parent;	
-				}
-			}
-			else //removeTargetNode->_parent->_right == removeTargetNode
-			{
-				if (removeTargetNode->_left != dummyBlackTerminalNode && removeTargetNode->_right == dummyBlackTerminalNode)
-				{
-					removeTargetNode->_parent->_right = removeTargetNode->_left;
-					removeTargetNode->_left->_parent = removeTargetNode->_parent;
-				}
-				else //removeTargetNode->_left == dummyBlackTerminalNode && removeTargetNode->_right != dummyBlackTerminalNode
-				{
-					removeTargetNode->_parent->_right = removeTargetNode->_right;
-					removeTargetNode->_right->_parent = removeTargetNode->_parent;
-				}
-			}
-		}
-
-		goto END_PROC;
+		//이동 대상 노드를 삭제 대상 노드가 가지고 있던 한 단계 하위 자식 노드로 선택
+		(removeTargetNode->_left != dummyBlackTerminalNode) ?
+			moveTargetNode = removeTargetNode->_left : moveTargetNode = removeTargetNode->_right;
 	}
 	else //삭제 대상 노드가 검은색 더미 단말 노드가 아닌 왼쪽, 오른쪽 자식 노드를 모두 갖고 있을 경우
 	{
+		//삭제 대상 노드의 오른쪽 하위 트리에서 최소 값을 이동 대상 노드로 선택
 		moveTargetNode = RBT_SearchMinNode(removeTargetNode->_right);
-		oldMoveTargetParentNode = moveTargetNode->_parent;
 
-		if (removeTargetNode == (*srcRootNode)) //삭제 대상 노드가 루트 노드일 경우
-		{
-			//이동 대상 노드를 최상위 루트 노드로 변경
-			(*srcRootNode) = moveTargetNode;
-		}
-		else //삭제 대상 노드가 루트 노드가 아닐 경우
-		{
-			//이동 대상 노드를 삭제 대상 노드가 연결 되었던 상위 부모 노드로 연결
-			(removeTargetNode->_parent->_left == removeTargetNode) ?
-				removeTargetNode->_parent->_left = moveTargetNode : removeTargetNode->_parent->_right = moveTargetNode;
-		}
+		//삭제 대상 노드의 데이터 및 색을 이동 대상 노드의 데이터 및 색으로 변경
+		removeTargetNode->_data = moveTargetNode->_data;
+		removeTargetNode->_color = moveTargetNode->_color;
 
-		moveTargetNode->_parent = removeTargetNode->_parent;
+		//이동 대상 노드를 삭제 대상 노드로 선택
+		removeTargetNode = moveTargetNode;
 
-		//이동 대상 노드의 왼쪽 혹은 오른쪽 하위 트리의 루트 노드를 이동 대상 노드가 이동이 발생하기 전 연결되었던 상위 부모 노드로 연결
-		if (moveTargetNode->_left != dummyBlackTerminalNode && moveTargetNode->_right == dummyBlackTerminalNode)
-		{
-			(oldMoveTargetParentNode->_left == moveTargetNode) ? 
-				oldMoveTargetParentNode->_left = moveTargetNode->_left : oldMoveTargetParentNode->_right = moveTargetNode->_left;
-			
-			moveTargetNode->_left->_parent = oldMoveTargetParentNode;
-		}
-		else if (moveTargetNode->_left == dummyBlackTerminalNode && moveTargetNode->_right != dummyBlackTerminalNode)
-		{
-			(oldMoveTargetParentNode->_left == moveTargetNode) ?
-				oldMoveTargetParentNode->_left = moveTargetNode->_right : oldMoveTargetParentNode->_right = moveTargetNode->_right;
+		//이동 대상 노드가 가지고 있던 한 단계 하위 자식 노드를 다시 이동 대상 노드로 선택
+		moveTargetNode = moveTargetNode->_right;
+	}
 
-			moveTargetNode->_right->_parent = oldMoveTargetParentNode;
-		}
-		else //이동 대상 노드의 왼쪽 혹은 오른쪽 하위 트리가 존재하지 않을 경우
-		{
-			//이동 대상 노드가 이동이 발생하기 전 연결 되었던 상위 부모 노드로부터의 연결 해제
-			(oldMoveTargetParentNode->_left == moveTargetNode) ?
-				oldMoveTargetParentNode->_left = dummyBlackTerminalNode : oldMoveTargetParentNode->_right = dummyBlackTerminalNode;
-		}
+	//이동 대상 노드의 부모를 삭제 대상 노드의 부모로 연결
+	moveTargetNode->_parent = removeTargetNode->_parent;
 
-		//이동 대상 노드의 왼쪽 및 오른쪽 자식 노드를 삭제 대상 노드의 왼쪽 및 오른쪽 자식 노드로 연결
-		moveTargetNode->_left = removeTargetNode->_left;
-		moveTargetNode->_right = removeTargetNode->_right;
+	//이동 대상 노드의 왼쪽 및 오른쪽을 삭제 대상 노드의 왼쪽 및 오른쪽으로 연결
+	moveTargetNode->_left = removeTargetNode->_left;
+	moveTargetNode->_right = removeTargetNode->_right;
 
-		if(removeTargetNode->_left != dummyBlackTerminalNode)
-			removeTargetNode->_left->_parent = moveTargetNode;
+	if (removeTargetNode->_parent == NULL) //삭제 대상 노드가 루트 노드일 경우
+	{
+		(*srcRootNode) = moveTargetNode;
+	}
+	else //삭제 대상 노드가 루트 노드가 아닐 경우
+	{
+		//삭제 대상 노드의 부모에서 자식으로의 연결을 이동 대상 노드로 연결
+		(removeTargetNode->_parent->_left == removeTargetNode) ?
+			removeTargetNode->_parent->_left = moveTargetNode : removeTargetNode->_parent->_right = moveTargetNode;
+	}
 
-		if(removeTargetNode->_right != dummyBlackTerminalNode)
-			removeTargetNode->_right->_parent = moveTargetNode;
+	/*
+	* delete 7
+10 BLACK [X,-1]
+  6 RED [L,10]
+    3 BLACK [L,6]
+      2 RED [L,3] --------- 2
+    8 BLACK [R,6] --------- 2
+  18 RED [R,10]
+    11 BLACK [L,18]
+      13 RED [R,11] --------- 2
+    22 BLACK [R,18]
+      26 RED [R,22] --------- 2
+	*/
 
-		switch (removeTargetNode->_color) //삭제 대상 노드의 색에 따라
-		{
-		case COLOR::RED:
-			goto END_PROC;
+	
+	switch (removeTargetNode->_color) //현재 삭제 대상 노드의 색에 따라
+	{
+	case COLOR::RED:
+		goto END_PROC;
 
-		case COLOR::BLACK:
-			goto ADJ_MOVE_TARGET_PROC;
-		}
+	case COLOR::BLACK:
+		goto ADJ_MOVE_TARGET_PROC;
 	}
 
 ADJ_MOVE_TARGET_PROC: //이동 대상 노드의 인접 노드의 색에 따른 처리 루틴
@@ -679,6 +618,8 @@ ADJ_MOVE_TARGET_PROC: //이동 대상 노드의 인접 노드의 색에 따른 �
 										2) 이중 검은색 노드 (이동 대상 노드)의 부모 노드로부터의 방향에 따라,
 
 											2-1) 이중 검은색 노드 (이동 대상 노드)의 부모 노드의 왼쪽 자식 == 이중 검은색 노드 (이동 대상 노드)
+//TODO : 왼쪽과 오른쪽이 바꾸었으므로, 
+		-BB BR, -BB RB에 대해 수정 할 것
 
 												2-1-1) DEF1)을 위반하는 이중 검은색 노드 (이동 대상 노드)의 한 검은색을 없애기 위해,
 												이중 검은색 노드 (이동 대상 노드)가 존재하는 경로의 검은 노드의 수를 증가시켜야 하므로,
@@ -770,7 +711,6 @@ ADJ_MOVE_TARGET_PROC: //이동 대상 노드의 인접 노드의 색에 따른 �
 		- B : Black
 		- DB : Double Black
 		- 검은색 더미 단말 노드 및 인접한 상위, 하위 트리 생략
-		(모든 경로에 대해 DEF4)를 만족하지 않는 것처럼 보이지만, 인접한 상위, 하위 트리에 추가적인 검은색 노드가 존재)
 
 		1) BBR BB
 		: 이중 검은색 노드 (이동 대상 노드)의 부모 노드의 왼쪽 자식 == 이중 검은색 노드 (이동 대상 노드),
@@ -780,7 +720,9 @@ ADJ_MOVE_TARGET_PROC: //이동 대상 노드의 인접 노드의 색에 따른 �
 				R (sibling)			DB (moveTarget)
 			B		B
 
+
 			=> DEF1)을 위반하는 이중 검은색 노드 (이동 대상 노드)의 한 검은색을 없애기 위해,
+			이중 검은색 노드 (이동 대상 노드)가 존재하는 경로의 검은 노드의 수를 증가시켜야 하므로,
 			이중 검은색 노드 (이동 대상 노드)의 형제 노드로 자신의 한 검은색을 전달
 
 			- 이중 검은색 노드 (이동 대상 노드)의 형제 노드가 존재하는 경로의 검은 노드의 수 증가
@@ -789,6 +731,11 @@ ADJ_MOVE_TARGET_PROC: //이동 대상 노드의 인접 노드의 색에 따른 �
 							B
 				B (sibling)			B (moveTarget)
 			B		B
+
+			=> 이중 검은색 노드 (이동 대상 노드)의 형제 노드가 존재하는 경로의 검은 노드의 수 감소를 통한 복구 및
+			이중 검은색 노드 (이동 대상 노드)가 존재하는 경로의 검은 노드의 수 증가를 통한 복구를 위해
+
+
 
 			=> 이중 검은색 노드 (이동 대상 노드)의 형제 노드가 존재하는 경로의 검은 노드의 수 감소를 통한 복구 및
 			이중 검은색 노드 (이동 대상 노드)가 존재하는 경로의 검은 노드의 수 증가를 통한 복구를 위해
@@ -804,10 +751,6 @@ ADJ_MOVE_TARGET_PROC: //이동 대상 노드의 인접 노드의 색에 따른 �
 		2) -BB BB
 		: 이중 검은색 노드 (이동 대상 노드)의 부모 노드의 왼쪽 자식 == 이중 검은색 노드 (이동 대상 노드),
 		이중 검은색 노드 (이동 대상 노드)의 부모 노드의 오른쪽 자식 == 이중 검은색 노드 (이동 대상 노드)
-
-							B (or R)
-				B (sibling)			DB (moveTarget)
-			B		B
 
 			2-1) 이중 검은색 노드 (이동 대상 노드)의 부모 노드의 색 == 빨간색
 
@@ -865,37 +808,11 @@ ADJ_MOVE_TARGET_PROC: //이동 대상 노드의 인접 노드의 색에 따른 �
 
 			3-1) 이중 검은색 노드 (이동 대상 노드)의 부모 노드의 왼쪽 자식 == 이중 검은색 노드 (이동 대상 노드)
 
-							B (or R)
-				B (sibling)			DB (moveTarget)
-			R		B
-
-			=> DEF1)을 위반하는 이중 검은색 노드 (이동 대상 노드)의 한 검은색을 없애기 위해,
-			이중 검은색 노드 (이동 대상 노드)가 존재하는 경로의 검은 노드의 수를 증가시켜야 하므로,
-			이중 검은색 노드 (이동 대상 노드)의 부모 노드 기준 이중 검은색 노드 (이동 대상 노드)가 존재하는 방향으로 회전 및
-			이중 검은색 노드 (이동 대상 노드)의 형제 노드의 왼쪽 빨간색 자식 노드의 색 변경 (빨간색 => 검은색)
-
-			- 이중 검은색 노드 (이동 대상 노드)가 존재하는 경로의 검은 노드의 수 증가
-
-						B (oldSibling)
-				B					B (or R)
-								B		DB (moveTarget)
-
-			=> 이중 검은색 노드 (이동 대상 노드)가 존재하는 경로의 검은 노드의 수 감소를 통한 복구를 위해,
-			이중 검은색 노드 (이동 대상 노드)의 한 검은색 제거,
-			현재 하위 트리의 루트 노드의 색을 이전 색으로 복구를 위해,
-			이중 검은색 노드 (이동 대상 노드)의 형제 노드 (회전 발생 전)와 회전 발생 전 하위 트리의 루트 노드 간의 색 SWAP
-
-						B (or R, oldSibling)
-				B					B
-								B		B (moveTarget)
-
-			3-2) 이중 검은색 노드 (이동 대상 노드)의 부모 노드의 오른쪽 자식 == 이중 검은색 노드 (이동 대상 노드)
-
 								B (or R)
 				DB (moveTarget)			B (sibling)
 									R		B
 
-			=> 최종 결과를 위 3-1)과 같은 형태로 만들기 위해,
+			=> 최종 결과를 아래 3-2)과 같은 형태로 만들기 위해,
 			이중 검은색 노드 (이동 대상 노드)의 형제 노드 기준 우회전 및
 			이중 검은색 노드 (이동 대상 노드)의 형제 노드의 왼쪽 빨간색 자식 노드의 색 변경 (빨간색 => 검은색)
 
@@ -924,17 +841,69 @@ ADJ_MOVE_TARGET_PROC: //이동 대상 노드의 인접 노드의 색에 따른 �
 
 							B (or R)
 					B 				B (oldSibling)
-			B (moveTarget)				B
+			B (moveTarget)					B
+
+			3-2) 이중 검은색 노드 (이동 대상 노드)의 부모 노드의 오른쪽 자식 == 이중 검은색 노드 (이동 대상 노드)
+
+							B (or R)
+				B (sibling)			DB (moveTarget)
+			R		B
+
+			=> DEF1)을 위반하는 이중 검은색 노드 (이동 대상 노드)의 한 검은색을 없애기 위해,
+			이중 검은색 노드 (이동 대상 노드)가 존재하는 경로의 검은 노드의 수를 증가시켜야 하므로,
+			이중 검은색 노드 (이동 대상 노드)의 부모 노드 기준 이중 검은색 노드 (이동 대상 노드)가 존재하는 방향으로 회전 및
+			이중 검은색 노드 (이동 대상 노드)의 형제 노드의 왼쪽 빨간색 자식 노드의 색 변경 (빨간색 => 검은색)
+
+			- 이중 검은색 노드 (이동 대상 노드)가 존재하는 경로의 검은 노드의 수 증가
+
+						B (oldSibling)
+				B					B (or R)
+								B		DB (moveTarget)
+
+			=> 이중 검은색 노드 (이동 대상 노드)가 존재하는 경로의 검은 노드의 수 감소를 통한 복구를 위해,
+			이중 검은색 노드 (이동 대상 노드)의 한 검은색 제거,
+			현재 하위 트리의 루트 노드의 색을 이전 색으로 복구를 위해,
+			이중 검은색 노드 (이동 대상 노드)의 형제 노드 (회전 발생 전)와 회전 발생 전 하위 트리의 루트 노드 간의 색 SWAP
+
+						B (or R, oldSibling)
+				B					B
+								B		B (moveTarget)
 
 		4) -BB BR
 
 			4-1) 이중 검은색 노드 (이동 대상 노드)의 부모 노드의 왼쪽 자식 == 이중 검은색 노드 (이동 대상 노드)
 
+								B (or R)
+				DB (moveTarget)			B (sibling)
+									B		R
+
+			=> DEF1)을 위반하는 이중 검은색 노드 (이동 대상 노드)의 한 검은색을 없애기 위해,
+			이중 검은색 노드 (이동 대상 노드)가 존재하는 경로의 검은 노드의 수를 증가시켜야 하므로,
+			이중 검은색 노드 (이동 대상 노드)의 부모 노드 기준 이중 검은색 노드 (이동 대상 노드)가 존재하는 방향으로 회전 및
+			이중 검은색 노드 (이동 대상 노드)의 형제 노드의 오른쪽 빨간색 자식 노드의 색 변경 (빨간색 => 검은색)
+
+			- 이중 검은색 노드 (이동 대상 노드)가 존재하는 경로의 검은 노드의 수 증가
+
+							B (oldSibling)
+					B (or R)			B
+			DB (moveTarget)	B
+
+			=> 이중 검은색 노드 (이동 대상 노드)가 존재하는 경로의 검은 노드의 수 감소를 통한 복구를 위해,
+			이중 검은색 노드 (이동 대상 노드)의 한 검은색 제거,
+			현재 하위 트리의 루트 노드의 색을 이전 색으로 복구를 위해,
+			이중 검은색 노드 (이동 대상 노드)의 형제 노드 (회전 발생 전)와 회전 발생 전 하위 트리의 루트 노드 간의 색 SWAP
+
+							B (or R, oldSibling)
+					B					B
+			B (moveTarget)	B
+
+			4-2) 이중 검은색 노드 (이동 대상 노드)의 부모 노드의 오른쪽 자식 == 이중 검은색 노드 (이동 대상 노드)
+
 							B (or R)
 				B (sibling)			DB (moveTarget)
 			B		R
 
-			=> 최종 결과를 아래 4-2)과 같은 형태로 만들기 위해,
+			=> 최종 결과를 위 4-1)과 같은 형태로 만들기 위해,
 			이중 검은색 노드 (이동 대상 노드)의 형제 노드 기준 좌회전 및
 			이중 검은색 노드 (이동 대상 노드)의 형제 노드의 오른쪽 빨간색 자식 노드의 색 변경 (빨간색 => 검은색)
 
@@ -965,32 +934,7 @@ ADJ_MOVE_TARGET_PROC: //이동 대상 노드의 인접 노드의 색에 따른 �
 				B (oldSibling)			B
 			B								B (moveTarget)
 
-			4-2) 이중 검은색 노드 (이동 대상 노드)의 부모 노드의 오른쪽 자식 == 이중 검은색 노드 (이동 대상 노드)
-
-							B (or R)
-				DB (moveTarget)			B (sibling)
-									B		R
-
-			=> DEF1)을 위반하는 이중 검은색 노드 (이동 대상 노드)의 한 검은색을 없애기 위해,
-			이중 검은색 노드 (이동 대상 노드)가 존재하는 경로의 검은 노드의 수를 증가시켜야 하므로,
-			이중 검은색 노드 (이동 대상 노드)의 부모 노드 기준 이중 검은색 노드 (이동 대상 노드)가 존재하는 방향으로 회전 및
-			이중 검은색 노드 (이동 대상 노드)의 형제 노드의 오른쪽 빨간색 자식 노드의 색 변경 (빨간색 => 검은색)
-
-			- 이중 검은색 노드 (이동 대상 노드)가 존재하는 경로의 검은 노드의 수 증가
-
-							B (oldSibling)
-					B (or R)			B
-			DB (moveTarget)	B
-
-			=> 이중 검은색 노드 (이동 대상 노드)가 존재하는 경로의 검은 노드의 수 감소를 통한 복구를 위해,
-			이중 검은색 노드 (이동 대상 노드)의 한 검은색 제거,
-			현재 하위 트리의 루트 노드의 색을 이전 색으로 복구를 위해,
-			이중 검은색 노드 (이동 대상 노드)의 형제 노드 (회전 발생 전)와 회전 발생 전 하위 트리의 루트 노드 간의 색 SWAP
-
-							B (or R, oldSibling)
-					B					B
-			B (moveTarget)	B
-
+//TODO : 왼쪽과 오른쪽이 바뀌었으므로 -BB RR 수정
 		5) -BB RR
 
 			5-1) 이중 검은색 노드 (이동 대상 노드)의 부모 노드의 왼쪽 자식 == 이중 검은색 노드 (이동 대상 노드)
@@ -1023,6 +967,9 @@ ADJ_MOVE_TARGET_PROC: //이동 대상 노드의 인접 노드의 색에 따른 �
 			R								B (moveTarget)
 	***/
 
+	//TODO : -BB RR, -BB RB, -BB BR 수정
+
+
 	while (moveTargetNode->_parent != NULL)
 	{
 		moveTargetSiblingNode =
@@ -1034,6 +981,7 @@ ADJ_MOVE_TARGET_PROC: //이동 대상 노드의 인접 노드의 색에 따른 �
 			moveTargetSiblingNode->_color == COLOR::RED)) //RBR -
 			throw std::logic_error(std::string(__func__) + std::string(" : DEF2) violation (Invalid Red-Black Tree : RBR -)"));
 
+		
 		if (moveTargetNode->_color == COLOR::RED) //RR- - or BR- -
 		{
 			moveTargetNode->_color = COLOR::BLACK;
@@ -1093,15 +1041,23 @@ ADJ_MOVE_TARGET_PROC: //이동 대상 노드의 인접 노드의 색에 따른 �
 						moveTargetNode->_parent->_right == moveTargetNode)) //-BB BR or -BB RR (moveTargetNode->_parent->_right == moveTargetNode)
 				{
 					if (moveTargetNode->_parent->_left == moveTargetNode)
+					{
+						moveTargetSiblingNode->_right->_color = COLOR::BLACK;
 						RBT_RotateTree(srcRootNode, moveTargetSiblingNode, ROTATE_DIRECTION::LEFT);
+						moveTargetSiblingNode =
+							(moveTargetNode->_parent->_left == moveTargetNode) ?
+							moveTargetNode->_parent->_right : moveTargetNode->_parent->_left;
+					}
+
+					SWAP(moveTargetSiblingNode->_color, moveTargetNode->_parent->_color, tmpColor);
 
 					//이중 검은색 노드 (이동 대상 노드)의 부모 노드 기준 이중 검은색 노드 (이동 대상 노드)가 존재하는 방향으로 회전
 					RBT_RotateTree(srcRootNode, moveTargetNode->_parent,
 						(moveTargetNode->_parent->_left == moveTargetNode) ?
 						ROTATE_DIRECTION::LEFT : ROTATE_DIRECTION::RIGHT);
 
-					moveTargetSiblingNode->_right->_color = COLOR::BLACK;
-					SWAP(moveTargetSiblingNode->_color, moveTargetNode->_parent->_color, tmpColor);
+					//moveTargetSiblingNode->_right->_color = COLOR::BLACK;
+					
 					goto END_PROC;
 				}
 				else
@@ -1112,6 +1068,7 @@ ADJ_MOVE_TARGET_PROC: //이동 대상 노드의 인접 노드의 색에 따른 �
 				break;
 			}
 		}
+		
 	}
 
 	goto END_PROC;
@@ -1120,12 +1077,9 @@ END_PROC:
 	(*srcRootNode)->_color = COLOR::BLACK;
 
 	if ((*srcRootNode) == dummyBlackTerminalNode)
-	{
-		NODE* tmpAddr = dummyBlackTerminalNode;
-
 		(*srcRootNode) = NULL;
-		dummyBlackTerminalNode = tmpAddr;
-	}
+
+	dummyBlackTerminalNode->_parent = dummyBlackTerminalNode->_left = dummyBlackTerminalNode->_right = NULL;
 
 	if (deallocateAfterRemove)
 		RBT_DeallocateNode(&removeTargetNode);
@@ -1235,6 +1189,7 @@ void RBT_InsertNodeHelper(NODE** srcRootNode, NODE* srcNewNode)
 		}
 	}
 }
+
 
 /// <summary>
 /// 대상 트리의 대상 부모 노드와 대상 부모 노드의 자식 노드 간에 회전 방향에 따른 회전 수행
@@ -1384,6 +1339,13 @@ size_t RBT_GetColorCount(NODE* srcRootNode, COLOR color, PATH_DIRECTION pathDire
 		if (srcRootNode->_left != NULL)
 			retVal += RBT_GetColorCount(srcRootNode->_left, color, pathDirection);
 		break;
+
+	case PATH_DIRECTION::BOTH:
+		if (srcRootNode->_right != NULL)
+			retVal += RBT_GetColorCount(srcRootNode->_right, color, pathDirection);
+		if (srcRootNode->_left != NULL)
+			retVal += RBT_GetColorCount(srcRootNode->_left, color, pathDirection);
+		break;
 	}
 
 	return retVal;
@@ -1421,6 +1383,14 @@ void RBT_ValidateTree(NODE* srcRootNode)
 	std::stack<std::tuple<NODE*, char>> callStack; //Call Stack
 	callStack.push(std::make_tuple(currentNode, execBranchSingleFlag));
 
+	size_t leftPathBlackNodeCount = 0;
+	size_t rightPathBlackNodeCount = 0;
+
+	size_t leftNodeLeftPathBlackNodeCount = 0;
+	size_t leftNodeRightPathBlackNodeCount = 0;
+	size_t rightNodeLeftPathBlackNodeCount = 0;
+	size_t rightNodeRightPathBlackNodeCount = 0;
+
 	while (!callStack.empty())
 	{
 		std::tie(currentNode, execBranchSingleFlag) = callStack.top();
@@ -1432,10 +1402,51 @@ void RBT_ValidateTree(NODE* srcRootNode)
 				(currentNode->_left->_color == COLOR::RED ||
 					currentNode->_right->_color == COLOR::RED)) //DEF2) validation
 				throw std::logic_error(std::string(__func__) + std::string(" : DEF2) violation (Invalid Red-Black Tree)"));
+			
+			try //DEF4) validation
+			{
+				if (srcRootNode->_color == COLOR::BLACK)
+				{
+					leftPathBlackNodeCount += 1;
+					rightPathBlackNodeCount += 1;
+				}
 
-			if (RBT_GetColorCount(srcRootNode, COLOR::BLACK, PATH_DIRECTION::LEFT) !=
-				RBT_GetColorCount(srcRootNode, COLOR::BLACK, PATH_DIRECTION::RIGHT)) //DEF4) validation
-				throw std::logic_error(std::string(__func__) + std::string(" : DEF4) violation (Invalid Red-Black Tree)"));
+				leftNodeLeftPathBlackNodeCount = RBT_GetColorCount(srcRootNode->_left, COLOR::BLACK, PATH_DIRECTION::LEFT);
+				leftNodeRightPathBlackNodeCount = RBT_GetColorCount(srcRootNode->_left, COLOR::BLACK, PATH_DIRECTION::RIGHT);
+
+				if (leftNodeLeftPathBlackNodeCount == leftNodeRightPathBlackNodeCount)
+					leftPathBlackNodeCount += leftNodeLeftPathBlackNodeCount;
+				else
+					throw std::logic_error(std::string(__func__) + std::string(" : DEF4) violation (Invalid Red-Black Tree)"));
+
+				rightNodeLeftPathBlackNodeCount = RBT_GetColorCount(srcRootNode->_right, COLOR::BLACK, PATH_DIRECTION::LEFT);
+				rightNodeRightPathBlackNodeCount = RBT_GetColorCount(srcRootNode->_right, COLOR::BLACK, PATH_DIRECTION::RIGHT);
+
+				if (rightNodeLeftPathBlackNodeCount == rightNodeRightPathBlackNodeCount)
+					rightPathBlackNodeCount += rightNodeLeftPathBlackNodeCount;
+				else
+					throw std::logic_error(std::string(__func__) + std::string(" : DEF4) violation (Invalid Red-Black Tree)"));
+
+				if (leftPathBlackNodeCount != rightPathBlackNodeCount)
+					throw std::logic_error(std::string(__func__) + std::string(" : DEF4) violation (Invalid Red-Black Tree)"));
+
+			}
+			catch (std::logic_error ex)
+			{
+				std::cout << "Current Node : " << srcRootNode->_data << "\n";
+				std::cout << "Current Node Left : " << srcRootNode->_left->_data << "\n";
+				std::cout << "Current Node Right : " << srcRootNode->_right->_data << "\n";
+				std::cout << "---\n";
+				std::cout << "leftPathBlackNodeCount : " << leftPathBlackNodeCount << "\n";
+				std::cout << "rightPathBlackNodeCount : " << rightPathBlackNodeCount << "\n";
+				std::cout << "---\n";
+				std::cout << "leftNodeLeftPathBlackNodeCount : " << leftNodeLeftPathBlackNodeCount << "\n";
+				std::cout << "leftNodeRightPathBlackNodeCount : " << leftNodeRightPathBlackNodeCount << "\n";
+				std::cout << "rightNodeLeftPathBlackNodeCount : " << rightNodeLeftPathBlackNodeCount << "\n";
+				std::cout << "rightNodeRightPathBlackNodeCount : " << rightNodeRightPathBlackNodeCount << "\n";
+
+				throw ex;
+			}
 
 			std::get<1>(callStack.top()) = (0x1);
 
@@ -1444,7 +1455,7 @@ void RBT_ValidateTree(NODE* srcRootNode)
 			{
 				if (currentNode->_data <= currentNode->_left->_data) //DEF5) validation
 				{
-					std::cout << currentNode->_data << ", " << currentNode->_left->_data << "\n";
+					std::cout << "current : " << currentNode->_data << ", left : " << currentNode->_left->_data << "\n";
 					throw std::logic_error(std::string(__func__) + std::string(" : DEF5) violation (Invalid Red-Black Tree)"));
 				}
 				std::get<1>(callStack.top()) = (0x2);
@@ -1457,7 +1468,7 @@ void RBT_ValidateTree(NODE* srcRootNode)
 			{
 				if (currentNode->_data >= currentNode->_right->_data) //DEF5) validation
 				{
-					std::cout << currentNode->_data << ", " << currentNode->_right->_data << "\n";
+					std::cout << "current : " << currentNode->_data << ", right : " << currentNode->_right->_data << "\n";
 					throw std::logic_error(std::string(__func__) + std::string(" : DEF5) violation (Invalid Red-Black Tree)"));
 				}
 				std::get<1>(callStack.top()) = (0x3);
