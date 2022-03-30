@@ -1,13 +1,13 @@
-#include "LLS_Core.h"
+ï»¿#include "LLS_Core.h"
 
 int main()
 {
 	_CrtMemState oldState, newState, lastState;
-	_CrtMemCheckpoint(&oldState); //ÇÒ´ç Àü »óÅÂ
+	_CrtMemCheckpoint(&oldState); //í• ë‹¹ ì „ ìƒíƒœ
 	
 	try
 	{
-		LINKED_LIST_STACK* stack = NULL; //´ÜÀÏ ¿¬°á ¸®½ºÆ® ½ºÅÃ
+		LINKED_LIST_STACK* stack = NULL; //ë‹¨ì¼ ì—°ê²° ë¦¬ìŠ¤íŠ¸ ìŠ¤íƒ
 		LLS_CreateStack(&stack);
 		LLS_Push(&stack, LLS_CreateNode("abc"));
 		LLS_Push(&stack, LLS_CreateNode("123"));
@@ -22,12 +22,12 @@ int main()
 			std::cout << "--- Before Pop ---\n";
 			std::cout << "Peek Data : " << LLS_Peek(&stack)->_data << std::endl;
 			std::cout << "IsEmpty : " << (LLS_IsEmpty(&stack) ? "true" : "false") << std::endl;
-			std::cout << "ÀüÃ¼ ³ëµå µ¥ÀÌÅÍ °³¼ö : " << LLS_GetTotalNodeCount(&stack) << std::endl;
+			std::cout << "ì „ì²´ ë…¸ë“œ ê°œìˆ˜ : " << LLS_GetTotalNodeCount(&stack) << std::endl;
 			poppedNode = LLS_Pop(&stack);
 			std::cout << "--- After Pop ---\n";
 			std::cout << "Pop Data : " << poppedNode->_data << std::endl;
 			std::cout << "IsEmpty : " << (LLS_IsEmpty(&stack) ? "true" : "false") << std::endl;
-			std::cout << "ÀüÃ¼ ³ëµå µ¥ÀÌÅÍ °³¼ö : " << LLS_GetTotalNodeCount(&stack) << std::endl;
+			std::cout << "ì „ì²´ ë…¸ë“œ ê°œìˆ˜ : " << LLS_GetTotalNodeCount(&stack) << std::endl;
 			std::cout << "-------------------------------------------\n";
 			LLS_DeallocateNode(&poppedNode);
 		}
@@ -41,7 +41,7 @@ int main()
 		exit(EXIT_FAILURE);
 	}
 
-	_CrtMemCheckpoint(&newState); //ÇÒ´ç ÇØÁ¦ ÈÄ »óÅÂ
+	_CrtMemCheckpoint(&newState); //í• ë‹¹ í•´ì œ í›„ ìƒíƒœ
 	_CrtDumpMemoryLeaks();
 	if (_CrtMemDifference(&lastState, &oldState, &newState))
 		_CrtMemDumpStatistics(&lastState);

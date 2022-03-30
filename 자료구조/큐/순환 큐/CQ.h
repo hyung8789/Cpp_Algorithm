@@ -23,7 +23,7 @@ void CQ_DeallocateQueue(CIRCULAR_QUEUE**);
 void CQ_Enqueue(CIRCULAR_QUEUE**, DATA_TYPE);
 DATA_TYPE CQ_Dequeue(CIRCULAR_QUEUE**);
 
-QUEUE_INDEX_TYPE CQ_GetTotalNodeDataCount(CIRCULAR_QUEUE**);
+QUEUE_INDEX_TYPE CQ_GetTotalNodeCount(CIRCULAR_QUEUE**);
 bool CQ_IsEmpty(CIRCULAR_QUEUE**);
 bool CQ_IsFull(CIRCULAR_QUEUE**);
 #endif

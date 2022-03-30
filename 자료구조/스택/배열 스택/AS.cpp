@@ -1,10 +1,10 @@
-#include "AS_Core.h"
+ï»¿#include "AS_Core.h"
 
 /// <summary>
-/// ´ë»ó ¹è¿­ ½ºÅÃ¿¡ ÇÒ´ç Å©±â¸¸Å­ ¹è¿­ ½ºÅÃ »ý¼º
+/// ëŒ€ìƒ ë°°ì—´ ìŠ¤íƒì— í• ë‹¹ í¬ê¸°ë§Œí¼ ë°°ì—´ ìŠ¤íƒ ìƒì„±
 /// </summary>
-/// <param name="srcArrayStack">´ë»ó ¹è¿­ ½ºÅÃ</param>
-/// <param name="capacity">ÇÒ´ç Å©±â</param>
+/// <param name="srcArrayStack">ëŒ€ìƒ ë°°ì—´ ìŠ¤íƒ</param>
+/// <param name="capacity">í• ë‹¹ í¬ê¸°</param>
 void AS_CreateStack(ARRAY_STACK** srcArrayStack, STACK_INDEX_TYPE capacity)
 {
 	if ((*srcArrayStack) != NULL)
@@ -17,7 +17,7 @@ void AS_CreateStack(ARRAY_STACK** srcArrayStack, STACK_INDEX_TYPE capacity)
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-	(*srcArrayStack)->_nodeArray = (NODE*)malloc(sizeof(NODE) * capacity); //ÇÒ´ç Å©±â¸¸Å­ »ý¼º
+	(*srcArrayStack)->_nodeArray = (NODE*)malloc(sizeof(NODE) * capacity); //í• ë‹¹ í¬ê¸°ë§Œí¼ ìƒì„±
 	if ((*srcArrayStack)->_nodeArray == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
@@ -26,9 +26,9 @@ void AS_CreateStack(ARRAY_STACK** srcArrayStack, STACK_INDEX_TYPE capacity)
 }
 
 /// <summary>
-/// ´ë»ó ¹è¿­ ½ºÅÃ¿¡ ÇÒ´ç µÈ ¸Þ¸ð¸® ÇØÁ¦
+/// ëŒ€ìƒ ë°°ì—´ ìŠ¤íƒì— í• ë‹¹ ëœ ë©”ëª¨ë¦¬ í•´ì œ
 /// </summary>
-/// <param name="srcArrayStack">´ë»ó ¹è¿­ ½ºÅÃ</param>
+/// <param name="srcArrayStack">ëŒ€ìƒ ë°°ì—´ ìŠ¤íƒ</param>
 void AS_DeallocateArrayStack(ARRAY_STACK** srcArrayStack)
 {
 	if ((*srcArrayStack) != NULL)
@@ -42,19 +42,19 @@ void AS_DeallocateArrayStack(ARRAY_STACK** srcArrayStack)
 }
 
 /// <summary>
-/// ´ë»ó ¹è¿­ ½ºÅÃÀÇ ¼øÂ÷ÀûÀÎ ÃÖ»óÀ§ µ¥ÀÌÅÍ »ðÀÔ
+/// ëŒ€ìƒ ë°°ì—´ ìŠ¤íƒì˜ ìˆœì°¨ì ì¸ ìµœìƒìœ„ ë°ì´í„° ì‚½ìž…
 /// </summary>
-/// <param name="srcArrayStack">´ë»ó ¹è¿­ ½ºÅÃ</param>
-/// <param name="srcData">»ðÀÔ ÇÒ µ¥ÀÌÅÍ</param>
+/// <param name="srcArrayStack">ëŒ€ìƒ ë°°ì—´ ìŠ¤íƒ</param>
+/// <param name="srcData">ì‚½ìž… í•  ë°ì´í„°</param>
 void AS_Push(ARRAY_STACK** srcArrayStack, DATA_TYPE srcData)
 {
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	if (AS_IsFull(srcArrayStack)) //°¡µæ Ã¡À¸¸é
+	if (AS_IsFull(srcArrayStack)) //ê°€ë“ ì°¼ìœ¼ë©´
 	{
-		STACK_INDEX_TYPE reallocCapacity = (*srcArrayStack)->_capacity + ceil((*srcArrayStack)->_capacity * CAPACITY_REALLOC_RATIO); //Àç ÇÒ´ç µÉ Å©±â
-		STACK_INDEX_TYPE reallocSizeInBytes = sizeof(NODE) * reallocCapacity; //Àç ÇÒ´ç µÉ ¹ÙÀÌÆ® ´ÜÀ§ Å©±â
+		STACK_INDEX_TYPE reallocCapacity = (*srcArrayStack)->_capacity + ceil((*srcArrayStack)->_capacity * CAPACITY_REALLOC_RATIO); //ìž¬ í• ë‹¹ ë  í¬ê¸°
+		STACK_INDEX_TYPE reallocSizeInBytes = sizeof(NODE) * reallocCapacity; //ìž¬ í• ë‹¹ ë  ë°”ì´íŠ¸ ë‹¨ìœ„ í¬ê¸°
 
 		void* reallocAddr = realloc((*srcArrayStack)->_nodeArray, reallocSizeInBytes);
 		if (reallocAddr == NULL)
@@ -64,28 +64,28 @@ void AS_Push(ARRAY_STACK** srcArrayStack, DATA_TYPE srcData)
 		(*srcArrayStack)->_capacity = reallocCapacity;
 	}
 
-	STACK_INDEX_TYPE index = (*srcArrayStack)->_top++; //Push ÇÒ ÀÎµ¦½º
+	STACK_INDEX_TYPE index = (*srcArrayStack)->_top++; //Push í•  ì¸ë±ìŠ¤
 	(*srcArrayStack)->_nodeArray[index]._data = srcData;
 }
 
 /// <summary>
-/// ´ë»ó ¹è¿­ ½ºÅÃÀÇ ¼øÂ÷ÀûÀÎ ÃÖ»óÀ§ µ¥ÀÌÅÍ Á¦°Å ¹× ¹ÝÈ¯
+/// ëŒ€ìƒ ë°°ì—´ ìŠ¤íƒì˜ ìˆœì°¨ì ì¸ ìµœìƒìœ„ ë°ì´í„° ì œê±° ë° ë°˜í™˜
 /// </summary>
-/// <param name="srcArrayStack">´ë»ó ¹è¿­ ½ºÅÃ</param>
-/// <returns>´ë»ó ¹è¿­ ½ºÅÃÀÇ ÃÖ»óÀ§ µ¥ÀÌÅÍ</returns>
+/// <param name="srcArrayStack">ëŒ€ìƒ ë°°ì—´ ìŠ¤íƒ</param>
+/// <returns>ëŒ€ìƒ ë°°ì—´ ìŠ¤íƒì˜ ìµœìƒìœ„ ë°ì´í„°</returns>
 DATA_TYPE AS_Pop(ARRAY_STACK** srcArrayStack)
 {
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	if (AS_IsEmpty(srcArrayStack)) //ºñ¾îÀÖÀ¸¸é
+	if (AS_IsEmpty(srcArrayStack)) //ë¹„ì–´ìžˆìœ¼ë©´
 		throw std::logic_error(std::string(__func__) + std::string(" : Empty Stack"));
 
-	if ((AS_GetTotalNodeDataCount(srcArrayStack) / (*srcArrayStack)->_capacity) <
-		CAPACITY_REDUCE_RATIO_THRESHOLD) //»ç¿ë·®¿¡ ´ëÇÑ ºñÀ²ÀÌ ±âÁ¸ ÇÒ´ç Å©±â¿¡ ´ëÇÑ °¨¼Ò°¡ ¹ß»ý µÉ ºó °ø°£ ÀÓ°è ºñÀ² ¹Ì¸¸ÀÏ °æ¿ì
+	if ((AS_GetTotalNodeCount(srcArrayStack) / (*srcArrayStack)->_capacity) <
+		CAPACITY_REDUCE_RATIO_THRESHOLD) //ì‚¬ìš©ëŸ‰ì— ëŒ€í•œ ë¹„ìœ¨ì´ ê¸°ì¡´ í• ë‹¹ í¬ê¸°ì— ëŒ€í•œ ê°ì†Œê°€ ë°œìƒ ë  ë¹ˆ ê³µê°„ ìž„ê³„ ë¹„ìœ¨ ë¯¸ë§Œì¼ ê²½ìš°
 	{
-		STACK_INDEX_TYPE reallocCapacity = (*srcArrayStack)->_capacity - ceil((*srcArrayStack)->_capacity * CAPACITY_REALLOC_RATIO); //Àç ÇÒ´ç µÉ Å©±â
-		STACK_INDEX_TYPE reallocSizeInBytes = sizeof(NODE) * reallocCapacity; //Àç ÇÒ´ç µÉ ¹ÙÀÌÆ® ´ÜÀ§ Å©±â
+		STACK_INDEX_TYPE reallocCapacity = (*srcArrayStack)->_capacity - ceil((*srcArrayStack)->_capacity * CAPACITY_REALLOC_RATIO); //ìž¬ í• ë‹¹ ë  í¬ê¸°
+		STACK_INDEX_TYPE reallocSizeInBytes = sizeof(NODE) * reallocCapacity; //ìž¬ í• ë‹¹ ë  ë°”ì´íŠ¸ ë‹¨ìœ„ í¬ê¸°
 		void* reallocAddr = realloc((*srcArrayStack)->_nodeArray, reallocSizeInBytes);
 		if (reallocAddr == NULL)
 			throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
@@ -94,33 +94,33 @@ DATA_TYPE AS_Pop(ARRAY_STACK** srcArrayStack)
 		(*srcArrayStack)->_capacity = reallocCapacity;
 	}
 
-	STACK_INDEX_TYPE index = --((*srcArrayStack)->_top); //Pop ÇÒ ÀÎµ¦½º
+	STACK_INDEX_TYPE index = --((*srcArrayStack)->_top); //Pop í•  ì¸ë±ìŠ¤
 	return (*srcArrayStack)->_nodeArray[index]._data;
 }
 
 /// <summary>
-/// ´ë»ó ¹è¿­ ½ºÅÃÀÇ ¼øÂ÷ÀûÀÎ ÃÖ»óÀ§ µ¥ÀÌÅÍ Á¦°Å¾øÀÌ ¹ÝÈ¯ 
+/// ëŒ€ìƒ ë°°ì—´ ìŠ¤íƒì˜ ìˆœì°¨ì ì¸ ìµœìƒìœ„ ë°ì´í„° ì œê±°ì—†ì´ ë°˜í™˜ 
 /// </summary>
-/// <param name="srcArrayStack">´ë»ó ¹è¿­ ½ºÅÃ</param>
-/// <returns>´ë»ó ¹è¿­ ½ºÅÃÀÇ ÃÖ»óÀ§ µ¥ÀÌÅÍ</returns>
+/// <param name="srcArrayStack">ëŒ€ìƒ ë°°ì—´ ìŠ¤íƒ</param>
+/// <returns>ëŒ€ìƒ ë°°ì—´ ìŠ¤íƒì˜ ìµœìƒìœ„ ë°ì´í„°</returns>
 DATA_TYPE AS_Peek(ARRAY_STACK** srcArrayStack)
 {
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	if (AS_IsEmpty(srcArrayStack)) //ºñ¾îÀÖÀ¸¸é
+	if (AS_IsEmpty(srcArrayStack)) //ë¹„ì–´ìžˆìœ¼ë©´
 		throw std::logic_error(std::string(__func__) + std::string(" : Empty Stack"));
 
-	STACK_INDEX_TYPE index = ((*srcArrayStack)->_top) - 1; //Peek ÇÒ ÀÎµ¦½º
+	STACK_INDEX_TYPE index = ((*srcArrayStack)->_top) - 1; //Peek í•  ì¸ë±ìŠ¤
 	return (*srcArrayStack)->_nodeArray[index]._data;
 }
 
 /// <summary>
-/// ´ë»ó ¹è¿­ ½ºÅÃÀÇ ÀüÃ¼ ³ëµå µ¥ÀÌÅÍ °³¼ö ¹ÝÈ¯
+/// ëŒ€ìƒ ë°°ì—´ ìŠ¤íƒì˜ ì „ì²´ ë…¸ë“œ ê°œìˆ˜ ë°˜í™˜
 /// </summary>
-/// <param name="srcArrayStack">´ë»ó ¹è¿­ ½ºÅÃ</param>
-/// <returns>´ë»ó ¹è¿­ ½ºÅÃÀÇ ÀüÃ¼ ³ëµå µ¥ÀÌÅÍ °³¼ö</returns>
-STACK_INDEX_TYPE AS_GetTotalNodeDataCount(ARRAY_STACK** srcArrayStack)
+/// <param name="srcArrayStack">ëŒ€ìƒ ë°°ì—´ ìŠ¤íƒ</param>
+/// <returns>ëŒ€ìƒ ë°°ì—´ ìŠ¤íƒì˜ ì „ì²´ ë…¸ë“œ ê°œìˆ˜</returns>
+STACK_INDEX_TYPE AS_GetTotalNodeCount(ARRAY_STACK** srcArrayStack)
 {
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -129,10 +129,10 @@ STACK_INDEX_TYPE AS_GetTotalNodeDataCount(ARRAY_STACK** srcArrayStack)
 }
 
 /// <summary>
-/// ´ë»ó ¹è¿­ ½ºÅÃÀÇ °ø¹é ¿©ºÎ ¹ÝÈ¯
+/// ëŒ€ìƒ ë°°ì—´ ìŠ¤íƒì˜ ê³µë°± ì—¬ë¶€ ë°˜í™˜
 /// </summary>
-/// <param name="srcArrayStack">´ë»ó ¹è¿­ ½ºÅÃ</param>
-/// <returns>´ë»ó ¹è¿­ ½ºÅÃÀÇ °ø¹é ¿©ºÎ</returns>
+/// <param name="srcArrayStack">ëŒ€ìƒ ë°°ì—´ ìŠ¤íƒ</param>
+/// <returns>ëŒ€ìƒ ë°°ì—´ ìŠ¤íƒì˜ ê³µë°± ì—¬ë¶€</returns>
 bool AS_IsEmpty(ARRAY_STACK** srcArrayStack)
 {
 	if ((*srcArrayStack) == NULL)
@@ -142,14 +142,14 @@ bool AS_IsEmpty(ARRAY_STACK** srcArrayStack)
 }
 
 /// <summary>
-/// ´ë»ó ¹è¿­ ½ºÅÃÀÇ »ðÀÔ °¡´É ¿©ºÎ ¹ÝÈ¯
+/// ëŒ€ìƒ ë°°ì—´ ìŠ¤íƒì˜ ì‚½ìž… ê°€ëŠ¥ ì—¬ë¶€ ë°˜í™˜
 /// </summary>
-/// <param name="srcArrayStack">´ë»ó ¹è¿­ ½ºÅÃ</param>
-/// <returns>´ë»ó ¹è¿­ ½ºÅÃÀÇ »ðÀÔ °¡´É ¿©ºÎ</returns>
+/// <param name="srcArrayStack">ëŒ€ìƒ ë°°ì—´ ìŠ¤íƒ</param>
+/// <returns>ëŒ€ìƒ ë°°ì—´ ìŠ¤íƒì˜ ì‚½ìž… ê°€ëŠ¥ ì—¬ë¶€</returns>
 bool AS_IsFull(ARRAY_STACK** srcArrayStack)
 {
 	if ((*srcArrayStack) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	return ((*srcArrayStack)->_capacity == (*srcArrayStack)->_top); //ÇÒ´ç Å©±â¿Í µ¿ÀÏÇØÁö´Â ½ÃÁ¡ºÎÅÍ ´õ ÀÌ»ó »ðÀÔ ºÒ°¡´É
+	return ((*srcArrayStack)->_capacity == (*srcArrayStack)->_top); //í• ë‹¹ í¬ê¸°ì™€ ë™ì¼í•´ì§€ëŠ” ì‹œì ë¶€í„° ë” ì´ìƒ ì‚½ìž… ë¶ˆê°€ëŠ¥
 }

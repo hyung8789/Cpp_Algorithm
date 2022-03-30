@@ -1,10 +1,10 @@
-#include "CQ_Core.h"
+ï»¿#include "CQ_Core.h"
 
 /// <summary>
-/// ´ë»ó Å¥¿¡ ÇÒ´ç Å©±â¸¸Å­ Å¥ »ý¼º
+/// ëŒ€ìƒ íì— í• ë‹¹ í¬ê¸°ë§Œí¼ í ìƒì„±
 /// </summary>
-/// <param name="srcCircularQueue">´ë»ó Å¥</param>
-/// <param name="capacity">ÇÒ´ç Å©±â</param>
+/// <param name="srcCircularQueue">ëŒ€ìƒ í</param>
+/// <param name="capacity">í• ë‹¹ í¬ê¸°</param>
 void CQ_CreateQueue(CIRCULAR_QUEUE** srcCircularQueue, QUEUE_INDEX_TYPE capacity)
 {
 	if ((*srcCircularQueue) != NULL)
@@ -17,18 +17,18 @@ void CQ_CreateQueue(CIRCULAR_QUEUE** srcCircularQueue, QUEUE_INDEX_TYPE capacity
 	if ((*srcCircularQueue) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-	(*srcCircularQueue)->_nodeArray = (NODE*)malloc(sizeof(NODE) * (capacity + 1)); //ÇÒ´ç Å©±â¸¸Å­ »ðÀÔ À§ÇØ ÇÒ´ç Å©±â + 1·Î ÇÒ´ç
+	(*srcCircularQueue)->_nodeArray = (NODE*)malloc(sizeof(NODE) * (capacity + 1)); //í• ë‹¹ í¬ê¸°ë§Œí¼ ì‚½ìž… ìœ„í•´ í• ë‹¹ í¬ê¸° + 1ë¡œ í• ë‹¹
 	if ((*srcCircularQueue)->_nodeArray == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
 	(*srcCircularQueue)->_front = (*srcCircularQueue)->_rear = 0;
-	(*srcCircularQueue)->_capacity = capacity + 1; //ÇÒ´ç Å©±â¸¸Å­ »ðÀÔ À§ÇØ ÇÒ´ç Å©±â + 1·Î ÇÒ´ç
+	(*srcCircularQueue)->_capacity = capacity + 1; //í• ë‹¹ í¬ê¸°ë§Œí¼ ì‚½ìž… ìœ„í•´ í• ë‹¹ í¬ê¸° + 1ë¡œ í• ë‹¹
 }
 
 /// <summary>
-/// ´ë»ó Å¥¿¡ ÇÒ´ç µÈ ¸Þ¸ð¸® ÇØÁ¦
+/// ëŒ€ìƒ íì— í• ë‹¹ ëœ ë©”ëª¨ë¦¬ í•´ì œ
 /// </summary>
-/// <param name="srcCircularQueue">´ë»ó Å¥</param>
+/// <param name="srcCircularQueue">ëŒ€ìƒ í</param>
 void CQ_DeallocateQueue(CIRCULAR_QUEUE** srcCircularQueue)
 {
 	if ((*srcCircularQueue) != NULL)
@@ -42,16 +42,16 @@ void CQ_DeallocateQueue(CIRCULAR_QUEUE** srcCircularQueue)
 }
 
 /// <summary>
-/// ´ë»ó Å¥ÀÇ ¼øÂ÷ÀûÀÎ µ¥ÀÌÅÍ »ðÀÔ
+/// ëŒ€ìƒ íì˜ ìˆœì°¨ì ì¸ ë°ì´í„° ì‚½ìž…
 /// </summary>
-/// <param name="srcCircularQueue">´ë»ó Å¥</param>
-/// <param name="srcData">»ðÀÔ ÇÒ µ¥ÀÌÅÍ</param>
+/// <param name="srcCircularQueue">ëŒ€ìƒ í</param>
+/// <param name="srcData">ì‚½ìž… í•  ë°ì´í„°</param>
 void CQ_Enqueue(CIRCULAR_QUEUE** srcCircularQueue, DATA_TYPE srcData)
 {
 	if ((*srcCircularQueue) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	if (CQ_IsFull(srcCircularQueue)) //Æ÷È­ »óÅÂÀÏ °æ¿ì
+	if (CQ_IsFull(srcCircularQueue)) //í¬í™” ìƒíƒœì¼ ê²½ìš°
 		throw std::logic_error(std::string(__func__) + std::string(" : Queue is Full"));
 
 	(*srcCircularQueue)->_rear = ((*srcCircularQueue)->_rear + 1) % (*srcCircularQueue)->_capacity;
@@ -59,16 +59,16 @@ void CQ_Enqueue(CIRCULAR_QUEUE** srcCircularQueue, DATA_TYPE srcData)
 }
 
 /// <summary>
-/// ´ë»ó Å¥ÀÇ ¼øÂ÷ÀûÀÎ µ¥ÀÌÅÍ Á¦°Å ¹× ¹ÝÈ¯
+/// ëŒ€ìƒ íì˜ ìˆœì°¨ì ì¸ ë°ì´í„° ì œê±° ë° ë°˜í™˜
 /// </summary>
-/// <param name="srcCircularQueue">´ë»ó Å¥</param>
-/// <returns>´ë»ó Å¥ÀÇ ¼øÂ÷ÀûÀÎ µ¥ÀÌÅÍ</returns>
+/// <param name="srcCircularQueue">ëŒ€ìƒ í</param>
+/// <returns>ëŒ€ìƒ íì˜ ìˆœì°¨ì ì¸ ë°ì´í„°</returns>
 DATA_TYPE CQ_Dequeue(CIRCULAR_QUEUE** srcCircularQueue)
 {
 	if ((*srcCircularQueue) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	if (CQ_IsEmpty(srcCircularQueue)) //°ø¹é »óÅÂÀÏ °æ¿ì
+	if (CQ_IsEmpty(srcCircularQueue)) //ê³µë°± ìƒíƒœì¼ ê²½ìš°
 		throw std::logic_error(std::string(__func__) + std::string(" : Queue is Empty"));
 
 	(*srcCircularQueue)->_front = ((*srcCircularQueue)->_front + 1) % (*srcCircularQueue)->_capacity;
@@ -76,11 +76,11 @@ DATA_TYPE CQ_Dequeue(CIRCULAR_QUEUE** srcCircularQueue)
 }
 
 /// <summary>
-/// ´ë»ó Å¥ÀÇ ÀüÃ¼ ³ëµå µ¥ÀÌÅÍ °³¼ö ¹ÝÈ¯
+/// ëŒ€ìƒ íì˜ ì „ì²´ ë…¸ë“œ ê°œìˆ˜ ë°˜í™˜
 /// </summary>
-/// <param name="srcCircularQueue">´ë»ó Å¥</param>
-/// <returns>´ë»ó Å¥ÀÇ ÀüÃ¼ ³ëµå µ¥ÀÌÅÍ °³¼ö</returns>
-QUEUE_INDEX_TYPE CQ_GetTotalNodeDataCount(CIRCULAR_QUEUE** srcCircularQueue)
+/// <param name="srcCircularQueue">ëŒ€ìƒ í</param>
+/// <returns>ëŒ€ìƒ íì˜ ì „ì²´ ë…¸ë“œ ê°œìˆ˜</returns>
+QUEUE_INDEX_TYPE CQ_GetTotalNodeCount(CIRCULAR_QUEUE** srcCircularQueue)
 {
 	if ((*srcCircularQueue) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -89,27 +89,27 @@ QUEUE_INDEX_TYPE CQ_GetTotalNodeDataCount(CIRCULAR_QUEUE** srcCircularQueue)
 }
 
 /// <summary>
-/// ´ë»ó Å¥ÀÇ °ø¹é ¿©ºÎ ¹ÝÈ¯
+/// ëŒ€ìƒ íì˜ ê³µë°± ì—¬ë¶€ ë°˜í™˜
 /// </summary>
-/// <param name="srcCircularQueue">´ë»ó Å¥</param>
-/// <returns>´ë»ó Å¥ÀÇ °ø¹é ¿©ºÎ</returns>
+/// <param name="srcCircularQueue">ëŒ€ìƒ í</param>
+/// <returns>ëŒ€ìƒ íì˜ ê³µë°± ì—¬ë¶€</returns>
 bool CQ_IsEmpty(CIRCULAR_QUEUE** srcCircularQueue)
 {
 	if ((*srcCircularQueue) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	return ((*srcCircularQueue)->_front == (*srcCircularQueue)->_rear); //Àü´Ü°ú ÈÄ´ÜÀÌ ¸¸³ª´Â ½ÃÁ¡¿¡ °ø¹é »óÅÂ
+	return ((*srcCircularQueue)->_front == (*srcCircularQueue)->_rear); //ì „ë‹¨ê³¼ í›„ë‹¨ì´ ë§Œë‚˜ëŠ” ì‹œì ì— ê³µë°± ìƒíƒœ
 }
 
 /// <summary>
-/// ´ë»ó Å¥ÀÇ Æ÷È­ ¿©ºÎ ¹ÝÈ¯
+/// ëŒ€ìƒ íì˜ í¬í™” ì—¬ë¶€ ë°˜í™˜
 /// </summary>
-/// <param name="srcCircularQueue">´ë»ó Å¥</param>
-/// <returns>´ë»ó Å¥ÀÇ Æ÷È­ ¿©ºÎ</returns>
+/// <param name="srcCircularQueue">ëŒ€ìƒ í</param>
+/// <returns>ëŒ€ìƒ íì˜ í¬í™” ì—¬ë¶€</returns>
 bool CQ_IsFull(CIRCULAR_QUEUE** srcCircularQueue)
 {
 	if ((*srcCircularQueue) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	return ((*srcCircularQueue)->_rear + 1) % (*srcCircularQueue)->_capacity == (*srcCircularQueue)->_front; //´ÙÀ½¿¡ »ðÀÔ µÉ ÈÄ´ÜÀÇ À§Ä¡¿¡¼­ Àü´ÜÀ» ¸¸³ª¸é Æ÷È­ »óÅÂ
+	return ((*srcCircularQueue)->_rear + 1) % (*srcCircularQueue)->_capacity == (*srcCircularQueue)->_front; //ë‹¤ìŒì— ì‚½ìž… ë  í›„ë‹¨ì˜ ìœ„ì¹˜ì—ì„œ ì „ë‹¨ì„ ë§Œë‚˜ë©´ í¬í™” ìƒíƒœ
 }

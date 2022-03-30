@@ -18,7 +18,7 @@ int main()
 				", Front : " << queue->_front << ", Rear : " << queue->_rear << "\n";
 			CQ_Enqueue(&queue, i);
 		}
-		std::cout << "전체 노드 데이터 수 : " << CQ_GetTotalNodeDataCount(&queue) << std::endl;
+		std::cout << "전체 노드 데이터 수 : " << CQ_GetTotalNodeCount(&queue) << std::endl;
 		std::cout << "---\n";
 
 		while (!CQ_IsEmpty(&queue))
@@ -26,7 +26,7 @@ int main()
 			std::cout << "Dequeue data : " << CQ_Dequeue(&queue) <<
 				", Front : " << queue->_front << ", Rear : " << queue->_rear << "\n";
 		}
-		std::cout << "전체 노드 데이터 수 : " << CQ_GetTotalNodeDataCount(&queue) << std::endl;
+		std::cout << "전체 노드 데이터 수 : " << CQ_GetTotalNodeCount(&queue) << std::endl;
 		std::cout << "---\n";
 
 		CQ_Enqueue(&queue, 1234);

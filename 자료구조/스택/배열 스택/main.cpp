@@ -1,23 +1,23 @@
-#include "AS_Core.h"
+ï»¿#include "AS_Core.h"
 
 #define STACK_SIZE 3
 
 int main()
 {
 	_CrtMemState oldState, newState, lastState;
-	_CrtMemCheckpoint(&oldState); //ÇÒ´ç Àü »óÅÂ
+	_CrtMemCheckpoint(&oldState); //í• ë‹¹ ì „ ìƒíƒœ
 
 	try
 	{
-		ARRAY_STACK* stack = NULL; //¹è¿­ ½ºÅÃ
-		AS_CreateStack(&stack, STACK_SIZE); //STACK_SIZE¸¸Å­ »ğÀÔ °¡´É ÇÑ Å©±â ÇÒ´ç
+		ARRAY_STACK* stack = NULL; //ë°°ì—´ ìŠ¤íƒ
+		AS_CreateStack(&stack, STACK_SIZE); //STACK_SIZEë§Œí¼ ì‚½ì… ê°€ëŠ¥ í•œ í¬ê¸° í• ë‹¹
 
 		for (int i = 0; i < STACK_SIZE; i++)
 		{
 			AS_Push(&stack, i);
 		}
 
-		STACK_INDEX_TYPE count = AS_GetTotalNodeDataCount(&stack);
+		STACK_INDEX_TYPE count = AS_GetTotalNodeCount(&stack);
 		for (int i = 0; i < count; i++)
 		{
 			std::cout << "-------------------------------------------\n";
@@ -26,19 +26,19 @@ int main()
 			std::cout << "Top Index : " << stack->_top << std::endl;
 			std::cout << "IsEmpty : " << (AS_IsEmpty(&stack) ? "true" : "false") << std::endl;
 			std::cout << "IsFull : " << (AS_IsFull(&stack) ? "true" : "false") << std::endl;
-			std::cout << "ÀüÃ¼ ³ëµå µ¥ÀÌÅÍ °³¼ö : " << AS_GetTotalNodeDataCount(&stack) << std::endl;
+			std::cout << "ì „ì²´ ë…¸ë“œ ê°œìˆ˜ : " << AS_GetTotalNodeCount(&stack) << std::endl;
 			std::cout << "--- After Pop ---\n";
 			std::cout << "Pop Data : " << AS_Pop(&stack) << std::endl;
 			std::cout << "Top Index : " << stack->_top << std::endl;
 			std::cout << "IsEmpty : " << (AS_IsEmpty(&stack) ? "true" : "false") << std::endl;
 			std::cout << "IsFull : " << (AS_IsFull(&stack) ? "true" : "false") << std::endl;
-			std::cout << "ÀüÃ¼ ³ëµå µ¥ÀÌÅÍ °³¼ö : " << AS_GetTotalNodeDataCount(&stack) << std::endl;
+			std::cout << "ì „ì²´ ë…¸ë“œ ê°œìˆ˜ : " << AS_GetTotalNodeCount(&stack) << std::endl;
 			std::cout << "-------------------------------------------\n";
 		}
 
 		std::cout << "--- realloc test ---\n";
 		int reallocTestSize = STACK_SIZE * 2;
-		for (int i = 0; i < reallocTestSize; i++) //ÃÊ±â ÇÒ´ç Å©±â¸¦ ÃÊ°úÇÏ¿© µ¥ÀÌÅÍ »ğÀÔ
+		for (int i = 0; i < reallocTestSize; i++) //ì´ˆê¸° í• ë‹¹ í¬ê¸°ë¥¼ ì´ˆê³¼í•˜ì—¬ ë°ì´í„° ì‚½ì…
 		{
 			AS_Push(&stack, i);
 			std::cout << "Current Capacity : " << stack->_capacity << std::endl;
@@ -57,7 +57,7 @@ int main()
 		exit(EXIT_FAILURE);
 	}
 
-	_CrtMemCheckpoint(&newState); //ÇÒ´ç ÇØÁ¦ ÈÄ »óÅÂ
+	_CrtMemCheckpoint(&newState); //í• ë‹¹ í•´ì œ í›„ ìƒíƒœ
 	_CrtDumpMemoryLeaks();
 	if (_CrtMemDifference(&lastState, &oldState, &newState))
 		_CrtMemDumpStatistics(&lastState);
