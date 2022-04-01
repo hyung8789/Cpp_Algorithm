@@ -73,6 +73,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "달팽이 배열", "자료�
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "힙", "자료구조\트리\힙\힙.vcxproj", "{822E1A54-D213-414C-ABFE-22FFF0E3D1EB}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "우선순위 큐", "자료구조\큐\우선순위 큐\우선순위 큐.vcxproj", "{0E0AADCC-0FCD-4C25-8BE5-D67B6AB28899}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -257,6 +259,14 @@ Global
 		{822E1A54-D213-414C-ABFE-22FFF0E3D1EB}.Release|x64.Build.0 = Release|x64
 		{822E1A54-D213-414C-ABFE-22FFF0E3D1EB}.Release|x86.ActiveCfg = Release|Win32
 		{822E1A54-D213-414C-ABFE-22FFF0E3D1EB}.Release|x86.Build.0 = Release|Win32
+		{0E0AADCC-0FCD-4C25-8BE5-D67B6AB28899}.Debug|x64.ActiveCfg = Debug|x64
+		{0E0AADCC-0FCD-4C25-8BE5-D67B6AB28899}.Debug|x64.Build.0 = Debug|x64
+		{0E0AADCC-0FCD-4C25-8BE5-D67B6AB28899}.Debug|x86.ActiveCfg = Debug|Win32
+		{0E0AADCC-0FCD-4C25-8BE5-D67B6AB28899}.Debug|x86.Build.0 = Debug|Win32
+		{0E0AADCC-0FCD-4C25-8BE5-D67B6AB28899}.Release|x64.ActiveCfg = Release|x64
+		{0E0AADCC-0FCD-4C25-8BE5-D67B6AB28899}.Release|x64.Build.0 = Release|x64
+		{0E0AADCC-0FCD-4C25-8BE5-D67B6AB28899}.Release|x86.ActiveCfg = Release|Win32
+		{0E0AADCC-0FCD-4C25-8BE5-D67B6AB28899}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -288,6 +298,7 @@ Global
 		{05A422E0-162D-4946-B1D6-3590FACB0364} = {B94DA8CF-A01D-4AD0-A792-B77CEB63955E}
 		{2B1ACC82-D06F-4888-A741-E976DE3517A8} = {8E3064B4-28E2-470E-B62A-33177F953820}
 		{822E1A54-D213-414C-ABFE-22FFF0E3D1EB} = {B94DA8CF-A01D-4AD0-A792-B77CEB63955E}
+		{0E0AADCC-0FCD-4C25-8BE5-D67B6AB28899} = {DB64AB4F-637E-406B-A691-326587D7F084}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D3CD1F56-C927-48C3-B1A1-4D96FE0343E6}

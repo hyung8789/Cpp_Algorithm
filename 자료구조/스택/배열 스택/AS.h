@@ -23,11 +23,11 @@ typedef struct ARRAY_STACK_TYPE
 void AS_CreateStack(ARRAY_STACK**, STACK_INDEX_TYPE);
 void AS_DeallocateArrayStack(ARRAY_STACK**);
 
-void AS_Push(ARRAY_STACK**, DATA_TYPE);
-DATA_TYPE AS_Pop(ARRAY_STACK**);
-DATA_TYPE AS_Peek(ARRAY_STACK**);
+void AS_Push(ARRAY_STACK*, DATA_TYPE);
+DATA_TYPE AS_Pop(ARRAY_STACK*);
+DATA_TYPE AS_Peek(ARRAY_STACK*);
 
-STACK_INDEX_TYPE AS_GetTotalNodeCount(ARRAY_STACK**);
-bool AS_IsEmpty(ARRAY_STACK**);
-bool AS_IsFull(ARRAY_STACK**);
+STACK_INDEX_TYPE AS_GetTotalNodeCount(ARRAY_STACK*);
+bool AS_IsEmpty(ARRAY_STACK*);
+bool AS_IsFull(ARRAY_STACK*);
 #endif

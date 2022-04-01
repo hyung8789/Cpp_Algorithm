@@ -82,7 +82,11 @@ int main()
 
 		/***
 			이론 상 정렬하고자 하는 방법과 역순으로 정렬 된 데이터 (Worst Case)에 대해 정렬 시도 시
-			Average Case 보다 오래 걸려야 정상이지만 CPU의 Branch Prediction에 의해 더 빠르게 나옴
+			Average Case 보다 오래 걸려야 정상이지만,
+			정렬 시 비교에 따른 분기가 발생하는 수행하는
+			CPU의 Branch Prediction에 의해 더 빠르게 나옴
+
+			https://ko.wikipedia.org/wiki/%EB%B6%84%EA%B8%B0_%EC%98%88%EC%B8%A1
 		***/
 
 		for (size_t i = 0; i < totalSortFuncCount; i++)

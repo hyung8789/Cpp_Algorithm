@@ -1,9 +1,9 @@
-#include "LLS_Core.h"
+ï»¿#include "LLS_Core.h"
 
 /// <summary>
-/// ´ë»ó ¿¬°á ¸®½ºÆ® ½ºÅÃ »ý¼º
+/// ëŒ€ìƒ ì—°ê²° ë¦¬ìŠ¤íŠ¸ ìŠ¤íƒ ìƒì„±
 /// </summary>
-/// <param name="srcLinkedListStack">´ë»ó ¿¬°á ¸®½ºÆ® ½ºÅÃ</param>
+/// <param name="srcLinkedListStack">ëŒ€ìƒ ì—°ê²° ë¦¬ìŠ¤íŠ¸ ìŠ¤íƒ</param>
 void LLS_CreateStack(LINKED_LIST_STACK** srcLinkedListStack)
 {
 	if ((*srcLinkedListStack) != NULL)
@@ -18,16 +18,16 @@ void LLS_CreateStack(LINKED_LIST_STACK** srcLinkedListStack)
 }
 
 /// <summary>
-/// ´ë»ó ¿¬°á ¸®½ºÆ®¿¡ ÇÒ´ç µÈ ¸Þ¸ð¸® ÇØÁ¦
+/// ëŒ€ìƒ ì—°ê²° ë¦¬ìŠ¤íŠ¸ì— í• ë‹¹ ëœ ë©”ëª¨ë¦¬ í•´ì œ
 /// </summary>
-/// <param name="srcLinkedListStack">´ë»ó ¿¬°á ¸®½ºÆ®</param>
+/// <param name="srcLinkedListStack">ëŒ€ìƒ ì—°ê²° ë¦¬ìŠ¤íŠ¸</param>
 void LLS_DeallocateLinkedListStack(LINKED_LIST_STACK** srcLinkedListStack)
 {
 	if ((*srcLinkedListStack) != NULL)
 	{
-		while (!LLS_IsEmpty(srcLinkedListStack)) //´ë»ó ¿¬°á ¸®½ºÆ®¿¡ ÇÒ´ç µÈ ÀüÃ¼ ³ëµå¿¡ ´ëÇØ
+		while (!LLS_IsEmpty(*srcLinkedListStack)) //ëŒ€ìƒ ì—°ê²° ë¦¬ìŠ¤íŠ¸ì— í• ë‹¹ ëœ ì „ì²´ ë…¸ë“œì— ëŒ€í•´
 		{
-			NODE* tmp = LLS_Pop(srcLinkedListStack);
+			NODE* tmp = LLS_Pop(*srcLinkedListStack);
 			LLS_DeallocateNode(&tmp);
 		}
 
@@ -37,10 +37,10 @@ void LLS_DeallocateLinkedListStack(LINKED_LIST_STACK** srcLinkedListStack)
 }
 
 /// <summary>
-/// »õ·Î¿î ³ëµå »ý¼º ¹× »ý¼º µÈ ³ëµå ¹ÝÈ¯
+/// ìƒˆë¡œìš´ ë…¸ë“œ ìƒì„± ë° ìƒì„± ëœ ë…¸ë“œ ë°˜í™˜
 /// </summary>
-/// <param name="srcData">³ëµåÀÇ µ¥ÀÌÅÍ</param>
-/// <returns>»ý¼º µÈ ³ëµå</returns>
+/// <param name="srcData">ë…¸ë“œì˜ ë°ì´í„°</param>
+/// <returns>ìƒì„± ëœ ë…¸ë“œ</returns>
 NODE* LLS_CreateNode(const char* srcData)
 {
 	if (srcData == NULL)
@@ -50,7 +50,7 @@ NODE* LLS_CreateNode(const char* srcData)
 	if (retVal == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-	retVal->_data = (char*)malloc(strlen(srcData) + 1); //'\0' Æ÷ÇÔ Å©±â
+	retVal->_data = (char*)malloc(strlen(srcData) + 1); //'\0' í¬í•¨ í¬ê¸°
 	if (retVal->_data == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
@@ -63,9 +63,9 @@ NODE* LLS_CreateNode(const char* srcData)
 }
 
 /// <summary>
-/// ´ë»ó ³ëµå¿¡ ÇÒ´ç µÈ ¸Þ¸ð¸® ÇØÁ¦
+/// ëŒ€ìƒ ë…¸ë“œì— í• ë‹¹ ëœ ë©”ëª¨ë¦¬ í•´ì œ
 /// </summary>
-/// <param name="srcNode">´ë»ó ³ëµå</param>
+/// <param name="srcNode">ëŒ€ìƒ ë…¸ë“œ</param>
 void LLS_DeallocateNode(NODE** srcNode)
 {
 	if ((*srcNode) != NULL)
@@ -82,56 +82,56 @@ void LLS_DeallocateNode(NODE** srcNode)
 }
 
 /// <summary>
-/// ´ë»ó ¿¬°á ¸®½ºÆ® ½ºÅÃÀÇ ¼øÂ÷ÀûÀÎ ÃÖ»óÀ§ ³ëµå »ðÀÔ
+/// ëŒ€ìƒ ì—°ê²° ë¦¬ìŠ¤íŠ¸ ìŠ¤íƒì˜ ìˆœì°¨ì ì¸ ìµœìƒìœ„ ë…¸ë“œ ì‚½ìž…
 /// </summary>
-/// <param name="srcLinkedListStack">´ë»ó ¿¬°á ¸®½ºÆ® ½ºÅÃ</param>
-/// <param name="srcNewNode">»ðÀÔ ÇÒ ³ëµå</param>
-void LLS_Push(LINKED_LIST_STACK** srcLinkedListStack, NODE* srcNewNode)
+/// <param name="srcLinkedListStack">ëŒ€ìƒ ì—°ê²° ë¦¬ìŠ¤íŠ¸ ìŠ¤íƒ</param>
+/// <param name="srcNewNode">ì‚½ìž… í•  ë…¸ë“œ</param>
+void LLS_Push(LINKED_LIST_STACK* srcLinkedListStack, NODE* srcNewNode)
 {
-	if ((*srcLinkedListStack) == NULL)
+	if (srcLinkedListStack == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	if (srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	if ((*srcLinkedListStack)->_head == NULL)
+	if (srcLinkedListStack->_head == NULL)
 	{
-		(*srcLinkedListStack)->_head = (*srcLinkedListStack)->_top = srcNewNode;
+		srcLinkedListStack->_head = srcLinkedListStack->_top = srcNewNode;
 	}
-	else //ÃÖ»óÀ§ ³ëµå ´ÙÀ½¿¡ »õ ³ëµå ¿¬°á ¹× ÃÖ»óÀ§ ³ëµå º¯°æ
+	else //ìµœìƒìœ„ ë…¸ë“œ ë‹¤ìŒì— ìƒˆ ë…¸ë“œ ì—°ê²° ë° ìµœìƒìœ„ ë…¸ë“œ ë³€ê²½
 	{
-		(*srcLinkedListStack)->_top->_next = srcNewNode;
-		(*srcLinkedListStack)->_top = srcNewNode; //ÃÖ»óÀ§ ³ëµå º¯°æ
+		srcLinkedListStack->_top->_next = srcNewNode;
+		srcLinkedListStack->_top = srcNewNode; //ìµœìƒìœ„ ë…¸ë“œ ë³€ê²½
 	}
 
-	(*srcLinkedListStack)->_totalNodeCount++; //ÀüÃ¼ ³ëµå ¼ö Áõ°¡
+	srcLinkedListStack->_totalNodeCount++; //ì „ì²´ ë…¸ë“œ ìˆ˜ ì¦ê°€
 }
 
 /// <summary>
-/// ´ë»ó ¿¬°á ¸®½ºÆ® ½ºÅÃÀÇ ¼øÂ÷ÀûÀÎ ÃÖ»óÀ§ µ¥ÀÌÅÍ Á¦°Å ¹× ¹ÝÈ¯
+/// ëŒ€ìƒ ì—°ê²° ë¦¬ìŠ¤íŠ¸ ìŠ¤íƒì˜ ìˆœì°¨ì ì¸ ìµœìƒìœ„ ë°ì´í„° ì œê±° ë° ë°˜í™˜
 /// </summary>
-/// <param name="srcLinkedListStack">´ë»ó ¿¬°á ¸®½ºÆ® ½ºÅÃ</param>
-/// <returns>´ë»ó ¿¬°á ¸®½ºÆ® ½ºÅÃÀÇ ÃÖ»óÀ§ µ¥ÀÌÅÍ</returns>
-NODE* LLS_Pop(LINKED_LIST_STACK** srcLinkedListStack)
+/// <param name="srcLinkedListStack">ëŒ€ìƒ ì—°ê²° ë¦¬ìŠ¤íŠ¸ ìŠ¤íƒ</param>
+/// <returns>ëŒ€ìƒ ì—°ê²° ë¦¬ìŠ¤íŠ¸ ìŠ¤íƒì˜ ìµœìƒìœ„ ë°ì´í„°</returns>
+NODE* LLS_Pop(LINKED_LIST_STACK* srcLinkedListStack)
 {
 	NODE* retVal = NULL;
 
-	if ((*srcLinkedListStack) == NULL)
+	if (srcLinkedListStack == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	if (LLS_IsEmpty(srcLinkedListStack)) //ºñ¾îÀÖÀ¸¸é
+	if (LLS_IsEmpty(srcLinkedListStack)) //ë¹„ì–´ìžˆìœ¼ë©´
 		throw std::logic_error(std::string(__func__) + std::string(" : Empty Stack"));
 
-	retVal = (*srcLinkedListStack)->_top;
-	(*srcLinkedListStack)->_totalNodeCount--; //ÀüÃ¼ ³ëµå ¼ö °¨¼Ò
+	retVal = srcLinkedListStack->_top;
+	srcLinkedListStack->_totalNodeCount--; //ì „ì²´ ë…¸ë“œ ìˆ˜ ê°ì†Œ
 
-	if (retVal == (*srcLinkedListStack)->_head) //ÃÖ»óÀ§ ³ëµå°¡ Çìµå ³ëµåÀÏ °æ¿ì
+	if (retVal == srcLinkedListStack->_head) //ìµœìƒìœ„ ë…¸ë“œê°€ í—¤ë“œ ë…¸ë“œì¼ ê²½ìš°
 	{
-		(*srcLinkedListStack)->_top = (*srcLinkedListStack)->_head = NULL;
+		srcLinkedListStack->_top = srcLinkedListStack->_head = NULL;
 	}
-	else //´ÜÀÏ ¿¬°á ¸®½ºÆ®ÀÌ¹Ç·Î, ¼øÂ÷ÀûÀ¸·Î ÃÖ»óÀ§ ³ëµåÀÇ ÀÌÀüÀ» Å½»ö
+	else //ë‹¨ì¼ ì—°ê²° ë¦¬ìŠ¤íŠ¸ì´ë¯€ë¡œ, ìˆœì°¨ì ìœ¼ë¡œ ìµœìƒìœ„ ë…¸ë“œì˜ ì´ì „ì„ íƒìƒ‰
 	{
-		NODE* current = (*srcLinkedListStack)->_head;
+		NODE* current = srcLinkedListStack->_head;
 
 		while (current != NULL && current->_next != retVal)
 		{
@@ -141,7 +141,7 @@ NODE* LLS_Pop(LINKED_LIST_STACK** srcLinkedListStack)
 		if (current == NULL)
 			throw std::runtime_error(std::string(__func__) + std::string(" : Unknown Err"));
 
-		(*srcLinkedListStack)->_top = current; //ÃÖ»óÀ§ ³ëµå¸¦ ÃÖ»óÀ§ ³ëµåÀÇ ÀÌÀü ³ëµå·Î º¯°æ
+		srcLinkedListStack->_top = current; //ìµœìƒìœ„ ë…¸ë“œë¥¼ ìµœìƒìœ„ ë…¸ë“œì˜ ì´ì „ ë…¸ë“œë¡œ ë³€ê²½
 		current->_next = NULL;
 	}
 
@@ -149,47 +149,47 @@ NODE* LLS_Pop(LINKED_LIST_STACK** srcLinkedListStack)
 }
 
 /// <summary>
-/// ´ë»ó ¿¬°á ¸®½ºÆ® ½ºÅÃÀÇ ¼øÂ÷ÀûÀÎ ÃÖ»óÀ§ µ¥ÀÌÅÍ Á¦°Å¾øÀÌ ¹ÝÈ¯ 
+/// ëŒ€ìƒ ì—°ê²° ë¦¬ìŠ¤íŠ¸ ìŠ¤íƒì˜ ìˆœì°¨ì ì¸ ìµœìƒìœ„ ë°ì´í„° ì œê±°ì—†ì´ ë°˜í™˜ 
 /// </summary>
-/// <param name="srcLinkedListStack">´ë»ó ¿¬°á ¸®½ºÆ® ½ºÅÃ</param>
-/// <returns>´ë»ó ¿¬°á ¸®½ºÆ® ½ºÅÃÀÇ ÃÖ»óÀ§ µ¥ÀÌÅÍ</returns>
-NODE* LLS_Peek(LINKED_LIST_STACK** srcLinkedListStack)
+/// <param name="srcLinkedListStack">ëŒ€ìƒ ì—°ê²° ë¦¬ìŠ¤íŠ¸ ìŠ¤íƒ</param>
+/// <returns>ëŒ€ìƒ ì—°ê²° ë¦¬ìŠ¤íŠ¸ ìŠ¤íƒì˜ ìµœìƒìœ„ ë°ì´í„°</returns>
+NODE* LLS_Peek(LINKED_LIST_STACK* srcLinkedListStack)
 {
 	NODE* retVal = NULL;
 
-	if ((*srcLinkedListStack) == NULL)
+	if (srcLinkedListStack == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	if (LLS_IsEmpty(srcLinkedListStack)) //ºñ¾îÀÖÀ¸¸é
+	if (LLS_IsEmpty(srcLinkedListStack)) //ë¹„ì–´ìžˆìœ¼ë©´
 		throw std::logic_error(std::string(__func__) + std::string(" : Empty Stack"));
 
-	retVal = (*srcLinkedListStack)->_top;
+	retVal = srcLinkedListStack->_top;
 
 	return retVal;
 }
 
 /// <summary>
-/// ´ë»ó ¿¬°á ¸®½ºÆ® ½ºÅÃÀÇ ÀüÃ¼ ³ëµå °³¼ö ¹ÝÈ¯
+/// ëŒ€ìƒ ì—°ê²° ë¦¬ìŠ¤íŠ¸ ìŠ¤íƒì˜ ì „ì²´ ë…¸ë“œ ê°œìˆ˜ ë°˜í™˜
 /// </summary>
-/// <param name="srcLinkedListStack">´ë»ó ¿¬°á ¸®½ºÆ® ½ºÅÃÀÇ ÀüÃ¼ ³ëµå °³¼ö</param>
+/// <param name="srcLinkedListStack">ëŒ€ìƒ ì—°ê²° ë¦¬ìŠ¤íŠ¸ ìŠ¤íƒì˜ ì „ì²´ ë…¸ë“œ ê°œìˆ˜</param>
 /// <returns></returns>
-STACK_INDEX_TYPE LLS_GetTotalNodeCount(LINKED_LIST_STACK** srcLinkedListStack)
+STACK_INDEX_TYPE LLS_GetTotalNodeCount(LINKED_LIST_STACK* srcLinkedListStack)
 {
-	if ((*srcLinkedListStack) == NULL)
+	if (srcLinkedListStack == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	return (*srcLinkedListStack)->_totalNodeCount;
+	return srcLinkedListStack->_totalNodeCount;
 }
 
 /// <summary>
-/// ´ë»ó ¿¬°á ¸®½ºÆ® ½ºÅÃÀÇ °ø¹é ¿©ºÎ ¹ÝÈ¯
+/// ëŒ€ìƒ ì—°ê²° ë¦¬ìŠ¤íŠ¸ ìŠ¤íƒì˜ ê³µë°± ì—¬ë¶€ ë°˜í™˜
 /// </summary>
-/// <param name="srcLinkedListStack">´ë»ó ¿¬°á ¸®½ºÆ® ½ºÅÃ</param>
-/// <returns>´ë»ó ¿¬°á ¸®½ºÆ® ½ºÅÃÀÇ °ø¹é ¿©ºÎ</returns>
-bool LLS_IsEmpty(LINKED_LIST_STACK** srcLinkedListStack)
+/// <param name="srcLinkedListStack">ëŒ€ìƒ ì—°ê²° ë¦¬ìŠ¤íŠ¸ ìŠ¤íƒ</param>
+/// <returns>ëŒ€ìƒ ì—°ê²° ë¦¬ìŠ¤íŠ¸ ìŠ¤íƒì˜ ê³µë°± ì—¬ë¶€</returns>
+bool LLS_IsEmpty(LINKED_LIST_STACK* srcLinkedListStack)
 {
-	if ((*srcLinkedListStack) == NULL)
+	if (srcLinkedListStack == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	return ((*srcLinkedListStack)->_totalNodeCount == 0);
+	return (srcLinkedListStack->_totalNodeCount == 0);
 }

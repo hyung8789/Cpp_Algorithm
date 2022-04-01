@@ -966,10 +966,7 @@ ADJ_MOVE_TARGET_PROC: //이동 대상 노드의 인접 노드의 색에 따른 �
 					SWAP(moveTargetSiblingNode->_color, moveTargetSiblingNode->_parent->_color, tmpColor);
 
 					//이중 검은색 노드 (이동 대상 노드)의 부모 노드 기준 이중 검은색 노드 (이동 대상 노드)가 존재하는 방향으로 회전
-					RBT_RotateTree(srcRootNode, moveTargetNode->_parent,
-						(moveTargetNode->_parent->_left == moveTargetNode) ?
-						ROTATE_DIRECTION::LEFT : ROTATE_DIRECTION::RIGHT);
-
+					RBT_RotateTree(srcRootNode, moveTargetNode->_parent, ROTATE_DIRECTION::RIGHT);
 					goto END_PROC;
 				}
 				else if (moveTargetNode->_parent->_left == moveTargetNode) //(moveTargetNode->_parent->_left == moveTargetNode) : -BB RB or -BB BR or -BB RR
@@ -989,10 +986,7 @@ ADJ_MOVE_TARGET_PROC: //이동 대상 노드의 인접 노드의 색에 따른 �
 					SWAP(moveTargetSiblingNode->_color, moveTargetSiblingNode->_parent->_color, tmpColor);
 
 					//이중 검은색 노드 (이동 대상 노드)의 부모 노드 기준 이중 검은색 노드 (이동 대상 노드)가 존재하는 방향으로 회전
-					RBT_RotateTree(srcRootNode, moveTargetNode->_parent,
-						(moveTargetNode->_parent->_left == moveTargetNode) ?
-						ROTATE_DIRECTION::LEFT : ROTATE_DIRECTION::RIGHT);
-
+					RBT_RotateTree(srcRootNode, moveTargetNode->_parent, ROTATE_DIRECTION::LEFT);
 					goto END_PROC;
 				}
 				else

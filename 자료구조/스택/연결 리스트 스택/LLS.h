@@ -24,10 +24,10 @@ void LLS_DeallocateLinkedListStack(LINKED_LIST_STACK**);
 NODE* LLS_CreateNode(const char*);
 void LLS_DeallocateNode(NODE**);
 
-void LLS_Push(LINKED_LIST_STACK**, NODE*);
-NODE* LLS_Pop(LINKED_LIST_STACK**);
-NODE* LLS_Peek(LINKED_LIST_STACK**);
+void LLS_Push(LINKED_LIST_STACK*, NODE*);
+NODE* LLS_Pop(LINKED_LIST_STACK*);
+NODE* LLS_Peek(LINKED_LIST_STACK*);
 
-STACK_INDEX_TYPE LLS_GetTotalNodeCount(LINKED_LIST_STACK**);
-bool LLS_IsEmpty(LINKED_LIST_STACK**);
+STACK_INDEX_TYPE LLS_GetTotalNodeCount(LINKED_LIST_STACK*);
+bool LLS_IsEmpty(LINKED_LIST_STACK*);
 #endif
