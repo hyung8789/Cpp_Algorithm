@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PQ.h">
+    <ClInclude Include="HT.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="PQ_Core.h">
+    <ClInclude Include="HT_Core.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -26,7 +26,7 @@
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="PQ.cpp">
+    <ClCompile Include="HT.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

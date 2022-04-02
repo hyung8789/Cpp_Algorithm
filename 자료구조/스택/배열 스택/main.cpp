@@ -37,7 +37,7 @@ int main()
 		}
 
 		std::cout << "--- realloc test ---\n";
-		int reallocTestSize = STACK_SIZE * 2;
+		int reallocTestSize = STACK_SIZE * 10;
 		for (int i = 0; i < reallocTestSize; i++) //초기 할당 크기를 초과하여 데이터 삽입
 		{
 			AS_Push(stack, i);

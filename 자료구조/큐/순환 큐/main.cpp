@@ -1,35 +1,35 @@
-#include "CQ_Core.h"
+ï»¿#include "CQ_Core.h"
 
 #define SIZE 5
 
 int main()
 {
 	_CrtMemState oldState, newState, lastState;
-	_CrtMemCheckpoint(&oldState); //ÇÒ´ç Àü »óÅÂ
+	_CrtMemCheckpoint(&oldState); //í• ë‹¹ ì „ ìƒíƒœ
 
 	try
 	{
-		CIRCULAR_QUEUE* queue = NULL; //¼øÈ¯ Å¥
+		CIRCULAR_QUEUE* queue = NULL; //ìˆœí™˜ í
 		CQ_CreateQueue(&queue, SIZE);
 
 		for (int i = 0; i < SIZE; i++)
 		{
 			std::cout << "Enqueue data : " << i <<
 				", Front : " << queue->_front << ", Rear : " << queue->_rear << "\n";
-			CQ_Enqueue(&queue, i);
+			CQ_Enqueue(queue, i);
 		}
-		std::cout << "ÀüÃ¼ ³ëµå µ¥ÀÌÅÍ ¼ö : " << CQ_GetTotalNodeCount(&queue) << std::endl;
+		std::cout << "ì „ì²´ ë…¸ë“œ ë°ì´í„° ìˆ˜ : " << CQ_GetTotalNodeCount(queue) << std::endl;
 		std::cout << "---\n";
 
-		while (!CQ_IsEmpty(&queue))
+		while (!CQ_IsEmpty(queue))
 		{
-			std::cout << "Dequeue data : " << CQ_Dequeue(&queue) <<
+			std::cout << "Dequeue data : " << CQ_Dequeue(queue) <<
 				", Front : " << queue->_front << ", Rear : " << queue->_rear << "\n";
 		}
-		std::cout << "ÀüÃ¼ ³ëµå µ¥ÀÌÅÍ ¼ö : " << CQ_GetTotalNodeCount(&queue) << std::endl;
+		std::cout << "ì „ì²´ ë…¸ë“œ ë°ì´í„° ìˆ˜ : " << CQ_GetTotalNodeCount(queue) << std::endl;
 		std::cout << "---\n";
 
-		CQ_Enqueue(&queue, 1234);
+		CQ_Enqueue(queue, 1234);
 		std::cout << "Enqueue data : " << 1234 <<
 			", Front : " << queue->_front << ", Rear : " << queue->_rear << "\n";
 
@@ -41,7 +41,7 @@ int main()
 		exit(EXIT_FAILURE);
 	}
 
-	_CrtMemCheckpoint(&newState); //ÇÒ´ç ÇØÁ¦ ÈÄ »óÅÂ
+	_CrtMemCheckpoint(&newState); //í• ë‹¹ í•´ì œ í›„ ìƒíƒœ
 	_CrtDumpMemoryLeaks();
 	if (_CrtMemDifference(&lastState, &oldState, &newState))
 		_CrtMemDumpStatistics(&lastState);

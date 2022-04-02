@@ -1,7 +1,7 @@
 ﻿#include "HEAP_Core.h"
 
 /// <summary>
-/// 할당 크기만큼 힙 생성
+/// 할당 크기만큼 힙 생성 및 반환
 /// </summary>
 /// <param name="capacity">할당 크기</param>
 /// <returns>생성 된 힙</returns>
@@ -43,10 +43,10 @@ void HEAP_DeallocateHeap(HEAP** srcHeap)
 }
 
 /// <summary>
-/// 대상 힙 출력
+/// 대상 힙의 전체 요소 출력
 /// </summary>
 /// <param name="srcHeap">대상 힙</param>
-void HEAP_DispHeap(HEAP* srcHeap)
+void HEAP_DispTotalNode(HEAP* srcHeap)
 {
 	for (HEAP_INDEX_TYPE i = 0; i < srcHeap->_usedSize; i++)
 	{
@@ -59,7 +59,7 @@ void HEAP_DispHeap(HEAP* srcHeap)
 
 		std::cout << "- " << srcHeap->_nodeArray[i]._data;
 		
-		if (i == 0)
+		if (depth == 0)
 			std::cout << " (Root)";
 		else
 			std::cout << " (Parent : " << srcHeap->_nodeArray[HEAP_GetParentIndex(i)]._data << ")";
@@ -75,22 +75,29 @@ void HEAP_DispHeap(HEAP* srcHeap)
 void HEAP_Push(HEAP* srcHeap, const DATA_TYPE& srcData)
 {
 	if (srcHeap == NULL)
-		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	if (srcHeap->_usedSize == srcHeap->_capacity)
 	{
 		HEAP_INDEX_TYPE reallocCapacity = srcHeap->_capacity + ceil(srcHeap->_capacity * CAPACITY_REALLOC_RATIO); //재 할당 될 크기
 		HEAP_INDEX_TYPE reallocSizeInBytes = sizeof(NODE) * reallocCapacity; //재 할당 될 바이트 단위 크기
+
 		void* reallocAddr = realloc(srcHeap->_nodeArray, reallocSizeInBytes);
 		if (reallocAddr == NULL)
+		{
+			VAR_DUMP(srcHeap->_capacity);
+			VAR_DUMP(reallocCapacity);
+			VAR_DUMP(reallocSizeInBytes);
+
 			throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
+		}
 
 		srcHeap->_nodeArray = (NODE*)reallocAddr;
 		srcHeap->_capacity = reallocCapacity;
 	}
 	
 	HEAP_INDEX_TYPE currentIndex = srcHeap->_usedSize; //삽입 될 데이터의 인덱스
-	HEAP_INDEX_TYPE parentIndex = HEAP_GetParentIndex(currentIndex); //삽입 될 데이터의 인덱스의 부모 인덱스
+	HEAP_INDEX_TYPE parentIndex = HEAP_GetParentIndex(currentIndex); //삽입 될 데이터의 부모 인덱스
 
 	DATA_TYPE tmpData;
 
@@ -127,10 +134,11 @@ END_PROC:
 /// 대상 힙의 힙 순서 속성에 따른 데이터 제거 및 반환
 /// </summary>
 /// <param name="srcHeap">대상 힙</param>
+/// <returns>힙 순서 속성에 따른 데이터</returns>
 DATA_TYPE HEAP_Pop(HEAP* srcHeap)
 {
 	if (srcHeap == NULL)
-		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	if (srcHeap->_usedSize == 0)
 		throw std::logic_error(std::string(__func__) + std::string(" : Empty Heap"));
@@ -138,16 +146,26 @@ DATA_TYPE HEAP_Pop(HEAP* srcHeap)
 	DATA_TYPE retVal = srcHeap->_nodeArray[0]._data;
 	DATA_TYPE tmpData;
 
-	srcHeap->_nodeArray[0]._data = srcHeap->_nodeArray[--(srcHeap->_usedSize)]._data; //루트 노드로 마지막으로 삽입 된 노드의 데이터 이동
-	memset(&(srcHeap->_nodeArray[srcHeap->_usedSize]), NULL, sizeof(NODE)); //마지막으로 삽입 된 노드 제거
+	--(srcHeap->_usedSize);
+	srcHeap->_nodeArray[0]._data = srcHeap->_nodeArray[srcHeap->_usedSize]._data; //루트 노드로 마지막으로 삽입 된 노드의 데이터 이동
 
-	if ((srcHeap->_usedSize / srcHeap->_capacity) <
+	if ((static_cast<double>(srcHeap->_usedSize) / static_cast<double>(srcHeap->_capacity)) < 
 		CAPACITY_REALLOC_RATIO_THRESHOLD)
 	{
-		HEAP_INDEX_TYPE reallocCapacity = srcHeap->_capacity - ceil(srcHeap->_capacity * CAPACITY_REALLOC_RATIO); //재 할당 될 크기
+		HEAP_INDEX_TYPE reallocCapacity = srcHeap->_capacity - floor(srcHeap->_capacity * CAPACITY_REALLOC_RATIO); //재 할당 될 크기
 		HEAP_INDEX_TYPE reallocSizeInBytes = sizeof(NODE) * reallocCapacity; //재 할당 될 바이트 단위 크기
 
-		srcHeap->_nodeArray = (NODE*)realloc(srcHeap->_nodeArray, reallocSizeInBytes);
+		void* reallocAddr = realloc(srcHeap->_nodeArray, reallocSizeInBytes);
+		if (reallocAddr == NULL)
+		{
+			VAR_DUMP(srcHeap->_capacity);
+			VAR_DUMP(reallocCapacity);
+			VAR_DUMP(reallocSizeInBytes);
+
+			throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
+		}
+
+		srcHeap->_nodeArray = (NODE*)reallocAddr;
 		srcHeap->_capacity = reallocCapacity;
 	}
 
@@ -210,6 +228,7 @@ END_PROC:
 /// 대상 힙의 힙 순서 속성에 따른 읽기 전용 데이터 참조 반환
 /// </summary>
 /// <param name="srcHeap">대상 힙</param>
+/// <returns>힙 순서 속성에 따른 읽기 전용 데이터 참조</returns>
 const DATA_TYPE& HEAP_Peek(HEAP* srcHeap)
 {
 	if (srcHeap == NULL)

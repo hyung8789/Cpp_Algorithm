@@ -46,6 +46,6 @@ private:
 	static SORT_MAPPER* _instance;
 
 private:
-	SORT_METADATA _sortMetaDataTable[(const int)SORT_UNIQUE_MAPPED_INDEX::TOTAL_SORT_FUNC_COUNT];
+	SORT_METADATA _sortMetaDataTable[static_cast<const int>(SORT_UNIQUE_MAPPED_INDEX::TOTAL_SORT_FUNC_COUNT)];
 };
 #endif

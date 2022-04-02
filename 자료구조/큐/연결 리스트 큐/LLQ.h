@@ -25,9 +25,9 @@ void LLQ_DeallocateQueue(LINKED_LIST_QUEUE**);
 NODE* LLQ_CreateNode(DATA_TYPE);
 void LLQ_DeallocateNode(NODE**);
 
-void LLQ_Enqueue(LINKED_LIST_QUEUE**, NODE*);
-NODE* LLQ_Dequeue(LINKED_LIST_QUEUE**);
+void LLQ_Enqueue(LINKED_LIST_QUEUE*, NODE*);
+NODE* LLQ_Dequeue(LINKED_LIST_QUEUE*);
 
-QUEUE_INDEX_TYPE LLQ_GetTotalNodeCount(LINKED_LIST_QUEUE**);
-bool LLQ_IsEmpty(LINKED_LIST_QUEUE**);
+QUEUE_INDEX_TYPE LLQ_GetTotalNodeCount(LINKED_LIST_QUEUE*);
+bool LLQ_IsEmpty(LINKED_LIST_QUEUE*);
 #endif

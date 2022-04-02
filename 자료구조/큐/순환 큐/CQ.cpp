@@ -46,16 +46,16 @@ void CQ_DeallocateQueue(CIRCULAR_QUEUE** srcCircularQueue)
 /// </summary>
 /// <param name="srcCircularQueue">대상 큐</param>
 /// <param name="srcData">삽입 할 데이터</param>
-void CQ_Enqueue(CIRCULAR_QUEUE** srcCircularQueue, DATA_TYPE srcData)
+void CQ_Enqueue(CIRCULAR_QUEUE* srcCircularQueue, DATA_TYPE srcData)
 {
-	if ((*srcCircularQueue) == NULL)
+	if (srcCircularQueue == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	if (CQ_IsFull(srcCircularQueue)) //포화 상태일 경우
 		throw std::logic_error(std::string(__func__) + std::string(" : Queue is Full"));
 
-	(*srcCircularQueue)->_rear = ((*srcCircularQueue)->_rear + 1) % (*srcCircularQueue)->_capacity;
-	(*srcCircularQueue)->_nodeArray[(*srcCircularQueue)->_rear]._data = srcData;
+	srcCircularQueue->_rear = (srcCircularQueue->_rear + 1) % srcCircularQueue->_capacity;
+	srcCircularQueue->_nodeArray[srcCircularQueue->_rear]._data = srcData;
 }
 
 /// <summary>
@@ -63,16 +63,16 @@ void CQ_Enqueue(CIRCULAR_QUEUE** srcCircularQueue, DATA_TYPE srcData)
 /// </summary>
 /// <param name="srcCircularQueue">대상 큐</param>
 /// <returns>대상 큐의 순차적인 데이터</returns>
-DATA_TYPE CQ_Dequeue(CIRCULAR_QUEUE** srcCircularQueue)
+DATA_TYPE CQ_Dequeue(CIRCULAR_QUEUE* srcCircularQueue)
 {
-	if ((*srcCircularQueue) == NULL)
+	if (srcCircularQueue == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	if (CQ_IsEmpty(srcCircularQueue)) //공백 상태일 경우
 		throw std::logic_error(std::string(__func__) + std::string(" : Queue is Empty"));
 
-	(*srcCircularQueue)->_front = ((*srcCircularQueue)->_front + 1) % (*srcCircularQueue)->_capacity;
-	return (*srcCircularQueue)->_nodeArray[(*srcCircularQueue)->_front]._data;
+	srcCircularQueue->_front = (srcCircularQueue->_front + 1) % srcCircularQueue->_capacity;
+	return srcCircularQueue->_nodeArray[srcCircularQueue->_front]._data;
 }
 
 /// <summary>
@@ -80,12 +80,12 @@ DATA_TYPE CQ_Dequeue(CIRCULAR_QUEUE** srcCircularQueue)
 /// </summary>
 /// <param name="srcCircularQueue">대상 큐</param>
 /// <returns>대상 큐의 전체 노드 개수</returns>
-QUEUE_INDEX_TYPE CQ_GetTotalNodeCount(CIRCULAR_QUEUE** srcCircularQueue)
+QUEUE_INDEX_TYPE CQ_GetTotalNodeCount(CIRCULAR_QUEUE* srcCircularQueue)
 {
-	if ((*srcCircularQueue) == NULL)
+	if (srcCircularQueue == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	return ((*srcCircularQueue)->_rear - (*srcCircularQueue)->_front);
+	return (srcCircularQueue->_rear - srcCircularQueue->_front);
 }
 
 /// <summary>
@@ -93,12 +93,12 @@ QUEUE_INDEX_TYPE CQ_GetTotalNodeCount(CIRCULAR_QUEUE** srcCircularQueue)
 /// </summary>
 /// <param name="srcCircularQueue">대상 큐</param>
 /// <returns>대상 큐의 공백 여부</returns>
-bool CQ_IsEmpty(CIRCULAR_QUEUE** srcCircularQueue)
+bool CQ_IsEmpty(CIRCULAR_QUEUE* srcCircularQueue)
 {
-	if ((*srcCircularQueue) == NULL)
+	if (srcCircularQueue == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	return ((*srcCircularQueue)->_front == (*srcCircularQueue)->_rear); //전단과 후단이 만나는 시점에 공백 상태
+	return (srcCircularQueue->_front == srcCircularQueue->_rear); //전단과 후단이 만나는 시점에 공백 상태
 }
 
 /// <summary>
@@ -106,10 +106,10 @@ bool CQ_IsEmpty(CIRCULAR_QUEUE** srcCircularQueue)
 /// </summary>
 /// <param name="srcCircularQueue">대상 큐</param>
 /// <returns>대상 큐의 포화 여부</returns>
-bool CQ_IsFull(CIRCULAR_QUEUE** srcCircularQueue)
+bool CQ_IsFull(CIRCULAR_QUEUE* srcCircularQueue)
 {
-	if ((*srcCircularQueue) == NULL)
+	if (srcCircularQueue == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	return ((*srcCircularQueue)->_rear + 1) % (*srcCircularQueue)->_capacity == (*srcCircularQueue)->_front; //다음에 삽입 될 후단의 위치에서 전단을 만나면 포화 상태
+	return (srcCircularQueue->_rear + 1) % srcCircularQueue->_capacity == srcCircularQueue->_front; //다음에 삽입 될 후단의 위치에서 전단을 만나면 포화 상태
 }

@@ -58,7 +58,12 @@ void AS_Push(ARRAY_STACK* srcArrayStack, DATA_TYPE srcData)
 
 		void* reallocAddr = realloc(srcArrayStack->_nodeArray, reallocSizeInBytes);
 		if (reallocAddr == NULL)
+		{
+			VAR_DUMP(reallocCapacity);
+			VAR_DUMP(reallocSizeInBytes);
+
 			throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
+		}
 
 		srcArrayStack->_nodeArray = (NODE*)reallocAddr;
 		srcArrayStack->_capacity = reallocCapacity;
@@ -81,13 +86,22 @@ DATA_TYPE AS_Pop(ARRAY_STACK* srcArrayStack)
 	if (AS_IsEmpty(srcArrayStack)) //비어있으면
 		throw std::logic_error(std::string(__func__) + std::string(" : Empty Stack"));
 
-	if ((AS_GetTotalNodeCount(srcArrayStack) / srcArrayStack->_capacity) <
+	if (((static_cast<double>(AS_GetTotalNodeCount(srcArrayStack)) / static_cast<double>(srcArrayStack->_capacity))) <
 		CAPACITY_REDUCE_RATIO_THRESHOLD) //사용량에 대한 비율이 기존 할당 크기에 대한 감소가 발생 될 빈 공간 임계 비율 미만일 경우
 	{
-		STACK_INDEX_TYPE reallocCapacity = srcArrayStack->_capacity - ceil(srcArrayStack->_capacity * CAPACITY_REALLOC_RATIO); //재 할당 될 크기
+		STACK_INDEX_TYPE reallocCapacity = srcArrayStack->_capacity - floor(srcArrayStack->_capacity * CAPACITY_REALLOC_RATIO); //재 할당 될 크기
 		STACK_INDEX_TYPE reallocSizeInBytes = sizeof(NODE) * reallocCapacity; //재 할당 될 바이트 단위 크기
-		
-		srcArrayStack->_nodeArray = (NODE*)realloc(srcArrayStack->_nodeArray, reallocSizeInBytes);
+
+		void* reallocAddr = realloc(srcArrayStack->_nodeArray, reallocSizeInBytes);
+		if (reallocAddr == NULL)
+		{
+			VAR_DUMP(reallocCapacity);
+			VAR_DUMP(reallocSizeInBytes);
+
+			throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
+		}
+
+		srcArrayStack->_nodeArray = (NODE*)reallocAddr;
 		srcArrayStack->_capacity = reallocCapacity;
 	}
 

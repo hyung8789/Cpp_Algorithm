@@ -57,8 +57,8 @@ public:
     static CONSOLE_SCREEN_MANAGER& GetInstance();
     void Dispose();
 
-    void SetConsoleTextColor(const unsigned);
-    void UnsetConsoleTextColor();
+    void SetConsoleTextColor(const unsigned) const;
+    void UnsetConsoleTextColor() const;
 
 private:
     CONSOLE_SCREEN_MANAGER();

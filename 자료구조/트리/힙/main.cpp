@@ -16,22 +16,20 @@ int main()
 
 		for (int i = 0; i < LENGTH(inputData); i++)
 		{
-			//std::cout << "Current Insert : " << inputData[i] << std::endl;
+			std::cout << "Push : " << inputData[i] << std::endl;
 			HEAP_Push(heap, inputData[i]);
+			HEAP_DispTotalNode(heap);
+			std::cout << "\n";
 		}
 
-		HEAP_DispHeap(heap);
-		std::cout << "\n\n";
-
-		//TODO
 		for (int i = 0; i < LENGTH(inputData); i++)
 		{
-			HEAP_Pop(heap);
-			HEAP_DispHeap(heap);
-			std::cout << "\n\n";
+			std::cout << "Pop : " << HEAP_Pop(heap) << std::endl;
+			HEAP_DispTotalNode(heap);
+			std::cout << "\n";
 		}
 
-
+		HEAP_DeallocateHeap(&heap);
 	}
 	catch (const std::exception& ex)
 	{

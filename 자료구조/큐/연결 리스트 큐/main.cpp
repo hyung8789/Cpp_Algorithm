@@ -1,35 +1,35 @@
-#include "LLQ_Core.h"
+ï»¿#include "LLQ_Core.h"
 
 #define COUNT 5
 
 int main()
 {
 	_CrtMemState oldState, newState, lastState;
-	_CrtMemCheckpoint(&oldState); //ÇÒ´ç Àü »óÅÂ
+	_CrtMemCheckpoint(&oldState); //í• ë‹¹ ì „ ìƒíƒœ
 
 	/***
-		< ¼øÈ¯ Å¥¿Í ¿¬°á ¸®½ºÆ® Å¥ÀÇ ¼º´É ºñ±³ >
+		< ìˆœí™˜ íì™€ ì—°ê²° ë¦¬ìŠ¤íŠ¸ íì˜ ì„±ëŠ¥ ë¹„êµ >
 
-		1) ¼øÈ¯ Å¥
-		: Å¥ÀÇ Å©±â¸¦ ¹Ì¸® ¿¹Ãø °¡´É ÇÒ °æ¿ì, »õ·Î¿î µ¥ÀÌÅÍ »ðÀÔ ½Ã¸¶´Ù
-		°¡º¯Àû Heap ¸Þ¸ð¸® ÇÒ´ç¿¡ µû¸¥ ¿À¹öÇìµå°¡ ¾øÀ¸¹Ç·Î, ¿¬°á ¸®½ºÆ® Å¥º¸´Ù ½Ã°£ÀûÀ¸·Î ¿ì¼¼
-		±×·¯³ª, Å¥ÀÇ Å©±â¸¦ ÀüºÎ »ç¿ëÇÏÁö ¾ÊÀ» °æ¿ì, ³¶ºñµÇ´Â ¸Þ¸ð¸®¸¦ ÁÙÀÌ±â À§ÇØ¼­
-		±âÁ¸ ÇÒ´ç Å©±â¿¡ ´ëÇÑ °¨¼Ò°¡ ¹ß»ý µÉ ºó °ø°£ ÀÓ°è ºñÀ² (¹è¿­ ½ºÅÃ¿¡¼­ÀÇ ±¸Çö»çÇ×)¿¡ µû¶ó
-		°¡º¯ÀûÀ¸·Î ÇÒ´ç Å©±â¸¦ Á¶ÀýÇÏ¸é, ¿¬°á ¸®½ºÆ® Å¥¸¦ »ç¿ëÇÏ´Â °Í°ú ºñ±³ÇÏ¿© ¿ì¼¼ÇÑ Á¡ÀÌ ¾øÀ» °ÍÀÌ´Ù.
+		1) ìˆœí™˜ í
+		: íì˜ í¬ê¸°ë¥¼ ë¯¸ë¦¬ ì˜ˆì¸¡ ê°€ëŠ¥ í•  ê²½ìš°, ìƒˆë¡œìš´ ë°ì´í„° ì‚½ìž… ì‹œë§ˆë‹¤
+		ê°€ë³€ì  Heap ë©”ëª¨ë¦¬ í• ë‹¹ì— ë”°ë¥¸ ì˜¤ë²„í—¤ë“œê°€ ì—†ìœ¼ë¯€ë¡œ, ì—°ê²° ë¦¬ìŠ¤íŠ¸ íë³´ë‹¤ ì‹œê°„ì ìœ¼ë¡œ ìš°ì„¸
+		ê·¸ëŸ¬ë‚˜, íì˜ í¬ê¸°ë¥¼ ì „ë¶€ ì‚¬ìš©í•˜ì§€ ì•Šì„ ê²½ìš°, ë‚­ë¹„ë˜ëŠ” ë©”ëª¨ë¦¬ë¥¼ ì¤„ì´ê¸° ìœ„í•´ì„œ
+		ê¸°ì¡´ í• ë‹¹ í¬ê¸°ì— ëŒ€í•œ ê°ì†Œê°€ ë°œìƒ ë  ë¹ˆ ê³µê°„ ìž„ê³„ ë¹„ìœ¨ (ë°°ì—´ ìŠ¤íƒì—ì„œì˜ êµ¬í˜„ì‚¬í•­)ì— ë”°ë¼
+		ê°€ë³€ì ìœ¼ë¡œ í• ë‹¹ í¬ê¸°ë¥¼ ì¡°ì ˆí•˜ë©´, ì—°ê²° ë¦¬ìŠ¤íŠ¸ íë¥¼ ì‚¬ìš©í•˜ëŠ” ê²ƒê³¼ ë¹„êµí•˜ì—¬ ìš°ì„¸í•œ ì ì´ ì—†ì„ ê²ƒì´ë‹¤.
 
-		2) ¿¬°á ¸®½ºÆ® Å¥
-		: Å¥ÀÇ Å©±â¸¦ ¹Ì¸® ¿¹Ãø ÇÒ ¼ö ¾ø´Â °æ¿ì, °ø°£ÀûÀ¸·Î ¼øÈ¯ Å¥º¸´Ù ¿ì¼¼ÇÏ³ª,
-		»õ·Î¿î µ¥ÀÌÅÍ »ðÀÔ ½Ã¸¶´Ù °¡º¯Àû Heap ¸Þ¸ð¸® ÇÒ´ç¿¡ µû¸¥ ¿À¹öÇìµå¿¡ ÀÇÇØ ½Ã°£ÀûÀ¸·Î ºÒ¸®
+		2) ì—°ê²° ë¦¬ìŠ¤íŠ¸ í
+		: íì˜ í¬ê¸°ë¥¼ ë¯¸ë¦¬ ì˜ˆì¸¡ í•  ìˆ˜ ì—†ëŠ” ê²½ìš°, ê³µê°„ì ìœ¼ë¡œ ìˆœí™˜ íë³´ë‹¤ ìš°ì„¸í•˜ë‚˜,
+		ìƒˆë¡œìš´ ë°ì´í„° ì‚½ìž… ì‹œë§ˆë‹¤ ê°€ë³€ì  Heap ë©”ëª¨ë¦¬ í• ë‹¹ì— ë”°ë¥¸ ì˜¤ë²„í—¤ë“œì— ì˜í•´ ì‹œê°„ì ìœ¼ë¡œ ë¶ˆë¦¬
 	***/
 
 	try
 	{
-		LINKED_LIST_QUEUE* queue = NULL; //¿¬°á ¸®½ºÆ® Å¥
+		LINKED_LIST_QUEUE* queue = NULL; //ì—°ê²° ë¦¬ìŠ¤íŠ¸ í
 		LLQ_CreateQueue(&queue);
 
 		for (int i = 0; i < COUNT; i++)
 		{
-			LLQ_Enqueue(&queue, LLQ_CreateNode(i));
+			LLQ_Enqueue(queue, LLQ_CreateNode(i));
 
 			std::cout << "Enqueue data : " << i;
 			if (queue->_front != NULL)
@@ -38,12 +38,12 @@ int main()
 				std::cout << ", Rear data : " << queue->_rear->_data;
 			std::cout << "\n";
 		}
-		std::cout << "ÀüÃ¼ ³ëµå ¼ö : " << LLQ_GetTotalNodeCount(&queue) << std::endl;
+		std::cout << "ì „ì²´ ë…¸ë“œ ìˆ˜ : " << LLQ_GetTotalNodeCount(queue) << std::endl;
 		std::cout << "---\n";
 
-		while (!LLQ_IsEmpty(&queue))
+		while (!LLQ_IsEmpty(queue))
 		{
-			NODE* tmp = LLQ_Dequeue(&queue);
+			NODE* tmp = LLQ_Dequeue(queue);
 
 			std::cout << "Dequeue data : " << tmp->_data;
 			if (queue->_front != NULL)
@@ -54,7 +54,7 @@ int main()
 
 			LLQ_DeallocateNode(&tmp);
 		}
-		std::cout << "ÀüÃ¼ ³ëµå ¼ö : " << LLQ_GetTotalNodeCount(&queue) << std::endl;
+		std::cout << "ì „ì²´ ë…¸ë“œ ìˆ˜ : " << LLQ_GetTotalNodeCount(queue) << std::endl;
 
 		LLQ_DeallocateQueue(&queue);
 	}
@@ -64,7 +64,7 @@ int main()
 		exit(EXIT_FAILURE);
 	}
 
-	_CrtMemCheckpoint(&newState); //ÇÒ´ç ÇØÁ¦ ÈÄ »óÅÂ
+	_CrtMemCheckpoint(&newState); //í• ë‹¹ í•´ì œ í›„ ìƒíƒœ
 	_CrtDumpMemoryLeaks();
 	if (_CrtMemDifference(&lastState, &oldState, &newState))
 		_CrtMemDumpStatistics(&lastState);

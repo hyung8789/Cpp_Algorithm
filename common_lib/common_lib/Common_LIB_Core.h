@@ -9,4 +9,9 @@
 #ifdef USE_CONSOLE_SCREEN_MANAGER
 #include "ConsoleScreenManager.h"
 #endif
+
+//#define IGNORE_VAR_DUMP
+#ifdef IGNORE_VAR_DUMP
+#define VAR_DUMP(var) //do nothing
+#endif
 #endif

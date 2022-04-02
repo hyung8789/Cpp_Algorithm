@@ -30,7 +30,7 @@ void CONSOLE_SCREEN_MANAGER::Dispose()
 /// 대상 색으로 콘솔 텍스트 색상 설정
 /// </summary>
 /// <param name="color">대상 색</param>
-void CONSOLE_SCREEN_MANAGER::SetConsoleTextColor(const unsigned color)
+void CONSOLE_SCREEN_MANAGER::SetConsoleTextColor(const unsigned color) const
 {
 	SetConsoleTextAttribute(this->_hConsoleOutput, color);
 }
@@ -38,7 +38,7 @@ void CONSOLE_SCREEN_MANAGER::SetConsoleTextColor(const unsigned color)
 /// <summary>
 /// 콘솔 텍스트 색상 복구
 /// </summary>
-void CONSOLE_SCREEN_MANAGER::UnsetConsoleTextColor()
+void CONSOLE_SCREEN_MANAGER::UnsetConsoleTextColor() const
 {
 	SetConsoleTextAttribute(this->_hConsoleOutput, this->_oldWAttributes);
 }

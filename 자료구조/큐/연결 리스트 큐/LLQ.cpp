@@ -1,9 +1,9 @@
-#include "LLQ_Core.h"
+ï»¿#include "LLQ_Core.h"
 
 /// <summary>
-/// ´ë»ó Å¥¿¡ Å¥ »ý¼º
+/// ëŒ€ìƒ íì— í ìƒì„±
 /// </summary>
-/// <param name="srcLinkedListQueue">´ë»ó Å¥</param>
+/// <param name="srcLinkedListQueue">ëŒ€ìƒ í</param>
 void LLQ_CreateQueue(LINKED_LIST_QUEUE** srcLinkedListQueue)
 {
 	if ((*srcLinkedListQueue) != NULL)
@@ -18,16 +18,16 @@ void LLQ_CreateQueue(LINKED_LIST_QUEUE** srcLinkedListQueue)
 }
 
 /// <summary>
-/// ´ë»ó Å¥¿¡ ÇÒ´ç µÈ ¸Þ¸ð¸® ÇØÁ¦
+/// ëŒ€ìƒ íì— í• ë‹¹ ëœ ë©”ëª¨ë¦¬ í•´ì œ
 /// </summary>
-/// <param name="srcLinkedListQueue">´ë»ó Å¥</param>
+/// <param name="srcLinkedListQueue">ëŒ€ìƒ í</param>
 void LLQ_DeallocateQueue(LINKED_LIST_QUEUE** srcLinkedListQueue)
 {
 	if ((*srcLinkedListQueue) != NULL)
 	{
-		while (!LLQ_IsEmpty(srcLinkedListQueue)) //´ë»ó Å¥¿¡ ÇÒ´ç µÈ ÀüÃ¼ ³ëµå¿¡ ´ëÇØ
+		while (!LLQ_IsEmpty(*srcLinkedListQueue)) //ëŒ€ìƒ íì— í• ë‹¹ ëœ ì „ì²´ ë…¸ë“œì— ëŒ€í•´
 		{
-			NODE* tmp = LLQ_Dequeue(srcLinkedListQueue);
+			NODE* tmp = LLQ_Dequeue(*srcLinkedListQueue);
 			LLQ_DeallocateNode(&tmp);
 		}
 
@@ -37,10 +37,10 @@ void LLQ_DeallocateQueue(LINKED_LIST_QUEUE** srcLinkedListQueue)
 }
 
 /// <summary>
-/// »õ·Î¿î ³ëµå »ý¼º ¹× »ý¼º µÈ ³ëµå ¹ÝÈ¯
+/// ìƒˆë¡œìš´ ë…¸ë“œ ìƒì„± ë° ìƒì„± ëœ ë…¸ë“œ ë°˜í™˜
 /// </summary>
-/// <param name="srcData">³ëµåÀÇ µ¥ÀÌÅÍ</param>
-/// <returns>»ý¼º µÈ ³ëµå</returns>
+/// <param name="srcData">ë…¸ë“œì˜ ë°ì´í„°</param>
+/// <returns>ìƒì„± ëœ ë…¸ë“œ</returns>
 NODE* LLQ_CreateNode(DATA_TYPE srcData)
 {
 	NODE* retVal = (NODE*)malloc(sizeof(NODE));
@@ -54,9 +54,9 @@ NODE* LLQ_CreateNode(DATA_TYPE srcData)
 }
 
 /// <summary>
-/// ´ë»ó ³ëµå¿¡ ÇÒ´ç µÈ ¸Þ¸ð¸® ÇØÁ¦
+/// ëŒ€ìƒ ë…¸ë“œì— í• ë‹¹ ëœ ë©”ëª¨ë¦¬ í•´ì œ
 /// </summary>
-/// <param name="srcNode">´ë»ó ³ëµå</param>
+/// <param name="srcNode">ëŒ€ìƒ ë…¸ë“œ</param>
 void LLQ_DeallocateNode(NODE** srcNode)
 {
 	if ((*srcNode) != NULL)
@@ -67,76 +67,76 @@ void LLQ_DeallocateNode(NODE** srcNode)
 }
 
 /// <summary>
-/// ´ë»ó Å¥ÀÇ ¼øÂ÷ÀûÀÎ ³ëµå »ðÀÔ
+/// ëŒ€ìƒ íì˜ ìˆœì°¨ì ì¸ ë…¸ë“œ ì‚½ìž…
 /// </summary>
-/// <param name="srcLinkedListQueue">´ë»ó Å¥</param>
-/// <param name="srcNewNode">»ðÀÔ ÇÒ ³ëµå</param>
-void LLQ_Enqueue(LINKED_LIST_QUEUE** srcLinkedListQueue, NODE* srcNewNode)
+/// <param name="srcLinkedListQueue">ëŒ€ìƒ í</param>
+/// <param name="srcNewNode">ì‚½ìž… í•  ë…¸ë“œ</param>
+void LLQ_Enqueue(LINKED_LIST_QUEUE* srcLinkedListQueue, NODE* srcNewNode)
 {
-	if ((*srcLinkedListQueue) == NULL)
+	if (srcLinkedListQueue == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	if (srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	if (LLQ_IsEmpty(srcLinkedListQueue)) //Å¥°¡ ºñ¾îÀÖÀ¸¸é
+	if (LLQ_IsEmpty(srcLinkedListQueue)) //íê°€ ë¹„ì–´ìžˆìœ¼ë©´
 	{
-		(*srcLinkedListQueue)->_front = (*srcLinkedListQueue)->_rear = srcNewNode;
+		srcLinkedListQueue->_front = srcLinkedListQueue->_rear = srcNewNode;
 	}
 	else
 	{
-		(*srcLinkedListQueue)->_rear->_next = srcNewNode; //ÈÄ´Ü ³ëµåÀÇ ´ÙÀ½À» »õ ³ëµå·Î ¿¬°á
-		(*srcLinkedListQueue)->_rear = srcNewNode; //ÈÄ´Ü ³ëµå¸¦ »õ ³ëµå·Î º¯°æ
+		srcLinkedListQueue->_rear->_next = srcNewNode; //í›„ë‹¨ ë…¸ë“œì˜ ë‹¤ìŒì„ ìƒˆ ë…¸ë“œë¡œ ì—°ê²°
+		srcLinkedListQueue->_rear = srcNewNode; //í›„ë‹¨ ë…¸ë“œë¥¼ ìƒˆ ë…¸ë“œë¡œ ë³€ê²½
 	}
 
-	(*srcLinkedListQueue)->_totalNodeCount++;
+	srcLinkedListQueue->_totalNodeCount++;
 }
 
 /// <summary>
-/// ´ë»ó Å¥ÀÇ ¼øÂ÷ÀûÀÎ ³ëµå Á¦°Å ¹× ¹ÝÈ¯
+/// ëŒ€ìƒ íì˜ ìˆœì°¨ì ì¸ ë…¸ë“œ ì œê±° ë° ë°˜í™˜
 /// </summary>
-/// <param name="srcLinkedListQueue">´ë»ó Å¥</param>
-/// <returns>´ë»ó Å¥ÀÇ ¼øÂ÷ÀûÀÎ ³ëµå</returns>
-NODE* LLQ_Dequeue(LINKED_LIST_QUEUE** srcLinkedListQueue)
+/// <param name="srcLinkedListQueue">ëŒ€ìƒ í</param>
+/// <returns>ëŒ€ìƒ íì˜ ìˆœì°¨ì ì¸ ë…¸ë“œ</returns>
+NODE* LLQ_Dequeue(LINKED_LIST_QUEUE* srcLinkedListQueue)
 {
-	if ((*srcLinkedListQueue) == NULL)
+	if (srcLinkedListQueue == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	if (LLQ_IsEmpty(srcLinkedListQueue)) //°ø¹é »óÅÂÀÏ °æ¿ì
+	if (LLQ_IsEmpty(srcLinkedListQueue)) //ê³µë°± ìƒíƒœì¼ ê²½ìš°
 		throw std::logic_error(std::string(__func__) + std::string(" : Queue is Empty"));
 
-	NODE* retVal = (*srcLinkedListQueue)->_front;
-	(*srcLinkedListQueue)->_front = (*srcLinkedListQueue)->_front->_next;
-	(*srcLinkedListQueue)->_totalNodeCount--;
+	NODE* retVal = srcLinkedListQueue->_front;
+	srcLinkedListQueue->_front = srcLinkedListQueue->_front->_next;
+	srcLinkedListQueue->_totalNodeCount--;
 
-	if (LLQ_IsEmpty(srcLinkedListQueue)) //Á¦°Å¿¡ ÀÇÇÑ °ø¹é »óÅÂ°¡ µÉ °æ¿ì
-		(*srcLinkedListQueue)->_rear = NULL; //Á¦°Å µÈ ³ëµå¿¡ ´ëÇØ °ü¸®ÇÏÁö ¾ÊÀ½
+	if (LLQ_IsEmpty(srcLinkedListQueue)) //ì œê±°ì— ì˜í•œ ê³µë°± ìƒíƒœê°€ ë  ê²½ìš°
+		srcLinkedListQueue->_rear = NULL; //ì œê±° ëœ ë…¸ë“œì— ëŒ€í•´ ê´€ë¦¬í•˜ì§€ ì•ŠìŒ
 
 	return retVal;
 }
 
 /// <summary>
-/// ´ë»ó Å¥ÀÇ ÀüÃ¼ ³ëµå °³¼ö ¹ÝÈ¯
+/// ëŒ€ìƒ íì˜ ì „ì²´ ë…¸ë“œ ê°œìˆ˜ ë°˜í™˜
 /// </summary>
-/// <param name="srcCircularQueue">´ë»ó Å¥</param>
-/// <returns>´ë»ó Å¥ÀÇ ÀüÃ¼ ³ëµå °³¼ö</returns>
-QUEUE_INDEX_TYPE LLQ_GetTotalNodeCount(LINKED_LIST_QUEUE** srcLinkedListQueue)
+/// <param name="srcCircularQueue">ëŒ€ìƒ í</param>
+/// <returns>ëŒ€ìƒ íì˜ ì „ì²´ ë…¸ë“œ ê°œìˆ˜</returns>
+QUEUE_INDEX_TYPE LLQ_GetTotalNodeCount(LINKED_LIST_QUEUE* srcLinkedListQueue)
 {
-	if ((*srcLinkedListQueue) == NULL)
+	if (srcLinkedListQueue == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	return (*srcLinkedListQueue)->_totalNodeCount;
+	return srcLinkedListQueue->_totalNodeCount;
 }
 
 /// <summary>
-/// ´ë»ó Å¥ÀÇ °ø¹é ¿©ºÎ ¹ÝÈ¯
+/// ëŒ€ìƒ íì˜ ê³µë°± ì—¬ë¶€ ë°˜í™˜
 /// </summary>
-/// <param name="srcLinkedListQueue">´ë»ó Å¥</param>
-/// <returns>´ë»ó Å¥ÀÇ °ø¹é ¿©ºÎ</returns>
-bool LLQ_IsEmpty(LINKED_LIST_QUEUE** srcLinkedListQueue)
+/// <param name="srcLinkedListQueue">ëŒ€ìƒ í</param>
+/// <returns>ëŒ€ìƒ íì˜ ê³µë°± ì—¬ë¶€</returns>
+bool LLQ_IsEmpty(LINKED_LIST_QUEUE* srcLinkedListQueue)
 {
-	if ((*srcLinkedListQueue) == NULL)
+	if (srcLinkedListQueue == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	return ((*srcLinkedListQueue)->_totalNodeCount == 0);
+	return (srcLinkedListQueue->_totalNodeCount == 0);
 }

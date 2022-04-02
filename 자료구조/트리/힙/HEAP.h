@@ -35,7 +35,7 @@
 #define MIN_HEAP 0 //parent < left child && parent < right child
 #define MAX_HEAP 1 //parent > left child && parent > right child
 
-#define HEAP_ORDER_PROPERTY MIN_HEAP //힙 순서 속성
+#define HEAP_ORDER_PROPERTY MAX_HEAP //힙 순서 속성
 
 typedef int DATA_TYPE; //노드의 데이터 타입
 typedef int HEAP_INDEX_TYPE; //힙 인덱스 타입
@@ -56,7 +56,7 @@ struct HEAP
 HEAP* HEAP_CreateHeap(HEAP_INDEX_TYPE);
 void HEAP_DeallocateHeap(HEAP**);
 
-void HEAP_DispHeap(HEAP*);
+void HEAP_DispTotalNode(HEAP*);
 
 void HEAP_Push(HEAP*, const DATA_TYPE&);
 DATA_TYPE HEAP_Pop(HEAP*);
