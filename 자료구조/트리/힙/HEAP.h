@@ -58,7 +58,7 @@ void HEAP_DeallocateHeap(HEAP**);
 
 void HEAP_DispTotalNode(HEAP*);
 
-void HEAP_Push(HEAP*, const DATA_TYPE&);
+void HEAP_Push(HEAP*, DATA_TYPE);
 DATA_TYPE HEAP_Pop(HEAP*);
 const DATA_TYPE& HEAP_Peek(HEAP*);
 

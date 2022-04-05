@@ -68,6 +68,16 @@ int utils::SingleNumToDecAscii(int srcSingleNum)
 }
 
 /// <summary>
+/// 대상 숫자의 비트 개수 반환
+/// </summary>
+/// <param name="srcNum">대상 숫자</param>
+/// <returns>대상 숫자의 비트 개수</returns>
+size_t utils::BitCountFrom(size_t srcNum)
+{
+	return (1 + log2(srcNum)); //<< : *2, >> : /2 이므로, 2^0 자리를 포함하여 계산
+}
+
+/// <summary>
 /// 2차원 요소 인덱스를 1차원 요소 인덱스로 변환
 /// </summary>
 /// <param name="srcRowElementCount">행에 대한 전체 요소 개수</param>

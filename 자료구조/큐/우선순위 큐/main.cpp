@@ -22,7 +22,7 @@ int main()
 		std::cout << "--- Enqueue ---\n";
 		for (int i = 0; i < LENGTH(inputData); i++)
 		{
-			PQ_Enqueue(pq, inputData[i]);
+			PQ_Enqueue(pq, &inputData[i]);
 			const NODE& peekedNode = PQ_Peek(pq);
 			std::cout << "Peek - Priority : " << peekedNode._priority << 
 				", Data : " << (const char*)peekedNode._data <<"\n";

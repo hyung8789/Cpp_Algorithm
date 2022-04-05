@@ -72,7 +72,7 @@ void HEAP_DispTotalNode(HEAP* srcHeap)
 /// </summary>
 /// <param name="srcHeap">대상 힙</param>
 /// <param name="srcData">삽입 할 데이터</param>
-void HEAP_Push(HEAP* srcHeap, const DATA_TYPE& srcData)
+void HEAP_Push(HEAP* srcHeap, DATA_TYPE srcData)
 {
 	if (srcHeap == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));

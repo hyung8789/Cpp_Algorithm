@@ -126,7 +126,7 @@ void BST_InsertNode(NODE** srcRootNode, NODE* srcNewNode)
 /// <param name="targetData">삭제하고자 하는 대상 데이터</param>
 /// <param name="deallocateAfterRemove">삭제 대상 노드에 대한 메모리 해제 수행 여부</param>
 /// <summary>
-void BST_RemoveNode(NODE** srcRootNode, const DATA_TYPE& targetData, bool deallocateAfterRemove)
+void BST_RemoveNode(NODE** srcRootNode, DATA_TYPE targetData, bool deallocateAfterRemove)
 {
 	/***
 		< 삭제하고자 하는 대상 데이터가 포함 된 노드 (이하, 삭제 대상 노드)의 자식 노드 유무에 따른 처리 >
@@ -296,7 +296,7 @@ void BST_RemoveNode(NODE** srcRootNode, const DATA_TYPE& targetData, bool deallo
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 /// <param name="targetData">찾고자 하는 대상 데이터</param>
 /// <returns>찾고자 하는 대상 데이터가 포함 된 노드</returns>
-NODE* BST_SearchNode(NODE* srcRootNode, const DATA_TYPE& targetData)
+NODE* BST_SearchNode(NODE* srcRootNode, DATA_TYPE targetData)
 {
 	if (srcRootNode == NULL)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
@@ -319,7 +319,7 @@ NODE* BST_SearchNode(NODE* srcRootNode, const DATA_TYPE& targetData)
 /// <para>tuple arg 0 : 대상 데이터가 포함 된 노드</para>
 /// <para>tuple arg 1 : 해당 노드의 상위 부모 노드 (존재하지 않을 경우 NULL)</para>
 /// <para>tuple arg 2 : 해당 노드의 상위 부모 노드에서 대상 데이터가 포함 된 노드로의 연결 (존재하지 않을 경우 NULL)</para></returns>
-std::tuple<NODE*, NODE*, NODE**> BST_SearchNodeWithParentNode(NODE* srcRootNode, const DATA_TYPE& targetData, NODE* optionalTargetParentNode)
+std::tuple<NODE*, NODE*, NODE**> BST_SearchNodeWithParentNode(NODE* srcRootNode, DATA_TYPE targetData, NODE* optionalTargetParentNode)
 {
 	if (srcRootNode == NULL)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));

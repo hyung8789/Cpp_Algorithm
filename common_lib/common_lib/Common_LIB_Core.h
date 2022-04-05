@@ -12,6 +12,6 @@
 
 //#define IGNORE_VAR_DUMP
 #ifdef IGNORE_VAR_DUMP
-#define VAR_DUMP(var) //do nothing
+#define __VAR_DUMP(name, value, os) //do nothing
 #endif
 #endif

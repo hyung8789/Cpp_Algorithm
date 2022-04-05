@@ -35,10 +35,10 @@ void BST_DeallocateTree(NODE**);
 void BST_DispOrderedTree(NODE*, TRAVERSAL_METHOD);
 
 void BST_InsertNode(NODE**, NODE*);
-void BST_RemoveNode(NODE**, const DATA_TYPE&, bool = true);
+void BST_RemoveNode(NODE**, DATA_TYPE, bool = true);
 
-NODE* BST_SearchNode(NODE*, const DATA_TYPE&);
-std::tuple<NODE*, NODE*, NODE**> BST_SearchNodeWithParentNode(NODE*, const DATA_TYPE&, NODE* = NULL);
+NODE* BST_SearchNode(NODE*, DATA_TYPE);
+std::tuple<NODE*, NODE*, NODE**> BST_SearchNodeWithParentNode(NODE*, DATA_TYPE, NODE* = NULL);
 
 NODE* BST_SearchMinNode(NODE*);
 std::tuple<NODE*, NODE*, NODE**> BST_SearchMinNodeWithParentNode(NODE*, NODE* = NULL);

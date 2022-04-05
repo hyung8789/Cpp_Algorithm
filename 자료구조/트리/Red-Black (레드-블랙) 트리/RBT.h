@@ -81,8 +81,8 @@ void RBT_DeallocateTree(NODE**);
 void RBT_DispOrderedTree(NODE*, TRAVERSAL_METHOD, TREE_DEPTH_TYPE = 0);
 
 void RBT_InsertNode(NODE**, NODE*);
-void RBT_RemoveNode(NODE**, const DATA_TYPE&, bool = true);
-NODE* RBT_SearchNode(NODE*, const DATA_TYPE&);
+void RBT_RemoveNode(NODE**, DATA_TYPE, bool = true);
+NODE* RBT_SearchNode(NODE*, DATA_TYPE);
 NODE* RBT_SearchMaxNode(NODE*);
 NODE* RBT_SearchMinNode(NODE*);
 

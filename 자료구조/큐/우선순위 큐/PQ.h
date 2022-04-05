@@ -33,7 +33,7 @@ struct PRIORITY_QUEUE
 PRIORITY_QUEUE* PQ_CreateQueue(QUEUE_INDEX_TYPE);
 void PQ_DeallocateQueue(PRIORITY_QUEUE**);
 
-void PQ_Enqueue(PRIORITY_QUEUE*, const NODE&);
+void PQ_Enqueue(PRIORITY_QUEUE*, NODE*);
 void PQ_Dequeue(PRIORITY_QUEUE*, NODE*);
 const NODE& PQ_Peek(PRIORITY_QUEUE*);
 

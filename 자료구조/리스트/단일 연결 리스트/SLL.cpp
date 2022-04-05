@@ -1,10 +1,10 @@
-#include "SLL_Core.h"
+ï»¿#include "SLL_Core.h"
 
 /// <summary>
-/// »õ·Î¿î ³ëµå »ý¼º ¹× »ý¼º µÈ ³ëµå ¹ÝÈ¯
+/// ìƒˆë¡œìš´ ë…¸ë“œ ìƒì„± ë° ìƒì„± ëœ ë…¸ë“œ ë°˜í™˜
 /// </summary>
-/// <param name="srcData">³ëµåÀÇ µ¥ÀÌÅÍ</param>
-/// <returns>»ý¼º µÈ ³ëµå</returns>
+/// <param name="srcData">ë…¸ë“œì˜ ë°ì´í„°</param>
+/// <returns>ìƒì„± ëœ ë…¸ë“œ</returns>
 NODE* SLL_CreateNode(DATA_TYPE srcData)
 {
 	NODE* retVal = (NODE*)malloc(sizeof(NODE));
@@ -18,9 +18,9 @@ NODE* SLL_CreateNode(DATA_TYPE srcData)
 }
 
 /// <summary>
-/// ´ë»ó ³ëµå¿¡ ÇÒ´ç µÈ ¸Þ¸ð¸® ÇØÁ¦
+/// ëŒ€ìƒ ë…¸ë“œì— í• ë‹¹ ëœ ë©”ëª¨ë¦¬ í•´ì œ
 /// </summary>
-/// <param name="srcNode">´ë»ó ³ëµå</param>
+/// <param name="srcNode">ëŒ€ìƒ ë…¸ë“œ</param>
 void SLL_DeallocateNode(NODE** srcNode)
 {
 	if ((*srcNode) != NULL)
@@ -31,27 +31,25 @@ void SLL_DeallocateNode(NODE** srcNode)
 }
 
 /// <summary>
-/// ´ë»ó ¸®½ºÆ®¿¡ ÇÒ´ç µÈ ¸Þ¸ð¸® ÇØÁ¦
+/// ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸ì— í• ë‹¹ ëœ ë©”ëª¨ë¦¬ í•´ì œ
 /// </summary>
-/// <param name="srcList">´ë»ó ¸®½ºÆ®</param>
+/// <param name="srcList">ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸</param>
 void SLL_DeallocateNodeList(NODE** srcList)
 {
 	while ((*srcList) != NULL)
 	{
-		NODE* tmp = (*srcList); //»èÁ¦ ÇÒ ³ëµå
+		NODE* tmp = (*srcList); //ì‚­ì œ í•  ë…¸ë“œ
 
-		(*srcList) = (*srcList)->_next; //Çìµå ³ëµå¸¦ ´ÙÀ½ ³ëµå·Î ÀÌµ¿ ÈÄ »èÁ¦
+		(*srcList) = (*srcList)->_next; //í—¤ë“œ ë…¸ë“œë¥¼ ë‹¤ìŒ ë…¸ë“œë¡œ ì´ë™ í›„ ì‚­ì œ
 		SLL_DeallocateNode(&tmp);
 	}
-
-	(*srcList) = NULL;
 }
 
 /// <summary>
-/// ´ë»ó ¸®½ºÆ®ÀÇ ³¡¿¡ »õ ³ëµå »ðÀÔ
+/// ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸ì˜ ëì— ìƒˆ ë…¸ë“œ ì‚½ìž…
 /// </summary>
-/// <param name="srcList">´ë»ó ¸®½ºÆ®</param>
-/// <param name="srcNewNode">¸®½ºÆ®ÀÇ ³¡¿¡ »ðÀÔÇÏ°íÀÚ ÇÏ´Â »õ ³ëµå</param>
+/// <param name="srcList">ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸</param>
+/// <param name="srcNewNode">ë¦¬ìŠ¤íŠ¸ì˜ ëì— ì‚½ìž…í•˜ê³ ìž í•˜ëŠ” ìƒˆ ë…¸ë“œ</param>
 void SLL_AppendNode(NODE** srcList, NODE* srcNewNode)
 {
 	if (srcNewNode == NULL)
@@ -59,13 +57,13 @@ void SLL_AppendNode(NODE** srcList, NODE* srcNewNode)
 
 	if ((*srcList) == NULL)
 	{
-		(*srcList) = srcNewNode; //Çìµå ³ëµå ÇÒ´ç
+		(*srcList) = srcNewNode; //í—¤ë“œ ë…¸ë“œ í• ë‹¹
 	}
-	else //³¡¿¡ »õ ³ëµå »ðÀÔ
+	else //ëì— ìƒˆ ë…¸ë“œ ì‚½ìž…
 	{
-		NODE* tail = (*srcList); //²¿¸® ³ëµå
+		NODE* tail = (*srcList); //ê¼¬ë¦¬ ë…¸ë“œ
 
-		while (tail->_next != NULL) //³¡À¸·Î ÀÌµ¿
+		while (tail->_next != NULL) //ëìœ¼ë¡œ ì´ë™
 		{
 			tail = tail->_next;
 		}
@@ -75,19 +73,19 @@ void SLL_AppendNode(NODE** srcList, NODE* srcNewNode)
 }
 
 /// <summary>
-/// ´ë»ó ¸®½ºÆ®¿¡¼­ Çìµå ³ëµå ±âÁØ »ó´ëÀû Æ¯Á¤ À§Ä¡ÀÇ ³ëµå ¹ÝÈ¯
+/// ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸ì—ì„œ í—¤ë“œ ë…¸ë“œ ê¸°ì¤€ ìƒëŒ€ì  íŠ¹ì • ìœ„ì¹˜ì˜ ë…¸ë“œ ë°˜í™˜
 /// </summary>
-/// <param name="srcList">´ë»ó ¸®½ºÆ®</param>
-/// <param name="position">Çìµå ³ëµå ±âÁØ »ó´ëÀû Æ¯Á¤ À§Ä¡</param>
-/// <returns>Çìµå ³ëµå ±âÁØ »ó´ëÀû Æ¯Á¤ À§Ä¡ÀÇ ³ëµå</returns>
+/// <param name="srcList">ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸</param>
+/// <param name="position">í—¤ë“œ ë…¸ë“œ ê¸°ì¤€ ìƒëŒ€ì  íŠ¹ì • ìœ„ì¹˜</param>
+/// <returns>í—¤ë“œ ë…¸ë“œ ê¸°ì¤€ ìƒëŒ€ì  íŠ¹ì • ìœ„ì¹˜ì˜ ë…¸ë“œ</returns>
 NODE* SLL_GetNodeAt(NODE** srcList, NODE_POSITION_TYPE position)
 {
 	if (position < 0)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	NODE* retVal = (*srcList); //ÇöÀç ³ëµå
+	NODE* retVal = (*srcList); //í˜„ìž¬ ë…¸ë“œ
 
-	while (retVal != NULL && (--position) >= 0) //¹ÝÈ¯ ´ë»ó ³ëµå À§Ä¡±îÁö ÀÌµ¿
+	while (retVal != NULL && (--position) >= 0) //ë°˜í™˜ ëŒ€ìƒ ë…¸ë“œ ìœ„ì¹˜ê¹Œì§€ ì´ë™
 	{
 		retVal = retVal->_next;
 	}
@@ -99,28 +97,28 @@ NODE* SLL_GetNodeAt(NODE** srcList, NODE_POSITION_TYPE position)
 }
 
 /// <summary>
-/// ´ë»ó ¸®½ºÆ®¿¡¼­ Çìµå ³ëµå ±âÁØ »èÁ¦ ÇÒ »ó´ëÀû Æ¯Á¤ À§Ä¡ÀÇ ³ëµå »èÁ¦
+/// ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸ì—ì„œ í—¤ë“œ ë…¸ë“œ ê¸°ì¤€ ì‚­ì œ í•  ìƒëŒ€ì  íŠ¹ì • ìœ„ì¹˜ì˜ ë…¸ë“œ ì‚­ì œ
 /// </summary>
-/// <param name="srcList">´ë»ó ¸®½ºÆ®</param>
-/// <param name="position">Çìµå ³ëµå ±âÁØ »èÁ¦ ÇÒ »ó´ëÀû Æ¯Á¤ À§Ä¡</param>
-/// <param name="deallocateAfterRemove">»èÁ¦ ´ë»ó ³ëµå¿¡ ´ëÇÑ ¸Þ¸ð¸® ÇØÁ¦ ¼öÇà ¿©ºÎ</param>
+/// <param name="srcList">ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸</param>
+/// <param name="position">í—¤ë“œ ë…¸ë“œ ê¸°ì¤€ ì‚­ì œ í•  ìƒëŒ€ì  íŠ¹ì • ìœ„ì¹˜</param>
+/// <param name="deallocateAfterRemove">ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì— ëŒ€í•œ ë©”ëª¨ë¦¬ í•´ì œ ìˆ˜í–‰ ì—¬ë¶€</param>
 void SLL_RemoveNodeAt(NODE** srcList, NODE_POSITION_TYPE position, bool deallocateAfterRemove)
 {
 	/***
-		´ÜÀÏ ¿¬°á ¸®½ºÆ®¿¡¼­ »èÁ¦ ´ë»ó ³ëµå¿¡¼­ ÀÌÀü ³ëµå·Î Áï½Ã Á¢±ÙÀÌ ºÒ°¡´ÉÇÏ¹Ç·Î,
-		»èÁ¦ ´ë»ó ³ëµåÀÇ ÀÌÀü ³ëµå±îÁö ÀÌµ¿ÇÏ¿©, »èÁ¦ ´ë»ó ³ëµåÀÇ ´ÙÀ½ ¿¬°á ÇØÁ¦¸¦ ¼öÇàÇÏ¿©¾ß ÇÑ´Ù.
+		ë‹¨ì¼ ì—°ê²° ë¦¬ìŠ¤íŠ¸ì—ì„œ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì—ì„œ ì´ì „ ë…¸ë“œë¡œ ì¦‰ì‹œ ì ‘ê·¼ì´ ë¶ˆê°€ëŠ¥í•˜ë¯€ë¡œ,
+		ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ ë…¸ë“œê¹Œì§€ ì´ë™í•˜ì—¬, ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ë‹¤ìŒ ì—°ê²° í•´ì œë¥¼ ìˆ˜í–‰í•˜ì—¬ì•¼ í•œë‹¤.
 		---
-		ÀÌ¿¡ µû¶ó, ´Ü¼ø ÀÌÁß ¿¬°á ¸®½ºÆ® È¤Àº È¯Çü ÀÌÁß ¿¬°á ¸®½ºÆ®¿Í ´Ù¸£°Ô
-		ÇöÀç ±¸Á¶¿¡¼­ RemoveNodeAt°ú RemoveNode °£ÀÇ Áßº¹ ÃÖ¼ÒÈ­¸¦ À§ÇÑ Á¾¼Ó °ü°è¸¦ ¿¬°á ÇÒ ¼ö ¾ø´Ù.
+		ì´ì— ë”°ë¼, ë‹¨ìˆœ ì´ì¤‘ ì—°ê²° ë¦¬ìŠ¤íŠ¸ í˜¹ì€ í™˜í˜• ì´ì¤‘ ì—°ê²° ë¦¬ìŠ¤íŠ¸ì™€ ë‹¤ë¥´ê²Œ
+		í˜„ìž¬ êµ¬ì¡°ì—ì„œ RemoveNodeAtê³¼ RemoveNode ê°„ì˜ ì¤‘ë³µ ìµœì†Œí™”ë¥¼ ìœ„í•œ ì¢…ì† ê´€ê³„ë¥¼ ì—°ê²° í•  ìˆ˜ ì—†ë‹¤.
 	***/
 
 	if (position < 0)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	if (position == 0) //Çìµå ³ëµå°¡ »èÁ¦ ´ë»óÀÏ °æ¿ì
+	if (position == 0) //í—¤ë“œ ë…¸ë“œê°€ ì‚­ì œ ëŒ€ìƒì¼ ê²½ìš°
 	{
-		NODE* tmp = (*srcList); //»èÁ¦ ´ë»ó ³ëµå
-		(*srcList) = (*srcList)->_next; //Çìµå ³ëµåÀÇ ´ÙÀ½ ³ëµå·Î Çìµå ³ëµå º¯°æ
+		NODE* tmp = (*srcList); //ì‚­ì œ ëŒ€ìƒ ë…¸ë“œ
+		(*srcList) = (*srcList)->_next; //í—¤ë“œ ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œë¡œ í—¤ë“œ ë…¸ë“œ ë³€ê²½
 		tmp->_next = NULL;
 
 		if (deallocateAfterRemove)
@@ -128,11 +126,11 @@ void SLL_RemoveNodeAt(NODE** srcList, NODE_POSITION_TYPE position, bool dealloca
 			SLL_DeallocateNode(&tmp);
 		}
 	}
-	else //ÇöÀç ³ëµåÀÇ ´ÙÀ½ ³ëµå°¡ »èÁ¦ ´ë»ó ³ëµåÀÏ ¶§±îÁö Å½»ö
+	else //í˜„ìž¬ ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œê°€ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì¼ ë•Œê¹Œì§€ íƒìƒ‰
 	{
-		NODE* current = (*srcList); //ÇöÀç ³ëµå
+		NODE* current = (*srcList); //í˜„ìž¬ ë…¸ë“œ
 
-		while (current != NULL && (--position) >= 1) //»èÁ¦ ´ë»ó ³ëµåÀÇ ÀÌÀü ³ëµå À§Ä¡±îÁö ÀÌµ¿
+		while (current != NULL && (--position) >= 1) //ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ ë…¸ë“œ ìœ„ì¹˜ê¹Œì§€ ì´ë™
 		{
 			current = current->_next;
 		}
@@ -140,9 +138,9 @@ void SLL_RemoveNodeAt(NODE** srcList, NODE_POSITION_TYPE position, bool dealloca
 		if (current == NULL)
 			throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
-		NODE* tmp = current->_next; //»èÁ¦ ´ë»ó ³ëµå
+		NODE* tmp = current->_next; //ì‚­ì œ ëŒ€ìƒ ë…¸ë“œ
 
-		current->_next = tmp->_next; //ÇöÀç ³ëµåÀÇ ´ÙÀ½À» »èÁ¦ ´ë»ó ³ëµåÀÇ ´ÙÀ½ ³ëµå·Î ¿¬°á
+		current->_next = tmp->_next; //í˜„ìž¬ ë…¸ë“œì˜ ë‹¤ìŒì„ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œë¡œ ì—°ê²°
 		tmp->_next = NULL;
 
 		if (deallocateAfterRemove)
@@ -153,19 +151,19 @@ void SLL_RemoveNodeAt(NODE** srcList, NODE_POSITION_TYPE position, bool dealloca
 }
 
 /// <summary>
-/// ´ë»ó ¸®½ºÆ®¿¡¼­ »èÁ¦ ´ë»ó ³ëµå »èÁ¦
+/// ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸ì—ì„œ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œ ì‚­ì œ
 /// </summary>
-/// <param name="srcList">´ë»ó ¸®½ºÆ®</param>
-/// <param name="srcTargetNode">»èÁ¦ ´ë»ó ³ëµå</param>
-/// <param name="deallocateAfterRemove">»èÁ¦ ´ë»ó ³ëµå¿¡ ´ëÇÑ ¸Þ¸ð¸® ÇØÁ¦ ¼öÇà ¿©ºÎ</param>
+/// <param name="srcList">ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸</param>
+/// <param name="srcTargetNode">ì‚­ì œ ëŒ€ìƒ ë…¸ë“œ</param>
+/// <param name="deallocateAfterRemove">ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì— ëŒ€í•œ ë©”ëª¨ë¦¬ í•´ì œ ìˆ˜í–‰ ì—¬ë¶€</param>
 void SLL_RemoveNode(NODE** srcList, NODE* srcTargetNode, bool deallocateAfterRemove)
 {
 	if (srcTargetNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	if (srcTargetNode == (*srcList)) //»èÁ¦ ´ë»ó ³ëµå°¡ Çìµå ³ëµåÀÏ °æ¿ì
+	if (srcTargetNode == (*srcList)) //ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ í—¤ë“œ ë…¸ë“œì¼ ê²½ìš°
 	{
-		(*srcList) = srcTargetNode->_next; //»èÁ¦ ´ë»ó ³ëµåÀÇ ´ÙÀ½ ³ëµå·Î Çìµå ³ëµå º¯°æ
+		(*srcList) = srcTargetNode->_next; //ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œë¡œ í—¤ë“œ ë…¸ë“œ ë³€ê²½
 		srcTargetNode->_next = NULL;
 
 		if (deallocateAfterRemove)
@@ -173,11 +171,11 @@ void SLL_RemoveNode(NODE** srcList, NODE* srcTargetNode, bool deallocateAfterRem
 			SLL_DeallocateNode(&srcTargetNode);
 		}
 	}
-	else //ÇöÀç ³ëµåÀÇ ´ÙÀ½ ³ëµå°¡ »èÁ¦ ´ë»ó ³ëµåÀÏ¶§±îÁö Å½»ö
+	else //í˜„ìž¬ ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œê°€ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì¼ë•Œê¹Œì§€ íƒìƒ‰
 	{
-		NODE* current = (*srcList); //ÇöÀç ³ëµå
+		NODE* current = (*srcList); //í˜„ìž¬ ë…¸ë“œ
 
-		while (current != NULL && current->_next != srcTargetNode) //»èÁ¦ ´ë»ó ³ëµåÀÇ ÀÌÀü ³ëµå À§Ä¡±îÁö ÀÌµ¿
+		while (current != NULL && current->_next != srcTargetNode) //ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ ë…¸ë“œ ìœ„ì¹˜ê¹Œì§€ ì´ë™
 		{
 			current = current->_next;
 		}
@@ -185,7 +183,7 @@ void SLL_RemoveNode(NODE** srcList, NODE* srcTargetNode, bool deallocateAfterRem
 		if (current == NULL)
 			throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
-		current->_next = srcTargetNode->_next; //ÇöÀç ³ëµåÀÇ ´ÙÀ½À» »èÁ¦ ´ë»ó ³ëµåÀÇ ´ÙÀ½ ³ëµå·Î ¿¬°á
+		current->_next = srcTargetNode->_next; //í˜„ìž¬ ë…¸ë“œì˜ ë‹¤ìŒì„ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œë¡œ ì—°ê²°
 		srcTargetNode->_next = NULL;
 
 		if (deallocateAfterRemove)
@@ -196,10 +194,10 @@ void SLL_RemoveNode(NODE** srcList, NODE* srcTargetNode, bool deallocateAfterRem
 }
 
 /// <summary>
-/// ´ë»ó ¸®½ºÆ®ÀÇ ¸Ç ¾Õ¿¡ »õ ³ëµå »ðÀÔ
+/// ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸ì˜ ë§¨ ì•žì— ìƒˆ ë…¸ë“œ ì‚½ìž…
 /// </summary>
-/// <param name="srcList">´ë»ó ¸®½ºÆ®</param>
-/// <param name="srcNewNode">»ðÀÔÇÏ°íÀÚ ÇÏ´Â »õ ³ëµå</param>
+/// <param name="srcList">ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸</param>
+/// <param name="srcNewNode">ì‚½ìž…í•˜ê³ ìž í•˜ëŠ” ìƒˆ ë…¸ë“œ</param>
 void SLL_InsertNewHead(NODE** srcList, NODE* srcNewNode)
 {
 	if (srcNewNode == NULL)
@@ -209,45 +207,45 @@ void SLL_InsertNewHead(NODE** srcList, NODE* srcNewNode)
 	{
 		(*srcList) = srcNewNode;
 	}
-	else //Çìµå ³ëµåÀÇ ¾Õ¿¡ »ðÀÔ
+	else //í—¤ë“œ ë…¸ë“œì˜ ì•žì— ì‚½ìž…
 	{
 		SLL_InsertNodeBefore(srcList, (*srcList), srcNewNode);
 	}
 }
 
 /// <summary>
-/// ´ë»ó ³ëµåÀÇ µÚ¿¡ »õ ³ëµå »ðÀÔ
+/// ëŒ€ìƒ ë…¸ë“œì˜ ë’¤ì— ìƒˆ ë…¸ë“œ ì‚½ìž…
 /// </summary>
-/// <param name="srcTargetNode">´ë»ó ³ëµå</param>
-/// <param name="srcNewNode">»ðÀÔÇÏ°íÀÚ ÇÏ´Â »õ ³ëµå</param>
+/// <param name="srcTargetNode">ëŒ€ìƒ ë…¸ë“œ</param>
+/// <param name="srcNewNode">ì‚½ìž…í•˜ê³ ìž í•˜ëŠ” ìƒˆ ë…¸ë“œ</param>
 void SLL_InsertNodeAfter(NODE* srcTargetNode, NODE* srcNewNode)
 {
 	if (srcTargetNode == NULL || srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	srcNewNode->_next = srcTargetNode->_next; //»õ ³ëµåÀÇ ´ÙÀ½À» ´ë»ó ³ëµåÀÇ ´ÙÀ½ ³ëµå·Î ¿¬°á
-	srcTargetNode->_next = srcNewNode; //´ë»ó ³ëµåÀÇ ´ÙÀ½À» »õ ³ëµå·Î ¿¬°á
+	srcNewNode->_next = srcTargetNode->_next; //ìƒˆ ë…¸ë“œì˜ ë‹¤ìŒì„ ëŒ€ìƒ ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œë¡œ ì—°ê²°
+	srcTargetNode->_next = srcNewNode; //ëŒ€ìƒ ë…¸ë“œì˜ ë‹¤ìŒì„ ìƒˆ ë…¸ë“œë¡œ ì—°ê²°
 }
 
 /// <summary>
-/// ´ë»ó ¸®½ºÆ®ÀÇ ´ë»ó ³ëµåÀÇ ¾Õ¿¡ »õ ³ëµå »ðÀÔ
+/// ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸ì˜ ëŒ€ìƒ ë…¸ë“œì˜ ì•žì— ìƒˆ ë…¸ë“œ ì‚½ìž…
 /// </summary>
-/// <param name="srcList">´ë»ó ¸®½ºÆ®</param>
-/// <param name="srcTargetNode">´ë»ó ³ëµå</param>
-/// <param name="srcNewNode">»ðÀÔÇÏ°íÀÚ ÇÏ´Â »õ ³ëµå</param>
+/// <param name="srcList">ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸</param>
+/// <param name="srcTargetNode">ëŒ€ìƒ ë…¸ë“œ</param>
+/// <param name="srcNewNode">ì‚½ìž…í•˜ê³ ìž í•˜ëŠ” ìƒˆ ë…¸ë“œ</param>
 void SLL_InsertNodeBefore(NODE** srcList, NODE* srcTargetNode, NODE* srcNewNode)
 {
 	/***
-		1) TH : ´ë»ó ³ëµåÀÇ Çìµå ³ëµå ¿©ºÎ (T : Çìµå ³ëµå, F : Áß°£ ³ëµå È¤Àº ²¿¸® ³ëµå)
-		2) D : ÀÌ¿¡ µû¸¥ »ðÀÔÇÏ°íÀÚ ÇÏ´Â »õ ³ëµå »ðÀÔ ½Ã ¼öÇà ÀÛ¾÷
+		1) TH : ëŒ€ìƒ ë…¸ë“œì˜ í—¤ë“œ ë…¸ë“œ ì—¬ë¶€ (T : í—¤ë“œ ë…¸ë“œ, F : ì¤‘ê°„ ë…¸ë“œ í˜¹ì€ ê¼¬ë¦¬ ë…¸ë“œ)
+		2) D : ì´ì— ë”°ë¥¸ ì‚½ìž…í•˜ê³ ìž í•˜ëŠ” ìƒˆ ë…¸ë“œ ì‚½ìž… ì‹œ ìˆ˜í–‰ ìž‘ì—…
 
 		TH | D
-		T	1) »õ ³ëµåÀÇ ´ÙÀ½À» ±âÁ¸ Çìµå ³ëµå·Î ¿¬°á
-			2) »õ ³ëµå¸¦ Çìµå ³ëµå·Î º¯°æ
+		T	1) ìƒˆ ë…¸ë“œì˜ ë‹¤ìŒì„ ê¸°ì¡´ í—¤ë“œ ë…¸ë“œë¡œ ì—°ê²°
+			2) ìƒˆ ë…¸ë“œë¥¼ í—¤ë“œ ë…¸ë“œë¡œ ë³€ê²½
 
-		F	1) ´ë»ó ³ëµå¿¡¼­ ÀÌÀü ³ëµå·Î Áï½Ã Á¢±ÙÀÌ ºÒ°¡´ÉÇÏ¹Ç·Î, ´ë»ó ³ëµåÀÇ ÀÌÀü ³ëµå±îÁö ÀÌµ¿
-			2) ´ë»ó ³ëµåÀÇ ÀÌÀü ³ëµåÀÇ ´ÙÀ½À» »õ ³ëµå·Î ¿¬°á
-			3) »õ ³ëµåÀÇ ´ÙÀ½À» ´ë»ó ³ëµå·Î ¿¬°á
+		F	1) ëŒ€ìƒ ë…¸ë“œì—ì„œ ì´ì „ ë…¸ë“œë¡œ ì¦‰ì‹œ ì ‘ê·¼ì´ ë¶ˆê°€ëŠ¥í•˜ë¯€ë¡œ, ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ ë…¸ë“œê¹Œì§€ ì´ë™
+			2) ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ ë…¸ë“œì˜ ë‹¤ìŒì„ ìƒˆ ë…¸ë“œë¡œ ì—°ê²°
+			3) ìƒˆ ë…¸ë“œì˜ ë‹¤ìŒì„ ëŒ€ìƒ ë…¸ë“œë¡œ ì—°ê²°
 	***/
 
 	if (srcTargetNode == NULL || srcNewNode == NULL)
@@ -255,14 +253,14 @@ void SLL_InsertNodeBefore(NODE** srcList, NODE* srcTargetNode, NODE* srcNewNode)
 
 	if (srcTargetNode == (*srcList)) //T
 	{
-		srcNewNode->_next = (*srcList); //»õ ³ëµåÀÇ ´ÙÀ½À» ±âÁ¸ Çìµå ³ëµå·Î ¿¬°á
-		(*srcList) = srcNewNode; //Çìµå ³ëµå º¯°æ
+		srcNewNode->_next = (*srcList); //ìƒˆ ë…¸ë“œì˜ ë‹¤ìŒì„ ê¸°ì¡´ í—¤ë“œ ë…¸ë“œë¡œ ì—°ê²°
+		(*srcList) = srcNewNode; //í—¤ë“œ ë…¸ë“œ ë³€ê²½
 	}
 	else //F
 	{
-		NODE* current = (*srcList); //ÇöÀç ³ëµå
+		NODE* current = (*srcList); //í˜„ìž¬ ë…¸ë“œ
 
-		while (current != NULL && current->_next != srcTargetNode) //ÇöÀç ³ëµåÀÇ ´ÙÀ½ ³ëµå°¡ »ðÀÔ ´ë»ó ³ëµåÀÏ¶§±îÁö Å½»ö
+		while (current != NULL && current->_next != srcTargetNode) //í˜„ìž¬ ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œê°€ ì‚½ìž… ëŒ€ìƒ ë…¸ë“œì¼ë•Œê¹Œì§€ íƒìƒ‰
 		{
 			current = current->_next;
 		}
@@ -270,20 +268,20 @@ void SLL_InsertNodeBefore(NODE** srcList, NODE* srcTargetNode, NODE* srcNewNode)
 		if (current == NULL)
 			throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
 
-		current->_next = srcNewNode; //ÇöÀç ³ëµåÀÇ ´ÙÀ½À» »õ ³ëµå·Î ¿¬°á
-		srcNewNode->_next = srcTargetNode; //»õ ³ëµåÀÇ ´ÙÀ½À» ´ë»ó ³ëµå·Î ¿¬°á
+		current->_next = srcNewNode; //í˜„ìž¬ ë…¸ë“œì˜ ë‹¤ìŒì„ ìƒˆ ë…¸ë“œë¡œ ì—°ê²°
+		srcNewNode->_next = srcTargetNode; //ìƒˆ ë…¸ë“œì˜ ë‹¤ìŒì„ ëŒ€ìƒ ë…¸ë“œë¡œ ì—°ê²°
 	}
 }
 
 /// <summary>
-/// ´ë»ó ¸®½ºÆ®ÀÇ ÀüÃ¼ ³ëµåÀÇ ¼ö ¹ÝÈ¯
+/// ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸ì˜ ì „ì²´ ë…¸ë“œì˜ ìˆ˜ ë°˜í™˜
 /// </summary>
-/// <param name="srcList">´ë»ó ¸®½ºÆ®</param>
-/// <returns>´ë»ó ¸®½ºÆ®ÀÇ ÀüÃ¼ ³ëµåÀÇ ¼ö</returns>
+/// <param name="srcList">ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸</param>
+/// <returns>ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸ì˜ ì „ì²´ ë…¸ë“œì˜ ìˆ˜</returns>
 NODE_POSITION_TYPE SLL_GetTotalNodeCount(NODE** srcList)
 {
-	NODE_POSITION_TYPE totalNodeCount = 0; //ÀüÃ¼ ³ëµåÀÇ ¼ö
-	NODE* current = (*srcList); //ÇöÀç ³ëµå
+	NODE_POSITION_TYPE totalNodeCount = 0; //ì „ì²´ ë…¸ë“œì˜ ìˆ˜
+	NODE* current = (*srcList); //í˜„ìž¬ ë…¸ë“œ
 
 	while (current != NULL)
 	{
@@ -295,13 +293,13 @@ NODE_POSITION_TYPE SLL_GetTotalNodeCount(NODE** srcList)
 }
 
 /// <summary>
-/// ´ë»ó ¸®½ºÆ®ÀÇ ÀüÃ¼ ³ëµå¿¡ ´ëÇÑ µ¥ÀÌÅÍ Ãâ·Â
+/// ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸ì˜ ì „ì²´ ë…¸ë“œì— ëŒ€í•œ ë°ì´í„° ì¶œë ¥
 /// </summary>
-/// <param name="srcList">´ë»ó ¸®½ºÆ®</param>
+/// <param name="srcList">ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸</param>
 void SLL_DispNodeList(NODE** srcList)
 {
-	NODE_POSITION_TYPE currentPosition = 0; //ÇöÀç ³ëµåÀÇ À§Ä¡
-	NODE* current = (*srcList); //ÇöÀç ³ëµå
+	NODE_POSITION_TYPE currentPosition = 0; //í˜„ìž¬ ë…¸ë“œì˜ ìœ„ì¹˜
+	NODE* current = (*srcList); //í˜„ìž¬ ë…¸ë“œ
 
 	while (current != NULL)
 	{

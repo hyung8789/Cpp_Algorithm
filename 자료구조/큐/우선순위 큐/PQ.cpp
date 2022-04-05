@@ -47,10 +47,13 @@ void PQ_DeallocateQueue(PRIORITY_QUEUE** srcPriorityQueue)
 /// </summary>
 /// <param name="srcPriorityQueue">대상 큐</param>
 /// <param name="srcNewNode">삽입 할 새 노드</param>
-void PQ_Enqueue(PRIORITY_QUEUE* srcPriorityQueue, const NODE& srcNewNode)
+void PQ_Enqueue(PRIORITY_QUEUE* srcPriorityQueue, NODE* srcNewNode)
 {
 	if (srcPriorityQueue == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
+
+	if (srcNewNode == NULL)
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
 	if (PQ_IsFull(srcPriorityQueue))
 	{
@@ -76,7 +79,7 @@ void PQ_Enqueue(PRIORITY_QUEUE* srcPriorityQueue, const NODE& srcNewNode)
 
 	NODE tmpNode;
 
-	srcPriorityQueue->_nodeArray[currentIndex] = srcNewNode;
+	srcPriorityQueue->_nodeArray[currentIndex] = (*srcNewNode);
 
 	while (currentIndex > 0) //삽입 된 노드의 우선순위에 따른 적절한 위치 판별 및 이동
 	{

@@ -1,10 +1,10 @@
-#include "DLL_Core.h"
+ï»¿#include "DLL_Core.h"
 
 /// <summary>
-/// »õ·Î¿î ³ëµå »ý¼º ¹× »ý¼º µÈ ³ëµå ¹ÝÈ¯
+/// ìƒˆë¡œìš´ ë…¸ë“œ ìƒì„± ë° ìƒì„± ëœ ë…¸ë“œ ë°˜í™˜
 /// </summary>
-/// <param name="srcData">³ëµåÀÇ µ¥ÀÌÅÍ</param>
-/// <returns>»ý¼º µÈ ³ëµå</returns>
+/// <param name="srcData">ë…¸ë“œì˜ ë°ì´í„°</param>
+/// <returns>ìƒì„± ëœ ë…¸ë“œ</returns>
 NODE* DLL_CreateNode(DATA_TYPE srcData)
 {
 	NODE* retVal = (NODE*)malloc(sizeof(NODE));
@@ -18,9 +18,9 @@ NODE* DLL_CreateNode(DATA_TYPE srcData)
 }
 
 /// <summary>
-/// ´ë»ó ³ëµå¿¡ ÇÒ´ç µÈ ¸Þ¸ð¸® ÇØÁ¦
+/// ëŒ€ìƒ ë…¸ë“œì— í• ë‹¹ ëœ ë©”ëª¨ë¦¬ í•´ì œ
 /// </summary>
-/// <param name="srcNode">´ë»ó ³ëµå</param>
+/// <param name="srcNode">ëŒ€ìƒ ë…¸ë“œ</param>
 void DLL_DeallocateNode(NODE** srcNode)
 {
 	if ((*srcNode) != NULL)
@@ -31,41 +31,39 @@ void DLL_DeallocateNode(NODE** srcNode)
 }
 
 /// <summary>
-/// ´ë»ó ¸®½ºÆ®¿¡ ÇÒ´ç µÈ ¸Þ¸ð¸® ÇØÁ¦
+/// ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸ì— í• ë‹¹ ëœ ë©”ëª¨ë¦¬ í•´ì œ
 /// </summary>
-/// <param name="srcList">´ë»ó ¸®½ºÆ®</param>
+/// <param name="srcList">ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸</param>
 void DLL_DeallocateNodeList(NODE** srcList)
 {
 	while ((*srcList) != NULL)
 	{
-		NODE* tmp = (*srcList); //»èÁ¦ ÇÒ ³ëµå
+		NODE* tmp = (*srcList); //ì‚­ì œ í•  ë…¸ë“œ
 
-		(*srcList) = (*srcList)->_next; //Çìµå ³ëµå¸¦ ´ÙÀ½ ³ëµå·Î ÀÌµ¿ ÈÄ »èÁ¦
+		(*srcList) = (*srcList)->_next; //í—¤ë“œ ë…¸ë“œë¥¼ ë‹¤ìŒ ë…¸ë“œë¡œ ì´ë™ í›„ ì‚­ì œ
 		DLL_DeallocateNode(&tmp);
 	}
-
-	(*srcList) = NULL;
 }
 
 /// <summary>
-/// ´ë»ó ¸®½ºÆ®ÀÇ ³¡¿¡ »õ ³ëµå »ðÀÔ
+/// ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸ì˜ ëì— ìƒˆ ë…¸ë“œ ì‚½ìž…
 /// </summary>
-/// <param name="srcList">´ë»ó ¸®½ºÆ®</param>
-/// <param name="srcNewNode">¸®½ºÆ®ÀÇ ³¡¿¡ »ðÀÔÇÏ°íÀÚ ÇÏ´Â »õ ³ëµå</param>
+/// <param name="srcList">ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸</param>
+/// <param name="srcNewNode">ë¦¬ìŠ¤íŠ¸ì˜ ëì— ì‚½ìž…í•˜ê³ ìž í•˜ëŠ” ìƒˆ ë…¸ë“œ</param>
 void DLL_AppendNode(NODE** srcList, NODE* srcNewNode)
 {
 	if (srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	if ((*srcList) == NULL) //ºñ¾îÀÖÀ» °æ¿ì
+	if ((*srcList) == NULL) //ë¹„ì–´ìžˆì„ ê²½ìš°
 	{
-		(*srcList) = srcNewNode; //Çìµå ³ëµå ÇÒ´ç
+		(*srcList) = srcNewNode; //í—¤ë“œ ë…¸ë“œ í• ë‹¹
 	}
-	else //³¡¿¡ »õ ³ëµå »ðÀÔ
+	else //ëì— ìƒˆ ë…¸ë“œ ì‚½ìž…
 	{
-		NODE* tail = (*srcList); //²¿¸® ³ëµå
+		NODE* tail = (*srcList); //ê¼¬ë¦¬ ë…¸ë“œ
 
-		while (tail->_next != NULL) //³¡À¸·Î ÀÌµ¿
+		while (tail->_next != NULL) //ëìœ¼ë¡œ ì´ë™
 		{
 			tail = tail->_next;
 		}
@@ -75,19 +73,19 @@ void DLL_AppendNode(NODE** srcList, NODE* srcNewNode)
 }
 
 /// <summary>
-/// ´ë»ó ¸®½ºÆ®¿¡¼­ Çìµå ³ëµå ±âÁØ »ó´ëÀû Æ¯Á¤ À§Ä¡ÀÇ ³ëµå ¹ÝÈ¯
+/// ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸ì—ì„œ í—¤ë“œ ë…¸ë“œ ê¸°ì¤€ ìƒëŒ€ì  íŠ¹ì • ìœ„ì¹˜ì˜ ë…¸ë“œ ë°˜í™˜
 /// </summary>
-/// <param name="srcList">´ë»ó ¸®½ºÆ®</param>
-/// <param name="position">Çìµå ³ëµå ±âÁØ »ó´ëÀû Æ¯Á¤ À§Ä¡</param>
-/// <returns>Çìµå ³ëµå ±âÁØ »ó´ëÀû Æ¯Á¤ À§Ä¡ÀÇ ³ëµå</returns>
+/// <param name="srcList">ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸</param>
+/// <param name="position">í—¤ë“œ ë…¸ë“œ ê¸°ì¤€ ìƒëŒ€ì  íŠ¹ì • ìœ„ì¹˜</param>
+/// <returns>í—¤ë“œ ë…¸ë“œ ê¸°ì¤€ ìƒëŒ€ì  íŠ¹ì • ìœ„ì¹˜ì˜ ë…¸ë“œ</returns>
 NODE* DLL_GetNodeAt(NODE** srcList, NODE_POSITION_TYPE position)
 {
 	if (position < 0)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	NODE* retVal = (*srcList); //ÇöÀç ³ëµå
+	NODE* retVal = (*srcList); //í˜„ìž¬ ë…¸ë“œ
 
-	while (retVal != NULL && (--position) >= 0) //¹ÝÈ¯ ´ë»ó ³ëµå À§Ä¡±îÁö ÀÌµ¿
+	while (retVal != NULL && (--position) >= 0) //ë°˜í™˜ ëŒ€ìƒ ë…¸ë“œ ìœ„ì¹˜ê¹Œì§€ ì´ë™
 	{
 		retVal = retVal->_next;
 	}
@@ -99,19 +97,19 @@ NODE* DLL_GetNodeAt(NODE** srcList, NODE_POSITION_TYPE position)
 }
 
 /// <summary>
-/// ´ë»ó ¸®½ºÆ®¿¡¼­ Çìµå ³ëµå ±âÁØ »èÁ¦ ÇÒ »ó´ëÀû Æ¯Á¤ À§Ä¡ÀÇ ³ëµå »èÁ¦
+/// ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸ì—ì„œ í—¤ë“œ ë…¸ë“œ ê¸°ì¤€ ì‚­ì œ í•  ìƒëŒ€ì  íŠ¹ì • ìœ„ì¹˜ì˜ ë…¸ë“œ ì‚­ì œ
 /// </summary>
-/// <param name="srcList">´ë»ó ¸®½ºÆ®</param>
-/// <param name="position">Çìµå ³ëµå ±âÁØ »èÁ¦ ÇÒ »ó´ëÀû Æ¯Á¤ À§Ä¡</param>
-/// <param name="deallocateAfterRemove">»èÁ¦ ´ë»ó ³ëµå¿¡ ´ëÇÑ ¸Þ¸ð¸® ÇØÁ¦ ¼öÇà ¿©ºÎ</param>
+/// <param name="srcList">ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸</param>
+/// <param name="position">í—¤ë“œ ë…¸ë“œ ê¸°ì¤€ ì‚­ì œ í•  ìƒëŒ€ì  íŠ¹ì • ìœ„ì¹˜</param>
+/// <param name="deallocateAfterRemove">ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì— ëŒ€í•œ ë©”ëª¨ë¦¬ í•´ì œ ìˆ˜í–‰ ì—¬ë¶€</param>
 void DLL_RemoveNodeAt(NODE** srcList, NODE_POSITION_TYPE position, bool deallocateAfterRemove)
 {
 	if (position < 0)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	NODE* current = (*srcList); //ÇöÀç ³ëµå
+	NODE* current = (*srcList); //í˜„ìž¬ ë…¸ë“œ
 
-	while (current != NULL && (--position) >= 0) //»èÁ¦ ´ë»ó ³ëµå À§Ä¡±îÁö ÀÌµ¿
+	while (current != NULL && (--position) >= 0) //ì‚­ì œ ëŒ€ìƒ ë…¸ë“œ ìœ„ì¹˜ê¹Œì§€ ì´ë™
 	{
 		current = current->_next;
 	}
@@ -123,49 +121,49 @@ void DLL_RemoveNodeAt(NODE** srcList, NODE_POSITION_TYPE position, bool dealloca
 }
 
 /// <summary>
-/// ´ë»ó ¸®½ºÆ®¿¡¼­ »èÁ¦ ´ë»ó ³ëµå »èÁ¦
+/// ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸ì—ì„œ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œ ì‚­ì œ
 /// </summary>
-/// <param name="srcList">´ë»ó ¸®½ºÆ®</param>
-/// <param name="srcTargetNode">»èÁ¦ ´ë»ó ³ëµå</param>
-/// <param name="deallocateAfterRemove">»èÁ¦ ´ë»ó ³ëµå¿¡ ´ëÇÑ ¸Þ¸ð¸® ÇØÁ¦ ¼öÇà ¿©ºÎ</param>
+/// <param name="srcList">ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸</param>
+/// <param name="srcTargetNode">ì‚­ì œ ëŒ€ìƒ ë…¸ë“œ</param>
+/// <param name="deallocateAfterRemove">ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì— ëŒ€í•œ ë©”ëª¨ë¦¬ í•´ì œ ìˆ˜í–‰ ì—¬ë¶€</param>
 void DLL_RemoveNode(NODE** srcList, NODE* srcTargetNode, bool deallocateAfterRemove)
 {
 	/***
-		1) TPE : »èÁ¦ ´ë»ó ³ëµåÀÇ ÀÌÀü ³ëµå Á¸Àç ¿©ºÎ (T : Á¸Àç, F : ¹Ì Á¸Àç)
-		2) TNE : »èÁ¦ ´ë»ó ³ëµåÀÇ ´ÙÀ½ ³ëµå Á¸Àç ¿©ºÎ (T : Á¸Àç, F : ¹Ì Á¸Àç)
-		3) D : ÀÌ¿¡ µû¸¥ »èÁ¦ ´ë»ó ³ëµå »èÁ¦ ½Ã ¼öÇà ÀÛ¾÷
+		1) TPE : ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ ë…¸ë“œ ì¡´ìž¬ ì—¬ë¶€ (T : ì¡´ìž¬, F : ë¯¸ ì¡´ìž¬)
+		2) TNE : ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œ ì¡´ìž¬ ì—¬ë¶€ (T : ì¡´ìž¬, F : ë¯¸ ì¡´ìž¬)
+		3) D : ì´ì— ë”°ë¥¸ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œ ì‚­ì œ ì‹œ ìˆ˜í–‰ ìž‘ì—…
 
 		TPE | TNE | D
-		T	 T		1) »èÁ¦ ´ë»ó ³ëµåÀÇ ´ÙÀ½ ³ëµåÀÇ ÀÌÀüÀ» »èÁ¦ ´ë»ó ³ëµåÀÇ ÀÌÀü ³ëµå·Î ¿¬°á
-					2) »èÁ¦ ´ë»ó ³ëµåÀÇ ÀÌÀü ³ëµåÀÇ ´ÙÀ½À» »èÁ¦ ´ë»ó ³ëµåÀÇ ´ÙÀ½ ³ëµå·Î ¿¬°á
-					3) »èÁ¦ ´ë»ó ³ëµåÀÇ ÀÌÀü, ´ÙÀ½ ¿¬°á ÇØÁ¦ ¹× »èÁ¦ ´ë»ó ³ëµå »èÁ¦
+		T	 T		1) ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œì˜ ì´ì „ì„ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ ë…¸ë“œë¡œ ì—°ê²°
+					2) ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ ë…¸ë“œì˜ ë‹¤ìŒì„ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œë¡œ ì—°ê²°
+					3) ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „, ë‹¤ìŒ ì—°ê²° í•´ì œ ë° ì‚­ì œ ëŒ€ìƒ ë…¸ë“œ ì‚­ì œ
 
-		T	 F		1) »èÁ¦ ´ë»ó ³ëµåÀÇ ÀÌÀü ³ëµåÀÇ ´ÙÀ½À» »èÁ¦ ´ë»ó ³ëµåÀÇ ´ÙÀ½ ³ëµå·Î ¿¬°á (NULL)
-					2) »èÁ¦ ´ë»ó ³ëµåÀÇ ÀÌÀü, ´ÙÀ½ (NULL) ¿¬°á ÇØÁ¦ ¹× »èÁ¦ ´ë»ó ³ëµå »èÁ¦
+		T	 F		1) ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ ë…¸ë“œì˜ ë‹¤ìŒì„ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œë¡œ ì—°ê²° (NULL)
+					2) ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „, ë‹¤ìŒ (NULL) ì—°ê²° í•´ì œ ë° ì‚­ì œ ëŒ€ìƒ ë…¸ë“œ ì‚­ì œ
 
-		F	 T		1) Çìµå ³ëµå¸¦ »èÁ¦ ´ë»ó ³ëµåÀÇ ´ÙÀ½ ³ëµå·Î º¯°æ
-					2) »èÁ¦ ´ë»ó ³ëµåÀÇ ´ÙÀ½ ³ëµåÀÇ ÀÌÀüÀ» »èÁ¦ ´ë»ó ³ëµåÀÇ ÀÌÀü ³ëµå·Î ¿¬°á (NULL)
-					3) »èÁ¦ ´ë»ó ³ëµåÀÇ ÀÌÀü (NULL), ´ÙÀ½ ¿¬°á ÇØÁ¦ ¹× »èÁ¦ ´ë»ó ³ëµå »èÁ¦
+		F	 T		1) í—¤ë“œ ë…¸ë“œë¥¼ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œë¡œ ë³€ê²½
+					2) ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œì˜ ì´ì „ì„ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ ë…¸ë“œë¡œ ì—°ê²° (NULL)
+					3) ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ (NULL), ë‹¤ìŒ ì—°ê²° í•´ì œ ë° ì‚­ì œ ëŒ€ìƒ ë…¸ë“œ ì‚­ì œ
 
-		F	 F		1) »èÁ¦ ´ë»ó ³ëµåÀÇ ÀÌÀü (NULL), ´ÙÀ½ (NULL) ¿¬°á ÇØÁ¦ ¹× »èÁ¦ ´ë»ó ³ëµå »èÁ¦
+		F	 F		1) ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ (NULL), ë‹¤ìŒ (NULL) ì—°ê²° í•´ì œ ë° ì‚­ì œ ëŒ€ìƒ ë…¸ë“œ ì‚­ì œ
 	***/
 
 	if (srcTargetNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	if (srcTargetNode == (*srcList)) //F T (»èÁ¦ ´ë»ó ³ëµå°¡ Çìµå ³ëµåÀÎ °æ¿ì)
+	if (srcTargetNode == (*srcList)) //F T (ì‚­ì œ ëŒ€ìƒ ë…¸ë“œê°€ í—¤ë“œ ë…¸ë“œì¸ ê²½ìš°)
 	{
-		(*srcList) = srcTargetNode->_next; //Çìµå ³ëµå¸¦ »èÁ¦ ´ë»ó ³ëµåÀÇ ´ÙÀ½ ³ëµå·Î º¯°æ
+		(*srcList) = srcTargetNode->_next; //í—¤ë“œ ë…¸ë“œë¥¼ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œë¡œ ë³€ê²½
 	}
 
 	if (srcTargetNode->_next != NULL) //- T
 	{
-		srcTargetNode->_next->_prev = srcTargetNode->_prev; //»èÁ¦ ´ë»ó ³ëµåÀÇ ´ÙÀ½ ³ëµåÀÇ ÀÌÀüÀ» »èÁ¦ ´ë»ó ³ëµåÀÇ ÀÌÀü ³ëµå·Î ¿¬°á
+		srcTargetNode->_next->_prev = srcTargetNode->_prev; //ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œì˜ ì´ì „ì„ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ ë…¸ë“œë¡œ ì—°ê²°
 	}
 
 	if (srcTargetNode->_prev != NULL) //T -
 	{
-		srcTargetNode->_prev->_next = srcTargetNode->_next; //»èÁ¦ ´ë»ó ³ëµåÀÇ ÀÌÀü ³ëµåÀÇ ´ÙÀ½À» »èÁ¦ ´ë»ó ³ëµåÀÇ ´ÙÀ½ ³ëµå·Î ¿¬°á
+		srcTargetNode->_prev->_next = srcTargetNode->_next; //ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ ë…¸ë“œì˜ ë‹¤ìŒì„ ì‚­ì œ ëŒ€ìƒ ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œë¡œ ì—°ê²°
 	}
 
 	srcTargetNode->_prev = NULL;
@@ -178,10 +176,10 @@ void DLL_RemoveNode(NODE** srcList, NODE* srcTargetNode, bool deallocateAfterRem
 }
 
 /// <summary>
-/// ´ë»ó ¸®½ºÆ®ÀÇ ¸Ç ¾Õ¿¡ »õ ³ëµå »ðÀÔ
+/// ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸ì˜ ë§¨ ì•žì— ìƒˆ ë…¸ë“œ ì‚½ìž…
 /// </summary>
-/// <param name="srcList">´ë»ó ¸®½ºÆ®</param>
-/// <param name="srcNewNode">»ðÀÔÇÏ°íÀÚ ÇÏ´Â »õ ³ëµå</param>
+/// <param name="srcList">ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸</param>
+/// <param name="srcNewNode">ì‚½ìž…í•˜ê³ ìž í•˜ëŠ” ìƒˆ ë…¸ë“œ</param>
 void DLL_InsertNewHead(NODE** srcList, NODE* srcNewNode)
 {
 	if (srcNewNode == NULL)
@@ -191,94 +189,94 @@ void DLL_InsertNewHead(NODE** srcList, NODE* srcNewNode)
 	{
 		(*srcList) = srcNewNode;
 	}
-	else //Çìµå ³ëµåÀÇ ¾Õ¿¡ »ðÀÔ
+	else //í—¤ë“œ ë…¸ë“œì˜ ì•žì— ì‚½ìž…
 	{
 		DLL_InsertNodeBefore(srcList, (*srcList), srcNewNode);
 	}
 }
 
 /// <summary>
-/// ´ë»ó ³ëµåÀÇ µÚ¿¡ »õ ³ëµå »ðÀÔ
+/// ëŒ€ìƒ ë…¸ë“œì˜ ë’¤ì— ìƒˆ ë…¸ë“œ ì‚½ìž…
 /// </summary>
-/// <param name="srcTargetNode">´ë»ó ³ëµå</param>
-/// <param name="srcNewNode">»ðÀÔÇÏ°íÀÚ ÇÏ´Â »õ ³ëµå</param>
+/// <param name="srcTargetNode">ëŒ€ìƒ ë…¸ë“œ</param>
+/// <param name="srcNewNode">ì‚½ìž…í•˜ê³ ìž í•˜ëŠ” ìƒˆ ë…¸ë“œ</param>
 void DLL_InsertNodeAfter(NODE* srcTargetNode, NODE* srcNewNode)
 {
 	/***
-		È¯Çü ÀÌÁß ¿¬°á ¸®½ºÆ®¿Í ºñ±³ÇÏ¿© Çìµå¿Í ²¿¸®°¡ ¼­·Î ¿¬°áµÇÁö ¾ÊÀ¸¹Ç·Î,
-		´ë»ó ³ëµåÀÇ µÚ¿¡ »ðÀÔ ½Ã ´ë»ó ³ëµåÀÇ ´ÙÀ½ ³ëµå°¡ Á¸Àç ÇÒ °æ¿ì¸¸,
-		´ë»ó ³ëµåÀÇ ´ÙÀ½ ³ëµåÀÇ ÀÌÀüÀ» »õ ³ëµå·Î ¿¬°á
+		í™˜í˜• ì´ì¤‘ ì—°ê²° ë¦¬ìŠ¤íŠ¸ì™€ ë¹„êµí•˜ì—¬ í—¤ë“œì™€ ê¼¬ë¦¬ê°€ ì„œë¡œ ì—°ê²°ë˜ì§€ ì•Šìœ¼ë¯€ë¡œ,
+		ëŒ€ìƒ ë…¸ë“œì˜ ë’¤ì— ì‚½ìž… ì‹œ ëŒ€ìƒ ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œê°€ ì¡´ìž¬ í•  ê²½ìš°ë§Œ,
+		ëŒ€ìƒ ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œì˜ ì´ì „ì„ ìƒˆ ë…¸ë“œë¡œ ì—°ê²°
 	***/
 
 	if (srcTargetNode == NULL || srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	srcNewNode->_prev = srcTargetNode; //»õ ³ëµåÀÇ ÀÌÀüÀ» ´ë»ó ³ëµå·Î ¿¬°á
-	srcNewNode->_next = srcTargetNode->_next; //»õ ³ëµåÀÇ ´ÙÀ½À» ´ë»ó ³ëµåÀÇ ´ÙÀ½ ³ëµå·Î ¿¬°á
+	srcNewNode->_prev = srcTargetNode; //ìƒˆ ë…¸ë“œì˜ ì´ì „ì„ ëŒ€ìƒ ë…¸ë“œë¡œ ì—°ê²°
+	srcNewNode->_next = srcTargetNode->_next; //ìƒˆ ë…¸ë“œì˜ ë‹¤ìŒì„ ëŒ€ìƒ ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œë¡œ ì—°ê²°
 
-	if (srcTargetNode->_next != NULL) //´ë»ó ³ëµåÀÇ ´ÙÀ½ ³ëµå°¡ Á¸Àç ÇÒ °æ¿ì
+	if (srcTargetNode->_next != NULL) //ëŒ€ìƒ ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œê°€ ì¡´ìž¬ í•  ê²½ìš°
 	{
-		srcTargetNode->_next->_prev = srcNewNode; //´ë»ó ³ëµåÀÇ ´ÙÀ½ ³ëµåÀÇ ÀÌÀüÀ» »õ ³ëµå·Î ¿¬°á
+		srcTargetNode->_next->_prev = srcNewNode; //ëŒ€ìƒ ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œì˜ ì´ì „ì„ ìƒˆ ë…¸ë“œë¡œ ì—°ê²°
 	}
 
-	srcTargetNode->_next = srcNewNode; //´ë»ó ³ëµåÀÇ ´ÙÀ½À» »õ ³ëµå·Î ¿¬°á
+	srcTargetNode->_next = srcNewNode; //ëŒ€ìƒ ë…¸ë“œì˜ ë‹¤ìŒì„ ìƒˆ ë…¸ë“œë¡œ ì—°ê²°
 }
 
 /// <summary>
-/// ´ë»ó ¸®½ºÆ®ÀÇ ´ë»ó ³ëµåÀÇ ¾Õ¿¡ »õ ³ëµå »ðÀÔ
+/// ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸ì˜ ëŒ€ìƒ ë…¸ë“œì˜ ì•žì— ìƒˆ ë…¸ë“œ ì‚½ìž…
 /// </summary>
-/// <param name="srcList">´ë»ó ¸®½ºÆ®</param>
-/// <param name="srcTargetNode">´ë»ó ³ëµå</param>
-/// <param name="srcNewNode">»ðÀÔÇÏ°íÀÚ ÇÏ´Â »õ ³ëµå</param>
+/// <param name="srcList">ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸</param>
+/// <param name="srcTargetNode">ëŒ€ìƒ ë…¸ë“œ</param>
+/// <param name="srcNewNode">ì‚½ìž…í•˜ê³ ìž í•˜ëŠ” ìƒˆ ë…¸ë“œ</param>
 void DLL_InsertNodeBefore(NODE** srcList, NODE* srcTargetNode, NODE* srcNewNode)
 {
 	/***
-		È¯Çü ÀÌÁß ¿¬°á ¸®½ºÆ®¿Í ºñ±³ÇÏ¿© Çìµå¿Í ²¿¸®°¡ ¼­·Î ¿¬°áµÇÁö ¾ÊÀ¸¹Ç·Î,
-		´ë»ó ³ëµåÀÇ ¾Õ¿¡ »ðÀÔ ½Ã ´ë»ó ³ëµåÀÇ ÀÌÀü ³ëµå°¡ Á¸Àç ÇÒ °æ¿ì¸¸ (´ë»ó ³ëµå°¡ Çìµå ³ëµå°¡ ¾Æ´Ñ °æ¿ì)
-		´ë»ó ³ëµåÀÇ ÀÌÀü ³ëµåÀÇ ´ÙÀ½À» »õ ³ëµå·Î ¿¬°á
+		í™˜í˜• ì´ì¤‘ ì—°ê²° ë¦¬ìŠ¤íŠ¸ì™€ ë¹„êµí•˜ì—¬ í—¤ë“œì™€ ê¼¬ë¦¬ê°€ ì„œë¡œ ì—°ê²°ë˜ì§€ ì•Šìœ¼ë¯€ë¡œ,
+		ëŒ€ìƒ ë…¸ë“œì˜ ì•žì— ì‚½ìž… ì‹œ ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ ë…¸ë“œê°€ ì¡´ìž¬ í•  ê²½ìš°ë§Œ (ëŒ€ìƒ ë…¸ë“œê°€ í—¤ë“œ ë…¸ë“œê°€ ì•„ë‹Œ ê²½ìš°)
+		ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ ë…¸ë“œì˜ ë‹¤ìŒì„ ìƒˆ ë…¸ë“œë¡œ ì—°ê²°
 		---
-		1) TH : ´ë»ó ³ëµåÀÇ Çìµå ³ëµå ¿©ºÎ (T : Çìµå ³ëµå, F : Áß°£ ³ëµå È¤Àº ²¿¸® ³ëµå)
-		2) D : ÀÌ¿¡ µû¸¥ »ðÀÔÇÏ°íÀÚ ÇÏ´Â »õ ³ëµå »ðÀÔ ½Ã ¼öÇà ÀÛ¾÷
+		1) TH : ëŒ€ìƒ ë…¸ë“œì˜ í—¤ë“œ ë…¸ë“œ ì—¬ë¶€ (T : í—¤ë“œ ë…¸ë“œ, F : ì¤‘ê°„ ë…¸ë“œ í˜¹ì€ ê¼¬ë¦¬ ë…¸ë“œ)
+		2) D : ì´ì— ë”°ë¥¸ ì‚½ìž…í•˜ê³ ìž í•˜ëŠ” ìƒˆ ë…¸ë“œ ì‚½ìž… ì‹œ ìˆ˜í–‰ ìž‘ì—…
 
 		TH | D
-		T	1) »õ ³ëµåÀÇ ´ÙÀ½À» ´ë»ó ³ëµå·Î ¿¬°á
-			2) »õ ³ëµåÀÇ ÀÌÀüÀ» ´ë»ó ³ëµåÀÇ ÀÌÀü ³ëµå·Î ¿¬°á
-			3) »õ ³ëµå¸¦ Çìµå ³ëµå·Î º¯°æ
-			4) ´ë»ó ³ëµåÀÇ ÀÌÀüÀ» »õ ³ëµå·Î ¿¬°á
+		T	1) ìƒˆ ë…¸ë“œì˜ ë‹¤ìŒì„ ëŒ€ìƒ ë…¸ë“œë¡œ ì—°ê²°
+			2) ìƒˆ ë…¸ë“œì˜ ì´ì „ì„ ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ ë…¸ë“œë¡œ ì—°ê²°
+			3) ìƒˆ ë…¸ë“œë¥¼ í—¤ë“œ ë…¸ë“œë¡œ ë³€ê²½
+			4) ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ì„ ìƒˆ ë…¸ë“œë¡œ ì—°ê²°
 
-		F	1) »õ ³ëµåÀÇ ´ÙÀ½À» ´ë»ó ³ëµå·Î ¿¬°á
-			2) »õ ³ëµåÀÇ ÀÌÀüÀ» ´ë»ó ³ëµåÀÇ ÀÌÀü ³ëµå·Î ¿¬°á
-			3) ´ë»ó ³ëµåÀÇ ÀÌÀü ³ëµåÀÇ ´ÙÀ½À» »õ ³ëµå·Î ¿¬°á
-			4) ´ë»ó ³ëµåÀÇ ÀÌÀüÀ» »õ ³ëµå·Î ¿¬°á
+		F	1) ìƒˆ ë…¸ë“œì˜ ë‹¤ìŒì„ ëŒ€ìƒ ë…¸ë“œë¡œ ì—°ê²°
+			2) ìƒˆ ë…¸ë“œì˜ ì´ì „ì„ ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ ë…¸ë“œë¡œ ì—°ê²°
+			3) ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ ë…¸ë“œì˜ ë‹¤ìŒì„ ìƒˆ ë…¸ë“œë¡œ ì—°ê²°
+			4) ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ì„ ìƒˆ ë…¸ë“œë¡œ ì—°ê²°
 	***/
 
 	if (srcTargetNode == NULL || srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	srcNewNode->_next = srcTargetNode; //»õ ³ëµåÀÇ ´ÙÀ½À» ´ë»ó ³ëµå·Î ¿¬°á
-	srcNewNode->_prev = srcTargetNode->_prev; //»õ ³ëµåÀÇ ÀÌÀüÀ» ´ë»ó ³ëµåÀÇ ÀÌÀü ³ëµå·Î ¿¬°á
+	srcNewNode->_next = srcTargetNode; //ìƒˆ ë…¸ë“œì˜ ë‹¤ìŒì„ ëŒ€ìƒ ë…¸ë“œë¡œ ì—°ê²°
+	srcNewNode->_prev = srcTargetNode->_prev; //ìƒˆ ë…¸ë“œì˜ ì´ì „ì„ ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ ë…¸ë“œë¡œ ì—°ê²°
 
 	if (srcTargetNode == (*srcList)) //T
 	{
-		(*srcList) = srcNewNode; //Çìµå ³ëµå º¯°æ
+		(*srcList) = srcNewNode; //í—¤ë“œ ë…¸ë“œ ë³€ê²½
 	}
 	else //F
 	{
-		srcTargetNode->_prev->_next = srcNewNode; //´ë»ó ³ëµåÀÇ ÀÌÀü ³ëµåÀÇ ´ÙÀ½À» »õ ³ëµå·Î ¿¬°á
+		srcTargetNode->_prev->_next = srcNewNode; //ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ ë…¸ë“œì˜ ë‹¤ìŒì„ ìƒˆ ë…¸ë“œë¡œ ì—°ê²°
 	}
 
-	srcTargetNode->_prev = srcNewNode; //´ë»ó ³ëµåÀÇ ÀÌÀüÀ» »õ ³ëµå·Î ¿¬°á
+	srcTargetNode->_prev = srcNewNode; //ëŒ€ìƒ ë…¸ë“œì˜ ì´ì „ì„ ìƒˆ ë…¸ë“œë¡œ ì—°ê²°
 }
 
 /// <summary>
-/// ´ë»ó ¸®½ºÆ®ÀÇ ÀüÃ¼ ³ëµåÀÇ ¼ö ¹ÝÈ¯
+/// ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸ì˜ ì „ì²´ ë…¸ë“œì˜ ìˆ˜ ë°˜í™˜
 /// </summary>
-/// <param name="srcList">´ë»ó ¸®½ºÆ®</param>
-/// <returns>´ë»ó ¸®½ºÆ®ÀÇ ÀüÃ¼ ³ëµåÀÇ ¼ö</returns>
+/// <param name="srcList">ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸</param>
+/// <returns>ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸ì˜ ì „ì²´ ë…¸ë“œì˜ ìˆ˜</returns>
 NODE_POSITION_TYPE DLL_GetTotalNodeCount(NODE** srcList)
 {
-	NODE_POSITION_TYPE totalNodeCount = 0; //ÀüÃ¼ ³ëµåÀÇ ¼ö
-	NODE* current = (*srcList); //ÇöÀç ³ëµå
+	NODE_POSITION_TYPE totalNodeCount = 0; //ì „ì²´ ë…¸ë“œì˜ ìˆ˜
+	NODE* current = (*srcList); //í˜„ìž¬ ë…¸ë“œ
 
 	while (current != NULL)
 	{
@@ -290,13 +288,13 @@ NODE_POSITION_TYPE DLL_GetTotalNodeCount(NODE** srcList)
 }
 
 /// <summary>
-/// ´ë»ó ¸®½ºÆ®ÀÇ ÀüÃ¼ ³ëµå¿¡ ´ëÇÑ µ¥ÀÌÅÍ Ãâ·Â
+/// ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸ì˜ ì „ì²´ ë…¸ë“œì— ëŒ€í•œ ë°ì´í„° ì¶œë ¥
 /// </summary>
-/// <param name="srcList">´ë»ó ¸®½ºÆ®</param>
+/// <param name="srcList">ëŒ€ìƒ ë¦¬ìŠ¤íŠ¸</param>
 void DLL_DispNodeList(NODE** srcList)
 {
-	NODE_POSITION_TYPE currentPosition = 0; //ÇöÀç ³ëµåÀÇ À§Ä¡
-	NODE* current = (*srcList); //ÇöÀç ³ëµå
+	NODE_POSITION_TYPE currentPosition = 0; //í˜„ìž¬ ë…¸ë“œì˜ ìœ„ì¹˜
+	NODE* current = (*srcList); //í˜„ìž¬ ë…¸ë“œ
 
 	while (current != NULL)
 	{

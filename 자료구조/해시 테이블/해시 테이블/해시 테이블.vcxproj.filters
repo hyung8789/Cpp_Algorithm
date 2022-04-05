@@ -15,10 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HT.h">
+    <ClInclude Include="HT_Chaining.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="HT_Core.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="HT_OpenAddr.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="HT_Common.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -26,7 +32,10 @@
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="HT.cpp">
+    <ClCompile Include="HT_Chaining.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="HT_Common.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

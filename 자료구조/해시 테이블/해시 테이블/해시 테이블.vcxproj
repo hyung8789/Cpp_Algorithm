@@ -139,11 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="HT.h" />
+    <ClInclude Include="HT_Chaining.h" />
+    <ClInclude Include="HT_Common.h" />
     <ClInclude Include="HT_Core.h" />
+    <ClInclude Include="HT_OpenAddr.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="HT.cpp" />
+    <ClCompile Include="HT_Chaining.cpp" />
+    <ClCompile Include="HT_Common.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>

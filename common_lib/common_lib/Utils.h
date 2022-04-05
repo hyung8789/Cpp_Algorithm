@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <math.h>
 
 /// <summary>
 /// 연속적인 요소들에 대한 접근 방법
@@ -19,6 +20,7 @@ namespace utils
 	double StrToDouble(const char*);
 	int CharToDecAscii(char);
 	int SingleNumToDecAscii(int);
+	size_t BitCountFrom(size_t);
 
 	size_t TwoDimensionIndexToOneDimensionIndex(size_t, size_t,
 		size_t, size_t, ELEMENT_ORDER = ELEMENT_ORDER::ROW_MAJOR);
