@@ -8,7 +8,7 @@ NODE* dummyBlackTerminalNode = NULL; //검은색 더미 단말 노드
 /// <param name="srcData">노드의 데이터</param>
 /// <param name="color">노드의 색</param>
 /// <returns>생성 된 노드</returns>
-NODE* RBT_CreateNode(DATA_TYPE srcData)
+NODE* RBT_CreateNode(RBT_DATA_TYPE srcData)
 {
 	NODE* retVal = (NODE*)malloc(sizeof(NODE));
 	if (retVal == NULL)
@@ -413,7 +413,7 @@ RECOLORING_PROC: //색 변경 처리 루틴
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 /// <param name="targetData">삭제하고자 하는 대상 데이터</param>
 /// <param name="deallocateAfterRemove">삭제 대상 노드에 대한 메모리 해제 수행 여부</param>
-void RBT_RemoveNode(NODE** srcRootNode, DATA_TYPE targetData, bool deallocateAfterRemove)
+void RBT_RemoveNode(NODE** srcRootNode, RBT_DATA_TYPE targetData, bool deallocateAfterRemove)
 {
 	/***
 		< 삭제하고자 하는 대상 데이터가 포함 된 노드 (이하, 삭제 대상 노드) 및
@@ -1031,7 +1031,7 @@ END_PROC:
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 /// <param name="targetData">찾고자 하는 대상 데이터</param>
 /// <returns>찾고자 하는 대상 데이터가 포함 된 노드</returns>
-NODE* RBT_SearchNode(NODE* srcRootNode, DATA_TYPE targetData)
+NODE* RBT_SearchNode(NODE* srcRootNode, RBT_DATA_TYPE targetData)
 {
 	if (srcRootNode == NULL || srcRootNode == dummyBlackTerminalNode)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));

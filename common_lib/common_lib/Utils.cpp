@@ -72,9 +72,34 @@ int utils::SingleNumToDecAscii(int srcSingleNum)
 /// </summary>
 /// <param name="srcNum">대상 숫자</param>
 /// <returns>대상 숫자의 비트 개수</returns>
-size_t utils::BitCountFrom(size_t srcNum)
+size_t utils::GetBitCountFrom(size_t srcNum)
 {
 	return (1 + log2(srcNum)); //<< : *2, >> : /2 이므로, 2^0 자리를 포함하여 계산
+}
+
+/// <summary>
+/// 임의의 문자열 생성
+/// </summary>
+/// <param name="dstStr">출력 문자열</param>
+/// <param name="dstStrSize">출력 문자열의 버퍼의 크기</param>
+void utils::GenRandStr(char dstStr[], size_t dstStrSize)
+{
+	// https://www.asciitable.com/
+
+	if(dstStrSize == 0)
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
+
+	const char decAsciiMinRange = 32; //space
+	const char decAsciiMaxRange = 126; //~
+
+	std::random_device rand_device; //비결정적 생성기
+	std::mt19937 gen(rand_device()); //메르센 트위스터에 시드 할당
+	std::uniform_int_distribution<short> dist(decAsciiMinRange, decAsciiMaxRange); //균일 이산 분포
+
+	for (size_t i = 0; i < dstStrSize - 1; i++)
+		dstStr[i] = dist(gen);
+
+	dstStr[dstStrSize - 1] = '\0';
 }
 
 /// <summary>

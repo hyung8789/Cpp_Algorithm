@@ -22,7 +22,7 @@
 	DEF6) 위의 정의 및 구현의 단순화를 위해 중복 된 데이터를 허용하지 않음
 ***/
 
-typedef int DATA_TYPE; //노드의 데이터 타입
+typedef int RBT_DATA_TYPE; //노드의 데이터 타입
 typedef int TREE_DEPTH_TYPE; //트리 깊이 타입
 
 #ifdef COLOR_VISUALIZATION
@@ -43,7 +43,7 @@ enum class COLOR : const unsigned
 
 typedef struct NODE_TYPE
 {
-	DATA_TYPE _data; //노드의 데이터
+	RBT_DATA_TYPE _data; //노드의 데이터
 	COLOR _color; //노드 색
 
 	NODE_TYPE* _parent; //부모 노드
@@ -74,15 +74,15 @@ enum class PATH_DIRECTION : const int
 #define DUMMY_BLACK_TERMINAL_NODE_DATA INT_MIN //노드의 데이터 타입에 따른 검은색 더미 단말 노드의 데이터
 extern NODE* dummyBlackTerminalNode;
 
-NODE* RBT_CreateNode(DATA_TYPE);
+NODE* RBT_CreateNode(RBT_DATA_TYPE);
 void RBT_DeallocateNode(NODE**);
 void RBT_DeallocateTree(NODE**);
 
 void RBT_DispOrderedTree(NODE*, TRAVERSAL_METHOD, TREE_DEPTH_TYPE = 0);
 
 void RBT_InsertNode(NODE**, NODE*);
-void RBT_RemoveNode(NODE**, DATA_TYPE, bool = true);
-NODE* RBT_SearchNode(NODE*, DATA_TYPE);
+void RBT_RemoveNode(NODE**, RBT_DATA_TYPE, bool = true);
+NODE* RBT_SearchNode(NODE*, RBT_DATA_TYPE);
 NODE* RBT_SearchMaxNode(NODE*);
 NODE* RBT_SearchMinNode(NODE*);
 

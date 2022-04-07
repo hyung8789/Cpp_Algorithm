@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="HT_Chaining.h" />
+    <ClInclude Include="HT_Chaining_RBT.h" />
     <ClInclude Include="HT_Common.h" />
     <ClInclude Include="HT_Core.h" />
     <ClInclude Include="HT_OpenAddr.h" />
@@ -152,6 +153,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\common_lib\common_lib\common_lib.vcxproj">
       <Project>{30e376ac-0d9b-4adc-8a9b-e985fea0d7c3}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\트리\Red-Black (레드-블랙) 트리\Red-Black (레드-블랙) 트리.vcxproj">
+      <Project>{05a422e0-162d-4946-b1d6-3590facb0364}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

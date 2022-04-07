@@ -10,12 +10,12 @@
 
 typedef unsigned int HASH_INDEX_TYPE;
 
-typedef char* KEY_TYPE; //노드의 키 타입
-typedef char* DATA_TYPE; //노드의 데이터 타입
+typedef char* HT_KEY_TYPE; //노드의 키 타입
+typedef char* HT_DATA_TYPE; //노드의 데이터 타입
 
-typedef HASH_INDEX_TYPE(*HASH_FUNC_ADDR_TYPE)(HASH_INDEX_TYPE, KEY_TYPE);
+typedef HASH_INDEX_TYPE(*HASH_FUNC_ADDR_TYPE)(HASH_INDEX_TYPE, HT_KEY_TYPE);
 
-HASH_INDEX_TYPE HT_Common_DigitFolding_Hash(HASH_INDEX_TYPE, KEY_TYPE);
+HASH_INDEX_TYPE HT_Common_DigitFolding_Hash(HASH_INDEX_TYPE, HT_KEY_TYPE);
 //TODO : add
 
 #if HASH_METHOD == DIGIT_FOLDING

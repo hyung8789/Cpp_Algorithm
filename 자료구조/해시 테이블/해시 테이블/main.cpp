@@ -14,24 +14,46 @@ int main()
 			{"dbca", "foo data2"},
 			{"foo key", "foo data3"},
 			{"bar key", "foo data4"}
-		};
+		}; //입력 데이터 (키, 값)
 
 		CHAINING_HASH_TABLE* hashTable = HT_Chaining_CreateHashTable(123456);
 
 		for (int i = 0; i < LENGTH(inputData); i++)
 		{
-			HT_Chaining_InsertData(hashTable, (KEY_TYPE)inputData[i][0], (DATA_TYPE)inputData[i][1]);
+			HT_Chaining_InsertData(hashTable, (HT_KEY_TYPE)inputData[i][0], (HT_DATA_TYPE)inputData[i][1]);
 		}
 
 		for (int i = 0; i < LENGTH(inputData); i++)
 		{
-			std::cout << "Searching : " << inputData[i][0] <<"\n";
-
-			//CHAINING_NODE* result = HT_Chaining_SearchData(hashTable, (KEY_TYPE)inputData[i][0]);
-			//std::cout << "Key : " << result->_key << ", Data : " << result->_data <<"\n";
+			std::cout << "---\n";
+			std::cout << "Search : " << inputData[i][0] <<"\n";
+			std::cout << "Hash Index : " << HT_Common_DigitFolding_Hash(123456, (HT_KEY_TYPE)inputData[i][0]) <<"\n";
+			std::cout << "Data : " << HT_Chaining_SearchData(hashTable, (HT_KEY_TYPE)inputData[i][0]) <<"\n";
+			std::cout << "---\n";
 		}
 
+		for (int i = 0; i < LENGTH(inputData); i++)
+		{
+			if (i == 1) //삭제 된 키
+				continue;
+
+			std::cout << "Remove : " << inputData[i][0] << "\n";
+			HT_Chaining_RemoveData(hashTable, (HT_KEY_TYPE)inputData[i][0]);
+		}
+
+
 		HT_Chaining_DeallocateHashTable(&hashTable);
+
+		char DUMMY_KEY[5][10] =
+		{
+			{NULL},
+		};
+		const char* DUMMY_DATA = "dummy";
+		for (int i = 0; i < LENGTH(DUMMY_KEY); i++)
+		{
+			utils::GenRandStr(DUMMY_KEY[i], 10);
+			std::cout << DUMMY_KEY[i] << "\n";
+		}
 	}
 	catch (const std::exception& ex)
 	{

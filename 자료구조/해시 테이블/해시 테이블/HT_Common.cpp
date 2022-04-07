@@ -1,11 +1,15 @@
 ﻿#include "HT_Core.h"
 
-HASH_INDEX_TYPE HT_Common_DigitFolding_Hash(HASH_INDEX_TYPE capacity, KEY_TYPE srcKey)
+/// <summary>
+/// 할당 크기 및 대상 키에 대해 자릿수 접기를 통해 사상 된 해시 인덱스 반환
+/// </summary>
+/// <param name="capacity">할당 크기</param>
+/// <param name="srcKey">대상 키</param>
+/// <returns>사상 된 해시 인덱스</returns>
+HASH_INDEX_TYPE HT_Common_DigitFolding_Hash(HASH_INDEX_TYPE capacity, HT_KEY_TYPE srcKey)
 {
 	/***
 		< 할당량에 대해 Hash Index의 충돌 최소화 및 사상 범위 확대 >
-
-		https://www.asciitable.com/
 
 		- Digit Folding에 의해 사상 된 Hash Index의 최대 값 : 127 (아스키 코드에 의한 문자 개수) * 키의 자리 수
 		- 테이블 할당량에 대해 Hash Index로 사상되지 않는 범위의 비트 개수 : 할당량의 비트 개수 - 키의 비트 개수
@@ -27,7 +31,7 @@ HASH_INDEX_TYPE HT_Common_DigitFolding_Hash(HASH_INDEX_TYPE capacity, KEY_TYPE s
 	HASH_INDEX_TYPE hashIndex = 0;
 
 	size_t srcKeyLength = strlen(srcKey); //대상 키의 문자열 길이
-	HASH_INDEX_TYPE leftShiftCount = utils::BitCountFrom(capacity) - utils::BitCountFrom(srcKeyLength);
+	HASH_INDEX_TYPE leftShiftCount = utils::GetBitCountFrom(capacity) - utils::GetBitCountFrom(srcKeyLength);
 
 	for (size_t i = 0; i < srcKeyLength; i++)
 		hashIndex = (hashIndex << leftShiftCount) + utils::CharToDecAscii(srcKey[i]);
