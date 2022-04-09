@@ -6,7 +6,7 @@
 ***/
 
 #define CAPACITY_REALLOC_RATIO_THRESHOLD 0.5 //기존 할당 크기에 대한 재 할당이 발생 될 빈 공간 임계 비율 (0.0 ~ 1.0)
-#define CAPACITY_REALLOC_RATIO (1.0 - CAPACITY_REALLOC_RATIO_THRESHOLD) //기존 할당 크기에 대해 증가 혹은 감소 시 재 할당 될 비율
+#define CAPACITY_REALLOC_RATIO 0.5 //기존 할당 크기에 대해 증가 혹은 감소 시 재 할당 될 비율
 
 #define HIGH_PRIORITY_FIRST 0 //높은 우선순위 우선 (우선순위 0 > 우선순위 1)
 #define LOW_PRIORITY_FIRST 1 //낮은 우선순위 우선 (우선순위 0 < 우선순위 1)

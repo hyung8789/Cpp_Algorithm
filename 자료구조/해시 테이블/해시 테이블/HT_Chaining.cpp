@@ -1,7 +1,6 @@
 ﻿#include "HT_Core.h"
 
-extern HASH_FUNC_ADDR_TYPE hashFunc;
-#ifdef DEBUG_MODE
+#ifdef HT_DEBUG_MODE
 extern size_t hashCollisionCount;
 #endif
 
@@ -66,14 +65,14 @@ CHAINING_NODE* HT_Chaining_CreateNode(HT_KEY_TYPE srcKey, HT_DATA_TYPE srcData)
 	if (retVal == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-	retVal->_key = (HT_KEY_TYPE)malloc(sizeof(HT_KEY_TYPE) * (strlen(srcKey) + 1)); //'\0' 포함 길이
+	retVal->_key = (HT_KEY_TYPE)malloc(sizeof(char) * (strlen(srcKey) + 1)); //'\0' 포함 길이
 	if (retVal->_key == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
 	if (strcpy_s(retVal->_key, strlen(srcKey) + 1, srcKey) != 0)
 		throw std::runtime_error(std::string(__func__) + std::string(" : src, dst is null or wrong size"));
 
-	retVal->_data = (HT_KEY_TYPE)malloc(sizeof(HT_DATA_TYPE) * (strlen(srcData) + 1)); //'\0' 포함 길이
+	retVal->_data = (HT_KEY_TYPE)malloc(sizeof(char) * (strlen(srcData) + 1)); //'\0' 포함 길이
 	if (retVal->_data == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
@@ -132,7 +131,7 @@ void HT_Chaining_InsertData(CHAINING_HASH_TABLE* srcHashTable, HT_KEY_TYPE srcKe
 	if (srcKey == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	HASH_INDEX_TYPE hashIndex = hashFunc(srcHashTable->_capacity, srcKey);
+	HASH_INDEX_TYPE hashIndex = HT_Common_DigitFolding_Hash(srcHashTable->_capacity, srcKey);
 	CHAINING_NODE* newNode = NULL;
 
 	if (srcHashTable->_table[hashIndex] == NULL) //충돌이 발생하지 않았을 경우
@@ -142,7 +141,7 @@ void HT_Chaining_InsertData(CHAINING_HASH_TABLE* srcHashTable, HT_KEY_TYPE srcKe
 	}
 	else //충돌이 발생했을 경우
 	{
-#ifdef DEBUG_MODE
+#ifdef HT_DEBUG_MODE
 		hashCollisionCount++;
 		std::cout << "충돌 발생 : " << srcKey << " (" << hashCollisionCount << ")\n";
 #endif
@@ -155,7 +154,7 @@ void HT_Chaining_InsertData(CHAINING_HASH_TABLE* srcHashTable, HT_KEY_TYPE srcKe
 			{
 				memset(currentNode->_data, '\0', strlen(currentNode->_data));
 
-				size_t reallocSizeInBytes = sizeof(HT_DATA_TYPE) * (strlen(srcData) + 1); //재 할당 될 바이트 단위 크기 ('\0' 포함 길이)
+				size_t reallocSizeInBytes = sizeof(char) * (strlen(srcData) + 1); //재 할당 될 바이트 단위 크기 ('\0' 포함 길이)
 				if (reallocSizeInBytes != strlen(currentNode->_data)) //기존 데이터의 크기가 재 할당 될 크기와 다를 경우
 				{
 					void* reallocAddr = realloc(currentNode->_data, reallocSizeInBytes);
@@ -197,7 +196,7 @@ HT_DATA_TYPE HT_Chaining_SearchData(CHAINING_HASH_TABLE* srcHashTable, HT_KEY_TY
 	if (targetKey == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	HASH_INDEX_TYPE hashIndex = hashFunc(srcHashTable->_capacity, targetKey);
+	HASH_INDEX_TYPE hashIndex = HT_Common_DigitFolding_Hash(srcHashTable->_capacity, targetKey);
 	CHAINING_NODE_LIST currentNode = srcHashTable->_table[hashIndex];
 
 	while (currentNode != NULL)
@@ -225,7 +224,7 @@ void HT_Chaining_RemoveData(CHAINING_HASH_TABLE* srcHashTable, HT_KEY_TYPE targe
 	if (targetKey == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	HASH_INDEX_TYPE hashIndex = hashFunc(srcHashTable->_capacity, targetKey);
+	HASH_INDEX_TYPE hashIndex = HT_Common_DigitFolding_Hash(srcHashTable->_capacity, targetKey);
 	CHAINING_NODE* removeTargetNode = NULL; //삭제 대상 노드
 	CHAINING_NODE* removeTargetPrevNode = NULL; //삭제 대상 노드의 이전 노드
 

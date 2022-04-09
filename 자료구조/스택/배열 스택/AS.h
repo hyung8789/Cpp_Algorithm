@@ -2,7 +2,7 @@
 #define _AS_H_
 
 #define CAPACITY_REALLOC_RATIO_THRESHOLD 0.7 //기존 할당 크기에 대한 재 할당이 발생 될 빈 공간 임계 비율 (0.0 ~ 1.0)
-#define CAPACITY_REALLOC_RATIO (1.0 - CAPACITY_REALLOC_RATIO_THRESHOLD) //기존 할당 크기에 대해 증가 혹은 감소 시 재 할당 될 비율
+#define CAPACITY_REALLOC_RATIO 0.5 //기존 할당 크기에 대해 증가 혹은 감소 시 재 할당 될 비율
 
 typedef int DATA_TYPE; //노드의 데이터 타입
 typedef int STACK_INDEX_TYPE; //스택 인덱스 타입

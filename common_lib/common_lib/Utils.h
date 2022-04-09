@@ -24,7 +24,7 @@ namespace utils
 	
 	size_t GetBitCountFrom(size_t);
 
-	void GenRandStr(char[], size_t);
+	void GenRandStr(char[], size_t, size_t);
 
 	size_t TwoDimensionIndexToOneDimensionIndex(size_t, size_t,
 		size_t, size_t, ELEMENT_ORDER = ELEMENT_ORDER::ROW_MAJOR);

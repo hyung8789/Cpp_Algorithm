@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="HT_Chaining.cpp" />
     <ClCompile Include="HT_Common.cpp" />
+    <ClCompile Include="HT_OpenAddr.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>

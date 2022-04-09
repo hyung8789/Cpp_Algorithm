@@ -76,30 +76,32 @@ size_t utils::GetBitCountFrom(size_t srcNum)
 {
 	return (1 + log2(srcNum)); //<< : *2, >> : /2 이므로, 2^0 자리를 포함하여 계산
 }
-
 /// <summary>
 /// 임의의 문자열 생성
 /// </summary>
 /// <param name="dstStr">출력 문자열</param>
-/// <param name="dstStrSize">출력 문자열의 버퍼의 크기</param>
-void utils::GenRandStr(char dstStr[], size_t dstStrSize)
+/// <param name="dstStrSize">출력 문자열 버퍼의 바이트 단위 크기</param>
+/// <param name="randStrLength">출력 문자열 버퍼의 바이트 단위의 크기보다 작은 바이트 단위의 생성 될 문자열의 길이</param>
+void utils::GenRandStr(char dstStr[], size_t dstStrSize, size_t randStrLength)
 {
-	// https://www.asciitable.com/
-
-	if(dstStrSize == 0)
+	if (dstStrSize == 0 || randStrLength == 0)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	const char decAsciiMinRange = 32; //space
-	const char decAsciiMaxRange = 126; //~
+	if (randStrLength >= dstStrSize)
+		throw std::out_of_range(std::string(__func__) + std::string(" : out of range"));
+
+	// https://www.asciitable.com/
+	const char decAsciiMinRangeValue = utils::CharToDecAscii(' '); //32 (space)
+	const char decAsciiMaxRangeValue = utils::CharToDecAscii('~'); //126 (~)
 
 	std::random_device rand_device; //비결정적 생성기
 	std::mt19937 gen(rand_device()); //메르센 트위스터에 시드 할당
-	std::uniform_int_distribution<short> dist(decAsciiMinRange, decAsciiMaxRange); //균일 이산 분포
+	std::uniform_int_distribution<short> dist(decAsciiMinRangeValue, decAsciiMaxRangeValue); //균일 이산 분포
 
-	for (size_t i = 0; i < dstStrSize - 1; i++)
+	for (size_t i = 0; i < randStrLength; i++)
 		dstStr[i] = dist(gen);
 
-	dstStr[dstStrSize - 1] = '\0';
+	dstStr[randStrLength] = '\0';
 }
 
 /// <summary>
@@ -142,9 +144,9 @@ size_t utils::TwoDimensionIndexToOneDimensionIndex(size_t srcRowElementCount, si
 	***/
 
 	if (targetRowIndex >= srcRowElementCount || targetColIndex >= srcColElementCount)
-		throw std::out_of_range(std::string(__func__) + std::string(" : out of range (") + 
-		std::string(std::to_string(targetRowIndex) + ", " + std::to_string(srcRowElementCount) + ", " +
-			std::to_string(targetColIndex) + ", " +  std::to_string(srcColElementCount) + ")"));
+		throw std::out_of_range(std::string(__func__) + std::string(" : out of range (") +
+			std::string(std::to_string(targetRowIndex) + ", " + std::to_string(srcRowElementCount) + ", " +
+				std::to_string(targetColIndex) + ", " + std::to_string(srcColElementCount) + ")"));
 
 	switch (elementOrder)
 	{

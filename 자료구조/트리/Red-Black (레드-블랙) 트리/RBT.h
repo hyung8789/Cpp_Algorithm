@@ -90,7 +90,7 @@ void RBT_InsertNodeHelper(NODE**, NODE*);
 void RBT_RotateTree(NODE**, NODE*, ROTATE_DIRECTION);
 size_t RBT_GetColorCount(NODE*, COLOR, PATH_DIRECTION);
 
-#ifdef DEBUG_MODE
+#ifdef RBT_DEBUG_MODE
 void RBT_ValidateTree(NODE*);
 #endif
 #endif

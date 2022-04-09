@@ -1290,7 +1290,7 @@ size_t RBT_GetColorCount(NODE* srcRootNode, COLOR color, PATH_DIRECTION pathDire
 	return retVal;
 }
 
-#ifdef DEBUG_MODE
+#ifdef RBT_DEBUG_MODE
 /// <summary>
 /// 대상 트리에 대한 유효성 검사 수행
 /// </summary>

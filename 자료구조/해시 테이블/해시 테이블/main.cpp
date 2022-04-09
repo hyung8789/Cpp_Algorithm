@@ -51,7 +51,8 @@ int main()
 		const char* DUMMY_DATA = "dummy";
 		for (int i = 0; i < LENGTH(DUMMY_KEY); i++)
 		{
-			utils::GenRandStr(DUMMY_KEY[i], 10);
+			
+			utils::GenRandStr(DUMMY_KEY[i], LENGTH(DUMMY_KEY[i]), 9);
 			std::cout << DUMMY_KEY[i] << "\n";
 		}
 	}

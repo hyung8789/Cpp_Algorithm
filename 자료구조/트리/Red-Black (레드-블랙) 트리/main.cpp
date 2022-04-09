@@ -27,7 +27,7 @@ int main()
 				//std::cout << "Current Insert : " << inputData[i] << std::endl;
 				RBT_InsertNode(&tree[treeIndex], RBT_CreateNode(inputData[i]));
 
-#ifdef DEBUG_MODE
+#ifdef RBT_DEBUG_MODE
 				RBT_ValidateTree(tree[treeIndex]);
 #endif
 			}
@@ -50,7 +50,7 @@ int main()
 					RBT_RemoveNode(&tree[treeIndex], inputData[i]);
 					std::cout << "\n";
 
-#ifdef DEBUG_MODE
+#ifdef RBT_DEBUG_MODE
 					RBT_ValidateTree(tree[treeIndex]);
 #endif
 				}
@@ -67,7 +67,7 @@ int main()
 					RBT_RemoveNode(&tree[treeIndex], inputData[i]);
 					std::cout << "\n";
 
-#ifdef DEBUG_MODE
+#ifdef RBT_DEBUG_MODE
 					RBT_ValidateTree(tree[treeIndex]);
 #endif
 				}
