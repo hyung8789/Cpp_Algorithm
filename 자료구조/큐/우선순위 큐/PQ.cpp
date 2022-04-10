@@ -122,6 +122,7 @@ void PQ_Dequeue(PRIORITY_QUEUE* srcPriorityQueue, NODE* dstNode)
 		throw std::logic_error(std::string(__func__) + std::string(" : Empty Queue"));
 
 	memcpy(dstNode, &(srcPriorityQueue->_nodeArray[0]), sizeof(NODE));
+
 	NODE tmpNode;
 
 	--(srcPriorityQueue->_usedSize);

@@ -1,9 +1,5 @@
 ﻿#include "HT_Core.h"
 
-#ifdef HT_DEBUG_MODE
-extern size_t hashCollisionCount;
-#endif
-
 /// <summary>
 /// 할당 크기만큼 해시 테이블 생성 및 반환
 /// </summary>
@@ -49,6 +45,76 @@ void HT_Chaining_DeallocateHashTable(CHAINING_HASH_TABLE** srcHashTable)
 		free(*srcHashTable);
 		(*srcHashTable) = NULL;
 	}
+}
+
+/// <summary>
+/// 대상 해시 테이블의 전체 노드에 대한 데이터 출력
+/// </summary>
+/// <param name="srcHashTable">대상 해시 테이블</param>
+void HT_Chaining_DispNodeList(CHAINING_HASH_TABLE* srcHashTable)
+{
+	if (srcHashTable == NULL)
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
+
+	for (HASH_INDEX_TYPE i = 0; i < srcHashTable->_capacity; i++)
+	{
+		if (srcHashTable->_table[i] != NULL)
+		{
+			std::cout << "----------------------------------\n";
+			std::cout << "Index [" << i << "]\n";
+
+			CHAINING_NODE* currentNode = srcHashTable->_table[i];
+			
+			while (currentNode != NULL)
+			{
+				std::cout << "Key : " << currentNode->_key <<
+					", Data : " << currentNode->_data << "\n";
+				
+				currentNode = currentNode->_next;
+			}
+
+			std::cout << "----------------------------------\n";
+		}
+	}
+}
+
+/// <summary>
+/// 대상 해시 테이블의 비어있는 인덱스 출력
+/// </summary>
+/// <param name="srcHashTable">대상 해시 테이블</param>
+void HT_Chaining_DispEmptyIndexList(CHAINING_HASH_TABLE* srcHashTable)
+{
+	if (srcHashTable == NULL)
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
+
+	for (HASH_INDEX_TYPE i = 0; i < srcHashTable->_capacity; i++)
+	{
+		if (srcHashTable->_table[i] == NULL)
+		{
+			std::cout << i <<" ";
+		}
+	}
+	std::cout << std::endl;
+}
+
+/// <summary>
+/// 대상 해시 테이블의 사용 중인 인덱스 출력
+/// </summary>
+/// <param name="srcHashTable">대상 해시 테이블</param>
+void HT_Chaining_DispOccupiedIndexList(CHAINING_HASH_TABLE* srcHashTable)
+{
+	if (srcHashTable == NULL)
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
+
+	for (HASH_INDEX_TYPE i = 0; i < srcHashTable->_capacity; i++)
+	{
+		if (srcHashTable->_table[i] != NULL)
+		{
+			std::cout << i <<" ";
+		}
+	}
+
+	std::cout << std::endl;
 }
 
 /// <summary>
@@ -142,8 +208,7 @@ void HT_Chaining_InsertData(CHAINING_HASH_TABLE* srcHashTable, HT_KEY_TYPE srcKe
 	else //충돌이 발생했을 경우
 	{
 #ifdef HT_DEBUG_MODE
-		hashCollisionCount++;
-		std::cout << "충돌 발생 : " << srcKey << " (" << hashCollisionCount << ")\n";
+		HT_Common_IncreaseHashCollisionCount(srcKey);
 #endif
 
 		CHAINING_NODE_LIST currentNode = srcHashTable->_table[hashIndex];

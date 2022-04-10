@@ -91,17 +91,48 @@ void utils::GenRandStr(char dstStr[], size_t dstStrSize, size_t randStrLength)
 		throw std::out_of_range(std::string(__func__) + std::string(" : out of range"));
 
 	// https://www.asciitable.com/
-	const char decAsciiMinRangeValue = utils::CharToDecAscii(' '); //32 (space)
-	const char decAsciiMaxRangeValue = utils::CharToDecAscii('~'); //126 (~)
+	// 출력 할 수 없는 Dec Ascii : 0 ~ 31 범위의 문자 제외
+	const char decAsciiMinRangeValue = utils::CharToDecAscii(' '); //Dec Ascii : 32
+	const char decAsciiMaxRangeValue = utils::CharToDecAscii('~'); //Dec Ascii : 126
 
 	std::random_device rand_device; //비결정적 생성기
 	std::mt19937 gen(rand_device()); //메르센 트위스터에 시드 할당
-	std::uniform_int_distribution<short> dist(decAsciiMinRangeValue, decAsciiMaxRangeValue); //균일 이산 분포
+	std::uniform_int_distribution<unsigned short> dist(decAsciiMinRangeValue, decAsciiMaxRangeValue); //균일 이산 분포
 
 	for (size_t i = 0; i < randStrLength; i++)
 		dstStr[i] = dist(gen);
 
 	dstStr[randStrLength] = '\0';
+}
+
+/// <summary>
+/// 임의의 부호있는 난수 생성 및 반환
+/// </summary>
+/// <param name="lowerBound">난수 생성 범위의 하한 값</param>
+/// <param name="upperBound">난수 생성 범위의 상한 값</param>
+/// <returns>생성 된 부호있는 난수</returns>
+ssize_t utils::GenSignedRandNum(ssize_t lowerBound, ssize_t upperBound)
+{
+	std::random_device rand_device; //비결정적 생성기
+	std::mt19937 gen(rand_device()); //메르센 트위스터에 시드 할당
+	std::uniform_int_distribution<ssize_t> dist(lowerBound, upperBound); //균일 이산 분포
+
+	return dist(gen);
+}
+
+/// <summary>
+/// 임의의 부호없는 난수 생성 및 반환
+/// </summary>
+/// <param name="lowerBound">난수 생성 범위의 하한 값</param>
+/// <param name="upperBound">난수 생성 범위의 상한 값</param>
+/// <returns>생성 된 부호없는 난수</returns>
+size_t utils::GenUnsignedRandNum(size_t lowerBound, size_t upperBound)
+{
+	std::random_device rand_device; //비결정적 생성기
+	std::mt19937 gen(rand_device()); //메르센 트위스터에 시드 할당
+	std::uniform_int_distribution<size_t> dist(lowerBound, upperBound); //균일 이산 분포
+	
+	return dist(gen);
 }
 
 /// <summary>

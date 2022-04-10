@@ -1,5 +1,15 @@
 ﻿#include "HT_Core.h"
 
+#define TABLE_INIT_SIZE 1233 //초기 테이블 크기
+#define MAX_STR_LEN 256
+
+const bool TEST_CHAINING_HASH_TABLE = false;
+const bool TEST_RAND_PATTERN_DATA = true;
+
+const bool DISP_NODE_LIST = false;
+const bool DISP_OCCUPIED_INDEX_LIST = true;
+const bool DISP_EMPTY_INDEX_LIST = true;
+
 int main()
 {
 	_CrtMemState oldState, newState, lastState;
@@ -7,54 +17,96 @@ int main()
 
 	try
 	{
-		const char* inputData[][2] =
-		{
-			{"abcd", "foo data1"},
-			{"abcd", "duplicate key test (overwrite)"},
-			{"dbca", "foo data2"},
-			{"foo key", "foo data3"},
-			{"bar key", "foo data4"}
-		}; //입력 데이터 (키, 값)
+		CHAINING_HASH_TABLE* hashTable = HT_Chaining_CreateHashTable(TABLE_INIT_SIZE);
 
-		CHAINING_HASH_TABLE* hashTable = HT_Chaining_CreateHashTable(123456);
-
-		for (int i = 0; i < LENGTH(inputData); i++)
+		if (TEST_CHAINING_HASH_TABLE)
 		{
-			HT_Chaining_InsertData(hashTable, (HT_KEY_TYPE)inputData[i][0], (HT_DATA_TYPE)inputData[i][1]);
+			const char* inputData[][2] =
+			{
+				{"abcd", "foo data1"},
+				{"abcd", "duplicate key test (overwrite)"},
+				{"dbca", "foo data2"},
+				{"foo key", "foo data3"},
+				{"bar key", "foo data4"},
+				{"a", "aaa"},
+				{"b", "bbb"},
+				{"ab", "ababab"},
+				{"YZ", "yzyzz"}, //ascii sum 179
+				{"Od", "crash"} //ascii sum 179
+			}; //입력 데이터 (키, 값)
+
+			for (int i = 0; i < LENGTH(inputData); i++)
+			{
+				HT_Chaining_InsertData(hashTable, (HT_KEY_TYPE)inputData[i][0], (HT_DATA_TYPE)inputData[i][1]);
+			}
+
+			for (int i = 0; i < LENGTH(inputData); i++)
+			{
+				std::cout << "Key Search : " << inputData[i][0] << "\n";
+				std::cout << "Index [" << HT_Common_DigitFolding_Hash(TABLE_INIT_SIZE, (HT_KEY_TYPE)inputData[i][0]) << "] : "
+					<< HT_Chaining_SearchData(hashTable, (HT_KEY_TYPE)inputData[i][0]) << "\n";
+			}
+
+			for (int i = 0; i < LENGTH(inputData); i++)
+			{
+				if (i == 1) //삭제 된 키
+					continue;
+
+				std::cout << "Remove : " << inputData[i][0] << "\n";
+				HT_Chaining_RemoveData(hashTable, (HT_KEY_TYPE)inputData[i][0]);
+			}
 		}
 
-		for (int i = 0; i < LENGTH(inputData); i++)
+		if (TEST_RAND_PATTERN_DATA)
 		{
-			std::cout << "---\n";
-			std::cout << "Search : " << inputData[i][0] <<"\n";
-			std::cout << "Hash Index : " << HT_Common_DigitFolding_Hash(123456, (HT_KEY_TYPE)inputData[i][0]) <<"\n";
-			std::cout << "Data : " << HT_Chaining_SearchData(hashTable, (HT_KEY_TYPE)inputData[i][0]) <<"\n";
-			std::cout << "---\n";
+			const int RAND_KEY_COUNT = 900; //임의 길이의 키 개수
+			const int MIN_KEY_LENGTH = 5; //최소 키 길이
+			const int MAX_KEY_LENGTH = 30; //최대 키 길이
+
+			char** randKeyList = new char* [RAND_KEY_COUNT]; //임의 길이의 키 목록
+
+			for (int i = 0; i < RAND_KEY_COUNT; i++)
+			{
+				randKeyList[i] = new char[MAX_STR_LEN];
+				
+				utils::GenRandStr(randKeyList[i], MAX_STR_LEN, utils::GenUnsignedRandNum(MIN_KEY_LENGTH, MAX_KEY_LENGTH));
+				//std::cout << randKeyList[i]<<"\n";
+
+				HT_Chaining_InsertData(hashTable,
+					(HT_KEY_TYPE)randKeyList[i],
+					(HT_DATA_TYPE)"foo data");
+			}
+
+			if (DISP_NODE_LIST)
+			{
+				HT_Chaining_DispNodeList(hashTable);
+			}
+
+			if (DISP_OCCUPIED_INDEX_LIST)
+			{
+				std::cout << "--- Occupied Index List ---\n";
+				HT_Chaining_DispOccupiedIndexList(hashTable);
+				std::cout << "---------------------------\n";
+			}
+
+			if (DISP_EMPTY_INDEX_LIST)
+			{
+				std::cout << "--- Empty Index List ---\n";
+				HT_Chaining_DispEmptyIndexList(hashTable);
+				std::cout << "---------------------------\n";
+			}
+
+			for (int i = 0; i < RAND_KEY_COUNT; i++)
+				delete randKeyList[i];
+			delete[] randKeyList;
 		}
 
-		for (int i = 0; i < LENGTH(inputData); i++)
-		{
-			if (i == 1) //삭제 된 키
-				continue;
-
-			std::cout << "Remove : " << inputData[i][0] << "\n";
-			HT_Chaining_RemoveData(hashTable, (HT_KEY_TYPE)inputData[i][0]);
-		}
-
+#ifdef HT_DEBUG_MODE
+		std::cout << "총 해시 충돌 발생 횟수 : " << HT_Common_GetHashCollisionCount() << "\n";
+#endif
 
 		HT_Chaining_DeallocateHashTable(&hashTable);
 
-		char DUMMY_KEY[5][10] =
-		{
-			{NULL},
-		};
-		const char* DUMMY_DATA = "dummy";
-		for (int i = 0; i < LENGTH(DUMMY_KEY); i++)
-		{
-			
-			utils::GenRandStr(DUMMY_KEY[i], LENGTH(DUMMY_KEY[i]), 9);
-			std::cout << DUMMY_KEY[i] << "\n";
-		}
 	}
 	catch (const std::exception& ex)
 	{

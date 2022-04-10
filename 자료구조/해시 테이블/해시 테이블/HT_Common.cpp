@@ -1,5 +1,40 @@
 ﻿#include "HT_Core.h"
 
+#ifdef HT_DEBUG_MODE
+extern size_t hashCollisionCount;
+
+/// <summary>
+/// 해시 충돌 횟수 초기화
+/// </summary>
+void HT_Common_InitHashCollisionCount()
+{
+	hashCollisionCount = 0;
+}
+
+/// <summary>
+/// 해시 충돌 횟수 증가
+/// </summary>
+/// <param name="srcKey">대상 키</param>
+void HT_Common_IncreaseHashCollisionCount(HT_KEY_TYPE srcKey)
+{
+#ifdef DISP_COLLISION_KEY
+	if(srcKey != NULL)
+		std::cout << "충돌 발생 : " << srcKey <<"\n";
+#endif
+
+	hashCollisionCount++;
+}
+
+/// <summary>
+/// 해시 충돌 횟수 반환
+/// </summary>
+/// <returns>해시 충돌 횟수</returns>
+size_t HT_Common_GetHashCollisionCount()
+{
+	return hashCollisionCount;
+}
+#endif
+
 /// <summary>
 /// 할당 크기 및 대상 키에 대해 자릿수 접기를 통해 계산 된 해시 인덱스 반환
 /// </summary>
@@ -10,6 +45,8 @@ HASH_INDEX_TYPE HT_Common_DigitFolding_BaseProc(HASH_INDEX_TYPE capacity, HT_KEY
 {
 	/***
 		< 할당량에 대해 Hash Index의 충돌 최소화 및 사상 범위 확대 >
+
+		TODO : 이하 수정
 
 		- Digit Folding에 의해 사상 된 Hash Index의 최대 값 : 127 (아스키 코드에 의한 문자 개수) * 키의 자리 수
 		- 테이블 할당량에 대해 Hash Index로 사상되지 않는 범위의 비트 개수 : 할당량의 비트 개수 - 키의 비트 개수
@@ -32,13 +69,12 @@ HASH_INDEX_TYPE HT_Common_DigitFolding_BaseProc(HASH_INDEX_TYPE capacity, HT_KEY
 	HASH_INDEX_TYPE hashIndex = 0;
 
 	size_t srcKeyLength = strlen(srcKey); //대상 키의 문자열 길이
-	HASH_INDEX_TYPE leftShiftCount = utils::GetBitCountFrom(capacity) - utils::GetBitCountFrom(srcKeyLength);
+	//HASH_INDEX_TYPE leftShiftCount = utils::GetBitCountFrom(capacity) - utils::GetBitCountFrom(srcKeyLength);
 
-	//TODO : 시프트 횟수에 대해 적절한 수치?? (대상 키의 문자열 길이에 따라)
-	//
+	//TODO : 전체 테이블 할당량에 대해 모두 사용하기 위한 시프트 횟수에 대해 적절한 수치?? (대상 키의 문자열 길이에 따라, 인덱스 분포)
 
 	for (size_t i = 0; i < srcKeyLength; i++)
-		hashIndex = (hashIndex << leftShiftCount) + utils::CharToDecAscii(srcKey[i]);
+		hashIndex = (hashIndex << 1) + utils::CharToDecAscii(srcKey[i]);
 
 	return hashIndex;
 }

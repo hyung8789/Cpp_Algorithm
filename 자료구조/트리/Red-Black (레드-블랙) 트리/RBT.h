@@ -41,15 +41,15 @@ enum class COLOR : const unsigned
 };
 #endif
 
-typedef struct NODE_TYPE
+typedef struct RBT_NODE_TYPE
 {
 	RBT_DATA_TYPE _data; //노드의 데이터
 	COLOR _color; //노드 색
 
-	NODE_TYPE* _parent; //부모 노드
-	NODE_TYPE* _left; //왼쪽 노드
-	NODE_TYPE* _right; //오른쪽 노드
-}NODE;
+	RBT_NODE_TYPE* _parent; //부모 노드
+	RBT_NODE_TYPE* _left; //왼쪽 노드
+	RBT_NODE_TYPE* _right; //오른쪽 노드
+}RBT_NODE;
 
 enum class TRAVERSAL_METHOD : const int
 {
@@ -72,25 +72,25 @@ enum class PATH_DIRECTION : const int
 };
 
 #define DUMMY_BLACK_TERMINAL_NODE_DATA INT_MIN //노드의 데이터 타입에 따른 검은색 더미 단말 노드의 데이터
-extern NODE* dummyBlackTerminalNode;
+extern RBT_NODE* dummyBlackTerminalNode;
 
-NODE* RBT_CreateNode(RBT_DATA_TYPE);
-void RBT_DeallocateNode(NODE**);
-void RBT_DeallocateTree(NODE**);
+RBT_NODE* RBT_CreateNode(RBT_DATA_TYPE);
+void RBT_DeallocateNode(RBT_NODE**);
+void RBT_DeallocateTree(RBT_NODE**);
 
-void RBT_DispOrderedTree(NODE*, TRAVERSAL_METHOD, TREE_DEPTH_TYPE = 0);
+void RBT_DispOrderedTree(RBT_NODE*, TRAVERSAL_METHOD, TREE_DEPTH_TYPE = 0);
 
-void RBT_InsertNode(NODE**, NODE*);
-void RBT_RemoveNode(NODE**, RBT_DATA_TYPE, bool = true);
-NODE* RBT_SearchNode(NODE*, RBT_DATA_TYPE);
-NODE* RBT_SearchMaxNode(NODE*);
-NODE* RBT_SearchMinNode(NODE*);
+void RBT_InsertNode(RBT_NODE**, RBT_NODE*);
+void RBT_RemoveNode(RBT_NODE**, RBT_DATA_TYPE, bool = true);
+RBT_NODE* RBT_SearchNode(RBT_NODE*, RBT_DATA_TYPE);
+RBT_NODE* RBT_SearchMaxNode(RBT_NODE*);
+RBT_NODE* RBT_SearchMinNode(RBT_NODE*);
 
-void RBT_InsertNodeHelper(NODE**, NODE*);
-void RBT_RotateTree(NODE**, NODE*, ROTATE_DIRECTION);
-size_t RBT_GetColorCount(NODE*, COLOR, PATH_DIRECTION);
+void RBT_InsertNodeHelper(RBT_NODE**, RBT_NODE*);
+void RBT_RotateTree(RBT_NODE**, RBT_NODE*, ROTATE_DIRECTION);
+size_t RBT_GetColorCount(RBT_NODE*, COLOR, PATH_DIRECTION);
 
 #ifdef RBT_DEBUG_MODE
-void RBT_ValidateTree(NODE*);
+void RBT_ValidateTree(RBT_NODE*);
 #endif
 #endif

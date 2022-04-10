@@ -1,6 +1,6 @@
 ﻿#include "RBT_Core.h"
 
-NODE* dummyBlackTerminalNode = NULL; //검은색 더미 단말 노드
+RBT_NODE* dummyBlackTerminalNode = NULL; //검은색 더미 단말 노드
 
 /// <summary>
 /// 새로운 노드 생성 및 생성 된 노드 반환
@@ -8,9 +8,9 @@ NODE* dummyBlackTerminalNode = NULL; //검은색 더미 단말 노드
 /// <param name="srcData">노드의 데이터</param>
 /// <param name="color">노드의 색</param>
 /// <returns>생성 된 노드</returns>
-NODE* RBT_CreateNode(RBT_DATA_TYPE srcData)
+RBT_NODE* RBT_CreateNode(RBT_DATA_TYPE srcData)
 {
-	NODE* retVal = (NODE*)malloc(sizeof(NODE));
+	RBT_NODE* retVal = (RBT_NODE*)malloc(sizeof(RBT_NODE));
 	if (retVal == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
@@ -25,7 +25,7 @@ NODE* RBT_CreateNode(RBT_DATA_TYPE srcData)
 /// 대상 노드에 할당 된 메모리 해제
 /// </summary>
 /// <param name="srcNode">대상 노드</param>
-void RBT_DeallocateNode(NODE** srcNode)
+void RBT_DeallocateNode(RBT_NODE** srcNode)
 {
 	if ((*srcNode) != NULL)
 	{
@@ -38,7 +38,7 @@ void RBT_DeallocateNode(NODE** srcNode)
 /// 대상 트리에 할당 된 모든 노드의 메모리 해제
 /// </summary>
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
-void RBT_DeallocateTree(NODE** srcRootNode)
+void RBT_DeallocateTree(RBT_NODE** srcRootNode)
 {
 	if ((*srcRootNode) != NULL) //후위 순회로 왼쪽 끝 노드부터 해제 
 	{
@@ -59,7 +59,7 @@ void RBT_DeallocateTree(NODE** srcRootNode)
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 /// <param name="traversalMethod">순회 방법</param>
 /// <param name="rootNodeDepth">대상 트리의 최상위 루트 노드의 깊이</param>
-void RBT_DispOrderedTree(NODE* srcRootNode, TRAVERSAL_METHOD traversalMethod, TREE_DEPTH_TYPE rootNodeDepth)
+void RBT_DispOrderedTree(RBT_NODE* srcRootNode, TRAVERSAL_METHOD traversalMethod, TREE_DEPTH_TYPE rootNodeDepth)
 {
 	if (srcRootNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -184,7 +184,7 @@ void RBT_DispOrderedTree(NODE* srcRootNode, TRAVERSAL_METHOD traversalMethod, TR
 /// </summary>
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 /// <param name="srcNewNode">새 노드</param>
-void RBT_InsertNode(NODE** srcRootNode, NODE* srcNewNode)
+void RBT_InsertNode(RBT_NODE** srcRootNode, RBT_NODE* srcNewNode)
 {
 	RBT_InsertNodeHelper(srcRootNode, srcNewNode);
 
@@ -206,8 +206,8 @@ void RBT_InsertNode(NODE** srcRootNode, NODE* srcNewNode)
 			새 노드의 부모의 형제 노드 (삼촌)의 색에 따라 처리
 	***/
 
-	NODE* uncleNode = NULL; //새 노드의 부모의 형제 노드 (삼촌)
-	NODE* grandParentNode = NULL; //새 노드의 부모의 부모 노드 (할아버지)
+	RBT_NODE* uncleNode = NULL; //새 노드의 부모의 형제 노드 (삼촌)
+	RBT_NODE* grandParentNode = NULL; //새 노드의 부모의 부모 노드 (할아버지)
 	COLOR tmpColor;
 
 DETERMINING_PROC: //다음 작업 판별 처리 루틴
@@ -413,7 +413,7 @@ RECOLORING_PROC: //색 변경 처리 루틴
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 /// <param name="targetData">삭제하고자 하는 대상 데이터</param>
 /// <param name="deallocateAfterRemove">삭제 대상 노드에 대한 메모리 해제 수행 여부</param>
-void RBT_RemoveNode(NODE** srcRootNode, RBT_DATA_TYPE targetData, bool deallocateAfterRemove)
+void RBT_RemoveNode(RBT_NODE** srcRootNode, RBT_DATA_TYPE targetData, bool deallocateAfterRemove)
 {
 	/***
 		< 삭제하고자 하는 대상 데이터가 포함 된 노드 (이하, 삭제 대상 노드) 및
@@ -475,9 +475,9 @@ void RBT_RemoveNode(NODE** srcRootNode, RBT_DATA_TYPE targetData, bool deallocat
 	if ((*srcRootNode) == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	NODE* removeTargetNode = RBT_SearchNode((*srcRootNode), targetData); //삭제 대상 노드
-	NODE* moveTargetNode = NULL; //이동 대상 노드
-	NODE* moveTargetSiblingNode = NULL; //이동 대상 노드의 반대쪽 형제 노드
+	RBT_NODE* removeTargetNode = RBT_SearchNode((*srcRootNode), targetData); //삭제 대상 노드
+	RBT_NODE* moveTargetNode = NULL; //이동 대상 노드
+	RBT_NODE* moveTargetSiblingNode = NULL; //이동 대상 노드의 반대쪽 형제 노드
 
 	COLOR tmpColor;
 
@@ -1031,7 +1031,7 @@ END_PROC:
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 /// <param name="targetData">찾고자 하는 대상 데이터</param>
 /// <returns>찾고자 하는 대상 데이터가 포함 된 노드</returns>
-NODE* RBT_SearchNode(NODE* srcRootNode, RBT_DATA_TYPE targetData)
+RBT_NODE* RBT_SearchNode(RBT_NODE* srcRootNode, RBT_DATA_TYPE targetData)
 {
 	if (srcRootNode == NULL || srcRootNode == dummyBlackTerminalNode)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
@@ -1049,7 +1049,7 @@ NODE* RBT_SearchNode(NODE* srcRootNode, RBT_DATA_TYPE targetData)
 /// </summary>
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 /// <returns>최소값인 데이터가 포함 된 노드</returns>
-NODE* RBT_SearchMaxNode(NODE* srcRootNode)
+RBT_NODE* RBT_SearchMaxNode(RBT_NODE* srcRootNode)
 {
 	if (srcRootNode == NULL || srcRootNode == dummyBlackTerminalNode)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
@@ -1065,7 +1065,7 @@ NODE* RBT_SearchMaxNode(NODE* srcRootNode)
 /// </summary>
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 /// <returns>최소값인 데이터가 포함 된 노드</returns>
-NODE* RBT_SearchMinNode(NODE* srcRootNode)
+RBT_NODE* RBT_SearchMinNode(RBT_NODE* srcRootNode)
 {
 	if (srcRootNode == NULL || srcRootNode == dummyBlackTerminalNode)
 		throw myexception::NOT_FOUND_EXCEPTION(std::string(__func__) + std::string(" : Not found"));
@@ -1081,7 +1081,7 @@ NODE* RBT_SearchMinNode(NODE* srcRootNode)
 /// </summary>
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 /// <param name="srcNewNode">새 노드</param>
-void RBT_InsertNodeHelper(NODE** srcRootNode, NODE* srcNewNode)
+void RBT_InsertNodeHelper(RBT_NODE** srcRootNode, RBT_NODE* srcNewNode)
 {
 	if (srcNewNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
@@ -1136,7 +1136,7 @@ void RBT_InsertNodeHelper(NODE** srcRootNode, NODE* srcNewNode)
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
 /// <param name="srcTargetParentNode">대상 부모 노드</param>
 /// <param name="rotateDirection">회전 방향</param>
-void RBT_RotateTree(NODE** srcRootNode, NODE* srcTargetParentNode, ROTATE_DIRECTION rotateDirection)
+void RBT_RotateTree(RBT_NODE** srcRootNode, RBT_NODE* srcTargetParentNode, ROTATE_DIRECTION rotateDirection)
 {
 	/***
 		< 트리 회전 - 우회전 >
@@ -1196,11 +1196,11 @@ void RBT_RotateTree(NODE** srcRootNode, NODE* srcTargetParentNode, ROTATE_DIRECT
 	if ((*srcRootNode) == NULL || srcTargetParentNode == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	NODE* moveTargetNode = NULL; //회전을 위해 이동 될 노드
-	NODE* moveTargetChildNode = NULL; //회전을 위해 이동 될 노드의 자식 노드
+	RBT_NODE* moveTargetNode = NULL; //회전을 위해 이동 될 노드
+	RBT_NODE* moveTargetChildNode = NULL; //회전을 위해 이동 될 노드의 자식 노드
 
-	NODE** moveTargetParentToChildConnection = NULL; //회전을 위해 이동 될 노드의 부모 노드에서 회전을 위해 이동 될 노드로의 연결
-	NODE** moveTargetToChildConnection = NULL; //회전을 위해 이동 될 노드에서 회전을 위해 이동 될 노드의 자식 노드로의 연결
+	RBT_NODE** moveTargetParentToChildConnection = NULL; //회전을 위해 이동 될 노드의 부모 노드에서 회전을 위해 이동 될 노드로의 연결
+	RBT_NODE** moveTargetToChildConnection = NULL; //회전을 위해 이동 될 노드에서 회전을 위해 이동 될 노드의 자식 노드로의 연결
 
 	switch (rotateDirection)
 	{
@@ -1257,7 +1257,7 @@ void RBT_RotateTree(NODE** srcRootNode, NODE* srcTargetParentNode, ROTATE_DIRECT
 /// <param name="color">노드의 색</param>
 /// <param name="pathDirection">경로 방향</param>
 /// <returns>특정 색을 가진 노드 개수</returns>
-size_t RBT_GetColorCount(NODE* srcRootNode, COLOR color, PATH_DIRECTION pathDirection)
+size_t RBT_GetColorCount(RBT_NODE* srcRootNode, COLOR color, PATH_DIRECTION pathDirection)
 {
 	size_t retVal = 0; //특정 색을 가진 노드 개수
 
@@ -1295,7 +1295,7 @@ size_t RBT_GetColorCount(NODE* srcRootNode, COLOR color, PATH_DIRECTION pathDire
 /// 대상 트리에 대한 유효성 검사 수행
 /// </summary>
 /// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
-void RBT_ValidateTree(NODE* srcRootNode)
+void RBT_ValidateTree(RBT_NODE* srcRootNode)
 {
 	if (srcRootNode == NULL)
 		return;
@@ -1307,7 +1307,7 @@ void RBT_ValidateTree(NODE* srcRootNode)
 	if (dummyBlackTerminalNode->_parent != NULL) //검은색 더미 단말 노드에서 부모로의 연결은 허용하지 않음 
 		throw std::logic_error(std::string(__func__) + std::string(" : Not allowed parent connection from dummy"));
 
-	NODE* currentNode = srcRootNode; //현재 노드
+	RBT_NODE* currentNode = srcRootNode; //현재 노드
 	char execBranchSingleFlag = (0x0); //실행 분기 단일 플래그
 
 	/***
@@ -1319,7 +1319,7 @@ void RBT_ValidateTree(NODE* srcRootNode)
 		0011(2) : pop 및 필요 할 경우 해당 요소에 대한 마지막 작업 수행
 	***/
 
-	std::stack<std::tuple<NODE*, char>> callStack; //Call Stack
+	std::stack<std::tuple<RBT_NODE*, char>> callStack; //Call Stack
 	callStack.push(std::make_tuple(currentNode, execBranchSingleFlag));
 
 	size_t leftPathBlackNodeCount = 0;

@@ -18,7 +18,7 @@ int main()
 			7, 3, 18, 10, 22, 8, 11, 26, 2, 6, 13
 		}; //입력 데이터
 
-		NODE* tree[TREE_COUNT] = { NULL, };
+		RBT_NODE* tree[TREE_COUNT] = { NULL, };
 
 		for (int treeIndex = 0; treeIndex < TREE_COUNT; treeIndex++)
 		{

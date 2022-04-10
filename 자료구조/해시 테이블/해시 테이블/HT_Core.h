@@ -16,12 +16,11 @@
 #include "../../트리/Red-Black (레드-블랙) 트리/RBT_Core.h"
 
 #define HT_DEBUG_MODE
-#ifdef HT_DEBUG_MODE
-static size_t hashCollisionCount = 0; //해시 충돌 횟수 카운트
-#endif
+//#define DISP_COLLIISION_KEY
 
 #include "HT_Common.h"
 #include "HT_Chaining.h"
 #include "HT_Chaining_RBT.h"
 #include "HT_OpenAddr.h"
+#include "HT_Test.h"
 #endif

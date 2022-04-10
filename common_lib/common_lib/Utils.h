@@ -6,6 +6,10 @@
 #include <math.h>
 #include <random>
 
+#ifndef ssize_t
+typedef signed long long ssize_t;
+#endif
+
 /// <summary>
 /// 연속적인 요소들에 대한 접근 방법
 /// </summary>
@@ -25,6 +29,8 @@ namespace utils
 	size_t GetBitCountFrom(size_t);
 
 	void GenRandStr(char[], size_t, size_t);
+	ssize_t GenSignedRandNum(ssize_t, ssize_t);
+	size_t GenUnsignedRandNum(size_t, size_t);
 
 	size_t TwoDimensionIndexToOneDimensionIndex(size_t, size_t,
 		size_t, size_t, ELEMENT_ORDER = ELEMENT_ORDER::ROW_MAJOR);
