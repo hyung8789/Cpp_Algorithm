@@ -22,5 +22,4 @@
 #include "HT_Chaining.h"
 #include "HT_Chaining_RBT.h"
 #include "HT_OpenAddr.h"
-#include "HT_Test.h"
 #endif

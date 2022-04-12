@@ -46,6 +46,7 @@ int main()
 		for (int i = 0; i < reallocTestSize; i++)
 		{
 			AS_Pop(stack);
+			std::cout << "전체 노드 개수 : " << AS_GetTotalNodeCount(stack) << std::endl;
 			std::cout << "Current Capacity : " << stack->_capacity << std::endl;
 		}
 

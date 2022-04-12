@@ -26,6 +26,9 @@ typedef int RBT_DATA_TYPE; //노드의 데이터 타입
 typedef int TREE_DEPTH_TYPE; //트리 깊이 타입
 
 #ifdef COLOR_VISUALIZATION
+/// <summary>
+/// 색상 가시화를 위한 노드의 색상
+/// </summary>
 enum class COLOR : const unsigned
 {
     RED = ((const unsigned)BG_COLOR::BG_RED | (const unsigned)FG_COLOR::FG_WHITE |
@@ -34,6 +37,9 @@ enum class COLOR : const unsigned
 		FOREGROUND_INTENSITY)
 };
 #else
+/// <summary>
+/// 노드의 색상
+/// </summary>
 enum class COLOR : const unsigned
 {
     RED = 0,
@@ -41,6 +47,9 @@ enum class COLOR : const unsigned
 };
 #endif
 
+/// <summary>
+/// 레드 블랙 트리의 노드
+/// </summary>
 typedef struct RBT_NODE_TYPE
 {
 	RBT_DATA_TYPE _data; //노드의 데이터
@@ -51,6 +60,9 @@ typedef struct RBT_NODE_TYPE
 	RBT_NODE_TYPE* _right; //오른쪽 노드
 }RBT_NODE;
 
+/// <summary>
+/// 순회 방법
+/// </summary>
 enum class TRAVERSAL_METHOD : const int
 {
 	PREORDER = 0, //전위 순회 (Root -> Left -> Right)
@@ -58,12 +70,18 @@ enum class TRAVERSAL_METHOD : const int
 	POSTORDER //후위 순회 (Left -> Right -> Root)
 };
 
+/// <summary>
+/// 회전 방향
+/// </summary>
 enum class ROTATE_DIRECTION : const int
 {
 	RIGHT = 0, //우회전 (부모 노드의 왼쪽 자식과 부모의 위치 교환) 
 	LEFT //좌회전 (부모 노드의 오른쪽 자식과 부모의 위치 교환)
 };
 
+/// <summary>
+/// 경로 방향
+/// </summary>
 enum class PATH_DIRECTION : const int
 {
 	RIGHT = 0, //오른쪽 경로

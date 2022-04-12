@@ -144,7 +144,6 @@
     <ClInclude Include="HT_Common.h" />
     <ClInclude Include="HT_Core.h" />
     <ClInclude Include="HT_OpenAddr.h" />
-    <ClInclude Include="HT_Test.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HT_Chaining.cpp" />

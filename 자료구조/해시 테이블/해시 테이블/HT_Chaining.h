@@ -1,6 +1,9 @@
 ﻿#ifndef _HT_CHAINING_H_
 #define _HT_CHAINING_H_
 
+/// <summary>
+/// 체이닝 노드
+/// </summary>
 struct CHAINING_NODE
 {
 	HT_KEY_TYPE _key; //Hash Function에 키로 사용 할 데이터
@@ -11,6 +14,9 @@ struct CHAINING_NODE
 
 typedef CHAINING_NODE* CHAINING_NODE_LIST;
 
+/// <summary>
+/// 체이닝 해시 테이블
+/// </summary>
 struct CHAINING_HASH_TABLE
 {
 	HASH_INDEX_TYPE _capacity; //할당량
@@ -20,10 +26,6 @@ struct CHAINING_HASH_TABLE
 
 CHAINING_HASH_TABLE* HT_Chaining_CreateHashTable(HASH_INDEX_TYPE);
 void HT_Chaining_DeallocateHashTable(CHAINING_HASH_TABLE**);
-
-void HT_Chaining_DispNodeList(CHAINING_HASH_TABLE*);
-void HT_Chaining_DispEmptyIndexList(CHAINING_HASH_TABLE*);
-void HT_Chaining_DispOccupiedIndexList(CHAINING_HASH_TABLE*);
 
 CHAINING_NODE* HT_Chaining_CreateNode(HT_KEY_TYPE, HT_DATA_TYPE);
 void HT_Chaining_DeallocateNode(CHAINING_NODE**);

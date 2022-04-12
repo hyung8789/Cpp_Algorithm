@@ -87,7 +87,7 @@ DATA_TYPE AS_Pop(ARRAY_STACK* srcArrayStack)
 		throw std::logic_error(std::string(__func__) + std::string(" : Empty Stack"));
 
 	if (((static_cast<double>(AS_GetTotalNodeCount(srcArrayStack)) / static_cast<double>(srcArrayStack->_capacity))) <
-		CAPACITY_REALLOC_RATIO_THRESHOLD) //사용량에 대한 비율이 기존 할당 크기에 대한 재 할당이 발생 될 빈 공간 임계 비율 미만일 경우
+		CAPACITY_REALLOC_RATIO_THRESHOLD)
 	{
 		STACK_INDEX_TYPE reallocCapacity = srcArrayStack->_capacity - floor(srcArrayStack->_capacity * CAPACITY_REALLOC_RATIO); //재 할당 될 크기
 		STACK_INDEX_TYPE reallocSizeInBytes = sizeof(NODE) * reallocCapacity; //재 할당 될 바이트 단위 크기

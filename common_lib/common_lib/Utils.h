@@ -6,9 +6,7 @@
 #include <math.h>
 #include <random>
 
-#ifndef ssize_t
 typedef signed long long ssize_t;
-#endif
 
 /// <summary>
 /// 연속적인 요소들에 대한 접근 방법

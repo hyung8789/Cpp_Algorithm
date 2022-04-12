@@ -36,6 +36,119 @@ size_t HT_Common_GetHashCollisionCount()
 #endif
 
 /// <summary>
+/// 대상 해시 테이블의 전체 노드에 대한 데이터 출력
+/// </summary>
+/// <param name="srcHashTable">대상 해시 테이블</param>
+/// <param name="collisionHandleMethod">대상 해시 테이블의 충돌 처리 방법</param>
+void HT_Common_DispNodeList(void* srcHashTable, HASH_TABLE_COLLISION_HANDLE_METHOD collisionHandleMethod)
+{
+	if (srcHashTable == NULL)
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
+
+	CHAINING_HASH_TABLE* chainingHashTable = NULL;
+	OPEN_ADDR_HASH_TABLE* openAddrHashTable = NULL;
+
+	CHAINING_NODE* currentChainingNode = NULL;
+
+	switch (collisionHandleMethod)
+	{
+	case HASH_TABLE_COLLISION_HANDLE_METHOD::CHAINING:
+		chainingHashTable = static_cast<CHAINING_HASH_TABLE*>(srcHashTable);
+
+		for (HASH_INDEX_TYPE i = 0; i < chainingHashTable->_capacity; i++)
+		{
+			if (chainingHashTable->_table[i] != NULL)
+			{
+				std::cout << "----------------------------------\n";
+				std::cout << "Index [" << i << "]\n";
+
+				currentChainingNode = chainingHashTable->_table[i];
+
+				while (currentChainingNode != NULL)
+				{
+					std::cout << "Key : " << currentChainingNode->_key <<
+						", Data : " << currentChainingNode->_data << "\n";
+
+					currentChainingNode = currentChainingNode->_next;
+				}
+
+				std::cout << "----------------------------------\n";
+			}
+		}
+
+		break;
+
+	case HASH_TABLE_COLLISION_HANDLE_METHOD::OPEN_ADDR:
+		openAddrHashTable = static_cast<OPEN_ADDR_HASH_TABLE*>(srcHashTable);
+
+		for (HASH_INDEX_TYPE i = 0; i < openAddrHashTable->_capacity; i++)
+		{
+			if (openAddrHashTable->_table[i]._state == NODE_STATE::OCCUPIED)
+			{
+				std::cout << "----------------------------------\n";
+				std::cout << "Index [" << i << "]\n";
+				std::cout << "Key : " << openAddrHashTable->_table[i]._key <<
+					", Data : " << openAddrHashTable->_table[i]._data << "\n";
+				std::cout << "----------------------------------\n";
+			}
+		}
+
+		break;
+	}
+}
+
+/// <summary>
+/// 대상 해시 테이블의 대상 노드의 상태를 가진 노드의 인덱스 목록 출력
+/// </summary>
+/// <param name="srcHashTable">대상 해시 테이블</param>
+/// <param name="collisionHandleMethod">대상 해시 테이블의 충돌 처리 방법</param>
+/// <param name="targetNodeState">대상 노드의 상태</param>
+void HT_Common_DispIndexListBy(void* srcHashTable, HASH_TABLE_COLLISION_HANDLE_METHOD collisionHandleMethod,
+	NODE_STATE targetNodeState)
+{
+	if (srcHashTable == NULL)
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
+
+	CHAINING_HASH_TABLE* chainingHashTable = NULL;
+	OPEN_ADDR_HASH_TABLE* openAddrHashTable = NULL;
+
+	switch (collisionHandleMethod)
+	{
+	case HASH_TABLE_COLLISION_HANDLE_METHOD::CHAINING:
+		chainingHashTable = static_cast<CHAINING_HASH_TABLE*>(srcHashTable);
+
+		if (targetNodeState == NODE_STATE::DELETED)
+			throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
+
+		for (HASH_INDEX_TYPE i = 0; i < chainingHashTable->_capacity; i++)
+		{
+			if ((targetNodeState == NODE_STATE::EMPTY) ?
+				chainingHashTable->_table[i] == NULL : chainingHashTable->_table[i] != NULL)
+			{
+				std::cout << i << " ";
+			}
+		}
+
+		std::cout << std::endl;
+		break;
+
+	case HASH_TABLE_COLLISION_HANDLE_METHOD::OPEN_ADDR:
+		openAddrHashTable = static_cast<OPEN_ADDR_HASH_TABLE*>(srcHashTable);
+
+		for (HASH_INDEX_TYPE i = 0; i < openAddrHashTable->_capacity; i++)
+		{
+			if (openAddrHashTable->_table[i]._state == targetNodeState)
+			{
+				std::cout << i << " ";
+			}
+		}
+
+		std::cout << std::endl;
+		break;
+	}
+}
+
+/// <summary>
 /// 할당 크기 및 대상 키에 대해 자릿수 접기를 통해 계산 된 해시 인덱스 반환
 /// </summary>
 /// <param name="capacity">할당 크기</param>
@@ -91,22 +204,22 @@ HASH_INDEX_TYPE HT_Common_DigitFolding_Hash(HASH_INDEX_TYPE capacity, HT_KEY_TYP
 }
 
 /// <summary>
-/// 
+/// 할당 크기 및 대상 키에 대해 자릿수 접기를 통해 사상 된 해시 인덱스 반환
 /// </summary>
-/// <param name="capacity"></param>
-/// <param name="srcKey"></param>
-/// <returns></returns>
+/// <param name="capacity">할당 크기</param>
+/// <param name="srcKey">대상 키</param>
+/// <returns>자릿수 접기를 통해 사상 된 해시 인덱스</returns>
 HASH_INDEX_TYPE HT_Common_DoubleHashing_Hash1(HASH_INDEX_TYPE capacity, HT_KEY_TYPE srcKey)
 {
 	return HT_Common_DigitFolding_BaseProc(capacity, srcKey) % capacity;
 }
 
 /// <summary>
-/// 
+///  할당 크기 및 대상 키에 대해 자릿수 접기를 통해 사상 된 해시 인덱스 반환 (2차 해싱)
 /// </summary>
-/// <param name="capacity"></param>
-/// <param name="srcKey"></param>
-/// <returns></returns>
+/// <param name="capacity">할당 크기</param>
+/// <param name="srcKey">대상 키</param>
+/// <returns>자릿수 접기를 통해 사상 된 해시 인덱스 (2차 해싱)</returns>
 HASH_INDEX_TYPE HT_Common_DoubleHashing_Hash2(HASH_INDEX_TYPE capacity, HT_KEY_TYPE srcKey)
 {
 	return (HT_Common_DigitFolding_BaseProc(capacity, srcKey) % (capacity - 3)) + 1;

@@ -217,8 +217,6 @@ void HT_Chaining_InsertData(CHAINING_HASH_TABLE* srcHashTable, HT_KEY_TYPE srcKe
 		{
 			if (strcmp(srcKey, currentNode->_key) == 0) //완전히 일치한 중복 키가 존재하면
 			{
-				memset(currentNode->_data, '\0', strlen(currentNode->_data));
-
 				size_t reallocSizeInBytes = sizeof(char) * (strlen(srcData) + 1); //재 할당 될 바이트 단위 크기 ('\0' 포함 길이)
 				if (reallocSizeInBytes != strlen(currentNode->_data)) //기존 데이터의 크기가 재 할당 될 크기와 다를 경우
 				{
@@ -228,6 +226,8 @@ void HT_Chaining_InsertData(CHAINING_HASH_TABLE* srcHashTable, HT_KEY_TYPE srcKe
 
 					currentNode->_data = (HT_DATA_TYPE)reallocAddr;
 				}
+
+				memset(currentNode->_data, '\0', strlen(currentNode->_data));
 
 				if (strcpy_s(currentNode->_data, strlen(srcData) + 1, srcData) != 0)
 					throw std::runtime_error(std::string(__func__) + std::string(" : src, dst is null or wrong size"));
