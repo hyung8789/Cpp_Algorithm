@@ -42,8 +42,7 @@ void HT_OpenAddr_DeallocateHashTable(OPEN_ADDR_HASH_TABLE** srcHashTable)
 	{
 		for (HASH_INDEX_TYPE i = 0; i < (*srcHashTable)->_capacity; i++)
 		{
-			free((*srcHashTable)->_table[i]._key);
-			free((*srcHashTable)->_table[i]._data);
+			HT_OpenAddr_DeallocateNode(&((*srcHashTable)->_table[i]));
 		}
 
 		free((*srcHashTable)->_table);
@@ -51,6 +50,22 @@ void HT_OpenAddr_DeallocateHashTable(OPEN_ADDR_HASH_TABLE** srcHashTable)
 
 		free(*srcHashTable);
 		(*srcHashTable) = NULL;
+	}
+}
+
+/// <summary>
+/// 대상 노드에 할당 된 메모리 해제
+/// </summary>
+/// <param name="srcNode">대상 노드</param>
+void HT_OpenAddr_DeallocateNode(OPEN_ADDR_NODE* srcNode)
+{
+	if (srcNode != NULL)
+	{
+		free(srcNode->_key);
+		free(srcNode->_data);
+
+		srcNode->_key = NULL;
+		srcNode->_data = NULL;
 	}
 }
 
@@ -289,13 +304,20 @@ void HT_OpenAddr_RehashingProc(OPEN_ADDR_HASH_TABLE** srcHashTable, HASH_INDEX_T
 		switch ((*srcHashTable)->_table[i]._state)
 		{
 		case NODE_STATE::EMPTY:
-		case NODE_STATE::DELETED:
 			//do nothing
+			break;
+
+		case NODE_STATE::DELETED:
+			//삽입 과정을 위한 힙 메모리 확보
+			HT_OpenAddr_DeallocateNode(&((*srcHashTable)->_table[i]));
 			break;
 
 		case NODE_STATE::OCCUPIED:
 			//사용 중인 기존 데이터에 대해 새 테이블로 이동
 			HT_OpenAddr_InsertData(&newHashTable, (*srcHashTable)->_table[i]._key, (*srcHashTable)->_table[i]._data);
+			
+			//삽입 과정을 위한 힙 메모리 확보
+			HT_OpenAddr_DeallocateNode(&((*srcHashTable)->_table[i]));
 			break;
 		}
 	}

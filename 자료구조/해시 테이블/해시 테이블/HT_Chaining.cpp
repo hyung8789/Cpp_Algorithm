@@ -79,45 +79,6 @@ void HT_Chaining_DispNodeList(CHAINING_HASH_TABLE* srcHashTable)
 }
 
 /// <summary>
-/// 대상 해시 테이블의 비어있는 인덱스 출력
-/// </summary>
-/// <param name="srcHashTable">대상 해시 테이블</param>
-void HT_Chaining_DispEmptyIndexList(CHAINING_HASH_TABLE* srcHashTable)
-{
-	if (srcHashTable == NULL)
-		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
-
-	for (HASH_INDEX_TYPE i = 0; i < srcHashTable->_capacity; i++)
-	{
-		if (srcHashTable->_table[i] == NULL)
-		{
-			std::cout << i <<" ";
-		}
-	}
-	std::cout << std::endl;
-}
-
-/// <summary>
-/// 대상 해시 테이블의 사용 중인 인덱스 출력
-/// </summary>
-/// <param name="srcHashTable">대상 해시 테이블</param>
-void HT_Chaining_DispOccupiedIndexList(CHAINING_HASH_TABLE* srcHashTable)
-{
-	if (srcHashTable == NULL)
-		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
-
-	for (HASH_INDEX_TYPE i = 0; i < srcHashTable->_capacity; i++)
-	{
-		if (srcHashTable->_table[i] != NULL)
-		{
-			std::cout << i <<" ";
-		}
-	}
-
-	std::cout << std::endl;
-}
-
-/// <summary>
 /// 대상 키 및 데이터가 포함 된 노드 생성 및 반환
 /// </summary>
 /// <param name="srcKey">대상 키</param>

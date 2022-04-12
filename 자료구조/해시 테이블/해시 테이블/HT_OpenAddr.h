@@ -1,7 +1,7 @@
 ﻿#ifndef _HT_OPEN_ADDR_H_
 #define _HT_OPEN_ADDR_H_
 
-#define CAPACITY_REALLOC_RATIO_THRESHOLD 0.4 //기존 할당 크기에 대한 재 할당이 발생 될 빈 공간 임계 비율 (0.0 ~ 1.0)
+#define CAPACITY_REALLOC_RATIO_THRESHOLD 0.4 //기존 할당 크기에 대한 재 할당이 발생 될 임계 비율 (0.0 ~ 1.0)
 #define CAPACITY_REALLOC_RATIO 2.0 //기존 할당 크기에 대해 증가 시 재 할당 될 비율
 
 /// <summary>
@@ -28,6 +28,8 @@ struct OPEN_ADDR_HASH_TABLE
 
 OPEN_ADDR_HASH_TABLE* HT_OpenAddr_CreateHashTable(HASH_INDEX_TYPE);
 void HT_OpenAddr_DeallocateHashTable(OPEN_ADDR_HASH_TABLE**);
+
+void HT_OpenAddr_DeallocateNode(OPEN_ADDR_NODE*);
 
 void HT_OpenAddr_InsertData(OPEN_ADDR_HASH_TABLE**, HT_KEY_TYPE, HT_DATA_TYPE);
 HT_DATA_TYPE HT_OpenAddr_SearchData(OPEN_ADDR_HASH_TABLE*, HT_KEY_TYPE);

@@ -29,7 +29,7 @@
 	- i번 인덱스 요소의 부모 인덱스 : (i-1) / 2
 ***/
 
-#define CAPACITY_REALLOC_RATIO_THRESHOLD 0.5 //기존 할당 크기에 대한 재 할당이 발생 될 빈 공간 임계 비율 (0.0 ~ 1.0)
+#define CAPACITY_REALLOC_RATIO_THRESHOLD 0.5 //기존 할당 크기에 대한 재 할당이 발생 될 임계 비율 (0.0 ~ 1.0)
 #define CAPACITY_REALLOC_RATIO 0.5 //기존 할당 크기에 대해 증가 혹은 감소 시 재 할당 될 비율
 
 #define MIN_HEAP 0 //parent < left child && parent < right child
