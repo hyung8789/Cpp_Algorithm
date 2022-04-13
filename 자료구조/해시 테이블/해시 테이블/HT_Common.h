@@ -7,16 +7,6 @@ typedef char* HT_KEY_TYPE; //노드의 키 타입
 typedef char* HT_DATA_TYPE; //노드의 데이터 타입
 
 /// <summary>
-/// 해시 테이블의 충돌 처리 방법
-/// </summary>
-enum class HASH_TABLE_COLLISION_HANDLE_METHOD : const char
-{
-	CHAINING = 0,
-	//CHAINING_RBT,
-	OPEN_ADDR
-};
-
-/// <summary>
 /// 노드의 상태
 /// </summary>
 enum class NODE_STATE : const char
@@ -92,10 +82,6 @@ void HT_Common_InitHashCollisionCount();
 void HT_Common_IncreaseHashCollisionCount(HT_KEY_TYPE = NULL);
 size_t HT_Common_GetHashCollisionCount();
 #endif
-
-void HT_Common_DispNodeList(void*, HASH_TABLE_COLLISION_HANDLE_METHOD);
-void HT_Common_DispIndexListBy(void*, HASH_TABLE_COLLISION_HANDLE_METHOD,
-	NODE_STATE);
 
 HASH_INDEX_TYPE HT_Common_DigitFolding_BaseProc(HASH_INDEX_TYPE, HT_KEY_TYPE);
 HASH_INDEX_TYPE HT_Common_DigitFolding_Hash(HASH_INDEX_TYPE, HT_KEY_TYPE);

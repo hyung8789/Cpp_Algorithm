@@ -31,6 +31,9 @@ CHAINING_NODE* HT_Chaining_CreateNode(HT_KEY_TYPE, HT_DATA_TYPE);
 void HT_Chaining_DeallocateNode(CHAINING_NODE**);
 void HT_Chaining_DeallocateNodeList(CHAINING_NODE_LIST*);
 
+void HT_Chaining_DispNodeList(CHAINING_HASH_TABLE*);
+void HT_Chaining_DispIndexListBy(CHAINING_HASH_TABLE*, NODE_STATE);
+
 void HT_Chaining_InsertData(CHAINING_HASH_TABLE*, HT_KEY_TYPE, HT_DATA_TYPE);
 HT_DATA_TYPE HT_Chaining_SearchData(CHAINING_HASH_TABLE*, HT_KEY_TYPE);
 void HT_Chaining_RemoveData(CHAINING_HASH_TABLE*, HT_KEY_TYPE, bool = true);

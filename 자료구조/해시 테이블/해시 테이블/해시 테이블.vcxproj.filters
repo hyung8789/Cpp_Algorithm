@@ -44,5 +44,8 @@
     <ClCompile Include="HT_OpenAddr.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="HT_Chaining_RBT.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

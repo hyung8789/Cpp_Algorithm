@@ -129,7 +129,7 @@ void PQ_Dequeue(PRIORITY_QUEUE* srcPriorityQueue, NODE* dstNode)
 	srcPriorityQueue->_nodeArray[0] = srcPriorityQueue->_nodeArray[srcPriorityQueue->_usedSize]; //루트 노드로 마지막으로 삽입 된 노드 이동
 
 	if ((static_cast<double>(srcPriorityQueue->_usedSize) / static_cast<double>(srcPriorityQueue->_capacity)) <
-		CAPACITY_REALLOC_RATIO_THRESHOLD)
+		CAPACITY_REALLOC_RATIO_THRESHOLD) //사용량이 기존 할당 크기에 대한 재 할당이 발생 될 임계 비율 미만일 경우
 	{
 		QUEUE_INDEX_TYPE reallocCapacity = srcPriorityQueue->_capacity - floor(srcPriorityQueue->_capacity * CAPACITY_REALLOC_RATIO); //재 할당 될 크기
 		QUEUE_INDEX_TYPE reallocSizeInBytes = sizeof(NODE) * reallocCapacity; //재 할당 될 바이트 단위 크기

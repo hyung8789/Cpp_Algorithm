@@ -48,37 +48,6 @@ void HT_Chaining_DeallocateHashTable(CHAINING_HASH_TABLE** srcHashTable)
 }
 
 /// <summary>
-/// 대상 해시 테이블의 전체 노드에 대한 데이터 출력
-/// </summary>
-/// <param name="srcHashTable">대상 해시 테이블</param>
-void HT_Chaining_DispNodeList(CHAINING_HASH_TABLE* srcHashTable)
-{
-	if (srcHashTable == NULL)
-		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
-
-	for (HASH_INDEX_TYPE i = 0; i < srcHashTable->_capacity; i++)
-	{
-		if (srcHashTable->_table[i] != NULL)
-		{
-			std::cout << "----------------------------------\n";
-			std::cout << "Index [" << i << "]\n";
-
-			CHAINING_NODE* currentNode = srcHashTable->_table[i];
-			
-			while (currentNode != NULL)
-			{
-				std::cout << "Key : " << currentNode->_key <<
-					", Data : " << currentNode->_data << "\n";
-				
-				currentNode = currentNode->_next;
-			}
-
-			std::cout << "----------------------------------\n";
-		}
-	}
-}
-
-/// <summary>
 /// 대상 키 및 데이터가 포함 된 노드 생성 및 반환
 /// </summary>
 /// <param name="srcKey">대상 키</param>
@@ -142,6 +111,64 @@ void HT_Chaining_DeallocateNodeList(CHAINING_NODE_LIST* srcNodeList)
 			(*srcNodeList) = nextNode;
 		}
 	}
+}
+
+/// <summary>
+/// 대상 해시 테이블의 전체 노드에 대한 데이터 출력
+/// </summary>
+/// <param name="srcHashTable">대상 해시 테이블</param>
+void HT_Chaining_DispNodeList(CHAINING_HASH_TABLE* srcHashTable)
+{
+	if (srcHashTable == NULL)
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
+
+	for (HASH_INDEX_TYPE i = 0; i < srcHashTable->_capacity; i++)
+	{
+		if (srcHashTable->_table[i] != NULL)
+		{
+			std::cout << "----------------------------------\n";
+			std::cout << "Index [" << i << "]\n";
+
+			CHAINING_NODE* currentChainingNode = srcHashTable->_table[i];
+
+			while (currentChainingNode != NULL)
+			{
+				std::cout << "Key : " << currentChainingNode->_key <<
+					", Data : " << currentChainingNode->_data << "\n";
+
+				currentChainingNode = currentChainingNode->_next;
+			}
+
+			std::cout << "\n";
+		}
+	}
+}
+
+/// <summary>
+/// 대상 해시 테이블의 대상 노드의 상태를 가진 노드의 인덱스 목록 출력
+/// </summary>
+/// <param name="srcHashTable">대상 해시 테이블</param>
+/// <param name="targetNodeState">대상 노드의 상태</param>
+void HT_Chaining_DispIndexListBy(CHAINING_HASH_TABLE* srcHashTable, NODE_STATE targetNodeState)
+{
+	if (srcHashTable == NULL)
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
+
+	if (targetNodeState == NODE_STATE::DELETED)
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
+
+	std::cout << "--- Chaining Index List ---\n";
+
+	for (HASH_INDEX_TYPE i = 0; i < srcHashTable->_capacity; i++)
+	{
+		if ((targetNodeState == NODE_STATE::EMPTY) ?
+			srcHashTable->_table[i] == NULL : srcHashTable->_table[i] != NULL)
+		{
+			std::cout << i << " ";
+		}
+	}
+
+	std::cout << std::endl;
 }
 
 /// <summary>

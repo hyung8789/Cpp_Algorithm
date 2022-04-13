@@ -40,7 +40,7 @@ enum class COLOR : const unsigned
 /// <summary>
 /// 노드의 색상
 /// </summary>
-enum class COLOR : const unsigned
+enum class COLOR : const char
 {
     RED = 0,
     BLACK

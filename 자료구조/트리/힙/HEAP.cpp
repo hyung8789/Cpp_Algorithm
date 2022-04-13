@@ -150,7 +150,7 @@ DATA_TYPE HEAP_Pop(HEAP* srcHeap)
 	srcHeap->_nodeArray[0]._data = srcHeap->_nodeArray[srcHeap->_usedSize]._data; //루트 노드로 마지막으로 삽입 된 노드의 데이터 이동
 
 	if ((static_cast<double>(srcHeap->_usedSize) / static_cast<double>(srcHeap->_capacity)) < 
-		CAPACITY_REALLOC_RATIO_THRESHOLD)
+		CAPACITY_REALLOC_RATIO_THRESHOLD) //사용량이 기존 할당 크기에 대한 재 할당이 발생 될 임계 비율 미만일 경우
 	{
 		HEAP_INDEX_TYPE reallocCapacity = srcHeap->_capacity - floor(srcHeap->_capacity * CAPACITY_REALLOC_RATIO); //재 할당 될 크기
 		HEAP_INDEX_TYPE reallocSizeInBytes = sizeof(NODE) * reallocCapacity; //재 할당 될 바이트 단위 크기

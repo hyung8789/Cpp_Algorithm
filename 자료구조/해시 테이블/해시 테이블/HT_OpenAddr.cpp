@@ -5,18 +5,18 @@
 /// </summary>
 /// <param name="capacity">할당 크기</param>
 /// <returns>생성 된 해시 테이블</returns>
-OPEN_ADDR_HASH_TABLE* HT_OpenAddr_CreateHashTable(HASH_INDEX_TYPE capacity)
+OPENADDR_HASH_TABLE* HT_OpenAddr_CreateHashTable(HASH_INDEX_TYPE capacity)
 {
-	OPEN_ADDR_HASH_TABLE* retVal = NULL;
+	OPENADDR_HASH_TABLE* retVal = NULL;
 
 	if (capacity <= 0)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	retVal = (OPEN_ADDR_HASH_TABLE*)malloc(sizeof(OPEN_ADDR_HASH_TABLE));
+	retVal = (OPENADDR_HASH_TABLE*)malloc(sizeof(OPENADDR_HASH_TABLE));
 	if (retVal == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-	retVal->_table = (OPEN_ADDR_NODE*)malloc(sizeof(OPEN_ADDR_NODE) * capacity); //할당 크기만큼 생성
+	retVal->_table = (OPENADDR_NODE*)malloc(sizeof(OPENADDR_NODE) * capacity); //할당 크기만큼 생성
 	if (retVal->_table == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
@@ -36,7 +36,7 @@ OPEN_ADDR_HASH_TABLE* HT_OpenAddr_CreateHashTable(HASH_INDEX_TYPE capacity)
 /// 대상 해시 테이블에 할당 된 메모리 해제
 /// </summary>
 /// <param name="srcHashTable">대상 해시 테이블</param>
-void HT_OpenAddr_DeallocateHashTable(OPEN_ADDR_HASH_TABLE** srcHashTable)
+void HT_OpenAddr_DeallocateHashTable(OPENADDR_HASH_TABLE** srcHashTable)
 {
 	if ((*srcHashTable) != NULL)
 	{
@@ -57,7 +57,7 @@ void HT_OpenAddr_DeallocateHashTable(OPEN_ADDR_HASH_TABLE** srcHashTable)
 /// 대상 노드에 할당 된 메모리 해제
 /// </summary>
 /// <param name="srcNode">대상 노드</param>
-void HT_OpenAddr_DeallocateNode(OPEN_ADDR_NODE* srcNode)
+void HT_OpenAddr_DeallocateNode(OPENADDR_NODE* srcNode)
 {
 	if (srcNode != NULL)
 	{
@@ -70,12 +70,57 @@ void HT_OpenAddr_DeallocateNode(OPEN_ADDR_NODE* srcNode)
 }
 
 /// <summary>
+/// 대상 해시 테이블의 전체 노드에 대한 데이터 출력
+/// </summary>
+/// <param name="srcHashTable">대상 해시 테이블</param>
+void HT_OpenAddr_DispNodeList(OPENADDR_HASH_TABLE* srcHashTable)
+{
+	if (srcHashTable == NULL)
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
+
+	for (HASH_INDEX_TYPE i = 0; i < srcHashTable->_capacity; i++)
+	{
+		if (srcHashTable->_table[i]._state == NODE_STATE::OCCUPIED)
+		{
+			std::cout << "----------------------------------\n";
+			std::cout << "Index [" << i << "]\n";
+			std::cout << "Key : " << srcHashTable->_table[i]._key <<
+				", Data : " << srcHashTable->_table[i]._data << "\n";
+			std::cout << "\n";
+		}
+	}
+}
+
+/// <summary>
+/// 대상 해시 테이블의 대상 노드의 상태를 가진 노드의 인덱스 목록 출력
+/// </summary>
+/// <param name="srcHashTable">대상 해시 테이블</param>
+/// <param name="targetNodeState">대상 노드의 상태</param>
+void HT_OpenAddr_DispIndexListBy(OPENADDR_HASH_TABLE* srcHashTable, NODE_STATE targetNodeState)
+{
+	if (srcHashTable == NULL)
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
+
+	std::cout << "--- OpenAddr Index List ---\n";
+
+	for (HASH_INDEX_TYPE i = 0; i < srcHashTable->_capacity; i++)
+	{
+		if (srcHashTable->_table[i]._state == targetNodeState)
+		{
+			std::cout << i << " ";
+		}
+	}
+
+	std::cout << std::endl;
+}
+
+/// <summary>
 /// 대상 해시 테이블에 삽입하고자 하는 대상 키를 통해 사상 된 해시 인덱스에 따른 삽입하고자 하는 대상 데이터 삽입
 /// </summary>
 /// <param name="srcHashTable">대상 해시 테이블</param>
 /// <param name="srcKey">삽입하고자 하는 대상 키</param>
 /// <param name="srcData">삽입하고자 하는 대상 데이터</param>
-void HT_OpenAddr_InsertData(OPEN_ADDR_HASH_TABLE** srcHashTable, HT_KEY_TYPE srcKey, HT_DATA_TYPE srcData)
+void HT_OpenAddr_InsertData(OPENADDR_HASH_TABLE** srcHashTable, HT_KEY_TYPE srcKey, HT_DATA_TYPE srcData)
 {
 	if ((*srcHashTable) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -84,7 +129,7 @@ void HT_OpenAddr_InsertData(OPEN_ADDR_HASH_TABLE** srcHashTable, HT_KEY_TYPE src
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
 	if (((static_cast<double>((*srcHashTable)->_usedSize) / static_cast<double>((*srcHashTable)->_capacity))) >=
-		CAPACITY_REALLOC_RATIO_THRESHOLD)
+		CAPACITY_INCREASE_RATIO_THRESHOLD) //사용량이 기존 할당 크기에 대한 증가가 발생 될 임계 비율 이상일 경우
 	{
 #ifdef HT_DEBUG_MODE
 		VAR_DUMP((*srcHashTable)->_usedSize);
@@ -92,7 +137,7 @@ void HT_OpenAddr_InsertData(OPEN_ADDR_HASH_TABLE** srcHashTable, HT_KEY_TYPE src
 		VAR_DUMP((static_cast<double>((*srcHashTable)->_usedSize) / static_cast<double>((*srcHashTable)->_capacity)));
 #endif
 
-		HASH_INDEX_TYPE reallocCapacity = (*srcHashTable)->_capacity + ceil((*srcHashTable)->_capacity * CAPACITY_REALLOC_RATIO); //재 할당 될 크기
+		HASH_INDEX_TYPE reallocCapacity = (*srcHashTable)->_capacity + ceil((*srcHashTable)->_capacity * CAPACITY_INCREASE_RATIO); //재 할당 될 크기
 		HT_OpenAddr_RehashingProc(srcHashTable, reallocCapacity);
 	}
 
@@ -113,18 +158,17 @@ void HT_OpenAddr_InsertData(OPEN_ADDR_HASH_TABLE** srcHashTable, HT_KEY_TYPE src
 		case NODE_STATE::DELETED:
 			if (strcmp(srcKey, (*srcHashTable)->_table[hashIndex]._key) == 0) //대상 키와 완전히 일치 한 키일 경우 덮어쓰기
 				goto OVERWRITE_PROC;
-			else
-				goto INSERT_PROC; //EMPTY 상태로 간주
+			else //EMPTY 상태로 간주
+				goto INSERT_PROC;
 
 		case NODE_STATE::OCCUPIED:
+#ifdef HT_DEBUG_MODE
+			HT_Common_IncreaseHashCollisionCount(srcKey);
+#endif
 			if (strcmp(srcKey, (*srcHashTable)->_table[hashIndex]._key) == 0) //대상 키와 완전히 일치 한 키일 경우 덮어쓰기
-				goto INSERT_PROC;
+				goto OVERWRITE_PROC;
 			break;
 		}
-
-#ifdef HT_DEBUG_MODE
-		HT_Common_IncreaseHashCollisionCount(srcKey);
-#endif
 
 		hashIndex = (hashIndex + offset) % (*srcHashTable)->_capacity;
 	} while (hashIndex != hashIndexInitValue); //최초 해시 인덱스로 돌아오기 전까지
@@ -133,9 +177,8 @@ void HT_OpenAddr_InsertData(OPEN_ADDR_HASH_TABLE** srcHashTable, HT_KEY_TYPE src
 	throw myexception::MEM_CORRUPTION_EXCEPTION(std::string(__func__) + std::string(" : Mem corruption"));
 
 INSERT_PROC: //삽입 처리 루틴
-	if ((*srcHashTable)->_table[hashIndex]._key != NULL)
+	if ((*srcHashTable)->_table[hashIndex]._key != NULL) //EMPTY 상태로 간주 된 기존 키의 길이에 따라 (DELETED)
 	{
-		//EMPTY 상태로 간주 된 기존 키의 길이에 따라
 		reallocSizeInBytes = sizeof(char) * (strlen(srcKey) + 1);
 		if (reallocSizeInBytes != strlen((*srcHashTable)->_table[hashIndex]._key)) //기존 키의 크기가 재 할당 될 크기와 다를 경우
 		{
@@ -196,7 +239,7 @@ END_PROC:
 /// <param name="srcHashTable">대상 해시 테이블</param>
 /// <param name="targetKey">검색하고자 하는 대상 키</param>
 /// <returns>검색하고자 하는 대상 키를 통해 사상 된 해시 인덱스에 따른 데이터</returns>
-HT_DATA_TYPE HT_OpenAddr_SearchData(OPEN_ADDR_HASH_TABLE* srcHashTable, HT_KEY_TYPE targetKey)
+HT_DATA_TYPE HT_OpenAddr_SearchData(OPENADDR_HASH_TABLE* srcHashTable, HT_KEY_TYPE targetKey)
 {
 	if (srcHashTable == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -238,7 +281,7 @@ THROW_NOT_FOUND_EXCEPTION:
 /// </summary>
 /// <param name="srcHashTable">대상 해시 테이블</param>
 /// <param name="targetKey">삭제하고자 하는 대상 키</param>
-void HT_OpenAddr_RemoveData(OPEN_ADDR_HASH_TABLE* srcHashTable, HT_KEY_TYPE targetKey)
+void HT_OpenAddr_RemoveData(OPENADDR_HASH_TABLE* srcHashTable, HT_KEY_TYPE targetKey)
 {
 	if (srcHashTable == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -285,11 +328,11 @@ THROW_NOT_FOUND_EXCEPTION:
 }
 
 /// <summary>
-/// 대상 해시 테이블에 재할당 크기로 기존 데이터에 대한 재해싱 수행
+/// 대상 해시 테이블에 재 할당 크기로 기존 데이터에 대한 재해싱 수행
 /// </summary>
 /// <param name="srcHashTable">대상 해시 테이블</param>
-/// <param name="reallocCapacity">재할당 크기</param>
-void HT_OpenAddr_RehashingProc(OPEN_ADDR_HASH_TABLE** srcHashTable, HASH_INDEX_TYPE reallocCapacity)
+/// <param name="reallocCapacity">재 할당 크기</param>
+void HT_OpenAddr_RehashingProc(OPENADDR_HASH_TABLE** srcHashTable, HASH_INDEX_TYPE reallocCapacity)
 {
 	if ((*srcHashTable) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
@@ -297,7 +340,7 @@ void HT_OpenAddr_RehashingProc(OPEN_ADDR_HASH_TABLE** srcHashTable, HASH_INDEX_T
 	if ((reallocCapacity <= 0) || (*srcHashTable)->_usedSize > reallocCapacity)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
-	OPEN_ADDR_HASH_TABLE* newHashTable = HT_OpenAddr_CreateHashTable(reallocCapacity);
+	OPENADDR_HASH_TABLE* newHashTable = HT_OpenAddr_CreateHashTable(reallocCapacity);
 
 	for (HASH_INDEX_TYPE i = 0; i < (*srcHashTable)->_capacity; i++)
 	{
