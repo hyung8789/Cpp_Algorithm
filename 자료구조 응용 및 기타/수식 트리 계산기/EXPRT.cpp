@@ -69,19 +69,12 @@ NODE* EXPRT_CreateNode(DATA_TYPE srcData)
 	if (retVal == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-	if (typeid(srcData) == typeid(char*)) //문자열 공간 할당 및 문자열 복사
-	{
-		retVal->_data = (char*)malloc(strlen(srcData) + 1); //'\0' 포함 크기
-		if (retVal->_data == NULL)
-			throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
+	retVal->_data = (char*)malloc(strlen(srcData) + 1); //'\0' 포함 크기
+	if (retVal->_data == NULL)
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-		if (strcpy_s(retVal->_data, strlen(srcData) + 1, srcData) != 0)
-			throw std::runtime_error(std::string(__func__) + std::string(" : src, dst is null or wrong size"));
-	}
-	else //값 할당
-	{
-		retVal->_data = srcData;
-	}
+	if (strcpy_s(retVal->_data, strlen(srcData) + 1, srcData) != 0)
+		throw std::runtime_error(std::string(__func__) + std::string(" : src, dst is null or wrong size"));
 
 	retVal->_left = retVal->_right = NULL;
 
@@ -96,7 +89,7 @@ void EXPRT_DeallocateNode(NODE** srcNode)
 {
 	if ((*srcNode) != NULL)
 	{
-		if (typeid((*srcNode)->_data) == typeid(char*) && (*srcNode)->_data != NULL)
+		if ((*srcNode)->_data != NULL)
 		{
 			free((*srcNode)->_data);
 			(*srcNode)->_data = NULL;

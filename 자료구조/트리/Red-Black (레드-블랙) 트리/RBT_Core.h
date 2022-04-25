@@ -10,6 +10,7 @@
 
 #include <stdexcept>
 
+//#define STR_STORAGE_TREE_TYPE //문자열 저장 트리 타입
 #define COLOR_VISUALIZATION //색상 가시화
 #define RBT_DEBUG_MODE //유효성 검사
 

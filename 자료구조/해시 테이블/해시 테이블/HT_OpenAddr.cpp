@@ -173,7 +173,7 @@ void HT_OpenAddr_InsertData(OPENADDR_HASH_TABLE** srcHashTable, HT_KEY_TYPE srcK
 		hashIndex = (hashIndex + offset) % (*srcHashTable)->_capacity;
 	} while (hashIndex != hashIndexInitValue); //최초 해시 인덱스로 돌아오기 전까지
 
-	//Rehash에 의해, 빈 공간이 반드시 존재하여야 함
+	//RehashingProc에 의해, 빈 공간이 반드시 존재하여야 함
 	throw myexception::MEM_CORRUPTION_EXCEPTION(std::string(__func__) + std::string(" : Mem corruption"));
 
 INSERT_PROC: //삽입 처리 루틴

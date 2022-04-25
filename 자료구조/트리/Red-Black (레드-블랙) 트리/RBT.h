@@ -19,11 +19,17 @@
 	DEF5) 루트 노드 혹은 서브 트리 내의 루트 노드는 항상 중앙값을 가짐
 	: 루트 노드의 왼쪽 서브 트리 < 루트 노드 < 루트 노드의 오른쪽 서브 트리
 
-	DEF6) 위의 정의 및 구현의 단순화를 위해 중복 된 데이터를 허용하지 않음
+	DEF6) 위의 정의 및 구현의 단순화를 위해 중복 된 키를 허용하지 않음
 ***/
 
+#ifdef STR_STORAGE_TREE_TYPE
+typedef char* RBT_KEY_TYPE; //노드의 키 타입
+typedef char* RBT_DATA_TYPE; //노드의 데이터 타입
+#else
+typedef int RBT_KEY_TYPE; //노드의 키 타입
 typedef int RBT_DATA_TYPE; //노드의 데이터 타입
-typedef int TREE_DEPTH_TYPE; //트리 깊이 타입
+#endif
+typedef size_t TREE_DEPTH_TYPE; //트리 깊이 타입
 
 #ifdef COLOR_VISUALIZATION
 /// <summary>
@@ -52,6 +58,7 @@ enum class COLOR : const char
 /// </summary>
 typedef struct RBT_NODE_TYPE
 {
+	RBT_KEY_TYPE _key; //노드의 키
 	RBT_DATA_TYPE _data; //노드의 데이터
 	COLOR _color; //노드 색
 
@@ -89,22 +96,27 @@ enum class PATH_DIRECTION : const int
 	BOTH //양쪽 경로 (오른쪽 및 왼쪽)
 };
 
-#define DUMMY_BLACK_TERMINAL_NODE_DATA INT_MIN //노드의 데이터 타입에 따른 검은색 더미 단말 노드의 데이터
 extern RBT_NODE* dummyBlackTerminalNode;
 
-RBT_NODE* RBT_CreateNode(RBT_DATA_TYPE);
+RBT_NODE* RBT_CreateNode(RBT_KEY_TYPE, RBT_DATA_TYPE, bool = false);
 void RBT_DeallocateNode(RBT_NODE**);
 void RBT_DeallocateTree(RBT_NODE**);
 
 void RBT_DispOrderedTree(RBT_NODE*, TRAVERSAL_METHOD, TREE_DEPTH_TYPE = 0);
 
 void RBT_InsertNode(RBT_NODE**, RBT_NODE*);
-void RBT_RemoveNode(RBT_NODE**, RBT_DATA_TYPE, bool = true);
-RBT_NODE* RBT_SearchNode(RBT_NODE*, RBT_DATA_TYPE);
-RBT_NODE* RBT_SearchMaxNode(RBT_NODE*);
-RBT_NODE* RBT_SearchMinNode(RBT_NODE*);
+void RBT_RemoveNode(RBT_NODE**, RBT_KEY_TYPE, bool = true);
+RBT_NODE* RBT_SearchNode(RBT_NODE*, RBT_KEY_TYPE);
+RBT_NODE* RBT_SearchMaxKeyNode(RBT_NODE*);
+RBT_NODE* RBT_SearchMinKeyNode(RBT_NODE*);
+
+int RBT_CompareKey(RBT_KEY_TYPE, RBT_KEY_TYPE);
+void RBT_AssignKeyAndData(RBT_NODE*, RBT_KEY_TYPE, RBT_DATA_TYPE);
+void RBT_OverwriteKeyAndData(RBT_NODE*, RBT_KEY_TYPE, RBT_DATA_TYPE);
 
 void RBT_InsertNodeHelper(RBT_NODE**, RBT_NODE*);
+void RBT_RestructureAfterInsert(RBT_NODE**, RBT_NODE*);
+void RBT_RestructureAfterRemove(RBT_NODE**, RBT_NODE*);
 void RBT_RotateTree(RBT_NODE**, RBT_NODE*, ROTATE_DIRECTION);
 size_t RBT_GetColorCount(RBT_NODE*, COLOR, PATH_DIRECTION);
 
