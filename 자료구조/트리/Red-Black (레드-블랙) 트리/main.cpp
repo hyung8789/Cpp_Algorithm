@@ -10,21 +10,20 @@ int main()
 	try
 	{
 		dummyBlackTerminalNode = RBT_CreateNode(0, 0, true);
-		dummyBlackTerminalNode->_color = COLOR::BLACK;
 
-		//TODO : 문자열에 대한 트리 구축
 #ifdef STR_STORAGE_TREE_TYPE
 		const char* inputKey[] =
 		{
 			// https://www.geeksforgeeks.org/red-black-tree-set-3-delete-2/?ref=lbp
-			"7", "3", "18", "10", "22", "8", "11", "26", "2", "6", "13"
+			"c1234", "b223", "i12", "f132", "j1", "e22", "g333", "k44", "a55", "d6666", "h77"
 		}; //입력 키
-		const char* inputData = "dummy"; //입력 데이터
+		const char* inputData = "dummy data"; //입력 데이터
 #else
 		const int inputKey[] =
 		{
 			// https://www.geeksforgeeks.org/red-black-tree-set-3-delete-2/?ref=lbp
 			7, 3, 18, 10, 22, 8, 11, 26, 2, 6, 13
+			//7, 5, 3
 		}; //입력 키
 
 		const int inputData = -1; //입력 데이터
@@ -38,7 +37,8 @@ int main()
 			{
 				//std::cout << "Current Insert : " << inputKey[i] << std::endl;
 				RBT_InsertNode(&tree[treeIndex], RBT_CreateNode((RBT_KEY_TYPE)inputKey[i], (RBT_DATA_TYPE)inputData));
-
+				RBT_DispOrderedTree(tree[treeIndex], TRAVERSAL_METHOD::INORDER);
+				std::cout << "\n\n";
 #ifdef RBT_DEBUG_MODE
 				RBT_ValidateTree(tree[treeIndex]);
 #endif
@@ -53,7 +53,7 @@ int main()
 			switch (treeIndex)
 			{
 			case 0:
-				std::cout << "< 입력 데이터에 대한 정방향 삭제 테스트 >\n";
+				std::cout << "< 입력 키 및 데이터에 대한 정방향 삭제 테스트 >\n";
 
 				for (int i = 0; i < LENGTH(inputKey); i++)
 				{
@@ -70,7 +70,7 @@ int main()
 				break;
 
 			case 1:
-				std::cout << "< 입력 데이터에 대한 역방향 삭제 테스트 >\n";
+				std::cout << "< 입력 키 및 데이터에 대한 역방향 삭제 테스트 >\n";
 
 				for (int i = LENGTH(inputKey) - 1; i >= 0; i--)
 				{

@@ -25,7 +25,7 @@ int main()
 
 	try
 	{
-		const char* staticInputKeyValue[][2] =
+		const char* staticInputKeyData[][2] =
 		{
 			{"abcd", "foo data1"},
 			{"abcd", "duplicate key test (overwrite)"},
@@ -59,18 +59,18 @@ int main()
 
 			if (TEST_STATIC_KEY)
 			{
-				for (int i = 0; i < LENGTH(staticInputKeyValue); i++)
+				for (int i = 0; i < LENGTH(staticInputKeyData); i++)
 				{
 					HT_Chaining_InsertData(chainingHashTable,
-						(HT_KEY_TYPE)staticInputKeyValue[i][0],
-						(HT_DATA_TYPE)staticInputKeyValue[i][1]);
+						(HT_KEY_TYPE)staticInputKeyData[i][0],
+						(HT_DATA_TYPE)staticInputKeyData[i][1]);
 				}
 
-				for (int i = 0; i < LENGTH(staticInputKeyValue); i++)
+				for (int i = 0; i < LENGTH(staticInputKeyData); i++)
 				{
-					std::cout << "--- " << "Key Search : " << staticInputKeyValue[i][0] << " ---\n";
+					std::cout << "--- " << "Key Search : " << staticInputKeyData[i][0] << " ---\n";
 					std::cout << HT_Chaining_SearchData(chainingHashTable,
-						(HT_KEY_TYPE)staticInputKeyValue[i][0]) << "\n";
+						(HT_KEY_TYPE)staticInputKeyData[i][0]) << "\n";
 				}
 
 				if (DISP_NODE_LIST)
@@ -83,13 +83,13 @@ int main()
 					HT_Chaining_DispIndexListBy(chainingHashTable, DISP_CHAINING_INDEX_LIST_BY);
 				}
 
-				for (int i = 0; i < LENGTH(staticInputKeyValue); i++)
+				for (int i = 0; i < LENGTH(staticInputKeyData); i++)
 				{
 					try
 					{
-						std::cout << "--- " << "Remove : " << staticInputKeyValue[i][0] << " ---\n";
+						std::cout << "--- " << "Remove : " << staticInputKeyData[i][0] << " ---\n";
 						HT_Chaining_RemoveData(chainingHashTable,
-							(HT_KEY_TYPE)staticInputKeyValue[i][0]);
+							(HT_KEY_TYPE)staticInputKeyData[i][0]);
 					}
 					catch (const myexception::NOT_FOUND_EXCEPTION& ex)
 					{
@@ -148,18 +148,18 @@ int main()
 
 			if (TEST_STATIC_KEY)
 			{
-				for (int i = 0; i < LENGTH(staticInputKeyValue); i++)
+				for (int i = 0; i < LENGTH(staticInputKeyData); i++)
 				{
 					HT_OpenAddr_InsertData(&openAddrHashTable,
-						(HT_KEY_TYPE)staticInputKeyValue[i][0],
-						(HT_DATA_TYPE)staticInputKeyValue[i][1]);
+						(HT_KEY_TYPE)staticInputKeyData[i][0],
+						(HT_DATA_TYPE)staticInputKeyData[i][1]);
 				}
 
-				for (int i = 0; i < LENGTH(staticInputKeyValue); i++)
+				for (int i = 0; i < LENGTH(staticInputKeyData); i++)
 				{
-					std::cout << "--- " << "Key Search : " << staticInputKeyValue[i][0] << " ---\n";
+					std::cout << "--- " << "Key Search : " << staticInputKeyData[i][0] << " ---\n";
 					std::cout << HT_OpenAddr_SearchData(openAddrHashTable,
-						(HT_KEY_TYPE)staticInputKeyValue[i][0]) << "\n";
+						(HT_KEY_TYPE)staticInputKeyData[i][0]) << "\n";
 				}
 
 				if (DISP_NODE_LIST)
@@ -172,13 +172,13 @@ int main()
 					HT_OpenAddr_DispIndexListBy(openAddrHashTable, DISP_OPENADDR_INDEX_LIST_BY);
 				}
 
-				for (int i = 0; i < LENGTH(staticInputKeyValue); i++)
+				for (int i = 0; i < LENGTH(staticInputKeyData); i++)
 				{
 					try
 					{
-						std::cout << "--- " << "Remove : " << staticInputKeyValue[i][0] << " ---\n";
+						std::cout << "--- " << "Remove : " << staticInputKeyData[i][0] << " ---\n";
 						HT_OpenAddr_RemoveData(openAddrHashTable,
-							(HT_KEY_TYPE)staticInputKeyValue[i][0]);
+							(HT_KEY_TYPE)staticInputKeyData[i][0]);
 					}
 					catch (const myexception::NOT_FOUND_EXCEPTION& ex)
 					{

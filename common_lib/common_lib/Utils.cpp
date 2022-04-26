@@ -68,6 +68,31 @@ int utils::SingleNumToDecAscii(int srcSingleNum)
 }
 
 /// <summary>
+/// 인간이 보편적으로 자연스럽다고 생각하는 숫자 및 문자의 사전 순으로 문자열 비교
+/// </summary>
+/// <param name="a">비교 할 첫 번째 문자열</param>
+/// <param name="b">비교 할 두 번째 문자열</param>
+/// <returns>사전 순으로 첫 번째 문자열 > 두 번째 문자열 : 0 보다 큰 값
+/// <para>사전 순으로 첫 번째 문자열 == 두 번째 문자열 : 0</para>
+/// <para>그 외 : 0 보다 작은 값</para></returns>
+int utils::StrcmpByNaturalSortOrder(const char* a, const char* b)
+{
+	// https://blog.codinghorror.com/sorting-for-humans-natural-sort-order/
+	// https://en.wikipedia.org/wiki/Natural_sort_order
+
+	if(a == NULL || b == NULL)
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
+
+	size_t aLen = strlen(a);
+	size_t bLen = strlen(b);
+
+	if (aLen == bLen)
+		return strcmp(a, b);
+	else
+		return (aLen > bLen) ? 1 : -1; //더 짧은 문자열이 앞에 옴
+}
+
+/// <summary>
 /// 대상 숫자의 비트 개수 반환
 /// </summary>
 /// <param name="srcNum">대상 숫자</param>

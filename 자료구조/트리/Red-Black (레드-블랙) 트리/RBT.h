@@ -110,13 +110,13 @@ RBT_NODE* RBT_SearchNode(RBT_NODE*, RBT_KEY_TYPE);
 RBT_NODE* RBT_SearchMaxKeyNode(RBT_NODE*);
 RBT_NODE* RBT_SearchMinKeyNode(RBT_NODE*);
 
-int RBT_CompareKey(RBT_KEY_TYPE, RBT_KEY_TYPE);
-void RBT_AssignKeyAndData(RBT_NODE*, RBT_KEY_TYPE, RBT_DATA_TYPE);
-void RBT_OverwriteKeyAndData(RBT_NODE*, RBT_KEY_TYPE, RBT_DATA_TYPE);
+inline int RBT_CompareKey(RBT_KEY_TYPE, RBT_KEY_TYPE);
+void RBT_AssignKeyAndData(RBT_NODE*, RBT_KEY_TYPE, RBT_DATA_TYPE, bool = false);
+void RBT_CopyKeyAndData(RBT_NODE*, RBT_KEY_TYPE, RBT_DATA_TYPE);
+void RBT_MoveKeyAndData(RBT_NODE*, RBT_KEY_TYPE*, RBT_DATA_TYPE*);
 
 void RBT_InsertNodeHelper(RBT_NODE**, RBT_NODE*);
 void RBT_RestructureAfterInsert(RBT_NODE**, RBT_NODE*);
-void RBT_RestructureAfterRemove(RBT_NODE**, RBT_NODE*);
 void RBT_RotateTree(RBT_NODE**, RBT_NODE*, ROTATE_DIRECTION);
 size_t RBT_GetColorCount(RBT_NODE*, COLOR, PATH_DIRECTION);
 
