@@ -23,7 +23,7 @@ namespace utils
 	double StrToDouble(const char*);
 	int CharToDecAscii(char);
 	int SingleNumToDecAscii(int);
-	int StrcmpByNaturalSortOrder(const char*, const char*);
+	int StrCompareByNaturalSortOrder(const char*, const char*);
 
 	size_t GetBitCountFrom(size_t);
 

@@ -68,14 +68,14 @@ int utils::SingleNumToDecAscii(int srcSingleNum)
 }
 
 /// <summary>
-/// 인간이 보편적으로 자연스럽다고 생각하는 숫자 및 문자의 사전 순으로 문자열 비교
+/// strcmp의 표준 구현 사항에 따른 ASCIIbetical 정렬이 아닌 인간이 일반적으로 자연스럽다고 생각하는 숫자 및 문자의 자연 정렬 순서로 문자열 비교
 /// </summary>
 /// <param name="a">비교 할 첫 번째 문자열</param>
 /// <param name="b">비교 할 두 번째 문자열</param>
-/// <returns>사전 순으로 첫 번째 문자열 > 두 번째 문자열 : 0 보다 큰 값
-/// <para>사전 순으로 첫 번째 문자열 == 두 번째 문자열 : 0</para>
+/// <returns>자연 정렬 순서로 첫 번째 문자열 > 두 번째 문자열 : 0 보다 큰 값
+/// <para>자연 정렬 순서로 첫 번째 문자열 == 두 번째 문자열 : 0</para>
 /// <para>그 외 : 0 보다 작은 값</para></returns>
-int utils::StrcmpByNaturalSortOrder(const char* a, const char* b)
+int utils::StrCompareByNaturalSortOrder(const char* a, const char* b)
 {
 	// https://blog.codinghorror.com/sorting-for-humans-natural-sort-order/
 	// https://en.wikipedia.org/wiki/Natural_sort_order

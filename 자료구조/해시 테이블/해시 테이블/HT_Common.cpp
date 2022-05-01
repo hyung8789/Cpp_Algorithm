@@ -46,8 +46,6 @@ HASH_INDEX_TYPE HT_Common_DigitFolding_BaseProc(HASH_INDEX_TYPE capacity, HT_KEY
 	/***
 		< 할당량에 대해 Hash Index의 충돌 최소화 및 사상 범위 확대 >
 
-		TODO : 이하 수정
-
 		- Digit Folding에 의해 사상 된 Hash Index의 최대 값 : 127 (아스키 코드에 의한 문자 개수) * 키의 자리 수
 		- 테이블 할당량에 대해 Hash Index로 사상되지 않는 범위의 비트 개수 : 할당량의 비트 개수 - 키의 비트 개수
 
@@ -69,12 +67,12 @@ HASH_INDEX_TYPE HT_Common_DigitFolding_BaseProc(HASH_INDEX_TYPE capacity, HT_KEY
 	HASH_INDEX_TYPE hashIndex = 0;
 
 	size_t srcKeyLength = strlen(srcKey); //대상 키의 문자열 길이
-	//HASH_INDEX_TYPE leftShiftCount = utils::GetBitCountFrom(capacity) - utils::GetBitCountFrom(srcKeyLength);
+	HASH_INDEX_TYPE leftShiftCount = utils::GetBitCountFrom(capacity) - utils::GetBitCountFrom(srcKeyLength);
 
-	//TODO : 전체 테이블 할당량에 대해 모두 사용하기 위한 시프트 횟수에 대해 적절한 수치?? (대상 키의 문자열 길이에 따라, 인덱스 분포)
+	// https://stackoverflow.com/questions/51960331/why-5-bit-left-shift-in-hashing-function
 
 	for (size_t i = 0; i < srcKeyLength; i++)
-		hashIndex = (hashIndex << 1) + utils::CharToDecAscii(srcKey[i]);
+		hashIndex = (hashIndex << leftShiftCount) + utils::CharToDecAscii(srcKey[i]);
 
 	return hashIndex;
 }

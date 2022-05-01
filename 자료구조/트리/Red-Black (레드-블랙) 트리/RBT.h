@@ -22,7 +22,7 @@
 	DEF6) 위의 정의 및 구현의 단순화를 위해 중복 된 키를 허용하지 않음
 ***/
 
-#ifdef STR_STORAGE_TREE_TYPE
+#ifdef STR_STORAGE_RBT_TYPE
 typedef char* RBT_KEY_TYPE; //노드의 키 타입
 typedef char* RBT_DATA_TYPE; //노드의 데이터 타입
 #else
@@ -100,7 +100,7 @@ extern RBT_NODE* dummyBlackTerminalNode;
 
 RBT_NODE* RBT_CreateNode(RBT_KEY_TYPE, RBT_DATA_TYPE, bool = false);
 void RBT_DeallocateNode(RBT_NODE**);
-void RBT_DeallocateTree(RBT_NODE**);
+void RBT_DeallocateTree(RBT_NODE**, bool);
 
 void RBT_DispOrderedTree(RBT_NODE*, TRAVERSAL_METHOD, TREE_DEPTH_TYPE = 0);
 
@@ -117,6 +117,7 @@ void RBT_MoveKeyAndData(RBT_NODE*, RBT_KEY_TYPE*, RBT_DATA_TYPE*);
 
 void RBT_InsertNodeHelper(RBT_NODE**, RBT_NODE*);
 void RBT_RestructureAfterInsert(RBT_NODE**, RBT_NODE*);
+void RBT_RestructureAfterRemove(RBT_NODE**, RBT_NODE*);
 void RBT_RotateTree(RBT_NODE**, RBT_NODE*, ROTATE_DIRECTION);
 size_t RBT_GetColorCount(RBT_NODE*, COLOR, PATH_DIRECTION);
 

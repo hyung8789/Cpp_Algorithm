@@ -9,12 +9,9 @@ int main()
 
 	try
 	{
-		dummyBlackTerminalNode = RBT_CreateNode(0, 0, true);
-
-#ifdef STR_STORAGE_TREE_TYPE
+#ifdef STR_STORAGE_RBT_TYPE
 		const char* inputKey[] =
 		{
-			// https://www.geeksforgeeks.org/red-black-tree-set-3-delete-2/?ref=lbp
 			"c1234", "b223", "i12", "f132", "j1", "e22", "g333", "k44", "a55", "d6666", "h77"
 		}; //입력 키
 		const char* inputData = "dummy data"; //입력 데이터
@@ -28,7 +25,7 @@ int main()
 
 		const int inputData = -1; //입력 데이터
 #endif
-		
+
 		RBT_NODE* tree[TREE_COUNT] = { NULL, };
 
 		for (int treeIndex = 0; treeIndex < TREE_COUNT; treeIndex++)
@@ -57,10 +54,10 @@ int main()
 
 				for (int i = 0; i < LENGTH(inputKey); i++)
 				{
-					//std::cout << "Current Remove : " << inputKey[i] << std::endl;
+					std::cout << "Current Remove : " << inputKey[i] << std::endl;
 					RBT_DispOrderedTree(tree[treeIndex], TRAVERSAL_METHOD::INORDER);
+					std::cout << "\n\n";
 					RBT_RemoveNode(&tree[treeIndex], (RBT_KEY_TYPE)inputKey[i]);
-					std::cout << "\n";
 
 #ifdef RBT_DEBUG_MODE
 					RBT_ValidateTree(tree[treeIndex]);
@@ -74,10 +71,10 @@ int main()
 
 				for (int i = LENGTH(inputKey) - 1; i >= 0; i--)
 				{
-					//std::cout << "Current Remove : " << inputKey[i] << std::endl;
+					std::cout << "Current Remove : " << inputKey[i] << std::endl;
 					RBT_DispOrderedTree(tree[treeIndex], TRAVERSAL_METHOD::INORDER);
+					std::cout << "\n\n";
 					RBT_RemoveNode(&tree[treeIndex], (RBT_KEY_TYPE)inputKey[i]);
-					std::cout << "\n";
 
 #ifdef RBT_DEBUG_MODE
 					RBT_ValidateTree(tree[treeIndex]);
@@ -90,7 +87,7 @@ int main()
 				break;
 			}
 
-			RBT_DeallocateTree(&tree[treeIndex]);
+			RBT_DeallocateTree(&tree[treeIndex], false);
 		}
 
 		RBT_DeallocateNode(&dummyBlackTerminalNode);

@@ -1,4 +1,4 @@
-#ifndef _DS_CORE_H_
+﻿#ifndef _DS_CORE_H_
 #define _DS_CORE_H_
 
 #define _CRTDBG_MAP_ALLOC

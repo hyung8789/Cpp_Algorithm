@@ -52,11 +52,11 @@ void LCRS_DeallocateTree(NODE** srcRootNode)
 		/***
 			< RECURSIVE_METHOD의 Call Stack 구현 >
 
-			1) 최초 Call Stack에 초기 루트 노드와 실행 분기 단일 플래그 삽입
+			1) 최초 Call Stack에 초기 루트 노드와 스택 프레임 삽입
 
 			2) Call Stack이 빌 때까지 이하 반복
 
-			3) 현재 노드 (Call Stack의 최상위 노드) 및 현재 노드의 실행 분기 단일 플래그 할당
+			3) 현재 노드 (Call Stack의 최상위 노드) 및 현재 노드의 스택 프레임 할당
 
 			4) 현재 노드의 왼쪽 자식 노드가 존재할 경우
 				4-1) 헌재 노드에 대해 다음 번 실행 시 오른쪽 형제 노드를 방문
@@ -72,10 +72,10 @@ void LCRS_DeallocateTree(NODE** srcRootNode)
 		***/
 
 		NODE* currentNode = (*srcRootNode); //현재 노드
-		char execBranchSingleFlag = (0x0); //실행 분기 단일 플래그
+		char stackFrame = (0x0); //스택 프레임
 
 		/***
-			< 실행 분기 단일 플래그 >
+			< 스택 프레임 >
 
 			0000(2) : Left Child 방문
 			0001(2) : Right Sibling 방문
@@ -83,13 +83,13 @@ void LCRS_DeallocateTree(NODE** srcRootNode)
 		***/
 
 		std::stack<std::tuple<NODE*, char>> callStack; //Call Stack
-		callStack.push(std::make_tuple(currentNode, execBranchSingleFlag));
+		callStack.push(std::make_tuple(currentNode, stackFrame));
 
 		while (!callStack.empty())
 		{
-			std::tie(currentNode, execBranchSingleFlag) = callStack.top();
+			std::tie(currentNode, stackFrame) = callStack.top();
 
-			switch (execBranchSingleFlag)
+			switch (stackFrame)
 			{
 			case (0x0): //Left Child 방문
 				if (currentNode->_leftChild != NULL) //현재 노드의 왼쪽 자식 노드가 존재 할 경우
@@ -114,7 +114,7 @@ void LCRS_DeallocateTree(NODE** srcRootNode)
 				break;
 
 			default:
-				throw std::logic_error(std::string(__func__) + std::string(" : Invalid Flag"));
+				throw std::logic_error(std::string(__func__) + std::string(" : Invalid Stack Frame"));
 			}
 		}
 #endif
@@ -174,10 +174,10 @@ void LCRS_DispTreeNodesAt(NODE* srcRootNode, TREE_DEPTH_TYPE targetNodeDepth)
 #elif defined ITERATIVE_METHOD
 	NODE* currentNode = srcRootNode; //현재 노드
 	TREE_DEPTH_TYPE currentNodeDepth = 0; //현재 노드의 깊이
-	char execBranchSingleFlag = (0x0); //실행 분기 단일 플래그
+	char stackFrame = (0x0); //스택 프레임
 
 	/***
-		< 실행 분기 단일 플래그 >
+		< 스택 프레임 >
 
 		0000(2) : 특정 노드의 깊이에 도달 시 현재 노드 출력
 		0001(2) : 현재 노드가 대상 특정 노드의 깊이보다 상위 노드일 경우 Left Child 방문
@@ -186,13 +186,13 @@ void LCRS_DispTreeNodesAt(NODE* srcRootNode, TREE_DEPTH_TYPE targetNodeDepth)
 	***/
 
 	std::stack<std::tuple<NODE*, TREE_DEPTH_TYPE, char>> callStack; //Call Stack
-	callStack.push(std::make_tuple(currentNode, currentNodeDepth, execBranchSingleFlag));
+	callStack.push(std::make_tuple(currentNode, currentNodeDepth, stackFrame));
 
 	while (!callStack.empty())
 	{
-		std::tie(currentNode, currentNodeDepth, execBranchSingleFlag) = callStack.top();
+		std::tie(currentNode, currentNodeDepth, stackFrame) = callStack.top();
 
-		switch (execBranchSingleFlag)
+		switch (stackFrame)
 		{
 		case (0x0): //대상 특정 노드의 깊이에 도달 시 현재 노드 출력
 			std::get<2>(callStack.top()) = (0x1); //헌재 노드에 대해 다음 번 실행 시 현재 노드가 특정 노드의 깊이보다 상위 노드일 경우 Left Child 방문
@@ -223,7 +223,7 @@ void LCRS_DispTreeNodesAt(NODE* srcRootNode, TREE_DEPTH_TYPE targetNodeDepth)
 			break;
 
 		default:
-			throw std::logic_error(std::string(__func__) + std::string(" : Invalid Flag"));
+			throw std::logic_error(std::string(__func__) + std::string(" : Invalid Stack Frame"));
 		}
 	}
 #endif
@@ -255,10 +255,10 @@ void LCRS_DispTree(NODE* srcRootNode, TREE_DEPTH_TYPE rootNodeDepth)
 #elif defined ITERATIVE_METHOD
 	NODE* currentNode = srcRootNode; //현재 노드
 	TREE_DEPTH_TYPE currentNodeDepth = rootNodeDepth; //현재 노드의 깊이
-	char execBranchSingleFlag = (0x0); //실행 분기 단일 플래그
+	char stackFrame = (0x0); //스택 프레임
 
 	/***
-		< 실행 분기 단일 플래그 >
+		< 스택 프레임 >
 
 		0000(2) : 현재 노드 출력
 		0001(2) : Left Child 방문
@@ -267,13 +267,13 @@ void LCRS_DispTree(NODE* srcRootNode, TREE_DEPTH_TYPE rootNodeDepth)
 	***/
 
 	std::stack<std::tuple<NODE*, TREE_DEPTH_TYPE, char>> callStack; //Call Stack
-	callStack.push(std::make_tuple(currentNode, currentNodeDepth, execBranchSingleFlag));
+	callStack.push(std::make_tuple(currentNode, currentNodeDepth, stackFrame));
 
 	while (!callStack.empty())
 	{
-		std::tie(currentNode, currentNodeDepth, execBranchSingleFlag) = callStack.top();
+		std::tie(currentNode, currentNodeDepth, stackFrame) = callStack.top();
 
-		switch (execBranchSingleFlag)
+		switch (stackFrame)
 		{
 		case (0x0): //현재 노드 출력
 			std::get<2>(callStack.top()) = (0x1); //헌재 노드에 대해 다음 번 실행 시 왼쪽 자식 노드를 방문
@@ -305,7 +305,7 @@ void LCRS_DispTree(NODE* srcRootNode, TREE_DEPTH_TYPE rootNodeDepth)
 			break;
 
 		default:
-			throw std::logic_error(std::string(__func__) + std::string(" : Invalid Flag"));
+			throw std::logic_error(std::string(__func__) + std::string(" : Invalid Stack Frame"));
 		}
 	}
 #endif

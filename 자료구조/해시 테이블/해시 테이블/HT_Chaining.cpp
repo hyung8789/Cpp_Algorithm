@@ -122,6 +122,8 @@ void HT_Chaining_DispNodeList(CHAINING_HASH_TABLE* srcHashTable)
 	if (srcHashTable == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
+	std::cout << "--- Chaining Node List ---\n";
+
 	for (HASH_INDEX_TYPE i = 0; i < srcHashTable->_capacity; i++)
 	{
 		if (srcHashTable->_table[i] != NULL)
