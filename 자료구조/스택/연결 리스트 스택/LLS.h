@@ -3,6 +3,9 @@
 
 typedef int STACK_INDEX_TYPE; //스택 인덱스 타입
 
+/// <summary>
+/// 연결 리스트 스택 노드
+/// </summary>
 typedef struct NODE_TYPE
 {
 	char* _data; //노드의 데이터
@@ -10,6 +13,9 @@ typedef struct NODE_TYPE
 	NODE_TYPE* _next; //다음 노드
 }NODE;
 
+/// <summary>
+/// 연결 리스트 스택
+/// </summary>
 typedef struct LINKED_LIST_STACK_TYPE
 {
 	NODE* _top; //최상위 노드 (tail)

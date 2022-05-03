@@ -17,6 +17,9 @@ enum class ELEMENT_ORDER : const int
 	COL_MAJOR //열 우선순위
 };
 
+/// <summary>
+/// 기타 유틸 함수
+/// </summary>
 namespace utils
 {
 	void ReverseInplaceStr(char[]);

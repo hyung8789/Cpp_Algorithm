@@ -4,6 +4,9 @@
 typedef int DATA_TYPE; //노드의 데이터 타입
 typedef int QUEUE_INDEX_TYPE; //큐 인덱스 타입
 
+/// <summary>
+/// 연결 리스트 큐 노드
+/// </summary>
 typedef struct NODE_TYPE
 {
 	DATA_TYPE _data; //노드의 데이터
@@ -11,6 +14,9 @@ typedef struct NODE_TYPE
 	NODE_TYPE* _next; //다음 노드
 }NODE;
 
+/// <summary>
+/// 연결 리스트 큐
+/// </summary>
 typedef struct LINKED_LIST_QUEUE_TYPE
 {
 	NODE* _front; //전단 노드

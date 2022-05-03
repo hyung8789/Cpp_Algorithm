@@ -4,11 +4,17 @@
 typedef int DATA_TYPE; //노드의 데이터 타입
 typedef int QUEUE_INDEX_TYPE; //큐 인덱스 타입
 
+/// <summary>
+/// 순환 큐 노드
+/// </summary>
 typedef struct NODE_TYPE
 {
 	DATA_TYPE _data; //노드의 데이터
 }NODE;
 
+/// <summary>
+/// 순환 큐
+/// </summary>
 typedef struct CIRCULAR_QUEUE_TYPE
 {
 	QUEUE_INDEX_TYPE _capacity; //할당 크기

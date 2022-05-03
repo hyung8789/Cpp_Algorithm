@@ -80,7 +80,7 @@ int utils::StrCompareByNaturalSortOrder(const char* a, const char* b)
 	// https://blog.codinghorror.com/sorting-for-humans-natural-sort-order/
 	// https://en.wikipedia.org/wiki/Natural_sort_order
 
-	if(a == NULL || b == NULL)
+	if (a == NULL || b == NULL)
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
 	size_t aLen = strlen(a);
@@ -156,7 +156,7 @@ size_t utils::GenUnsignedRandNum(size_t lowerBound, size_t upperBound)
 	std::random_device rand_device; //비결정적 생성기
 	std::mt19937 gen(rand_device()); //메르센 트위스터에 시드 할당
 	std::uniform_int_distribution<size_t> dist(lowerBound, upperBound); //균일 이산 분포
-	
+
 	return dist(gen);
 }
 

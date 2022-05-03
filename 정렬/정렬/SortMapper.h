@@ -6,6 +6,9 @@ using SORT_FUNC_ADDR_TYPE = void(*)(SORT_ELEMENT_TYPE[], size_t, ORDER_BY); // h
 
 typedef int MY_SORT_ELEMENT_TYPE; //임의의 정렬 요소 타입 (정렬 요소 타입 구체화)
 
+/// <summary>
+/// 정렬의 고유 사상 인덱스
+/// </summary>
 enum class SORT_UNIQUE_MAPPED_INDEX : const int
 {
 	BUBBLE_SORT = 0,
@@ -16,8 +19,11 @@ enum class SORT_UNIQUE_MAPPED_INDEX : const int
 //COCKTAIL_SORT,
 //CYCLE_SORT,
 	TOTAL_SORT_FUNC_COUNT //전체 정렬 함수 개수
-}; //정렬의 고유 사상 인덱스
+};
 
+/// <summary>
+/// 정렬 메타데이터
+/// </summary>
 struct SORT_METADATA
 {
 	SORT_METADATA();
@@ -27,7 +33,7 @@ struct SORT_METADATA
 	const char* _sortFuncName; //정렬 함수 이름
 	const char* _optionalAlternativeSortFuncName; //대체 정렬 함수 이름 (Optional)
 	TRACE_RESULT _traceResult;
-}; //정렬에 대한 메타데이터
+};
 
 class SORT_MAPPER
 {

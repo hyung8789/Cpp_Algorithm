@@ -1,4 +1,4 @@
-#ifndef _CDLL_CORE_H_
+ï»¿#ifndef _CDLL_CORE_H_
 #define _CDLL_CORE_H_
 
 // https://docs.microsoft.com/ko-kr/visualstudio/debugger/finding-memory-leaks-using-the-crt-library?view=vs-2022
@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <iostream>
 
-//ÇØ´ç ÇÁ·ÎÁ§Æ® ¼Ó¼º¿¡¼­ Á¤Àû ¶óÀÌºê·¯¸® (lib)·Î ºôµå ÇÒ °Í
+//í•´ë‹¹ í”„ë¡œì íŠ¸ ì†ì„±ì—ì„œ ì •ì  ë¼ì´ë¸ŒëŸ¬ë¦¬ (lib)ë¡œ ë¹Œë“œ í•  ê²ƒ
 #include "../../../common_lib/common_lib/Common_LIB_Core.h"
 
 #include "CDLL.h"

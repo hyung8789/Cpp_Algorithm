@@ -1,11 +1,16 @@
-#ifndef _DS_H_
+ï»¿#ifndef _DS_H_
 #define _DS_H_
 
+// https://www.geeksforgeeks.org/union-find/
+
+/// <summary>
+/// ë¶„ë¦¬ ì§‘í•©ì˜ ë…¸ë“œ
+/// </summary>
 typedef struct NODE_TYPE
 {
-	void* _data; //³ëµåÀÇ µ¥ÀÌÅÍ
+	void* _data; //ë…¸ë“œì˜ ë°ì´í„°
 
-	NODE_TYPE* _parent; //ÇÑ ´Ü°è »óÀ§ ºÎ¸ğ ³ëµå
+	NODE_TYPE* _parent; //í•œ ë‹¨ê³„ ìƒìœ„ ë¶€ëª¨ ë…¸ë“œ
 }NODE;
 
 NODE* DS_CreateNode(void*);

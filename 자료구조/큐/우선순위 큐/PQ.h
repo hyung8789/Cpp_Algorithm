@@ -16,12 +16,18 @@
 typedef int QUEUE_INDEX_TYPE; //큐 인덱스 타입
 typedef int PRIORITY_TYPE; //우선순위 타입
 
+/// <summary>
+/// 우선순위 큐 노드
+/// </summary>
 typedef struct NODE_TYPE
 {
 	PRIORITY_TYPE _priority; //우선순위
 	void* _data; //노드의 데이터
 }NODE;
 
+/// <summary>
+/// 우선순위 큐
+/// </summary>
 struct PRIORITY_QUEUE
 {
 	QUEUE_INDEX_TYPE _capacity; //할당 크기

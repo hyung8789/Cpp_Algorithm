@@ -205,6 +205,10 @@ void RBT_InsertNode(RBT_NODE** srcRootNode, RBT_NODE* srcNewNode)
 
 	RBT_InsertNodeHelper(srcRootNode, srcNewNode);
 	RBT_RestructureAfterInsert(srcRootNode, srcNewNode);
+
+#ifdef RBT_DEBUG_MODE
+	RBT_ValidateTree(*srcRootNode);
+#endif
 }
 
 /// <summary>
@@ -335,6 +339,10 @@ void RBT_RemoveNode(RBT_NODE** srcRootNode, RBT_KEY_TYPE targetKey, bool dealloc
 
 	if (deallocateAfterRemove)
 		RBT_DeallocateNode(&removeTargetNode);
+
+#ifdef RBT_DEBUG_MODE
+	RBT_ValidateTree(*srcRootNode);
+#endif
 }
 
 /// <summary>
@@ -578,7 +586,8 @@ void RBT_RestructureAfterInsert(RBT_NODE** srcRootNode, RBT_NODE* srcNewNode)
 	RBT_NODE* grandParentNode = NULL; //새 노드의 부모의 부모 노드 (할아버지)
 	RBT_NODE* uncleNode = NULL; //새 노드의 부모의 형제 노드 (삼촌)
 
-	while (srcNewNode != (*srcRootNode) && srcNewNode->_parent->_color == COLOR::RED) //새 노드와 새 노드의 부모 노드 간 DEF2) 위반사항이 존재하는 동안
+	while (srcNewNode != (*srcRootNode) && 
+		(srcNewNode->_color == COLOR::RED && srcNewNode->_parent->_color == COLOR::RED)) //새 노드와 새 노드의 부모 노드 간 DEF2) 위반사항이 존재하는 동안
 	{
 		parentNode = srcNewNode->_parent;
 		grandParentNode = parentNode->_parent;
@@ -655,10 +664,10 @@ void RBT_RestructureAfterInsert(RBT_NODE** srcRootNode, RBT_NODE* srcNewNode)
 }
 
 /// <summary>
-/// 
+/// 대상 트리에 삭제하고자 하는 대상 키가 포함 된 노드 삭제 후 트리 재구성 수행
 /// </summary>
-/// <param name="srcRootNode"></param>
-/// <param name="srcMoveTargetNode"></param>
+/// <param name="srcRootNode">대상 트리의 최상위 루트 노드</param>
+/// <param name="srcMoveTargetNode">삭제 대상 노드의 자리를 대체 할 이동 대상 노드</param>
 void RBT_RestructureAfterRemove(RBT_NODE** srcRootNode, RBT_NODE* srcMoveTargetNode)
 {
 	/***
@@ -1029,7 +1038,16 @@ void RBT_RestructureAfterRemove(RBT_NODE** srcRootNode, RBT_NODE* srcMoveTargetN
 		if ((srcMoveTargetNode->_parent->_color == COLOR::RED &&
 			srcMoveTargetNode->_color == COLOR::BLACK &&
 			moveTargetSiblingNode->_color == COLOR::RED)) //RBR -
+		{
+			
+			VAR_DUMP(srcMoveTargetNode->_key);
+			VAR_DUMP(srcMoveTargetNode->_parent == NULL);
+			VAR_DUMP(srcMoveTargetNode->_left == NULL && srcMoveTargetNode->_right == NULL);
+			VAR_DUMP(static_cast<const unsigned>(srcMoveTargetNode->_color));
+			VAR_DUMP(static_cast<const unsigned>(moveTargetSiblingNode->_color));
+
 			throw std::logic_error(std::string(__func__) + std::string(" : DEF2) violation (Invalid Red-Black Tree : RBR -)"));
+		}
 
 		switch (moveTargetSiblingNode->_color) //이중 검은색 노드 (이동 대상 노드)의 형제 노드의 색에 따라
 		{
@@ -1336,106 +1354,117 @@ void RBT_ValidateTree(RBT_NODE* srcRootNode)
 	{
 		std::tie(currentNode, stackFrame) = callStack.top();
 
-		switch (stackFrame)
+		try
 		{
-		case (0x0): //현재 노드 기준 DEF2), DEF4) 검증
-			if (currentNode->_color == COLOR::RED &&
-				(currentNode->_left->_color == COLOR::RED ||
-					currentNode->_right->_color == COLOR::RED)) //DEF2) validation
-				throw std::logic_error(std::string(__func__) + std::string(" : DEF2) violation (Invalid Red-Black Tree)"));
-
-			leftPathBlackNodeCount = 0;
-			rightPathBlackNodeCount = 0;
-
-			leftNodeLeftPathBlackNodeCount = 0;
-			leftNodeRightPathBlackNodeCount = 0;
-			rightNodeLeftPathBlackNodeCount = 0;
-			rightNodeRightPathBlackNodeCount = 0;
-
-			try //DEF4) validation
+			switch (stackFrame)
 			{
-				if (srcRootNode->_color == COLOR::BLACK)
+			case (0x0): //현재 노드 기준 DEF2), DEF4) 검증
+				if (currentNode->_color == COLOR::RED &&
+					(currentNode->_left->_color == COLOR::RED ||
+						currentNode->_right->_color == COLOR::RED)) //DEF2) validation
+					throw std::logic_error(std::string(__func__) + std::string(" : DEF2) violation (Invalid Red-Black Tree)"));
+
+				leftPathBlackNodeCount = 0;
+				rightPathBlackNodeCount = 0;
+
+				leftNodeLeftPathBlackNodeCount = 0;
+				leftNodeRightPathBlackNodeCount = 0;
+				rightNodeLeftPathBlackNodeCount = 0;
+				rightNodeRightPathBlackNodeCount = 0;
+
+				try //DEF4) validation
 				{
-					leftPathBlackNodeCount += 1;
-					rightPathBlackNodeCount += 1;
+					if (srcRootNode->_color == COLOR::BLACK)
+					{
+						leftPathBlackNodeCount += 1;
+						rightPathBlackNodeCount += 1;
+					}
+
+					leftNodeLeftPathBlackNodeCount = RBT_GetColorCount(srcRootNode->_left, COLOR::BLACK, PATH_DIRECTION::LEFT);
+					leftNodeRightPathBlackNodeCount = RBT_GetColorCount(srcRootNode->_left, COLOR::BLACK, PATH_DIRECTION::RIGHT);
+
+					if (leftNodeLeftPathBlackNodeCount == leftNodeRightPathBlackNodeCount)
+						leftPathBlackNodeCount += leftNodeLeftPathBlackNodeCount;
+					else
+						throw std::logic_error(std::string(__func__) + std::string(" : DEF4) violation (Invalid Red-Black Tree)"));
+
+					rightNodeLeftPathBlackNodeCount = RBT_GetColorCount(srcRootNode->_right, COLOR::BLACK, PATH_DIRECTION::LEFT);
+					rightNodeRightPathBlackNodeCount = RBT_GetColorCount(srcRootNode->_right, COLOR::BLACK, PATH_DIRECTION::RIGHT);
+
+					if (rightNodeLeftPathBlackNodeCount == rightNodeRightPathBlackNodeCount)
+						rightPathBlackNodeCount += rightNodeLeftPathBlackNodeCount;
+					else
+						throw std::logic_error(std::string(__func__) + std::string(" : DEF4) violation (Invalid Red-Black Tree)"));
+
+					if (leftPathBlackNodeCount != rightPathBlackNodeCount)
+						throw std::logic_error(std::string(__func__) + std::string(" : DEF4) violation (Invalid Red-Black Tree)"));
+
+				}
+				catch (const std::logic_error& ex)
+				{
+					throw ex;
 				}
 
-				leftNodeLeftPathBlackNodeCount = RBT_GetColorCount(srcRootNode->_left, COLOR::BLACK, PATH_DIRECTION::LEFT);
-				leftNodeRightPathBlackNodeCount = RBT_GetColorCount(srcRootNode->_left, COLOR::BLACK, PATH_DIRECTION::RIGHT);
+				std::get<1>(callStack.top()) = (0x1);
 
-				if (leftNodeLeftPathBlackNodeCount == leftNodeRightPathBlackNodeCount)
-					leftPathBlackNodeCount += leftNodeLeftPathBlackNodeCount;
-				else
-					throw std::logic_error(std::string(__func__) + std::string(" : DEF4) violation (Invalid Red-Black Tree)"));
-
-				rightNodeLeftPathBlackNodeCount = RBT_GetColorCount(srcRootNode->_right, COLOR::BLACK, PATH_DIRECTION::LEFT);
-				rightNodeRightPathBlackNodeCount = RBT_GetColorCount(srcRootNode->_right, COLOR::BLACK, PATH_DIRECTION::RIGHT);
-
-				if (rightNodeLeftPathBlackNodeCount == rightNodeRightPathBlackNodeCount)
-					rightPathBlackNodeCount += rightNodeLeftPathBlackNodeCount;
-				else
-					throw std::logic_error(std::string(__func__) + std::string(" : DEF4) violation (Invalid Red-Black Tree)"));
-
-				if (leftPathBlackNodeCount != rightPathBlackNodeCount)
-					throw std::logic_error(std::string(__func__) + std::string(" : DEF4) violation (Invalid Red-Black Tree)"));
-
-			}
-			catch (const std::logic_error& ex)
-			{
-				VAR_DUMP(srcRootNode->_key);
-				VAR_DUMP(srcRootNode->_left->_key);
-				VAR_DUMP(srcRootNode->_right->_key);
-
-				VAR_DUMP(leftPathBlackNodeCount);
-				VAR_DUMP(rightPathBlackNodeCount);
-				VAR_DUMP(leftNodeLeftPathBlackNodeCount);
-				VAR_DUMP(leftNodeRightPathBlackNodeCount);
-				VAR_DUMP(rightNodeLeftPathBlackNodeCount);
-				VAR_DUMP(rightNodeRightPathBlackNodeCount);
-
-				throw ex;
-			}
-
-			std::get<1>(callStack.top()) = (0x1);
-
-		case (0x1): //현재 노드 기준 DEF5) 검증 및 왼쪽 노드 방문
-			if (currentNode->_left != dummyBlackTerminalNode)
-			{
-				if (!(RBT_CompareKey(currentNode->_key, currentNode->_left->_key) > 0)) //DEF5) validation
+			case (0x1): //현재 노드 기준 DEF5) 검증 및 왼쪽 노드 방문
+				if (currentNode->_left != dummyBlackTerminalNode)
 				{
-					VAR_DUMP(currentNode->_key);
-					VAR_DUMP(currentNode->_left->_key);
+					if (!(RBT_CompareKey(currentNode->_key, currentNode->_left->_key) > 0)) //DEF5) validation
+					{
+						VAR_DUMP(currentNode->_key);
+						VAR_DUMP(currentNode->_left->_key);
 
-					throw std::logic_error(std::string(__func__) + std::string(" : DEF5) violation (Invalid Red-Black Tree)"));
+						throw std::logic_error(std::string(__func__) + std::string(" : DEF5) violation (Invalid Red-Black Tree)"));
+					}
+
+					std::get<1>(callStack.top()) = (0x2);
+					callStack.push(std::make_tuple(currentNode->_left, (0x0)));
+					continue;
 				}
 
-				std::get<1>(callStack.top()) = (0x2);
-				callStack.push(std::make_tuple(currentNode->_left, (0x0)));
-				continue;
-			}
-
-		case (0x2): //현재 노드 기준 DEF5) 검증 및 오른쪽 노드 방문
-			if (currentNode->_right != dummyBlackTerminalNode)
-			{
-				if (!(RBT_CompareKey(currentNode->_key, currentNode->_right->_key) < 0)) //DEF5) validation
+			case (0x2): //현재 노드 기준 DEF5) 검증 및 오른쪽 노드 방문
+				if (currentNode->_right != dummyBlackTerminalNode)
 				{
-					VAR_DUMP(currentNode->_key);
-					VAR_DUMP(currentNode->_right->_key);
+					if (!(RBT_CompareKey(currentNode->_key, currentNode->_right->_key) < 0)) //DEF5) validation
+					{
+						VAR_DUMP(currentNode->_key);
+						VAR_DUMP(currentNode->_right->_key);
 
-					throw std::logic_error(std::string(__func__) + std::string(" : DEF5) violation (Invalid Red-Black Tree)"));
+						throw std::logic_error(std::string(__func__) + std::string(" : DEF5) violation (Invalid Red-Black Tree)"));
+					}
+
+					std::get<1>(callStack.top()) = (0x3);
+					callStack.push(std::make_tuple(currentNode->_right, (0x0)));
+					continue;
 				}
 
-				std::get<1>(callStack.top()) = (0x3);
-				callStack.push(std::make_tuple(currentNode->_right, (0x0)));
-				continue;
+			case (0x3): //pop 및 필요 할 경우 해당 요소에 대한 마지막 작업 수행
+				callStack.pop();
+				break;
+
+			default:
+				throw std::logic_error(std::string(__func__) + std::string(" : Invalid Stack Frame"));
 			}
+		}
+		catch (const std::logic_error& ex)
+		{
+			VAR_DUMP(srcRootNode->_key);
+			VAR_DUMP(srcRootNode->_left->_key);
+			VAR_DUMP(srcRootNode->_right->_key);
 
-		case (0x3): //pop 및 필요 할 경우 해당 요소에 대한 마지막 작업 수행
-			callStack.pop();
-			break;
+			VAR_DUMP(RBT_CompareKey(srcRootNode->_key, srcRootNode->_left->_key));
+			VAR_DUMP(RBT_CompareKey(srcRootNode->_key, srcRootNode->_right->_key));
 
-		default:
-			throw std::logic_error(std::string(__func__) + std::string(" : Invalid Stack Frame"));
+			VAR_DUMP(leftPathBlackNodeCount);
+			VAR_DUMP(rightPathBlackNodeCount);
+			VAR_DUMP(leftNodeLeftPathBlackNodeCount);
+			VAR_DUMP(leftNodeRightPathBlackNodeCount);
+			VAR_DUMP(rightNodeLeftPathBlackNodeCount);
+			VAR_DUMP(rightNodeRightPathBlackNodeCount);
+
+			RBT_DispOrderedTree(srcRootNode, TRAVERSAL_METHOD::INORDER);
+			throw ex;
 		}
 	}
 }

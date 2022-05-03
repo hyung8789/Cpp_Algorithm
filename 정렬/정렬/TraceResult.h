@@ -1,4 +1,4 @@
-#ifndef _TRACE_RESULT_H_
+ï»¿#ifndef _TRACE_RESULT_H_
 #define _TRACE_RESULT_H_
 
 extern std::mutex;
@@ -20,10 +20,10 @@ public:
 	TRACE_RESULT& operator=(const std::chrono::nanoseconds&);
 
 private:
-	std::chrono::nanoseconds _accDuration; //´©Àû ¼Ò¿ä ½Ã°£
-	std::chrono::nanoseconds _minDuration; //ÃÖ¼Ò ¼Ò¿ä ½Ã°£
-	std::chrono::nanoseconds _maxDuration; //ÃÖ´ë ¼Ò¿ä ½Ã°£
+	std::chrono::nanoseconds _accDuration; //ëˆ„ì  ì†Œìš” ì‹œê°„
+	std::chrono::nanoseconds _minDuration; //ìµœì†Œ ì†Œìš” ì‹œê°„
+	std::chrono::nanoseconds _maxDuration; //ìµœëŒ€ ì†Œìš” ì‹œê°„
 
-	size_t _compareCount; //ºñ±³ È½¼ö Ä«¿îÆ®
+	size_t _compareCount; //ë¹„êµ íšŸìˆ˜ ì¹´ìš´íŠ¸
 };
 #endif

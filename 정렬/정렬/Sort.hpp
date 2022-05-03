@@ -124,11 +124,14 @@ IncreaseCompareCount(), \
 	O(n^2)에서 O(nlog2(n)) 으로 낮출 수 있음
 ***/
 
+/// <summary>
+/// 정렬 방향
+/// </summary>
 enum class ORDER_BY : const int
 {
 	ASCENDING, //오름차순
 	DESCENDING //내림차순
-}; //정렬 방향
+};
 
 /// <summary>
 /// 버블 정렬 (Best Case : O(n), Worst, Average Case : O(n^2))

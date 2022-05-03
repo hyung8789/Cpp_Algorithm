@@ -1,15 +1,18 @@
-#ifndef _DLL_H_
+О╩©#ifndef _DLL_H_
 #define _DLL_H_
 
-typedef int DATA_TYPE; //ЁК╣Еюг ╣╔юлем е╦ют
-typedef int NODE_POSITION_TYPE; //ЁК╣Е ю╖д║ е╦ют
+typedef int DATA_TYPE; //К┘╦К⌠°Л²≤ К█╟Л²╢М└╟ М┐─Л·┘
+typedef int NODE_POSITION_TYPE; //К┘╦К⌠° Л°└Л╧≤ М┐─Л·┘
 
+/// <summary>
+/// Л²╢Л╓▒ Л≈╟Й╡╟ К╕╛Л┼╓М┼╦ К┘╦К⌠°
+/// </summary>
 typedef struct NODE_TYPE 
 {
-	DATA_TYPE _data; //ЁК╣Еюг ╣╔юлем
+	DATA_TYPE _data; //К┘╦К⌠°Л²≤ К█╟Л²╢М└╟
 
-	NODE_TYPE* _prev; //юлюЭ ЁК╣Е
-	NODE_TYPE* _next; //╢ыю╫ ЁК╣Е
+	NODE_TYPE* _prev; //Л²╢Л═└ К┘╦К⌠°
+	NODE_TYPE* _next; //К▀╓Л²▄ К┘╦К⌠°
 }NODE;
 
 NODE* DLL_CreateNode(DATA_TYPE);

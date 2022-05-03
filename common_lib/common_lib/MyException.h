@@ -5,7 +5,10 @@
 #include <string>
 #include <exception>
 
-namespace myexception //사용자 정의 에외
+/// <summary>
+/// 사용자 정의 예외
+/// </summary>
+namespace myexception
 {
 	/// <summary>
 	/// 사용자로부터 입력값에 대한 올바른 결과값을 찾지 못한 예외

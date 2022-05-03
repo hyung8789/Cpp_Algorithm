@@ -1,6 +1,6 @@
 ﻿#include "HT_Core.h"
 
-#define TABLE_INIT_SIZE 12345 //초기 테이블 크기
+#define TABLE_INIT_SIZE 111 //초기 테이블 크기
 #define MAX_STR_LEN 256
 
 const bool TEST_CHAINING_HASH_TABLE = false;

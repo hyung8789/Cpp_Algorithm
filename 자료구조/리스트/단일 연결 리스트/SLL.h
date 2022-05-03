@@ -4,6 +4,9 @@
 typedef int DATA_TYPE; //노드의 데이터 타입
 typedef int NODE_POSITION_TYPE; //노드 위치 타입
 
+/// <summary>
+/// 단일 연결 리스트 노드
+/// </summary>
 typedef struct NODE_TYPE 
 {
 	DATA_TYPE _data; //노드의 데이터

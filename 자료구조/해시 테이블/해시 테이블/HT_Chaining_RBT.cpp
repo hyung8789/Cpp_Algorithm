@@ -119,7 +119,8 @@ void HT_Chaining_RBT_InsertData(CHAINING_RBT_HASH_TABLE* srcHashTable, HT_KEY_TY
 
 	if (srcHashTable->_table[hashIndex] == NULL) //충돌이 발생하지 않았을 경우
 	{
-		RBT_InsertNode(&(srcHashTable->_table[hashIndex]), RBT_CreateNode(static_cast<RBT_KEY_TYPE>(srcKey), static_cast<RBT_DATA_TYPE>(srcData)));
+		RBT_InsertNode(&(srcHashTable->_table[hashIndex]),
+			RBT_CreateNode(static_cast<RBT_KEY_TYPE>(srcKey), static_cast<RBT_DATA_TYPE>(srcData)));
 	}
 	else //충돌이 발생했을 경우
 	{
@@ -130,7 +131,8 @@ void HT_Chaining_RBT_InsertData(CHAINING_RBT_HASH_TABLE* srcHashTable, HT_KEY_TY
 		try //충돌 시 완전히 일치 한 중복 키가 존재 시 덮어쓰기
 		{
 			RBT_NODE* duplicateKeyNode =
-				RBT_SearchNode(srcHashTable->_table[hashIndex], static_cast<RBT_KEY_TYPE>(srcKey)); //중복 키 노드
+				RBT_SearchNode(srcHashTable->_table[hashIndex], 
+					static_cast<RBT_KEY_TYPE>(srcKey)); //중복 키 노드
 
 			size_t reallocSizeInBytes = sizeof(char) * (strlen(srcData) + 1); //재 할당 될 바이트 단위 크기 ('\0' 포함 길이)
 			if (reallocSizeInBytes != strlen(duplicateKeyNode->_data)) //기존 데이터의 크기가 재 할당 될 크기와 다를 경우
@@ -149,12 +151,11 @@ void HT_Chaining_RBT_InsertData(CHAINING_RBT_HASH_TABLE* srcHashTable, HT_KEY_TY
 
 			return;
 		}
-		catch (const myexception::NOT_FOUND_EXCEPTION& ex)
+		catch (const myexception::NOT_FOUND_EXCEPTION& ex) //완전히 일치 한 중복 키가 존재하지 않을 경우
 		{
+			RBT_InsertNode(&(srcHashTable->_table[hashIndex]), 
+				RBT_CreateNode(static_cast<RBT_KEY_TYPE>(srcKey), static_cast<RBT_DATA_TYPE>(srcData)));
 		}
-
-		//완전히 일치 한 중복 키가 존재하지 않을 경우
-		RBT_InsertNode(&(srcHashTable->_table[hashIndex]), RBT_CreateNode(static_cast<RBT_KEY_TYPE>(srcKey), static_cast<RBT_DATA_TYPE>(srcData)));
 	}
 }
 

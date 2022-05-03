@@ -40,11 +40,17 @@
 typedef int DATA_TYPE; //노드의 데이터 타입
 typedef int HEAP_INDEX_TYPE; //힙 인덱스 타입
 
+/// <summary>
+/// 힙의 노드
+/// </summary>
 typedef struct NODE_TYPE
 {
 	DATA_TYPE _data; //노드의 데이터
 }NODE;
 
+/// <summary>
+/// 힙
+/// </summary>
 struct HEAP
 {
 	HEAP_INDEX_TYPE _capacity; //할당 크기
