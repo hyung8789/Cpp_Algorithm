@@ -113,7 +113,7 @@ void HT_Chaining_RBT_InsertData(CHAINING_RBT_HASH_TABLE* srcHashTable, HT_KEY_TY
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	if (srcKey == NULL)
-		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (NOT NULL)"));
 
 	HASH_INDEX_TYPE hashIndex = HT_Common_DigitFolding_Hash(srcHashTable->_capacity, srcKey);
 
@@ -171,7 +171,7 @@ HT_DATA_TYPE HT_Chaining_RBT_SearchData(CHAINING_RBT_HASH_TABLE* srcHashTable, H
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	if (targetKey == NULL)
-		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (NOT NULL)"));
 
 	HASH_INDEX_TYPE hashIndex = HT_Common_DigitFolding_Hash(srcHashTable->_capacity, targetKey);
 	CHAINING_RBT_TREE rootNode = srcHashTable->_table[hashIndex];
@@ -197,7 +197,7 @@ void HT_Chaining_RBT_RemoveData(CHAINING_RBT_HASH_TABLE* srcHashTable, HT_KEY_TY
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	if (targetKey == NULL)
-		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (NOT NULL)"));
 
 	HASH_INDEX_TYPE hashIndex = HT_Common_DigitFolding_Hash(srcHashTable->_capacity, targetKey);
 

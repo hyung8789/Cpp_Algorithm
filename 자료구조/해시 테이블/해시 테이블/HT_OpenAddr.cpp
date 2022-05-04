@@ -128,7 +128,7 @@ void HT_OpenAddr_InsertData(OPENADDR_HASH_TABLE** srcHashTable, HT_KEY_TYPE srcK
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	if (srcKey == NULL)
-		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (NOT NULL)"));
 
 	if (((static_cast<double>((*srcHashTable)->_usedSize) / static_cast<double>((*srcHashTable)->_capacity))) >=
 		CAPACITY_INCREASE_RATIO_THRESHOLD) //사용량이 기존 할당 크기에 대한 증가가 발생 될 임계 비율 이상일 경우
@@ -247,7 +247,7 @@ HT_DATA_TYPE HT_OpenAddr_SearchData(OPENADDR_HASH_TABLE* srcHashTable, HT_KEY_TY
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	if (targetKey == NULL)
-		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (NOT NULL)"));
 
 	HASH_INDEX_TYPE hashIndex = HT_Common_DoubleHashing_Hash1(srcHashTable->_capacity, targetKey);
 	HASH_INDEX_TYPE offset = HT_Common_DoubleHashing_Hash2(srcHashTable->_capacity, targetKey); //이동 단위
@@ -289,7 +289,7 @@ void HT_OpenAddr_RemoveData(OPENADDR_HASH_TABLE* srcHashTable, HT_KEY_TYPE targe
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	if (targetKey == NULL)
-		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (NOT NULL)"));
 
 	HASH_INDEX_TYPE hashIndex = HT_Common_DoubleHashing_Hash1(srcHashTable->_capacity, targetKey);
 	HASH_INDEX_TYPE offset = HT_Common_DoubleHashing_Hash2(srcHashTable->_capacity, targetKey); //이동 단위

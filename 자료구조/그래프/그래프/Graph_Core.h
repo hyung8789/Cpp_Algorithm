@@ -13,6 +13,7 @@
 //해당 프로젝트 속성에서 정적 라이브러리 (lib)로 빌드 할 것
 #include "../../../common_lib/common_lib/Common_LIB_Core.h"
 
+#include "Graph_Common.h"
 #include "Graph_Adj_Matrix.h"
 #include "Graph_Adj_List.h"
 

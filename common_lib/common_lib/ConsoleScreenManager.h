@@ -64,6 +64,16 @@ private:
     CONSOLE_SCREEN_MANAGER();
     static CONSOLE_SCREEN_MANAGER* _instance;
 
+    // https://docs.microsoft.com/ko-kr/cpp/cpp/copy-constructors-and-copy-assignment-operators-cpp?view=msvc-170
+    // https://docs.microsoft.com/ko-kr/cpp/cpp/copy-constructors-and-copy-assignment-operators-cpp?view=msvc-170
+    //고유 인스턴스에 대한 복사 생성, 대입 방지
+    CONSOLE_SCREEN_MANAGER(const CONSOLE_SCREEN_MANAGER&) = delete;
+    CONSOLE_SCREEN_MANAGER& operator=(const CONSOLE_SCREEN_MANAGER&) = delete;
+
+    //고유 인스턴스에 대한 이동 생성, 대입 방지
+    CONSOLE_SCREEN_MANAGER(const CONSOLE_SCREEN_MANAGER&&) = delete;
+    CONSOLE_SCREEN_MANAGER& operator=(const CONSOLE_SCREEN_MANAGER&&) = delete;
+
 private:
     HANDLE _hConsoleOutput; //콘솔 출력 핸들
     CONSOLE_SCREEN_BUFFER_INFO _consoleScreenBuferInfo; //콘솔 화면 버퍼

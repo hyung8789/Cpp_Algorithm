@@ -185,7 +185,7 @@ void HT_Chaining_InsertData(CHAINING_HASH_TABLE* srcHashTable, HT_KEY_TYPE srcKe
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	if (srcKey == NULL)
-		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (NOT NULL)"));
 
 	HASH_INDEX_TYPE hashIndex = HT_Common_DigitFolding_Hash(srcHashTable->_capacity, srcKey);
 	CHAINING_NODE* newNode = NULL;
@@ -249,7 +249,7 @@ HT_DATA_TYPE HT_Chaining_SearchData(CHAINING_HASH_TABLE* srcHashTable, HT_KEY_TY
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	if (targetKey == NULL)
-		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (NOT NULL)"));
 
 	HASH_INDEX_TYPE hashIndex = HT_Common_DigitFolding_Hash(srcHashTable->_capacity, targetKey);
 	CHAINING_NODE_LIST currentNode = srcHashTable->_table[hashIndex];
@@ -277,7 +277,7 @@ void HT_Chaining_RemoveData(CHAINING_HASH_TABLE* srcHashTable, HT_KEY_TYPE targe
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	if (targetKey == NULL)
-		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (NOT NULL)"));
 
 	HASH_INDEX_TYPE hashIndex = HT_Common_DigitFolding_Hash(srcHashTable->_capacity, targetKey);
 	CHAINING_NODE* removeTargetNode = NULL; //삭제 대상 노드

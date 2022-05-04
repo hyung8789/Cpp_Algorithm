@@ -51,6 +51,14 @@ private:
 	SORT_MAPPER();
 	static SORT_MAPPER* _instance;
 
+	//고유 인스턴스에 대한 복사 생성, 대입 방지
+	SORT_MAPPER(const SORT_MAPPER&) = delete;
+	SORT_MAPPER& operator=(const SORT_MAPPER&) = delete;
+
+	//고유 인스턴스에 대한 이동 생성, 대입 방지
+	SORT_MAPPER(const SORT_MAPPER&&) = delete;
+	SORT_MAPPER& operator=(const SORT_MAPPER&&) = delete;
+
 private:
 	SORT_METADATA _sortMetaDataTable[static_cast<const int>(SORT_UNIQUE_MAPPED_INDEX::TOTAL_SORT_FUNC_COUNT)];
 };

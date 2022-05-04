@@ -141,10 +141,12 @@
   <ItemGroup>
     <ClInclude Include="Graph_Adj_List.h" />
     <ClInclude Include="Graph_Adj_Matrix.h" />
+    <ClInclude Include="Graph_Common.h" />
     <ClInclude Include="Graph_Core.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graph_Adj_List.cpp" />
+    <ClCompile Include="Graph_Adj_Matrix.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
