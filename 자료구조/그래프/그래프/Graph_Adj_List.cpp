@@ -48,6 +48,9 @@ ADJ_LIST_EDGE* Graph_Adj_List_CreateEdge(GRAPH_INDEX_TYPE weight, ADJ_LIST_VERTE
 	if (from == NULL || to == NULL) //정점 없이 간선 존재 불가
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
+	if (from == to)
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args (Not allowed self loop)"));
+
 	ADJ_LIST_EDGE* retVal = (ADJ_LIST_EDGE*)malloc(sizeof(ADJ_LIST_EDGE));
 	if (retVal == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));

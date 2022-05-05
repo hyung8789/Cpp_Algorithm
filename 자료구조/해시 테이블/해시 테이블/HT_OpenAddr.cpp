@@ -140,7 +140,7 @@ void HT_OpenAddr_InsertData(OPENADDR_HASH_TABLE** srcHashTable, HT_KEY_TYPE srcK
 #endif
 
 		HASH_INDEX_TYPE reallocCapacity = (*srcHashTable)->_capacity + ceil((*srcHashTable)->_capacity * CAPACITY_INCREASE_RATIO); //재 할당 될 크기
-		HT_OpenAddr_RehashingProc(srcHashTable, reallocCapacity);
+		HT_OpenAddr_RehashProc(srcHashTable, reallocCapacity);
 	}
 
 	HASH_INDEX_TYPE hashIndex = HT_Common_DoubleHashing_Hash1((*srcHashTable)->_capacity, srcKey);
@@ -175,7 +175,7 @@ void HT_OpenAddr_InsertData(OPENADDR_HASH_TABLE** srcHashTable, HT_KEY_TYPE srcK
 		hashIndex = (hashIndex + offset) % (*srcHashTable)->_capacity;
 	} while (hashIndex != hashIndexInitValue); //최초 해시 인덱스로 돌아오기 전까지
 
-	//RehashingProc에 의해, 빈 공간이 반드시 존재하여야 함
+	//RehashProc에 의해, 빈 공간이 반드시 존재하여야 함
 	throw myexception::MEM_CORRUPTION_EXCEPTION(std::string(__func__) + std::string(" : Mem corruption"));
 
 INSERT_PROC: //삽입 처리 루틴
@@ -334,7 +334,7 @@ THROW_NOT_FOUND_EXCEPTION:
 /// </summary>
 /// <param name="srcHashTable">대상 해시 테이블</param>
 /// <param name="reallocCapacity">재 할당 크기</param>
-void HT_OpenAddr_RehashingProc(OPENADDR_HASH_TABLE** srcHashTable, HASH_INDEX_TYPE reallocCapacity)
+void HT_OpenAddr_RehashProc(OPENADDR_HASH_TABLE** srcHashTable, HASH_INDEX_TYPE reallocCapacity)
 {
 	if ((*srcHashTable) == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));

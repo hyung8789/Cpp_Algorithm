@@ -6,7 +6,7 @@
 /// </summary>
 struct ADJ_MATRIX_VERTEX
 {
-	GRAPH_INDEX_TYPE _data; //정점의 데이터
+	GRAPH_DATA_TYPE _data; //정점의 데이터
 	bool _hasVisited; //정점의 방문 여부
 };
 
@@ -15,6 +15,7 @@ struct ADJ_MATRIX_VERTEX
 /// </summary>
 struct ADJ_MATRIX_EDGE
 {
+	GRAPH_INDEX_TYPE _weight; //간선의 가중치
 	bool _hasConnected; //간선의 연결 여부
 };
 
@@ -34,8 +35,17 @@ ADJ_MATRIX_GRAPH* Graph_Adj_Matrix_CreateGraph(GRAPH_INDEX_TYPE);
 
 void Graph_Adj_Matrix_DeallocateGraph(ADJ_MATRIX_GRAPH**);
 
-void Graph_Adj_Matrix_AddVertex(ADJ_MATRIX_GRAPH*, GRAPH_INDEX_TYPE,
-	GRAPH_INDEX_TYPE = NOT_ASSIGNED, GRAPH_INDEX_TYPE = NOT_ASSIGNED);
+void Graph_Adj_Matrix_DispGraph(ADJ_MATRIX_GRAPH*);
+void Graph_Adj_Matrix_DispVertexArray(ADJ_MATRIX_GRAPH*);
+void Graph_Adj_Matrix_DispEdgeArray(ADJ_MATRIX_GRAPH*);
+
+void Graph_Adj_Matrix_AddVertex(ADJ_MATRIX_GRAPH*, 
+	GRAPH_DATA_TYPE, GRAPH_INDEX_TYPE = NOT_ASSIGNED);
 void Graph_Adj_Matrix_AddEdge(ADJ_MATRIX_GRAPH*, 
+	GRAPH_INDEX_TYPE, GRAPH_INDEX_TYPE, GRAPH_INDEX_TYPE);
+
+void Graph_Adj_Matrix_ClearProc(ADJ_MATRIX_GRAPH*, 
 	GRAPH_INDEX_TYPE, GRAPH_INDEX_TYPE);
+void Graph_Adj_Matrix_ResizeProc(ADJ_MATRIX_GRAPH*, 
+	GRAPH_INDEX_TYPE);
 #endif

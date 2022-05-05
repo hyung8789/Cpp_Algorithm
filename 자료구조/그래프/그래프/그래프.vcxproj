@@ -149,6 +149,11 @@
     <ClCompile Include="Graph_Adj_Matrix.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\common_lib\common_lib\common_lib.vcxproj">
+      <Project>{30e376ac-0d9b-4adc-8a9b-e985fea0d7c3}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -38,5 +38,5 @@ void HT_OpenAddr_InsertData(OPENADDR_HASH_TABLE**, HT_KEY_TYPE, HT_DATA_TYPE);
 HT_DATA_TYPE HT_OpenAddr_SearchData(OPENADDR_HASH_TABLE*, HT_KEY_TYPE);
 void HT_OpenAddr_RemoveData(OPENADDR_HASH_TABLE*, HT_KEY_TYPE);
 
-void HT_OpenAddr_RehashingProc(OPENADDR_HASH_TABLE**, HASH_INDEX_TYPE);
+void HT_OpenAddr_RehashProc(OPENADDR_HASH_TABLE**, HASH_INDEX_TYPE);
 #endif
