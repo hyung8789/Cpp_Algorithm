@@ -17,48 +17,48 @@ int main()
 			DLL_AppendNode(&list, newNode); //삽입
 		}
 
-		std::cout << "전체 노드의 수 : " << DLL_GetTotalNodeCount(&list) << std::endl;
-		DLL_DispNodeList(&list);
+		std::cout << "전체 노드의 수 : " << DLL_GetTotalNodeCount(list) << std::endl;
+		DLL_DispNodeList(list);
 
 		std::cout << "--- 0번 위치 노드 삭제 (간접 위치 접근) ---\n";
 		DLL_RemoveNodeAt(&list, 0);
-		std::cout << "전체 노드의 수 : " << DLL_GetTotalNodeCount(&list) << std::endl;
-		DLL_DispNodeList(&list);
+		std::cout << "전체 노드의 수 : " << DLL_GetTotalNodeCount(list) << std::endl;
+		DLL_DispNodeList(list);
 
 		std::cout << "--- 1번 위치 노드 삭제 (간접 위치 접근) ---\n";
 		DLL_RemoveNodeAt(&list, 1);
-		std::cout << "전체 노드의 수 : " << DLL_GetTotalNodeCount(&list) << std::endl;
-		DLL_DispNodeList(&list);
+		std::cout << "전체 노드의 수 : " << DLL_GetTotalNodeCount(list) << std::endl;
+		DLL_DispNodeList(list);
 
 		std::cout << "--- 2번 위치 노드 삭제 (직접 노드 접근) ---\n";
 		DLL_RemoveNode(&list, DLL_GetNodeAt(&list, 2));
-		std::cout << "전체 노드의 수 : " << DLL_GetTotalNodeCount(&list) << std::endl;
-		DLL_DispNodeList(&list);
+		std::cout << "전체 노드의 수 : " << DLL_GetTotalNodeCount(list) << std::endl;
+		DLL_DispNodeList(list);
 
 		std::cout << "--- 새로운 헤드 노드 삽입 (데이터 : 100) ---\n";
 		DLL_InsertNewHead(&list, DLL_CreateNode(100));
-		std::cout << "전체 노드의 수 : " << DLL_GetTotalNodeCount(&list) << std::endl;
-		DLL_DispNodeList(&list);
+		std::cout << "전체 노드의 수 : " << DLL_GetTotalNodeCount(list) << std::endl;
+		DLL_DispNodeList(list);
 
 		std::cout << "--- 2번 위치 뒤에 새 노드 삽입 (데이터 : 200) ---\n";
 		DLL_InsertNodeAfter(DLL_GetNodeAt(&list, 2), DLL_CreateNode(200));
-		std::cout << "전체 노드의 수 : " << DLL_GetTotalNodeCount(&list) << std::endl;
-		DLL_DispNodeList(&list);
+		std::cout << "전체 노드의 수 : " << DLL_GetTotalNodeCount(list) << std::endl;
+		DLL_DispNodeList(list);
 
 		std::cout << "--- 2번 위치 앞에 새 노드 삽입 (데이터 : 300) ---\n";
 		DLL_InsertNodeBefore(&list, DLL_GetNodeAt(&list, 2), DLL_CreateNode(300));
-		std::cout << "전체 노드의 수 : " << DLL_GetTotalNodeCount(&list) << std::endl;
-		DLL_DispNodeList(&list);
+		std::cout << "전체 노드의 수 : " << DLL_GetTotalNodeCount(list) << std::endl;
+		DLL_DispNodeList(list);
 
 		std::cout << "--- 0번 위치 앞에 새 노드 삽입 (데이터 : 400) ---\n";
 		DLL_InsertNodeBefore(&list, DLL_GetNodeAt(&list, 0), DLL_CreateNode(400));
-		std::cout << "전체 노드의 수 : " << DLL_GetTotalNodeCount(&list) << std::endl;
-		DLL_DispNodeList(&list);
+		std::cout << "전체 노드의 수 : " << DLL_GetTotalNodeCount(list) << std::endl;
+		DLL_DispNodeList(list);
 
 		std::cout << "--- 리스트 전체 메모리 해제 ---\n";
 		DLL_DeallocateNodeList(&list);
-		std::cout << "전체 노드의 수 : " << DLL_GetTotalNodeCount(&list) << std::endl;
-		DLL_DispNodeList(&list);
+		std::cout << "전체 노드의 수 : " << DLL_GetTotalNodeCount(list) << std::endl;
+		DLL_DispNodeList(list);
 	}
 	catch (const std::exception& ex)
 	{

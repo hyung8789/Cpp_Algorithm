@@ -28,6 +28,7 @@ void SLL_InsertNewHead(NODE**, NODE*);
 void SLL_InsertNodeAfter(NODE*, NODE*);
 void SLL_InsertNodeBefore(NODE**, NODE*, NODE*);
 
-NODE_POSITION_TYPE SLL_GetTotalNodeCount(NODE**);
-void SLL_DispNodeList(NODE**);
+void SLL_ReverseNodeList(NODE**);
+NODE_POSITION_TYPE SLL_GetTotalNodeCount(NODE*);
+void SLL_DispNodeList(NODE*);
 #endif

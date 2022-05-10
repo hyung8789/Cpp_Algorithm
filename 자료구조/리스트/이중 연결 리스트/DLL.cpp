@@ -273,14 +273,13 @@ void DLL_InsertNodeBefore(NODE** srcList, NODE* srcTargetNode, NODE* srcNewNode)
 /// </summary>
 /// <param name="srcList">대상 리스트</param>
 /// <returns>대상 리스트의 전체 노드의 수</returns>
-NODE_POSITION_TYPE DLL_GetTotalNodeCount(NODE** srcList)
+NODE_POSITION_TYPE DLL_GetTotalNodeCount(NODE* srcList)
 {
 	NODE_POSITION_TYPE totalNodeCount = 0; //전체 노드의 수
-	NODE* current = (*srcList); //현재 노드
 
-	while (current != NULL)
+	while (srcList != NULL)
 	{
-		current = current->_next;
+		srcList = srcList->_next;
 		totalNodeCount++;
 	}
 
@@ -291,16 +290,15 @@ NODE_POSITION_TYPE DLL_GetTotalNodeCount(NODE** srcList)
 /// 대상 리스트의 전체 노드에 대한 데이터 출력
 /// </summary>
 /// <param name="srcList">대상 리스트</param>
-void DLL_DispNodeList(NODE** srcList)
+void DLL_DispNodeList(NODE* srcList)
 {
 	NODE_POSITION_TYPE currentPosition = 0; //현재 노드의 위치
-	NODE* current = (*srcList); //현재 노드
 
-	while (current != NULL)
+	while (srcList != NULL)
 	{
-		std::cout << "List [" << currentPosition << "] : " << current->_data << std::endl;
+		std::cout << "List [" << currentPosition << "] : " << srcList->_data << std::endl;
 
-		current = current->_next;
+		srcList = srcList->_next;
 		currentPosition++;
 	}
 }

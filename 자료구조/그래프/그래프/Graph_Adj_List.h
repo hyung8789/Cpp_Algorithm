@@ -32,6 +32,7 @@ struct ADJ_LIST_EDGE
 struct ADJ_LIST_GRAPH
 {
 	ADJ_LIST_VERTEX* _vertexList; //정점 목록 (헤드 정점)
+
 	GRAPH_INDEX_TYPE _vertexCount; //정점의 수
 };
 
@@ -44,6 +45,8 @@ void Graph_Adj_List_DeallocateVertex(ADJ_LIST_VERTEX**);
 void Graph_Adj_List_DeallocateEdge(ADJ_LIST_EDGE**);
 
 void Graph_Adj_List_DispGraph(ADJ_LIST_GRAPH*);
+void Graph_Adj_List_DispDFSPath(ADJ_LIST_GRAPH*, ADJ_LIST_VERTEX* = NULL);
+void Graph_Adj_List_DispBFSPath(ADJ_LIST_GRAPH*);
 
 void Graph_Adj_List_AddVertex(ADJ_LIST_GRAPH*, ADJ_LIST_VERTEX*);
 void Graph_Adj_List_AddEdge(ADJ_LIST_VERTEX*, ADJ_LIST_EDGE*);

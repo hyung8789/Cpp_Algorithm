@@ -1,66 +1,70 @@
-#include "SLL_Core.h"
+ï»¿#include "SLL_Core.h"
 
 #define COUNT 5
 
 int main()
 {
 	_CrtMemState oldState, newState, lastState;
-	_CrtMemCheckpoint(&oldState); //ÇÒ´ç Àü »óÅÂ
+	_CrtMemCheckpoint(&oldState); //í• ë‹¹ ì „ ìƒíƒœ
 
 	try
 	{
-		NODE* list = NULL; //³ëµå ¸®½ºÆ®
+		NODE* list = NULL; //ë…¸ë“œ ë¦¬ìŠ¤íŠ¸
 
 		for (int i = 0; i < COUNT; i++)
 		{
-			NODE* newNode = SLL_CreateNode(i); //»ı¼º
-			SLL_AppendNode(&list, newNode); //»ğÀÔ
+			NODE* newNode = SLL_CreateNode(i); //ìƒì„±
+			SLL_AppendNode(&list, newNode); //ì‚½ì…
 		}
 
-		std::cout << "ÀüÃ¼ ³ëµåÀÇ ¼ö : " << SLL_GetTotalNodeCount(&list) << std::endl;
-		SLL_DispNodeList(&list);
+		std::cout << "ì „ì²´ ë…¸ë“œì˜ ìˆ˜ : " << SLL_GetTotalNodeCount(list) << std::endl;
+		SLL_DispNodeList(list);
 
-		std::cout << "--- 0¹ø À§Ä¡ ³ëµå »èÁ¦ (°£Á¢ À§Ä¡ Á¢±Ù) ---\n";
+		std::cout << "--- 0ë²ˆ ìœ„ì¹˜ ë…¸ë“œ ì‚­ì œ (ê°„ì ‘ ìœ„ì¹˜ ì ‘ê·¼) ---\n";
 		SLL_RemoveNodeAt(&list, 0);
-		std::cout << "ÀüÃ¼ ³ëµåÀÇ ¼ö : " << SLL_GetTotalNodeCount(&list) << std::endl;
-		SLL_DispNodeList(&list);
+		std::cout << "ì „ì²´ ë…¸ë“œì˜ ìˆ˜ : " << SLL_GetTotalNodeCount(list) << std::endl;
+		SLL_DispNodeList(list);
 
-		std::cout << "--- 1¹ø À§Ä¡ ³ëµå »èÁ¦ (°£Á¢ À§Ä¡ Á¢±Ù) ---\n";
+		std::cout << "--- 1ë²ˆ ìœ„ì¹˜ ë…¸ë“œ ì‚­ì œ (ê°„ì ‘ ìœ„ì¹˜ ì ‘ê·¼) ---\n";
 		SLL_RemoveNodeAt(&list, 1);
-		std::cout << "ÀüÃ¼ ³ëµåÀÇ ¼ö : " << SLL_GetTotalNodeCount(&list) << std::endl;
-		SLL_DispNodeList(&list);
+		std::cout << "ì „ì²´ ë…¸ë“œì˜ ìˆ˜ : " << SLL_GetTotalNodeCount(list) << std::endl;
+		SLL_DispNodeList(list);
 
-		std::cout << "--- 2¹ø À§Ä¡ ³ëµå »èÁ¦ (Á÷Á¢ ³ëµå Á¢±Ù) ---\n";
+		std::cout << "--- 2ë²ˆ ìœ„ì¹˜ ë…¸ë“œ ì‚­ì œ (ì§ì ‘ ë…¸ë“œ ì ‘ê·¼) ---\n";
 		SLL_RemoveNode(&list, SLL_GetNodeAt(&list, 2));
-		std::cout << "ÀüÃ¼ ³ëµåÀÇ ¼ö : " << SLL_GetTotalNodeCount(&list) << std::endl;
-		SLL_DispNodeList(&list);
+		std::cout << "ì „ì²´ ë…¸ë“œì˜ ìˆ˜ : " << SLL_GetTotalNodeCount(list) << std::endl;
+		SLL_DispNodeList(list);
 
-		std::cout << "--- »õ·Î¿î Çìµå ³ëµå »ğÀÔ (µ¥ÀÌÅÍ : 100) ---\n";
+		std::cout << "--- ìƒˆë¡œìš´ í—¤ë“œ ë…¸ë“œ ì‚½ì… (ë°ì´í„° : 100) ---\n";
 		SLL_InsertNewHead(&list, SLL_CreateNode(100));
-		std::cout << "ÀüÃ¼ ³ëµåÀÇ ¼ö : " << SLL_GetTotalNodeCount(&list) << std::endl;
-		SLL_DispNodeList(&list);
+		std::cout << "ì „ì²´ ë…¸ë“œì˜ ìˆ˜ : " << SLL_GetTotalNodeCount(list) << std::endl;
+		SLL_DispNodeList(list);
 
-		std::cout << "--- 2¹ø À§Ä¡ µÚ¿¡ »õ ³ëµå »ğÀÔ (µ¥ÀÌÅÍ : 200) ---\n";
+		std::cout << "--- 2ë²ˆ ìœ„ì¹˜ ë’¤ì— ìƒˆ ë…¸ë“œ ì‚½ì… (ë°ì´í„° : 200) ---\n";
 		SLL_InsertNodeAfter(SLL_GetNodeAt(&list, 2), SLL_CreateNode(200));
-		std::cout << "ÀüÃ¼ ³ëµåÀÇ ¼ö : " << SLL_GetTotalNodeCount(&list) << std::endl;
-		SLL_DispNodeList(&list);
+		std::cout << "ì „ì²´ ë…¸ë“œì˜ ìˆ˜ : " << SLL_GetTotalNodeCount(list) << std::endl;
+		SLL_DispNodeList(list);
 
-		std::cout << "--- 2¹ø À§Ä¡ ¾Õ¿¡ »õ ³ëµå »ğÀÔ (µ¥ÀÌÅÍ : 300) ---\n";
+		std::cout << "--- 2ë²ˆ ìœ„ì¹˜ ì•ì— ìƒˆ ë…¸ë“œ ì‚½ì… (ë°ì´í„° : 300) ---\n";
 		SLL_InsertNodeBefore(&list, SLL_GetNodeAt(&list, 2), SLL_CreateNode(300));
-		std::cout << "ÀüÃ¼ ³ëµåÀÇ ¼ö : " << SLL_GetTotalNodeCount(&list) << std::endl;
-		SLL_DispNodeList(&list);
+		std::cout << "ì „ì²´ ë…¸ë“œì˜ ìˆ˜ : " << SLL_GetTotalNodeCount(list) << std::endl;
+		SLL_DispNodeList(list);
 
-		std::cout << "--- 0¹ø À§Ä¡ ¾Õ¿¡ »õ ³ëµå »ğÀÔ (µ¥ÀÌÅÍ : 400) ---\n";
+		std::cout << "--- 0ë²ˆ ìœ„ì¹˜ ì•ì— ìƒˆ ë…¸ë“œ ì‚½ì… (ë°ì´í„° : 400) ---\n";
 		SLL_InsertNodeBefore(&list, SLL_GetNodeAt(&list, 0), SLL_CreateNode(400));
-		std::cout << "ÀüÃ¼ ³ëµåÀÇ ¼ö : " << SLL_GetTotalNodeCount(&list) << std::endl;
-		SLL_DispNodeList(&list);
+		std::cout << "ì „ì²´ ë…¸ë“œì˜ ìˆ˜ : " << SLL_GetTotalNodeCount(list) << std::endl;
+		SLL_DispNodeList(list);
 
-		std::cout << "--- ¸®½ºÆ® ÀüÃ¼ ¸Ş¸ğ¸® ÇØÁ¦ ---\n";
+		std::cout << "--- ë¦¬ìŠ¤íŠ¸ ë°˜ì „ ---\n";
+		SLL_ReverseNodeList(&list);
+		SLL_DispNodeList(list);
+
+		std::cout << "--- ë¦¬ìŠ¤íŠ¸ ì „ì²´ ë©”ëª¨ë¦¬ í•´ì œ ---\n";
 		SLL_DeallocateNodeList(&list);
-		std::cout << "ÀüÃ¼ ³ëµåÀÇ ¼ö : " << SLL_GetTotalNodeCount(&list) << std::endl;
-		SLL_DispNodeList(&list);
+		std::cout << "ì „ì²´ ë…¸ë“œì˜ ìˆ˜ : " << SLL_GetTotalNodeCount(list) << std::endl;
+		SLL_DispNodeList(list);
 
-		_CrtMemCheckpoint(&newState); //ÇÒ´ç ÇØÁ¦ ÈÄ »óÅÂ
+		_CrtMemCheckpoint(&newState); //í• ë‹¹ í•´ì œ í›„ ìƒíƒœ
 		_CrtDumpMemoryLeaks();
 		if (_CrtMemDifference(&lastState, &oldState, &newState))
 			_CrtMemDumpStatistics(&lastState);

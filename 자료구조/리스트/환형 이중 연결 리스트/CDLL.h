@@ -29,6 +29,6 @@ void CDLL_InsertNewHead(NODE**, NODE*);
 void CDLL_InsertNodeAfter(NODE*, NODE*);
 void CDLL_InsertNodeBefore(NODE**, NODE*, NODE*);
 
-NODE_POSITION_TYPE CDLL_GetTotalNodeCount(NODE**);
-void CDLL_DispNodeList(NODE**);
+NODE_POSITION_TYPE CDLL_GetTotalNodeCount(NODE*);
+void CDLL_DispNodeList(NODE*);
 #endif

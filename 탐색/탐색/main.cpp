@@ -1,95 +1,95 @@
-#include "Search_Core.h"
+ï»¿#include "Search_Core.h"
 
 #define COUNT 5
 
 int main()
 {
 	_CrtMemState oldState, newState, lastState;
-	_CrtMemCheckpoint(&oldState); //ÇÒ´ç Àü »óÅÂ
+	_CrtMemCheckpoint(&oldState); //í• ë‹¹ ì „ ìƒíƒœ
 
 	try
 	{
-		NODE* list = NULL; //³ëµå ¸®½ºÆ®
+		NODE* list = NULL; //ë…¸ë“œ ë¦¬ìŠ¤íŠ¸
 		for (int i = 0; i < COUNT; i++)
 		{
-			NODE* newNode = DLL_CreateNode(i); //»ı¼º
-			DLL_AppendNode(&list, newNode); //»ğÀÔ
+			NODE* newNode = DLL_CreateNode(i); //ìƒì„±
+			DLL_AppendNode(&list, newNode); //ì‚½ì…
 		}
 
-		std::cout << "\n========== ÀÌÁß ¿¬°á ¸®½ºÆ® ¼øÂ÷Å½»ö - ÀüÁø ÀÌµ¿¹ı (Move To Front) ==========\n";
+		std::cout << "\n========== ì´ì¤‘ ì—°ê²° ë¦¬ìŠ¤íŠ¸ ìˆœì°¨íƒìƒ‰ - ì „ì§„ ì´ë™ë²• (Move To Front) ==========\n";
 		for (int targetData = COUNT - 1; targetData >= 0; targetData--)
 		{
-			std::cout << "ÇöÀç °Ë»ö ´ë»ó µ¥ÀÌÅÍ : " << targetData;
+			std::cout << "í˜„ì¬ ê²€ìƒ‰ ëŒ€ìƒ ë°ì´í„° : " << targetData;
 			NODE* result = DLL_SequentialSearch_MTF(&list, targetData);
 			if (result->_data != targetData)
 				throw std::logic_error(std::string(__func__) + std::string(" : Search Logic Error"));
 			else
 				std::cout << " - found\n";
 
-			std::cout << "--- Å½»ö ¿Ï·á ÈÄ ¸®½ºÆ® »óÅÂ ---\n";
-			DLL_DispNodeList(&list);
+			std::cout << "--- íƒìƒ‰ ì™„ë£Œ í›„ ë¦¬ìŠ¤íŠ¸ ìƒíƒœ ---\n";
+			DLL_DispNodeList(list);
 		}
 
-		std::cout << "\n========== ÀÌÁß ¿¬°á ¸®½ºÆ® ¼øÂ÷Å½»ö - ÀüÀ§¹ı (Transpose) ==========\n";
+		std::cout << "\n========== ì´ì¤‘ ì—°ê²° ë¦¬ìŠ¤íŠ¸ ìˆœì°¨íƒìƒ‰ - ì „ìœ„ë²• (Transpose) ==========\n";
 		for (int targetData = COUNT - 1; targetData >= 0; targetData--)
 		{
-			std::cout << "ÇöÀç °Ë»ö ´ë»ó µ¥ÀÌÅÍ : " << targetData;
+			std::cout << "í˜„ì¬ ê²€ìƒ‰ ëŒ€ìƒ ë°ì´í„° : " << targetData;
 			NODE* result = DLL_SequentialSearch_Transpose(&list, targetData);
 			if (result->_data != targetData)
 				throw std::logic_error(std::string(__func__) + std::string(" : Search Logic Error"));
 			else
 				std::cout << " - found\n";
 
-			std::cout << "--- Å½»ö ¿Ï·á ÈÄ ¸®½ºÆ® »óÅÂ ---\n";
-			DLL_DispNodeList(&list);
+			std::cout << "--- íƒìƒ‰ ì™„ë£Œ í›„ ë¦¬ìŠ¤íŠ¸ ìƒíƒœ ---\n";
+			DLL_DispNodeList(list);
 		}
 
 		DLL_DeallocateNodeList(&list);
 
 		int orderedFooArray[COUNT];
-		for (int i = 0; i < COUNT; i++) //¿À¸§Â÷¼ø
+		for (int i = 0; i < COUNT; i++) //ì˜¤ë¦„ì°¨ìˆœ
 		{
 			orderedFooArray[i] = i;
 		}
 
-		std::cout << "\n========== ¼øÂ÷Å½»ö - ÀüÁø ÀÌµ¿¹ı (Move To Front) ==========\n";
+		std::cout << "\n========== ìˆœì°¨íƒìƒ‰ - ì „ì§„ ì´ë™ë²• (Move To Front) ==========\n";
 		for (int targetData = COUNT - 1; targetData >= 0; targetData--)
 		{
-			std::cout << "ÇöÀç °Ë»ö ´ë»ó µ¥ÀÌÅÍ : " << targetData;
+			std::cout << "í˜„ì¬ ê²€ìƒ‰ ëŒ€ìƒ ë°ì´í„° : " << targetData;
 			int result = SequentialSearch_MTF<int>(orderedFooArray, COUNT, targetData);
 			if (result != targetData)
 				throw std::logic_error(std::string(__func__) + std::string(" : Search Logic Error"));
 			else
 				std::cout << " - found\n";
 
-			std::cout << "--- Å½»ö ¿Ï·á ÈÄ ¹è¿­ »óÅÂ ---\n";
+			std::cout << "--- íƒìƒ‰ ì™„ë£Œ í›„ ë°°ì—´ ìƒíƒœ ---\n";
 			for (int i = 0; i < COUNT; i++)
 				std::cout << orderedFooArray[i] << " ";
 			std::cout << std::endl;
 		}
 
-		std::cout << "\n========== ¼øÂ÷Å½»ö - ÀüÀ§¹ı (Transpose) ==========\n";
+		std::cout << "\n========== ìˆœì°¨íƒìƒ‰ - ì „ìœ„ë²• (Transpose) ==========\n";
 		for (int targetData = COUNT - 1; targetData >= 0; targetData--)
 		{
-			std::cout << "ÇöÀç °Ë»ö ´ë»ó µ¥ÀÌÅÍ : " << targetData;
+			std::cout << "í˜„ì¬ ê²€ìƒ‰ ëŒ€ìƒ ë°ì´í„° : " << targetData;
 			int result = SequentialSearch_Transpose<int>(orderedFooArray, COUNT, targetData);
 			if (result != targetData)
 				throw std::logic_error(std::string(__func__) + std::string(" : Search Logic Error"));
 			else
 				std::cout << " - found\n";
 
-			std::cout << "--- Å½»ö ¿Ï·á ÈÄ ¹è¿­ »óÅÂ ---\n";
+			std::cout << "--- íƒìƒ‰ ì™„ë£Œ í›„ ë°°ì—´ ìƒíƒœ ---\n";
 			for (int i = 0; i < COUNT; i++)
 				std::cout << orderedFooArray[i] << " ";
 			std::cout << std::endl;
 		}
 
-		//ÀÌ ½ÃÁ¡¿¡¼­, À§ÀÇ ¸®½ºÆ®¿Í µ¿ÀÏÇÏ°Ô Á¤·Ä µÈ ¼ø¼­°¡ À¯ÁöµÇ¾îÀÖÀ½À» º¸ÀåÇØ¾ß ÇÔ
+		//ì´ ì‹œì ì—ì„œ, ìœ„ì˜ ë¦¬ìŠ¤íŠ¸ì™€ ë™ì¼í•˜ê²Œ ì •ë ¬ ëœ ìˆœì„œê°€ ìœ ì§€ë˜ì–´ìˆìŒì„ ë³´ì¥í•´ì•¼ í•¨
 
-		std::cout << "\n========== ¿À¸§Â÷¼ø Á¤·Ä µÈ µ¥ÀÌÅÍ¿¡ ´ëÇÑ ÀÌÁø Å½»ö ==========\n";
+		std::cout << "\n========== ì˜¤ë¦„ì°¨ìˆœ ì •ë ¬ ëœ ë°ì´í„°ì— ëŒ€í•œ ì´ì§„ íƒìƒ‰ ==========\n";
 		for (int targetData = COUNT - 1; targetData >= 0; targetData--)
 		{
-			std::cout << "ÇöÀç °Ë»ö ´ë»ó µ¥ÀÌÅÍ : " << targetData;
+			std::cout << "í˜„ì¬ ê²€ìƒ‰ ëŒ€ìƒ ë°ì´í„° : " << targetData;
 			int result = BinarySearch<int>(orderedFooArray, COUNT, targetData);
 			if (result != targetData)
 				throw std::logic_error(std::string(__func__) + std::string(" : Search Logic Error"));
@@ -97,14 +97,14 @@ int main()
 				std::cout << " - found\n";
 		}
 
-		for (int i = 0; i < COUNT; i++) //³»¸²Â÷¼ø
+		for (int i = 0; i < COUNT; i++) //ë‚´ë¦¼ì°¨ìˆœ
 		{
 			orderedFooArray[i] = (COUNT - 1) - i;
 		}
-		std::cout << "\n========== ³»¸²Â÷¼ø Á¤·Ä µÈ µ¥ÀÌÅÍ¿¡ ´ëÇÑ ÀÌÁø Å½»ö ==========\n";
+		std::cout << "\n========== ë‚´ë¦¼ì°¨ìˆœ ì •ë ¬ ëœ ë°ì´í„°ì— ëŒ€í•œ ì´ì§„ íƒìƒ‰ ==========\n";
 		for (int targetData = COUNT - 1; targetData >= 0; targetData--)
 		{
-			std::cout << "ÇöÀç °Ë»ö ´ë»ó µ¥ÀÌÅÍ : " << targetData;
+			std::cout << "í˜„ì¬ ê²€ìƒ‰ ëŒ€ìƒ ë°ì´í„° : " << targetData;
 			int result = BinarySearch<int>(orderedFooArray, COUNT, targetData);
 			if (result != targetData)
 				throw std::logic_error(std::string(__func__) + std::string(" : Search Logic Error"));
@@ -119,7 +119,7 @@ int main()
 		exit(EXIT_FAILURE);
 	}
 
-	_CrtMemCheckpoint(&newState); //ÇÒ´ç ÇØÁ¦ ÈÄ »óÅÂ
+	_CrtMemCheckpoint(&newState); //í• ë‹¹ í•´ì œ í›„ ìƒíƒœ
 	_CrtDumpMemoryLeaks();
 	if (_CrtMemDifference(&lastState, &oldState, &newState))
 		_CrtMemDumpStatistics(&lastState);

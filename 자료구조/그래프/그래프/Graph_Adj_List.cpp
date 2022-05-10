@@ -128,7 +128,9 @@ void Graph_Adj_List_DispGraph(ADJ_LIST_GRAPH* srcGraph)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
 	std::cout << "---------------------------------------------------------------------------------------------\n";
-	std::cout << "[정점 인덱스] 정점 데이터, 정점 방문 여부 : 인접 한 정점의 데이터 (인접 한 정점으로의 가중치)\n";
+	std::cout << "[정점 인덱스] 정점 데이터 (정점 방문 여부) : 인접 한 정점 데이터 (인접 한 정점으로의 가중치)\n";
+	std::cout << "- 정점 인덱스 : X - Not Assigned\n";
+	std::cout << "- 정점 방문 여부 : 0 - 방문되지 않음, 1 - 방문 됨\n";
 	std::cout << "---------------------------------------------------------------------------------------------\n";
 
 	ADJ_LIST_VERTEX* vertexList = srcGraph->_vertexList; //정점 목록
@@ -139,15 +141,12 @@ void Graph_Adj_List_DispGraph(ADJ_LIST_GRAPH* srcGraph)
 		edgeList = vertexList->_edgeList;
 
 		std::cout << "[";
-
 		if (vertexList->_index == NOT_ASSIGNED)
-			std::cout << "Not Assigned";
+			std::cout << "X";
 		else
 			std::cout << vertexList->_index;
-
-		std::cout << "] " << vertexList->_data << ", "
-			<< (vertexList->_hasVisited ? "Visited" : "Not Visited") <<
-			(edgeList == NULL ? "" : " : ");
+		std::cout << "] " << vertexList->_data << " ("
+			<< vertexList->_hasVisited << ") : ";
 
 		while (edgeList != NULL) //현재 정점과 인접 한 정점 목록 출력
 		{
@@ -159,6 +158,118 @@ void Graph_Adj_List_DispGraph(ADJ_LIST_GRAPH* srcGraph)
 
 		std::cout << "\n";
 		vertexList = vertexList->_next;
+	}
+}
+
+/// <summary>
+/// 대상 그래프에 깊이 우선 탐색 (Depth First Search)에 따른 방문 경로 출력
+/// </summary>
+/// <param name="srcGraph">대상 그래프</param>
+/// <param name="currentVertex">방문 할 다음 정점</param>
+void Graph_Adj_List_DispDFSPath(ADJ_LIST_GRAPH* srcGraph, ADJ_LIST_VERTEX* nextVertex)
+{
+	if (srcGraph == NULL)
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
+
+	ADJ_LIST_VERTEX* currentVertex; //현재 정점
+	ADJ_LIST_EDGE* currentVertexAdjEdgeList; //현재 정점의 인접 간선 목록
+
+	if (nextVertex == NULL) //최초 호출 시
+	{
+		std::cout << "-------------- DFS Path --------------\n";
+		std::cout << "방문 순서에 따른 [정점 인덱스] 정점 데이터\n";
+		std::cout << "- 정점 인덱스 : X - Not Assigned\n";
+		std::cout << "--------------------------------------\n";
+
+		currentVertex = srcGraph->_vertexList;
+	}
+	else
+	{
+		currentVertex = nextVertex;
+	}
+
+	currentVertexAdjEdgeList = currentVertex->_edgeList;
+
+	std::cout << "[";
+	if (currentVertex->_index == NOT_ASSIGNED)
+		std::cout << "X";
+	else
+		std::cout << currentVertex->_index;
+	std::cout << "] " << currentVertex->_data << std::endl;
+
+	currentVertex->_hasVisited = true;
+
+	while (currentVertexAdjEdgeList != NULL) //현재 정점과 인접한 모든 간선에 대해
+	{
+		nextVertex = currentVertexAdjEdgeList->_to; //다음에 방문 할 인접 정점
+
+		if (nextVertex == NULL)
+			throw myexception::MEM_CORRUPTION_EXCEPTION(std::string(__func__) + std::string(" : Mem corruption"));
+
+		if (!nextVertex->_hasVisited) //아직 방문하지 않은 인접 정점이 존재 할 경우
+			Graph_Adj_List_DispDFSPath(srcGraph, nextVertex);
+
+		currentVertexAdjEdgeList = currentVertexAdjEdgeList->_next;
+	}
+}
+
+/// <summary>
+/// 대상 그래프에 너비 우선 탐색 (Breadth First Search)에 따른 방문 경로 출력
+/// </summary>
+/// <param name="srcGraph">대상 그래프</param>
+void Graph_Adj_List_DispBFSPath(ADJ_LIST_GRAPH* srcGraph)
+{
+	if (srcGraph == NULL)
+		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
+
+	ADJ_LIST_VERTEX* currentVertex = srcGraph->_vertexList; //현재 정점
+	ADJ_LIST_EDGE* currentVertexAdjEdgeList = currentVertex->_edgeList; //현재 정점의 인접 간선 목록
+	std::queue<ADJ_LIST_VERTEX*> vertexQueue;
+
+	vertexQueue.push(currentVertex);
+
+	std::cout << "-------------- BFS Path --------------\n";
+	std::cout << "방문 순서에 따른 [정점 인덱스] 정점 데이터\n";
+	std::cout << "- 정점 인덱스 : X - Not Assigned\n";
+	std::cout << "--------------------------------------\n";
+	std::cout << "[";
+	if (currentVertex->_index == NOT_ASSIGNED)
+		std::cout << "X";
+	else
+		std::cout << currentVertex->_index;
+	std::cout << "] " << currentVertex->_data << std::endl;
+
+	currentVertex->_hasVisited = true;
+
+	while (!vertexQueue.empty()) //모든 정점을 방문 할 때까지
+	{
+		currentVertex = vertexQueue.front();
+		currentVertexAdjEdgeList = currentVertex->_edgeList;
+
+		while (currentVertexAdjEdgeList != NULL) //현재 정점의 모든 인접 정점에 대해 동일 시퀸스 내에 방문
+		{
+			currentVertex = currentVertexAdjEdgeList->_to;
+
+			if (currentVertex == NULL)
+				throw myexception::MEM_CORRUPTION_EXCEPTION(std::string(__func__) + std::string(" : Mem corruption"));
+
+			if (!currentVertex->_hasVisited) //현재 정점에 아직 방문하지 않은 인접 정점이 존재 할 경우
+			{
+				std::cout << "[";
+				if (currentVertex->_index == NOT_ASSIGNED)
+					std::cout << "X";
+				else
+					std::cout << currentVertex->_index;
+				std::cout << "] " << currentVertex->_data << std::endl;
+
+				currentVertex->_hasVisited = true;
+				vertexQueue.push(currentVertex);
+			}
+
+			currentVertexAdjEdgeList = currentVertexAdjEdgeList->_next;
+		}
+
+		vertexQueue.pop();
 	}
 }
 

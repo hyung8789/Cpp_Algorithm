@@ -1,7 +1,7 @@
 ﻿#ifndef _SEARCH_HPP_
 #define _SEARCH_HPP_
 
-#ifdef _DLL_H_
+#ifdef _DLL_CORE_H_
 /// <summary>
 /// 대상 리스트에서 순차탐색 - 전진 이동법 (Move To Front)으로 대상 데이터가 포함 된 최초 노드 반환
 /// </summary>

@@ -1,4 +1,4 @@
-#ifndef _SEARCH_CORE_H_
+ï»¿#ifndef _SEARCH_CORE_H_
 #define _SEARCH_CORE_H
 
 #define _CRTDBG_MAP_ALLOC
@@ -13,9 +13,9 @@
 #include <mutex> // https://www.cplusplus.com/reference/mutex
 #include <future> // https://www.cplusplus.com/reference/future
 
-//ÇØ´ç ÇÁ·ÎÁ§Æ® ¼Ó¼º¿¡¼­ Á¤Àû ¶óÀÌºê·¯¸® (lib)·Î ºôµå ÇÒ °Í
+//í•´ë‹¹ í”„ë¡œì íŠ¸ ì†ì„±ì—ì„œ ì •ì  ë¼ì´ë¸ŒëŸ¬ë¦¬ (lib)ë¡œ ë¹Œë“œ í•  ê²ƒ
 #include "../../common_lib/common_lib/Common_LIB_Core.h"
-#include "../../ÀÚ·á±¸Á¶/¸®½ºÆ®/ÀÌÁß ¿¬°á ¸®½ºÆ®/DLL_Core.h"
+#include "../../ìë£Œêµ¬ì¡°/ë¦¬ìŠ¤íŠ¸/ì´ì¤‘ ì—°ê²° ë¦¬ìŠ¤íŠ¸/DLL_Core.h"
 
 #include "Search.hpp"
 #endif

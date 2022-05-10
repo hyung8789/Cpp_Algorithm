@@ -274,18 +274,39 @@ void SLL_InsertNodeBefore(NODE** srcList, NODE* srcTargetNode, NODE* srcNewNode)
 }
 
 /// <summary>
+/// 대상 리스트 반전
+/// </summary>
+/// <param name="srcList">대상 리스트</param>
+void SLL_ReverseNodeList(NODE** srcList)
+{
+	NODE* currentNode = (*srcList);
+	NODE* nextNode = NULL; //현재 노드의 다음 노드
+	NODE* prevNode = NULL; //현재 노드의 이전 노드
+
+	while (currentNode != NULL)
+	{
+		nextNode = currentNode->_next;
+		currentNode->_next = prevNode;
+
+		prevNode = currentNode;
+		currentNode = nextNode;
+	}
+
+	(*srcList) = prevNode; //이 시점에, prevNode는 리스트의 마지막 노드
+}
+
+/// <summary>
 /// 대상 리스트의 전체 노드의 수 반환
 /// </summary>
 /// <param name="srcList">대상 리스트</param>
 /// <returns>대상 리스트의 전체 노드의 수</returns>
-NODE_POSITION_TYPE SLL_GetTotalNodeCount(NODE** srcList)
+NODE_POSITION_TYPE SLL_GetTotalNodeCount(NODE* srcList)
 {
 	NODE_POSITION_TYPE totalNodeCount = 0; //전체 노드의 수
-	NODE* current = (*srcList); //현재 노드
 
-	while (current != NULL)
+	while (srcList != NULL)
 	{
-		current = current->_next;
+		srcList = srcList->_next;
 		totalNodeCount++;
 	}
 
@@ -296,16 +317,15 @@ NODE_POSITION_TYPE SLL_GetTotalNodeCount(NODE** srcList)
 /// 대상 리스트의 전체 노드에 대한 데이터 출력
 /// </summary>
 /// <param name="srcList">대상 리스트</param>
-void SLL_DispNodeList(NODE** srcList)
+void SLL_DispNodeList(NODE* srcList)
 {
 	NODE_POSITION_TYPE currentPosition = 0; //현재 노드의 위치
-	NODE* current = (*srcList); //현재 노드
 
-	while (current != NULL)
+	while (srcList != NULL)
 	{
-		std::cout << "List [" << currentPosition << "] : " << current->_data << std::endl;
+		std::cout << "List [" << currentPosition << "] : " << srcList->_data << std::endl;
 
-		current = current->_next;
+		srcList = srcList->_next;
 		currentPosition++;
 	}
 }
