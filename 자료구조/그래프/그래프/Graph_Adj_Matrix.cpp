@@ -100,61 +100,27 @@ void Graph_Adj_Matrix_DispGraph(ADJ_MATRIX_GRAPH* srcGraph)
 
 		std::cout << " (" << srcGraph->_vertexArray[i]._hasVisited << ") : ";
 
-		/***
-			< 현재 정점과 인접 한 정점 목록 출력 >
-
-			ex)
-			i : 1
-			Vertex Count : 3
-			Vertex Array : [0], [1], [2]
-			Edge Array (x - adj check target, num - adj check sequence) :
-			[]		[x1]	[]
-			[x4]	[x2]	[x5]
-			[]		[x3]	[]
-		***/
-
-		for (GRAPH_INDEX_TYPE row = 0; row < srcGraph->_vertexCount; row++) //열 고정
+		for (GRAPH_INDEX_TYPE col = 0; col < srcGraph->_vertexCount; col++) //현재 정점 (i)과 인접한 모든 정점 (col)에 대해
 		{
-			if (srcGraph->_edgeArray[row][i]._hasConnected)
+			if (srcGraph->_edgeArray[i][col]._hasConnected)
 			{
-				if (srcGraph->_vertexArray[row]._data == NOT_ASSIGNED)
+				if (srcGraph->_vertexArray[col]._data == NOT_ASSIGNED)
 					std::cout << "X";
 				else
-					std::cout << srcGraph->_vertexArray[row]._data;
+					std::cout << srcGraph->_vertexArray[col]._data;
 
 				std::cout << " (";
-				if (srcGraph->_edgeArray[row][i]._weight == NOT_ASSIGNED)
+				if (srcGraph->_edgeArray[i][col]._weight == NOT_ASSIGNED)
 					std::cout << "X) ";
 				else
-					std::cout << srcGraph->_edgeArray[row][i]._weight << ") ";
-			}
-		}
-
-		if (srcGraph->_isSymmetric)
-			break;
-
-		for (GRAPH_INDEX_TYPE col = 0; col < srcGraph->_vertexCount; col++) //행 고정
-		{
-			if (col != i) //row, col가 만나는 중복 위치 제외
-			{
-				if (srcGraph->_edgeArray[i][col]._hasConnected)
-				{
-					if (srcGraph->_vertexArray[col]._data == NOT_ASSIGNED)
-						std::cout << "X";
-					else
-						std::cout << srcGraph->_vertexArray[col]._data;
-
-					std::cout << " (";
-					if (srcGraph->_edgeArray[i][col]._weight == NOT_ASSIGNED)
-						std::cout << "X) ";
-					else
-						std::cout << srcGraph->_edgeArray[i][col]._weight << ") ";
-				}
+					std::cout << srcGraph->_edgeArray[col][i]._weight << ") ";
 			}
 		}
 
 		std::cout << "\n";
 	}
+
+	std::cout << "\n";
 }
 
 /// <summary>
@@ -166,7 +132,7 @@ void Graph_Adj_Matrix_DispVertexArray(ADJ_MATRIX_GRAPH* srcGraph)
 	if (srcGraph == NULL || srcGraph->_vertexArray == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	std::cout << "\n--------------------------------------------------------------------------\n";
+	std::cout << "--------------------------------------------------------------------------\n";
 	std::cout << "[정점 인덱스] 정점 데이터 (정점 방문 여부)\n";
 	std::cout << "- 정점 데이터 : X - Not Assigned\n";
 	std::cout << "- 정점 방문 여부 : 0 - 방문되지 않음, 1 - 방문 됨\n";
@@ -193,7 +159,7 @@ void Graph_Adj_Matrix_DispEdgeArray(ADJ_MATRIX_GRAPH* srcGraph)
 	if (srcGraph == NULL || srcGraph->_edgeArray == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
-	std::cout << "\n--------------------------------------------------------------------------\n";
+	std::cout << "--------------------------------------------------------------------------\n";
 	std::cout << "간선의 연결 여부 (가중치)\n";
 	std::cout << "- 간선의 연결 여부 : 0 - 정점 간에 연결되지 않음, 1 - 정점 간에 연결 됨\n";
 	std::cout << "- 가중치 : X - Not Assigned\n";
@@ -221,12 +187,37 @@ void Graph_Adj_Matrix_DispEdgeArray(ADJ_MATRIX_GRAPH* srcGraph)
 /// 대상 그래프에 깊이 우선 탐색 (Depth First Search)에 따른 방문 경로 출력
 /// </summary>
 /// <param name="srcGraph">대상 그래프</param>
-void Graph_Adj_Matrix_DispDFSPath(ADJ_MATRIX_GRAPH* srcGraph)
+/// <param name="nextVertexIndex">방문 할 다음 정점 인덱스</param>
+void Graph_Adj_Matrix_DispDFSPath(ADJ_MATRIX_GRAPH* srcGraph, GRAPH_INDEX_TYPE nextVertexIndex)
 {
 	if (srcGraph == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
 
+	if (nextVertexIndex < 0)
+		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
+	if (nextVertexIndex == 0) //최초 호출 시
+	{
+		std::cout << "-------------- DFS Path --------------\n";
+		std::cout << "방문 순서에 따른 [정점 인덱스] 정점 데이터\n";
+		std::cout << "- 정점 데이터 : X - Not Assigned\n";
+		std::cout << "--------------------------------------\n";
+	}
+
+	std::cout << "[" << nextVertexIndex << "] ";
+	if (srcGraph->_vertexArray[nextVertexIndex]._data == NOT_ASSIGNED)
+		std::cout << "X";
+	else
+		std::cout << srcGraph->_vertexArray[nextVertexIndex]._data << " ";
+
+	srcGraph->_vertexArray[nextVertexIndex]._hasVisited = true;
+
+	for (GRAPH_INDEX_TYPE col = 0; col < srcGraph->_vertexCount; col++) //현재 정점 (nextVertexIndex)과 인접한 모든 정점 (col)에 대해
+	{
+		if (srcGraph->_edgeArray[nextVertexIndex][col]._hasConnected &&
+			!srcGraph->_vertexArray[col]._hasVisited) //아직 방문하지 않은 인접 정점이 존재하면
+			Graph_Adj_Matrix_DispDFSPath(srcGraph, col);
+	}
 }
 
 /// <summary>
@@ -237,6 +228,47 @@ void Graph_Adj_Matrix_DispBFSPath(ADJ_MATRIX_GRAPH* srcGraph)
 {
 	if (srcGraph == NULL)
 		throw std::runtime_error(std::string(__func__) + std::string(" : Not initialized"));
+
+	GRAPH_INDEX_TYPE currentVertexIndex = 0; //현재 정점 인덱스
+	std::queue<GRAPH_INDEX_TYPE> vertexIndexQueue;
+
+	vertexIndexQueue.push(currentVertexIndex);
+
+	std::cout << "-------------- BFS Path --------------\n";
+	std::cout << "방문 순서에 따른 [정점 인덱스] 정점 데이터\n";
+	std::cout << "- 정점 데이터 : X - Not Assigned\n";
+	std::cout << "--------------------------------------\n";
+
+	std::cout << "[" << currentVertexIndex << "] ";
+	if (srcGraph->_vertexArray[currentVertexIndex]._data == NOT_ASSIGNED)
+		std::cout << "X";
+	else
+		std::cout << srcGraph->_vertexArray[currentVertexIndex]._data << " ";
+
+	srcGraph->_vertexArray[currentVertexIndex]._hasVisited = true;
+
+	while (!vertexIndexQueue.empty()) //모든 정점을 방문 할 때까지
+	{
+		currentVertexIndex = vertexIndexQueue.front();
+
+		for (GRAPH_INDEX_TYPE col = 0; col < srcGraph->_vertexCount; col++) //현재 정점의 모든 인접 정점 (col)에 대해 동일 시퀸스 내에 방문
+		{
+			if (srcGraph->_edgeArray[currentVertexIndex][col]._hasConnected &&
+				!srcGraph->_vertexArray[col]._hasVisited) //아직 방문하지 않은 인접 정점이 존재하면
+			{
+				std::cout << "[" << col << "] ";
+				if (srcGraph->_vertexArray[col]._data == NOT_ASSIGNED)
+					std::cout << "X";
+				else
+					std::cout << srcGraph->_vertexArray[col]._data << " ";
+
+				srcGraph->_vertexArray[col]._hasVisited = true;
+				vertexIndexQueue.push(col);
+			}
+		}
+
+		vertexIndexQueue.pop();
+	}
 }
 
 /// <summary>
@@ -291,7 +323,7 @@ void Graph_Adj_Matrix_AddEdge(ADJ_MATRIX_GRAPH* srcGraph,
 		(from >= srcGraph->_vertexCount || to >= srcGraph->_vertexCount))
 		throw std::out_of_range(std::string(__func__) + std::string(" : out of range"));
 
-	if (srcGraph->_vertexArray[from]._data == NOT_ASSIGNED || srcGraph->_vertexArray[to]._data == NOT_ASSIGNED) //정점 없이 간선 존재불가
+	if (srcGraph->_vertexArray[from]._data == NOT_ASSIGNED || srcGraph->_vertexArray[to]._data == NOT_ASSIGNED) //정점 없이 간선 존재 불가
 		throw std::invalid_argument(std::string(__func__) + std::string(" : Invalid Args"));
 
 	if (from == to)
@@ -342,7 +374,7 @@ void Graph_Adj_Matrix_InitGraphProc(ADJ_MATRIX_GRAPH* srcGraph,
 		GRAPH_INDEX_TYPE rowEdgeIndex = endInitVertexIndex;
 		GRAPH_INDEX_TYPE colEdgeIndex = endInitVertexIndex;
 
-		//row, col가 만나는 공통 영역 초기화
+		//col, col가 만나는 공통 영역 초기화
 		Graph_Adj_Matrix_InitEdgeProc(&(srcGraph->_edgeArray[endInitVertexIndex][endInitVertexIndex]));
 
 		while ((--colEdgeIndex) >= 0) //초기화 시퀸스에 따라
@@ -351,7 +383,7 @@ void Graph_Adj_Matrix_InitGraphProc(ADJ_MATRIX_GRAPH* srcGraph,
 			Graph_Adj_Matrix_InitEdgeProc(&(srcGraph->_edgeArray[colEdgeIndex][rowEdgeIndex]));
 		}
 
-		endInitVertexIndex--; //row, col가 만나는 공통 영역 축소
+		endInitVertexIndex--; //col, col가 만나는 공통 영역 축소
 	}
 }
 
@@ -370,7 +402,7 @@ void Graph_Adj_Matrix_ResizeGraphProc(ADJ_MATRIX_GRAPH* srcGraph)
 		if (srcGraph->_vertexArray == NULL)
 			throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-		srcGraph->_edgeArray = (ADJ_MATRIX_EDGE**)malloc(sizeof(ADJ_MATRIX_EDGE*) * srcGraph->_vertexCount); //row
+		srcGraph->_edgeArray = (ADJ_MATRIX_EDGE**)malloc(sizeof(ADJ_MATRIX_EDGE*) * srcGraph->_vertexCount); //col
 		if (srcGraph->_edgeArray == NULL)
 			throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
@@ -392,7 +424,7 @@ void Graph_Adj_Matrix_ResizeGraphProc(ADJ_MATRIX_GRAPH* srcGraph)
 		if (reallocVertexArrayAddr == NULL)
 			throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 
-		void* reallocEdgePtrArrayAddr = realloc(srcGraph->_edgeArray, reallocEdgePtrArraySizeInBytes); //row
+		void* reallocEdgePtrArrayAddr = realloc(srcGraph->_edgeArray, reallocEdgePtrArraySizeInBytes); //col
 		if (reallocEdgePtrArrayAddr == NULL)
 			throw std::runtime_error(std::string(__func__) + std::string(" : Not enough Heap Memory"));
 

@@ -159,6 +159,8 @@ void Graph_Adj_List_DispGraph(ADJ_LIST_GRAPH* srcGraph)
 		std::cout << "\n";
 		vertexList = vertexList->_next;
 	}
+
+	std::cout << "\n";
 }
 
 /// <summary>
@@ -199,7 +201,7 @@ void Graph_Adj_List_DispDFSPath(ADJ_LIST_GRAPH* srcGraph, ADJ_LIST_VERTEX* nextV
 
 	currentVertex->_hasVisited = true;
 
-	while (currentVertexAdjEdgeList != NULL) //현재 정점과 인접한 모든 간선에 대해
+	while (currentVertexAdjEdgeList != NULL) //현재 정점과 인접한 모든 정점에 대해
 	{
 		nextVertex = currentVertexAdjEdgeList->_to; //다음에 방문 할 인접 정점
 

@@ -42,7 +42,7 @@ void Graph_Adj_Matrix_DeallocateGraph(ADJ_MATRIX_GRAPH**);
 void Graph_Adj_Matrix_DispGraph(ADJ_MATRIX_GRAPH*);
 void Graph_Adj_Matrix_DispVertexArray(ADJ_MATRIX_GRAPH*);
 void Graph_Adj_Matrix_DispEdgeArray(ADJ_MATRIX_GRAPH*);
-void Graph_Adj_Matrix_DispDFSPath(ADJ_MATRIX_GRAPH*);
+void Graph_Adj_Matrix_DispDFSPath(ADJ_MATRIX_GRAPH*, GRAPH_INDEX_TYPE = 0);
 void Graph_Adj_Matrix_DispBFSPath(ADJ_MATRIX_GRAPH*);
 
 void Graph_Adj_Matrix_AddVertex(ADJ_MATRIX_GRAPH*, 

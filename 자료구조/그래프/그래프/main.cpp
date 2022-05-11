@@ -1,8 +1,8 @@
 ﻿#include "Graph_Core.h"
 
 #define VERTEX_COUNT 5 //정점의 개수
-#define TEST_ADJ_LIST
-//#define TEST_ADJ_MATRIX
+//#define TEST_ADJ_LIST
+#define TEST_ADJ_MATRIX
 //#define TEST_DFS
 #define TEST_BFS
 
@@ -171,6 +171,13 @@ int main()
 
 		Graph_Adj_Matrix_DispEdgeArray(adjMatrixGraph);
 		Graph_Adj_Matrix_DispGraph(adjMatrixGraph);
+
+#ifdef TEST_DFS
+		Graph_Adj_Matrix_DispDFSPath(adjMatrixGraph);
+#endif
+#ifdef TEST_BFS
+		Graph_Adj_Matrix_DispBFSPath(adjMatrixGraph);
+#endif
 		Graph_Adj_Matrix_DeallocateGraph(&adjMatrixGraph);
 
 #endif
